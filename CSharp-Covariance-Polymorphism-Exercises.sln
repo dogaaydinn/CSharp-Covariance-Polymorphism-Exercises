@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp2", "ConsoleApp2\ConsoleApp2.csproj", "{2A274CC8-DF36-4559-8706-1B9AA5BA5B77}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdvancedCsharpConcepts", "AdvancedCsharpConcepts\AdvancedCsharpConcepts.csproj", "{2A274CC8-DF36-4559-8706-1B9AA5BA5B77}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
