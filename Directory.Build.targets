@@ -1,0 +1,32 @@
+<Project>
+
+  <!-- Custom Build Targets -->
+  <Target Name="PrintVersion" BeforeTargets="Build">
+    <Message Text="Building $(AssemblyName) v$(Version) for $(TargetFramework)" Importance="high" />
+  </Target>
+
+  <!-- Ensure Documentation is Generated -->
+  <Target Name="EnsureDocumentation" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
+    <Message Text="Documentation file: $(DocumentationFile)" Importance="high" />
+  </Target>
+
+  <!-- Code Coverage for Test Projects -->
+  <PropertyGroup Condition="$(MSBuildProjectName.Contains('Tests'))">
+    <CollectCoverage>true</CollectCoverage>
+    <CoverletOutputFormat>cobertura,json,lcov,opencover</CoverletOutputFormat>
+    <CoverletOutput>$(MSBuildProjectDirectory)/coverage/</CoverletOutput>
+    <Exclude>[*.Tests]*,[*.TestHelpers]*</Exclude>
+    <ExcludeByAttribute>Obsolete,GeneratedCode,CompilerGenerated,ExcludeFromCodeCoverage</ExcludeByAttribute>
+    <ThresholdType>line,branch,method</ThresholdType>
+    <Threshold>90,80,90</Threshold>
+  </PropertyGroup>
+
+  <!-- Performance Profiling -->
+  <PropertyGroup Condition="$(MSBuildProjectName.Contains('Benchmarks'))">
+    <ServerGarbageCollection>true</ServerGarbageCollection>
+    <ConcurrentGarbageCollection>true</ConcurrentGarbageCollection>
+    <RetainVMGarbageCollection>true</RetainVMGarbageCollection>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+
+</Project>
