@@ -1,0 +1,83 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# CI/CD
+.github
+.vscode
+.idea
+.vs
+
+# Build results
+**/bin/
+**/obj/
+**/out/
+**/.vs/
+**/.vscode/
+**/.idea/
+**/TestResults/
+**/BenchmarkDotNet.Artifacts/
+
+# NuGet
+**/.nuget/
+**/packages/
+*.nupkg
+*.snupkg
+
+# Test
+**/*Tests/
+**/coverage/
+**/*.trx
+**/*.coverage
+
+# Documentation
+**/docs/
+**/*.md
+!README.md
+
+# Docker
+**/.dockerignore
+**/Dockerfile*
+**/docker-compose*
+
+# OS
+**/.DS_Store
+**/Thumbs.db
+**/*.swp
+**/*.swo
+
+# Logs
+**/logs/
+**/*.log
+
+# Temporary
+**/tmp/
+**/temp/
+**/*.tmp
+
+# IDE
+**/*.user
+**/*.suo
+**/*.userosscache
+**/*.sln.docstates
+
+# ReSharper
+**/_ReSharper*/
+**/*.ReSharper
+
+# JetBrains Rider
+**/.idea/
+**/*.sln.iml
+
+# Visual Studio Code
+**/.vscode/
+
+# Node (if any)
+**/node_modules/
+**/npm-debug.log
+
+# Misc
+*.cache
+*.bak
+*.old
