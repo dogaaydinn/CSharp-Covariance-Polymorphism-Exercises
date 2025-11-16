@@ -1,18 +1,37 @@
 namespace AdvancedCsharpConcepts.Beginner.Override_Upcast_Downcast;
 
+/// <summary>
+/// Represents a car, which is a specific type of vehicle.
+/// Demonstrates method overriding and type casting (upcasting/downcasting) concepts.
+/// </summary>
 public class Car : Vehicle
 {
+    /// <summary>
+    /// Overrides the base Drive method to provide car-specific driving behavior.
+    /// </summary>
     public override void Drive()
     {
         Console.WriteLine("Car is driving");
     }
 
+    /// <summary>
+    /// Overrides the base DisplayInfo method to show car-specific information.
+    /// </summary>
     public override void DisplayInfo()
     {
         Console.WriteLine("Car info");
     }
 
-    //Soru 2: Car sınıfındaki bir nesneyi Vehicle türüne cast et ve ardından tekrar Car türüne geri cast et. 
+    /// <summary>
+    /// Demonstrates upcasting and downcasting operations with Car and Vehicle types.
+    /// Shows both safe casting (using 'is' pattern) and explicit casting techniques.
+    /// </summary>
+    /// <remarks>
+    /// This method illustrates:
+    /// - Upcasting: Converting a Car to Vehicle (safe and automatic)
+    /// - Downcasting: Converting a Vehicle back to Car (requires explicit cast or type checking)
+    /// </remarks>
+    //Soru 2: Car sınıfındaki bir nesneyi Vehicle türüne cast et ve ardından tekrar Car türüne geri cast et.
     public static void CastExample()
     {
         // Car nesnesi oluşturuluyor
