@@ -5,9 +5,17 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <LangVersion>12.0</LangVersion>
-        <AssemblyName>AdvancedCsharpConcepts</AssemblyName>
-        <RootNamespace>AdvancedCsharpConcepts</RootNamespace>
+        <LangVersion>10.0</LangVersion>
+        <EnablePreviewFeatures>false</EnablePreviewFeatures>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <NoWarn>$(NoWarn);1591</NoWarn>
+        <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+        <WarningsNotAsErrors>1591</WarningsNotAsErrors>
     </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="BenchmarkDotNet" Version="0.13.12" />
+        <PackageReference Include="System.Threading.Tasks.Dataflow" Version="6.0.0" />
+    </ItemGroup>
 
 </Project>

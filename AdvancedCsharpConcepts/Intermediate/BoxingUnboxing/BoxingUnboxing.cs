@@ -2,10 +2,31 @@ using System.Collections;
 
 namespace AdvancedCsharpConcepts.Intermediate.BoxingUnboxing;
 
+/// <summary>
+/// Demonstrates boxing and unboxing operations in C#.
+/// Boxing converts value types to reference types (heap allocation).
+/// Unboxing converts reference types back to value types (stack allocation).
+/// </summary>
+/// <remarks>
+/// Boxing and unboxing are performance-intensive operations because they involve:
+/// - Memory allocation on the heap (boxing)
+/// - Type checking and data extraction (unboxing)
+/// - Potential data loss when converting between types
+/// Use generic collections (List&lt;T&gt;) instead of non-generic ones (ArrayList) to avoid boxing overhead.
+/// </remarks>
 public class BoxingUnboxing
 {
     //Soru 1: Bir int değişkeni boxing ile object türüne dönüştürün. Daha sonra bunu tekrar int türüne unboxing yapın. Bu işlemler sırasında hafıza yönetimi açısından neler olduğunu açıklayın.
 
+    /// <summary>
+    /// Demonstrates basic boxing and unboxing operations with int and double types.
+    /// Shows memory management implications and potential data loss during type conversions.
+    /// </summary>
+    /// <remarks>
+    /// Boxing: Value type (stack) → Reference type (heap)<br/>
+    /// Unboxing: Reference type (heap) → Value type (stack)<br/>
+    /// Warning: Converting double to int causes data loss (decimal portion is truncated).
+    /// </remarks>
     public static void BoxingUnboxingExample()
     {
         // int değişkeni oluşturuluyor
@@ -27,6 +48,17 @@ public class BoxingUnboxing
 
     //Soru 2: ArrayList kullanarak farklı türlerden veriler ekleyin (örneğin int ve string). Ardından bu verileri unboxing ile geri alın ve performans farklarını analiz edin.
 
+    /// <summary>
+    /// Demonstrates boxing/unboxing overhead when using non-generic collections like ArrayList.
+    /// Compares performance implications of storing different types (int, string, double) in a single collection.
+    /// </summary>
+    /// <remarks>
+    /// ArrayList stores all items as 'object', causing:
+    /// - Boxing overhead for value types (int, double)
+    /// - Type checking overhead during unboxing
+    /// - Potential runtime errors if casting to wrong type<br/>
+    /// Best Practice: Use generic List&lt;T&gt; instead to avoid boxing and ensure type safety.
+    /// </remarks>
     public static void ArrayListExample()
     {
         // ArrayList oluşturuluyor
