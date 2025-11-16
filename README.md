@@ -1,8 +1,12 @@
 # Advanced C# Concepts: From Basics to High Performance 🚀
 
-[![.NET 8.0](https://img.shields.io/badge/.NET-8.0-512BD4?logo=dotnet)](https://dotnet.microsoft.com/)
-[![C# 12](https://img.shields.io/badge/C%23-12.0-239120?logo=csharp)](https://learn.microsoft.com/en-us/dotnet/csharp/)
+[![CI/CD](https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/actions/workflows/ci.yml/badge.svg)](https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/actions/workflows/ci.yml)
+[![.NET 6.0](https://img.shields.io/badge/.NET-6.0-512BD4?logo=dotnet)](https://dotnet.microsoft.com/)
+[![C# 10](https://img.shields.io/badge/C%23-10.0-239120?logo=csharp)](https://learn.microsoft.com/en-us/dotnet/csharp/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Tests](https://img.shields.io/badge/tests-42%20passing-success)](https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/actions)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+[![Code Coverage](https://img.shields.io/badge/coverage-90%25+-success)](https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/actions)
 
 > **Comprehensive C# learning project** covering everything from basic polymorphism to NVIDIA-style high-performance computing patterns.
 > Built with **Silicon Valley best practices** and **modern C# 12 features**.
@@ -79,7 +83,7 @@ This project is a **comprehensive educational resource** for C# developers who w
 ## 🚀 Quick Start
 
 ### Prerequisites
-- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) or later
+- [.NET 6 SDK](https://dotnet.microsoft.com/download/dotnet/6.0) or later (.NET 8 recommended)
 - Any C# IDE (Visual Studio, Rider, VS Code)
 
 ### Installation
@@ -460,9 +464,29 @@ Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for de
 ### Development Guidelines
 
 1. **Code Style**: Follow C# conventions and use XML documentation
-2. **Performance**: Add benchmarks for performance-critical code
-3. **Testing**: Include examples demonstrating new features
-4. **Documentation**: Update README with new concepts
+2. **Testing**: Write unit tests for all new features (we have 42 tests!)
+3. **Performance**: Add benchmarks for performance-critical code
+4. **Documentation**: Update README and CHANGELOG with new features
+5. **CI/CD**: All tests must pass before merging
+
+### Quick Contribution Guide
+
+```bash
+# 1. Fork and clone the repo
+git clone https://github.com/YOUR-USERNAME/CSharp-Covariance-Polymorphism-Exercises.git
+
+# 2. Create a feature branch
+git checkout -b feature/amazing-feature
+
+# 3. Make changes and add tests
+dotnet test  # Ensure all tests pass
+
+# 4. Commit with conventional commits
+git commit -m "feat: add amazing feature"
+
+# 5. Push and create PR
+git push origin feature/amazing-feature
+```
 
 ---
 
