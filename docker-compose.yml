@@ -1,0 +1,181 @@
+version: '3.9'
+
+# ==============================================
+# Docker Compose Configuration
+# Enterprise Development Environment
+# ==============================================
+
+services:
+  # ==============================================
+  # Main Application Service
+  # ==============================================
+  app:
+    image: advancedconcepts:latest
+    container_name: advancedconcepts-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        BUILDKIT_INLINE_CACHE: 1
+      cache_from:
+        - advancedconcepts:latest
+    restart: unless-stopped
+    environment:
+      - DOTNET_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Development
+      - DOTNET_EnableDiagnostics=1
+      - DOTNET_RUNNING_IN_CONTAINER=true
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - advancedconcepts-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    labels:
+      com.advancedconcepts.description: "Advanced C# Concepts Application"
+      com.advancedconcepts.version: "1.0.0"
+
+  # ==============================================
+  # Seq - Structured Logging (Optional)
+  # ==============================================
+  seq:
+    image: datalust/seq:latest
+    container_name: advancedconcepts-seq
+    restart: unless-stopped
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - "5341:80"
+    volumes:
+      - seq-data:/data
+    networks:
+      - advancedconcepts-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+
+  # ==============================================
+  # Prometheus - Metrics Collection (Optional)
+  # ==============================================
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: advancedconcepts-prometheus
+    restart: unless-stopped
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    networks:
+      - advancedconcepts-network
+    depends_on:
+      - app
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+
+  # ==============================================
+  # Grafana - Monitoring Dashboard (Optional)
+  # ==============================================
+  grafana:
+    image: grafana/grafana:latest
+    container_name: advancedconcepts-grafana
+    restart: unless-stopped
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources:ro
+    networks:
+      - advancedconcepts-network
+    depends_on:
+      - prometheus
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+
+# ==============================================
+# Networks
+# ==============================================
+networks:
+  advancedconcepts-network:
+    driver: bridge
+    name: advancedconcepts-network
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16
+
+# ==============================================
+# Volumes
+# ==============================================
+volumes:
+  seq-data:
+    driver: local
+    name: advancedconcepts-seq-data
+  prometheus-data:
+    driver: local
+    name: advancedconcepts-prometheus-data
+  grafana-data:
+    driver: local
+    name: advancedconcepts-grafana-data
+
+# ==============================================
+# Usage Instructions:
+# ==============================================
+# Start all services:
+#   docker-compose up -d
+#
+# Start only app:
+#   docker-compose up -d app
+#
+# View logs:
+#   docker-compose logs -f app
+#
+# Stop all services:
+#   docker-compose down
+#
+# Rebuild and restart:
+#   docker-compose up -d --build
+#
+# Access Services:
+#   - Application: http://localhost:8080
+#   - Seq (Logging): http://localhost:5341
+#   - Prometheus (Metrics): http://localhost:9090
+#   - Grafana (Dashboard): http://localhost:3000 (admin/admin)
+# ==============================================
