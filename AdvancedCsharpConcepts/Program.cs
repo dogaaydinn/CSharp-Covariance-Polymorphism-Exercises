@@ -6,6 +6,9 @@ using AdvancedCsharpConcepts.Beginner.Upcast_Downcast;
 using AdvancedCsharpConcepts.Intermediate.BoxingUnboxing;
 using AdvancedCsharpConcepts.Intermediate.CovarianceContravariance;
 using AdvancedCsharpConcepts.Beginner;
+using AdvancedCsharpConcepts.Advanced.ModernCSharp;
+using AdvancedCsharpConcepts.Advanced.HighPerformance;
+using AdvancedCsharpConcepts.Advanced.PerformanceBenchmarks;
 using Animal = AdvancedCsharpConcepts.Beginner.Polymorphism_AssignCompatibility.Animal;
 using Cat = AdvancedCsharpConcepts.Beginner.Polymorphism_AssignCompatibility.Cat;
 using Mammal = AdvancedCsharpConcepts.Beginner.Polymorphism_AssignCompatibility.Mammal;
@@ -17,8 +20,71 @@ using Cat = Beginner.Polymorphism_AssignCompatibility.Cat;
 
 internal static class Program
 {
-    private static void Main()
+    private static void Main(string[] args)
     {
+        // Parse command-line arguments
+        var runBenchmarks = args.Contains("--benchmark") || args.Contains("-b");
+        var runAdvancedOnly = args.Contains("--advanced") || args.Contains("-a");
+        var runBasicsOnly = args.Contains("--basics") || args.Contains("--basic");
+        var showHelp = args.Contains("--help") || args.Contains("-h");
+
+        if (showHelp)
+        {
+            ShowHelp();
+            return;
+        }
+
+        Console.WriteLine("╔════════════════════════════════════════════════════════════════╗");
+        Console.WriteLine("║   Advanced C# Concepts - From Basics to High Performance     ║");
+        Console.WriteLine("║   Silicon Valley × NVIDIA Developer Best Practices            ║");
+        Console.WriteLine("╚════════════════════════════════════════════════════════════════╝\n");
+
+        if (runBenchmarks)
+        {
+            BenchmarkRunner.RunAllBenchmarks();
+            return;
+        }
+
+        if (runAdvancedOnly)
+        {
+            RunAdvancedExamples();
+            return;
+        }
+
+        if (runBasicsOnly)
+        {
+            RunBasicExamples();
+            return;
+        }
+
+        // Default: run everything
+        RunBasicExamples();
+        RunAdvancedExamples();
+        BenchmarkRunner.ShowQuickSummary();
+    }
+
+    private static void ShowHelp()
+    {
+        Console.WriteLine("Advanced C# Concepts - Command Line Options\n");
+        Console.WriteLine("Usage: dotnet run [options]\n");
+        Console.WriteLine("Options:");
+        Console.WriteLine("  --help, -h         Show this help message");
+        Console.WriteLine("  --basics, --basic  Run only basic examples (polymorphism, casting, etc.)");
+        Console.WriteLine("  --advanced, -a     Run only advanced examples (C# 12, Span<T>, parallelism)");
+        Console.WriteLine("  --benchmark, -b    Run performance benchmarks (requires Release mode)");
+        Console.WriteLine("\nExamples:");
+        Console.WriteLine("  dotnet run                          # Run all examples");
+        Console.WriteLine("  dotnet run --basics                 # Run basic examples only");
+        Console.WriteLine("  dotnet run --advanced               # Run advanced examples only");
+        Console.WriteLine("  dotnet run -c Release --benchmark   # Run benchmarks\n");
+    }
+
+    private static void RunBasicExamples()
+    {
+        Console.WriteLine("═══════════════════════════════════════════════════════════════");
+        Console.WriteLine("                    BASIC EXAMPLES                              ");
+        Console.WriteLine("═══════════════════════════════════════════════════════════════\n");
+
         #region Polymorphism-AssignCompatibility- Assignment Compatibility
         //Soru 1: Bir Vehicle sınıfı oluştur ve bunu kalıtım yoluyla Car ve Bike sınıflarına genişlet. Bir List<Vehicle> içerisine hem Car hem de Bike ekle ve her bir nesnenin override edilmiş metotlarını çağır.
         //Question 1: Create a Vehicle class and extend it by inheritance to Car and Bike. Add both Car and Bike to a List<Vehicle> and call the overridden methods of each object.
@@ -198,5 +264,47 @@ Console.WriteLine("Cast an object of class Car to type Vehicle and then cast it 
         Console.WriteLine("Generic Covariance ve Contravariance completed.\n");
 
         #endregion
+    }
+
+    private static void RunAdvancedExamples()
+    {
+        Console.WriteLine("\n═══════════════════════════════════════════════════════════════");
+        Console.WriteLine("                    ADVANCED EXAMPLES                           ");
+        Console.WriteLine("         Silicon Valley × NVIDIA Best Practices                 ");
+        Console.WriteLine("═══════════════════════════════════════════════════════════════\n");
+
+        #region C# 12 Primary Constructors
+
+        PrimaryConstructorsExample.RunExample();
+
+        #endregion
+
+        #region C# 12 Collection Expressions
+
+        CollectionExpressionsExample.RunExample();
+
+        #endregion
+
+        #region Advanced Pattern Matching
+
+        AdvancedPatternMatching.RunExample();
+
+        #endregion
+
+        #region High-Performance Parallel Processing
+
+        ParallelProcessingExamples.RunExample();
+
+        #endregion
+
+        #region Span<T> and Memory<T> - Zero Allocation
+
+        SpanMemoryExamples.RunExample();
+
+        #endregion
+
+        Console.WriteLine("\n═══════════════════════════════════════════════════════════════");
+        Console.WriteLine("                 ALL EXAMPLES COMPLETED                         ");
+        Console.WriteLine("═══════════════════════════════════════════════════════════════\n");
     }
 }
