@@ -138,7 +138,6 @@ Console.WriteLine("Cast an object of class Car to type Vehicle and then cast it 
         //Soru 1: Bir int değişkeni boxing ile object türüne dönüştürün. Daha sonra bunu tekrar int türüne unboxing yapın. Bu işlemler sırasında hafıza yönetimi açısından neler olduğunu açıklayın.
         //Question 1: Convert an int variable to object with boxing. Then unboxing it back to int type. Explain what happens during these operations in terms of memory management.
         Console.WriteLine("Convert an int variable to object type with boxing. Then unboxing it back to int type. Explain what happens during these operations in terms of memory management.");
-        var boxingUnboxing = new BoxingUnboxing();
         BoxingUnboxing.BoxingUnboxingExample();
         
         // Question 2: Using ArrayList, add data of different types (e.g. int and string). Then retrieve this data with unboxing and analyze the performance differences.
