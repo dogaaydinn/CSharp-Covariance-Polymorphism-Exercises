@@ -79,18 +79,57 @@ public static class FactoryPattern
 
     /// <summary>
     /// Simple Factory - Creates vehicles based on type.
+    /// Production-ready with input validation and error handling.
     /// </summary>
     public static class VehicleFactory
     {
+        /// <summary>
+        /// Creates a vehicle based on the specified type and parameters.
+        /// </summary>
+        /// <param name="type">The type of vehicle to create.</param>
+        /// <param name="parameter">Vehicle-specific parameter (model/brand for Car/Motorcycle, capacity for Truck).</param>
+        /// <returns>An instance of the requested vehicle type.</returns>
+        /// <exception cref="ArgumentException">Thrown when vehicle type is unknown or parameters are invalid.</exception>
+        /// <exception cref="ArgumentNullException">Thrown when required parameter is null or empty.</exception>
         public static IVehicle CreateVehicle(VehicleType type, string parameter = "Default")
         {
             return type switch
             {
-                VehicleType.Car => new Car(parameter),
-                VehicleType.Motorcycle => new Motorcycle(parameter),
-                VehicleType.Truck => new Truck(int.Parse(parameter)),
-                _ => throw new ArgumentException($"Unknown vehicle type: {type}")
+                VehicleType.Car => CreateCar(parameter),
+                VehicleType.Motorcycle => CreateMotorcycle(parameter),
+                VehicleType.Truck => CreateTruck(parameter),
+                _ => throw new ArgumentException($"Unknown vehicle type: {type}", nameof(type))
             };
+        }
+
+        private static IVehicle CreateCar(string model)
+        {
+            if (string.IsNullOrWhiteSpace(model))
+                throw new ArgumentNullException(nameof(model), "Car model cannot be null or empty");
+
+            return new Car(model);
+        }
+
+        private static IVehicle CreateMotorcycle(string brand)
+        {
+            if (string.IsNullOrWhiteSpace(brand))
+                throw new ArgumentNullException(nameof(brand), "Motorcycle brand cannot be null or empty");
+
+            return new Motorcycle(brand);
+        }
+
+        private static IVehicle CreateTruck(string capacityStr)
+        {
+            if (string.IsNullOrWhiteSpace(capacityStr))
+                throw new ArgumentNullException(nameof(capacityStr), "Truck capacity cannot be null or empty");
+
+            if (!int.TryParse(capacityStr, out var capacity))
+                throw new ArgumentException($"Invalid truck capacity: '{capacityStr}'. Must be a valid integer.", nameof(capacityStr));
+
+            if (capacity <= 0)
+                throw new ArgumentException($"Invalid truck capacity: {capacity}. Must be greater than zero.", nameof(capacityStr));
+
+            return new Truck(capacity);
         }
     }
 
