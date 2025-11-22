@@ -11,7 +11,28 @@
         <NoWarn>$(NoWarn);1591</NoWarn>
         <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
         <WarningsNotAsErrors>1591</WarningsNotAsErrors>
+
+        <!-- NuGet Package Properties -->
+        <PackageId>AdvancedCsharpConcepts</PackageId>
+        <Version>3.1.0</Version>
+        <Authors>Dogaaydin</Authors>
+        <Company>Dogaaydin</Company>
+        <Product>Advanced C# Concepts - Enterprise Framework</Product>
+        <Description>Enterprise-grade C# framework demonstrating advanced concepts: polymorphism, design patterns, SIMD vectorization, high-performance computing, production observability, and modern C# 12 features.</Description>
+        <PackageTags>csharp;design-patterns;polymorphism;simd;high-performance;arraypool;span;opentelemetry;observability;dotnet8;csharp12;enterprise;production-ready</PackageTags>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises.git</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+        <Copyright>Copyright © 2025 Dogaaydin</Copyright>
     </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="../README.md" Pack="true" PackagePath="\" />
+        <None Include="../CHANGELOG.md" Pack="true" PackagePath="\" />
+    </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="BenchmarkDotNet" Version="0.13.12" />

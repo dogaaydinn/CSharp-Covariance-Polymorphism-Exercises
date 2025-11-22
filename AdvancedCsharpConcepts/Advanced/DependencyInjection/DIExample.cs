@@ -12,13 +12,13 @@ public static class DIExample
     // Interfaces (Abstractions)
     public interface IDataRepository
     {
-        Task<string[]> GetDataAsync();
-        Task SaveDataAsync(string[] data);
+        Task<string[]> GetDataAsync(CancellationToken cancellationToken = default);
+        Task SaveDataAsync(string[] data, CancellationToken cancellationToken = default);
     }
 
     public interface IDataProcessor
     {
-        Task<int> ProcessDataAsync(string[] data);
+        Task<int> ProcessDataAsync(string[] data, CancellationToken cancellationToken = default);
     }
 
     public interface INotificationService
@@ -31,13 +31,15 @@ public static class DIExample
     {
         private readonly List<string> _data = new();
 
-        public Task<string[]> GetDataAsync()
+        public Task<string[]> GetDataAsync(CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             return Task.FromResult(_data.ToArray());
         }
 
-        public Task SaveDataAsync(string[] data)
+        public Task SaveDataAsync(string[] data, CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             _data.Clear();
             _data.AddRange(data);
             return Task.CompletedTask;
@@ -55,11 +57,12 @@ public static class DIExample
             _repository = repository;
         }
 
-        public async Task<int> ProcessDataAsync(string[] data)
+        public async Task<int> ProcessDataAsync(string[] data, CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             _logger.LogInformation("Processing {Count} items", data.Length);
 
-            await _repository.SaveDataAsync(data);
+            await _repository.SaveDataAsync(data, cancellationToken);
 
             var totalLength = data.Sum(x => x.Length);
             _logger.LogInformation("Processed {TotalLength} characters", totalLength);
@@ -104,21 +107,28 @@ public static class DIExample
             _logger = logger;
         }
 
-        public async Task RunAsync()
+        public async Task RunAsync(CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             _logger.LogInformation("Application started");
 
             try
             {
                 // Process new data
                 var newData = new[] { "Item1", "Item2", "Item3", "Item4", "Item5" };
-                var result = await _processor.ProcessDataAsync(newData);
+                var result = await _processor.ProcessDataAsync(newData, cancellationToken);
 
                 _notificationService.Notify($"Processed {newData.Length} items, total {result} characters");
 
                 // Retrieve and display data
-                var storedData = await _repository.GetDataAsync();
+                var storedData = await _repository.GetDataAsync(cancellationToken);
                 _logger.LogInformation("Retrieved {Count} items from repository", storedData.Length);
+            }
+            catch (OperationCanceledException)
+            {
+                _logger.LogWarning("Application was cancelled");
+                _notificationService.Notify("Operation was cancelled");
+                throw;
             }
             catch (Exception ex)
             {
