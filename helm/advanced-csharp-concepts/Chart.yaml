@@ -1,0 +1,21 @@
+apiVersion: v2
+name: advanced-csharp-concepts
+description: A Helm chart for Advanced C# Concepts - Enterprise Edition
+type: application
+version: 3.1.0
+appVersion: "3.1.0"
+keywords:
+  - csharp
+  - dotnet
+  - design-patterns
+  - performance
+  - simd
+  - arraypool
+home: https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises
+sources:
+  - https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises
+maintainers:
+  - name: Doğa Aydın
+    email: dogaaydin@example.com
+icon: https://raw.githubusercontent.com/dotnet/brand/main/logo/dotnet-logo.svg
+dependencies: []

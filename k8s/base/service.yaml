@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: advanced-csharp-concepts
+  labels:
+    app: advanced-csharp-concepts
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: http
+    protocol: TCP
+    name: http
+  - port: 9090
+    targetPort: metrics
+    protocol: TCP
+    name: metrics
+  selector:
+    app: advanced-csharp-concepts

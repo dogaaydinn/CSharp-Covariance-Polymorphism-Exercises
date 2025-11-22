@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  # Logging configuration
+  Serilog__MinimumLevel__Default: "Information"
+  Serilog__MinimumLevel__Override__Microsoft: "Warning"
+  Serilog__MinimumLevel__Override__System: "Warning"
+
+  # Application settings
+  Application__Name: "AdvancedCsharpConcepts"
+  Application__Version: "3.1.0"
+
+  # Feature flags
+  Features__EnableTelemetry: "true"
+  Features__EnableHealthChecks: "true"
+  Features__EnableMetrics: "true"

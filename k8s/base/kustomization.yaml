@@ -1,0 +1,21 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: default
+
+commonLabels:
+  app.kubernetes.io/name: advanced-csharp-concepts
+  app.kubernetes.io/version: "3.1.0"
+  app.kubernetes.io/component: application
+  app.kubernetes.io/part-of: advanced-csharp-concepts
+
+resources:
+  - deployment.yaml
+  - service.yaml
+  - configmap.yaml
+  - hpa.yaml
+
+images:
+  - name: advanced-csharp-concepts
+    newName: ghcr.io/dogaaydinn/advanced-csharp-concepts
+    newTag: "3.1.0"

@@ -1,0 +1,228 @@
+name: Release & Publish
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g., 3.2.0)'
+        required: true
+        default: '3.2.0'
+
+env:
+  DOTNET_VERSION: '8.0.x'
+  CONFIGURATION: Release
+
+jobs:
+  calculate-version:
+    name: Calculate Version
+    runs-on: ubuntu-latest
+    outputs:
+      semVer: ${{ steps.gitversion.outputs.semVer }}
+      majorMinorPatch: ${{ steps.gitversion.outputs.majorMinorPatch }}
+      nuGetVersionV2: ${{ steps.gitversion.outputs.nuGetVersionV2 }}
+      commitsSinceVersionSource: ${{ steps.gitversion.outputs.commitsSinceVersionSource }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v1
+        with:
+          versionSpec: '5.x'
+
+      - name: Determine Version
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v1
+        with:
+          useConfigFile: true
+          configFilePath: GitVersion.yml
+
+      - name: Display Version
+        run: |
+          echo "SemVer: ${{ steps.gitversion.outputs.semVer }}"
+          echo "MajorMinorPatch: ${{ steps.gitversion.outputs.majorMinorPatch }}"
+          echo "NuGetVersionV2: ${{ steps.gitversion.outputs.nuGetVersionV2 }}"
+          echo "CommitsSinceVersionSource: ${{ steps.gitversion.outputs.commitsSinceVersionSource }}"
+
+  build-and-test:
+    name: Build & Test
+    runs-on: ${{ matrix.os }}
+    needs: calculate-version
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration ${{ env.CONFIGURATION }} --no-restore /p:Version=${{ needs.calculate-version.outputs.semVer }}
+
+      - name: Run unit tests
+        run: dotnet test AdvancedCsharpConcepts.Tests/AdvancedCsharpConcepts.Tests.csproj --configuration ${{ env.CONFIGURATION }} --no-build --verbosity normal --collect:"XPlat Code Coverage"
+
+      - name: Run integration tests
+        run: dotnet test AdvancedCsharpConcepts.IntegrationTests/AdvancedCsharpConcepts.IntegrationTests.csproj --configuration ${{ env.CONFIGURATION }} --no-build --verbosity normal
+
+  package:
+    name: Package NuGet
+    runs-on: ubuntu-latest
+    needs: [calculate-version, build-and-test]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration ${{ env.CONFIGURATION }} --no-restore /p:Version=${{ needs.calculate-version.outputs.semVer }}
+
+      - name: Pack NuGet package
+        run: dotnet pack AdvancedCsharpConcepts/AdvancedCsharpConcepts.csproj --configuration ${{ env.CONFIGURATION }} --no-build --output ./artifacts /p:PackageVersion=${{ needs.calculate-version.outputs.nuGetVersionV2 }}
+
+      - name: Upload NuGet artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuget-package
+          path: ./artifacts/*.nupkg
+
+  publish-nuget:
+    name: Publish to NuGet.org
+    runs-on: ubuntu-latest
+    needs: [calculate-version, package]
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - name: Download NuGet artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: nuget-package
+          path: ./artifacts
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Publish to NuGet.org
+        run: |
+          dotnet nuget push ./artifacts/*.nupkg \
+            --source https://api.nuget.org/v3/index.json \
+            --api-key ${{ secrets.NUGET_API_KEY }} \
+            --skip-duplicate
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+
+  create-github-release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: [calculate-version, publish-nuget]
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download NuGet artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: nuget-package
+          path: ./artifacts
+
+      - name: Generate Release Notes
+        id: release_notes
+        run: |
+          # Extract version from tag
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+
+          # Generate changelog from commits since last tag
+          PREVIOUS_TAG=$(git describe --abbrev=0 --tags $(git rev-list --tags --skip=1 --max-count=1) 2>/dev/null || echo "")
+          if [ -z "$PREVIOUS_TAG" ]; then
+            COMMITS=$(git log --pretty=format:"- %s (%h)" --no-merges)
+          else
+            COMMITS=$(git log ${PREVIOUS_TAG}..HEAD --pretty=format:"- %s (%h)" --no-merges)
+          fi
+
+          # Create release notes
+          cat > release_notes.md << EOF
+          ## What's Changed
+
+          $COMMITS
+
+          ## Installation
+
+          \`\`\`bash
+          dotnet add package AdvancedCsharpConcepts --version $VERSION
+          \`\`\`
+
+          ## Documentation
+
+          - [README](https://github.com/${{ github.repository }}/blob/main/README.md)
+          - [CHANGELOG](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md)
+          - [Quick Reference](https://github.com/${{ github.repository }}/blob/main/QUICK_REFERENCE_v3.1.0.md)
+
+          ## Full Changelog
+
+          **Full Changelog**: https://github.com/${{ github.repository }}/compare/${PREVIOUS_TAG}...v${VERSION}
+          EOF
+
+          cat release_notes.md
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ needs.calculate-version.outputs.majorMinorPatch }}
+          name: Release v${{ needs.calculate-version.outputs.majorMinorPatch }}
+          body_path: release_notes.md
+          files: ./artifacts/*.nupkg
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  publish-documentation:
+    name: Publish Documentation
+    runs-on: ubuntu-latest
+    needs: create-github-release
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Install DocFX
+        run: dotnet tool install -g docfx
+
+      - name: Build documentation
+        run: docfx docfx.json
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_site
+          force_orphan: true
