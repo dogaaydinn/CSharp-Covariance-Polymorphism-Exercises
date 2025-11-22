@@ -1,0 +1,36 @@
+{
+  "$schema": "https://raw.githubusercontent.com/stryker-mutator/stryker-net/master/src/Stryker.CLI/Stryker.CLI/schema.json",
+  "stryker-config": {
+    "project": "AdvancedCsharpConcepts.csproj",
+    "test-projects": [
+      "AdvancedCsharpConcepts.Tests",
+      "AdvancedCsharpConcepts.IntegrationTests"
+    ],
+    "reporters": [
+      "html",
+      "progress",
+      "cleartext",
+      "json"
+    ],
+    "thresholds": {
+      "high": 85,
+      "low": 70,
+      "break": 65
+    },
+    "mutation-level": "complete",
+    "concurrency": 4,
+    "dashboard": {
+      "module": "AdvancedCsharpConcepts",
+      "version": "master"
+    },
+    "ignore-methods": [
+      "*ToString",
+      "*GetHashCode",
+      "*Equals"
+    ],
+    "mutate": [
+      "!**/Program.cs",
+      "!**/Benchmark*.cs"
+    ]
+  }
+}

@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdvancedCsharpConcepts", "A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdvancedCsharpConcepts.Tests", "AdvancedCsharpConcepts.Tests\AdvancedCsharpConcepts.Tests.csproj", "{55053A10-C3DA-4B1F-BD40-D442B215ED15}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdvancedCsharpConcepts.IntegrationTests", "AdvancedCsharpConcepts.IntegrationTests\AdvancedCsharpConcepts.IntegrationTests.csproj", "{B7F3E2D1-9A4C-4F5E-8D6B-1C2A3B4C5D6E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{55053A10-C3DA-4B1F-BD40-D442B215ED15}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55053A10-C3DA-4B1F-BD40-D442B215ED15}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{55053A10-C3DA-4B1F-BD40-D442B215ED15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7F3E2D1-9A4C-4F5E-8D6B-1C2A3B4C5D6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7F3E2D1-9A4C-4F5E-8D6B-1C2A3B4C5D6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7F3E2D1-9A4C-4F5E-8D6B-1C2A3B4C5D6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7F3E2D1-9A4C-4F5E-8D6B-1C2A3B4C5D6E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
