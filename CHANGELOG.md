@@ -7,6 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.0] - 2025-11-22
+
+### Fixed
+- ⚠️ **CRITICAL**: Fixed .NET version mismatch between main project (8.0) and test project (6.0→8.0)
+- ⚠️ **CRITICAL**: Fixed CI/CD pipeline to use .NET 8.0 instead of 6.0 (all 3 workflow occurrences)
+- ⚠️ **CRITICAL**: Resolved language version conflict (removed C# 10.0 override, now inherits C# 12.0)
+- Enhanced XML documentation for base polymorphism classes (Mammal, Animal, Cat, Dog)
+
+### Changed
+- Updated test dependencies to latest stable versions:
+  - Microsoft.NET.Test.Sdk: 17.1.0 → 17.11.1
+  - xUnit: 2.4.1 → 2.9.2
+  - xUnit.runner.visualstudio: 2.4.3 → 2.8.2
+- Added `IsTestProject` property to test project configuration
+
+### Added
+- ✅ **CODE_REVIEW_REPORT.md** - Comprehensive production-readiness assessment
+  - 87/100 overall score (B+)
+  - Detailed analysis of all code patterns
+  - Performance metrics and benchmarks
+  - Security assessment
+  - Production readiness sign-off
+
+### Security
+- Verified CodeQL security scanning configuration
+- Confirmed Docker runs as non-root user
+- Validated no hardcoded secrets in codebase
+
 ## [2.0.0] - 2025-01-16
 
 ### Added
