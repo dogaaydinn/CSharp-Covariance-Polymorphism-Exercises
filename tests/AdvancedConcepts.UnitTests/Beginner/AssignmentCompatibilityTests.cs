@@ -384,16 +384,16 @@ public class AssignmentCompatibilityTests
     }
 
     [Fact]
-    public void ExplicitCast_WithNull_ShouldThrow()
+    public void ExplicitCast_WithNull_ReturnsNull()
     {
         // Arrange
         Animal? animal = null;
 
-        // Act
-        Action act = () => { Dog dog = (Dog)animal!; };
+        // Act - Casting null to a reference type succeeds and returns null
+        Dog? dog = (Dog?)animal;
 
-        // Assert
-        act.Should().Throw<NullReferenceException>();
+        // Assert - The cast succeeds, result is null
+        dog.Should().BeNull();
     }
 
     #endregion

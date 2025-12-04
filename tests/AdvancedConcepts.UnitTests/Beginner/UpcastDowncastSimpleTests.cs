@@ -130,16 +130,16 @@ public class UpcastDowncastSimpleTests
     }
 
     [Fact]
-    public void ExplicitCast_NullEmployee_ShouldThrow()
+    public void ExplicitCast_NullEmployee_ReturnsNull()
     {
         // Arrange
         Employee? employee = null;
 
-        // Act
-        Action act = () => { Manager manager = (Manager)employee!; };
+        // Act - Casting null to a reference type succeeds and returns null
+        Manager? manager = (Manager?)employee;
 
-        // Assert
-        act.Should().Throw<NullReferenceException>();
+        // Assert - The cast succeeds, result is null
+        manager.Should().BeNull();
     }
 
     #endregion
