@@ -1,0 +1,1057 @@
+CSharp-Covariance-Polymorphism-Exercises/
+├── StrykerOutput/
+│   ├── 2025-11-30.16-34-54/
+│       ├── reports/
+│           └── mutation-report.html
+├── TestResults/
+│   ├── 065671a9-8f10-4376-90a9-6509946f8229/
+│   │   └── coverage.cobertura.xml
+│   ├── a48712df-a078-4f54-8dba-afd5a90da347/
+│       └── coverage.cobertura.xml
+├── benchmarks/
+│   ├── AdvancedConcepts.Benchmarks/
+│   │   ├── AdvancedConcepts.Benchmarks.csproj
+│   │   ├── BoxingBenchmarks.cs
+│   │   ├── GlobalUsings.cs
+│   │   ├── LinqBenchmarks.cs
+│   │   ├── PolymorphismBenchmarks.cs
+│   │   ├── Program.cs
+│   │   ├── SpanBenchmarks.cs
+│   │   └── TypeConversionBenchmarks.cs
+│   ├── load-test/
+│       ├── README.md
+│       ├── bombardier-test.sh
+│       └── webapi-load-test.js
+├── build/
+│   ├── docker/
+│   ├── scripts/
+├── docs/
+│   ├── architecture/
+│   │   ├── 01-architecture-decision-records/
+│   │   │   ├── 0001-adopting-dotnet-8-platform.md
+│   │   │   ├── 0002-using-dotnet-aspire.md
+│   │   │   ├── 0003-entity-framework-core-data-access.md
+│   │   │   ├── 0004-postgresql-primary-database.md
+│   │   │   ├── 0005-redis-distributed-caching.md
+│   │   │   ├── 0006-stackexchange-redis-client.md
+│   │   │   ├── 0007-opentelemetry-for-observability.md
+│   │   │   ├── 0008-blazor-server-frontend.md
+│   │   │   ├── 0009-minimal-apis-over-controllers.md
+│   │   │   ├── 0010-direct-dbcontext-usage.md
+│   │   │   ├── 0011-service-discovery-pattern.md
+│   │   │   ├── 0012-container-first-development.md
+│   │   │   ├── 0013-servicedefaults-pattern.md
+│   │   │   ├── 0014-health-checks-kubernetes.md
+│   │   │   ├── 0015-stylecop-code-quality.md
+│   │   │   ├── 0016-cache-aside-pattern.md
+│   │   │   ├── 0017-async-first-api-design.md
+│   │   │   ├── 0018-swagger-openapi-documentation.md
+│   │   │   ├── 0019-apphost-orchestration.md
+│   │   │   ├── 0020-zero-configuration-infrastructure.md
+│   │   │   ├── ADR-001-net8-upgrade.md
+│   │   │   ├── ADR-002-testing-strategy.md
+│   │   │   ├── ADR-003-logging-framework.md
+│   │   │   ├── ADR-004-cicd-platform.md
+│   │   │   ├── README.md
+│   │   │   └── adr-template.md
+│   │   ├── 02-c4-diagrams/
+│   │   │   ├── code-diagram.md
+│   │   │   ├── component-diagram.md
+│   │   │   ├── container-diagram.md
+│   │   │   └── context-diagram.md
+│   │   └── ARCHITECTURE.md
+│   ├── code-reviews/
+│   │   ├── 01-Polymorphism-Misuse/
+│   │   │   ├── fixed-code.cs
+│   │   │   ├── junior-code.cs
+│   │   │   ├── lessons-learned.md
+│   │   │   ├── review-comments.md
+│   │   │   └── senior-feedback.md
+│   │   ├── 01-Polymorphism-Review/
+│   │   │   ├── bad-code.cs
+│   │   │   ├── fixed-code.cs
+│   │   │   └── review-comments.md
+│   │   ├── 02-API-Design-Review/
+│   │   │   ├── fixed-code.cs
+│   │   │   ├── junior-code.cs
+│   │   │   ├── lessons-learned.md
+│   │   │   ├── review-comments.md
+│   │   │   ├── review-feedback.md
+│   │   │   ├── senior-feedback.md
+│   │   │   ├── v1-api.md
+│   │   │   └── v2-api.md
+│   │   ├── 03-Performance-Antipatterns/
+│   │   │   ├── fixed-code.cs
+│   │   │   ├── junior-code.cs
+│   │   │   ├── lessons-learned.md
+│   │   │   ├── review-comments.md
+│   │   │   └── senior-feedback.md
+│   │   ├── 04-Security-Vulnerabilities/
+│   │   │   ├── junior-code.cs
+│   │   │   └── review-comments.md
+│   │   ├── 05-Architecture-Decisions/
+│   │   ├── 06-Production-Incident-Postmortem/
+│   │   └── README.md
+│   ├── decisions/
+│   │   ├── 0001-use-mediatr-for-cqrs.md
+│   │   ├── 0002-use-clean-architecture-layers.md
+│   │   ├── 0003-use-polly-for-resilience.md
+│   │   ├── 0004-adopt-dotnet-aspire.md
+│   │   ├── 0005-implement-custom-source-generators.md
+│   │   ├── 0006-build-custom-roslyn-analyzers.md
+│   │   ├── 0007-choose-postgresql-over-sql-server.md
+│   │   ├── 0008-use-redis-for-distributed-caching.md
+│   │   ├── 0009-adopt-serilog-for-structured-logging.md
+│   │   ├── 0010-implement-opentelemetry.md
+│   │   ├── 0011-use-jwt-for-authentication.md
+│   │   ├── 0012-use-ef-core-for-data-access.md
+│   │   ├── 0013-use-benchmarkdotnet.md
+│   │   ├── 0014-containerize-with-docker.md
+│   │   ├── 0015-deploy-to-kubernetes.md
+│   │   ├── README.md
+│   │   └── TEMPLATE.md
+│   ├── guides/
+│   │   ├── ADVANCED_PERFORMANCE.md
+│   │   ├── CHANGELOG_AUTOMATION.md
+│   │   ├── CLOUD_DEPLOYMENT.md
+│   │   ├── GETTING_STARTED.md
+│   │   ├── ML_NET_INTEGRATION.md
+│   │   ├── NATIVE_AOT.md
+│   │   ├── NUGET_PACKAGING.md
+│   │   ├── ROSLYN_ANALYZERS.md
+│   │   ├── SOURCE_GENERATORS.md
+│   │   └── VERSIONING_STRATEGY.md
+│   ├── learning-paths/
+│   │   ├── assessment-tests/
+│   │   │   ├── path1/
+│   │   │       ├── README.md
+│   │   │       ├── final-exam.md
+│   │   │       ├── month-01-assessment.md
+│   │   │       ├── month-02-assessment.md
+│   │   │       ├── month-03-assessment.md
+│   │   │       ├── month-04-assessment.md
+│   │   │       ├── month-05-assessment.md
+│   │   │       ├── month-06-assessment.md
+│   │   │       ├── week-01-test.md
+│   │   │       ├── week-02-test.md
+│   │   │       ├── week-03-test.md
+│   │   │       ├── week-04-test.md
+│   │   │       ├── week-05-test.md
+│   │   │       ├── week-06-test.md
+│   │   │       ├── week-07-test.md
+│   │   │       └── weeks-08-24-tests.md
+│   │   ├── checklists/
+│   │   │   ├── path1-checklist.md
+│   │   │   ├── path2-checklist.md
+│   │   │   ├── path3-checklist.md
+│   │   │   └── path4-checklist.md
+│   │   ├── project-templates/
+│   │   │   ├── path1/
+│   │   │   │   ├── final-task-management-api.md
+│   │   │   │   ├── month1-pet-shelter-system.md
+│   │   │   │   ├── month2-data-analysis-pipeline.md
+│   │   │   │   ├── month3-notification-system.md
+│   │   │   │   ├── month4-algorithm-visualizer.md
+│   │   │   │   ├── month5-decorator-pipeline.md
+│   │   │   │   └── month6-capstone-prep.md
+│   │   │   ├── path2/
+│   │   │   │   ├── month1-2-high-performance-log-parser.md
+│   │   │   │   ├── month3-4-ecommerce-domain-layer.md
+│   │   │   │   ├── month5-6-microservice-platform.md
+│   │   │   │   ├── month7-8-production-ready-api.md
+│   │   │   │   └── month9-final-capstone.md
+│   │   │   ├── path3/
+│   │   │       ├── month1-3-system-architecture-design.md
+│   │   │       ├── month10-12-final-enterprise-architecture.md
+│   │   │       └── month4-6-performance-optimization.md
+│   │   └── README.md
+│   ├── mentorship/
+│   │   ├── code-review-checklist.md
+│   │   ├── common-junior-mistakes.md
+│   │   ├── growth-plan-template.md
+│   │   └── teaching-polymorphism.md
+│   ├── security/
+│   │   └── BEST_PRACTICES.md
+│   ├── ADVANCED_SAMPLES_COMPLETION_REPORT.md
+│   ├── BRUTAL_HONEST_ASSESSMENT.md
+│   ├── CICD_WORKFLOWS.md
+│   ├── EXPERT_SAMPLES_COMPLETION_REPORT.md
+│   ├── FINAL_COMPLETION_REPORT.md
+│   ├── IMMEDIATE_COMPLETION_SUMMARY.md
+│   ├── KALAN_ISLER_DETAYLI.md
+│   ├── LEARNING_PATHS.md
+│   ├── LEARNING_PATHS_STATUS.md
+│   ├── NUGET_PACKAGE_COMPLETION.md
+│   ├── PENDING_TASKS.md
+│   ├── PERFORMANCE.md
+│   ├── PERFORMANCE_TESTING_COMPLETION.md
+│   ├── PORTFOLIO_COMPLETION_REPORT.md
+│   ├── PRIORITY_1_COMPLETION_REPORT.md
+│   ├── PRIORITY_2_COMPLETION_REPORT.md
+│   ├── QUICK_START_CICD.md
+│   ├── RELEASE.md
+│   ├── START_HERE.md
+│   └── YAPILMASI_GEREKENLER.md
+├── helm/
+│   ├── advancedconcepts/
+│       ├── templates/
+│       │   ├── _helpers.tpl
+│       │   ├── deployment.yaml
+│       │   ├── hpa.yaml
+│       │   ├── service.yaml
+│       │   └── serviceaccount.yaml
+│       ├── Chart.yaml
+│       └── values.yaml
+├── k8s/
+│   ├── base/
+│   │   ├── configmap.yaml
+│   │   ├── deployment.yaml
+│   │   ├── ingress.yaml
+│   │   ├── kustomization.yaml
+│   │   ├── network-policy.yaml
+│   │   ├── secret.yaml
+│   │   └── service.yaml
+│   ├── overlays/
+│       ├── development/
+│       │   ├── dev-ingress.yaml
+│       │   └── kustomization.yaml
+│       ├── production/
+│       │   ├── kustomization.yaml
+│       │   ├── production-hpa.yaml
+│       │   ├── production-pdb.yaml
+│       │   └── production-pod-security-policy.yaml
+│       ├── staging/
+│           ├── kustomization.yaml
+│           └── staging-hpa.yaml
+├── samples/
+│   ├── 01-Beginner/
+│   │   ├── CastingExamples/
+│   │   │   ├── Examples/
+│   │   │   │   ├── AsOperatorExample.cs
+│   │   │   │   ├── CastingPitfallsExample.cs
+│   │   │   │   ├── DowncastingExample.cs
+│   │   │   │   ├── IsOperatorExample.cs
+│   │   │   │   ├── PatternMatchingExample.cs
+│   │   │   │   ├── RealWorldExample.cs
+│   │   │   │   └── UpcastingExample.cs
+│   │   │   ├── samples/
+│   │   │   │   ├── 01-Beginner/
+│   │   │   │       ├── CastingExamples/
+│   │   │   │           ├── Examples/
+│   │   │   ├── CastingExamples.csproj
+│   │   │   ├── Program.cs
+│   │   │   ├── README.md
+│   │   │   └── WHY_THIS_PATTERN.md
+│   │   ├── OverrideVirtual/
+│   │   │   ├── Examples/
+│   │   │   ├── OverrideVirtual.csproj
+│   │   │   ├── Program.cs
+│   │   │   ├── README.md
+│   │   │   └── WHY_THIS_PATTERN.md
+│   │   ├── PolymorphismBasics/
+│   │       ├── samples/
+│   │       │   ├── 03-Advanced/
+│   │       │       ├── SOLIDPrinciples/
+│   │       ├── CAREER_IMPACT.md
+│   │       ├── PolymorphismBasics.csproj
+│   │       ├── Program.cs
+│   │       ├── README.md
+│   │       └── WHY_THIS_PATTERN.md
+│   ├── 02-Intermediate/
+│   │   ├── BoxingPerformance/
+│   │   │   ├── Examples/
+│   │   │   │   ├── AvoidingBoxing.cs
+│   │   │   │   ├── BoxingBasics.cs
+│   │   │   │   ├── PerformanceComparison.cs
+│   │   │   │   └── RealWorldScenarios.cs
+│   │   │   ├── BoxingPerformance.csproj
+│   │   │   ├── Program.cs
+│   │   │   ├── README.md
+│   │   │   └── WHY_THIS_PATTERN.md
+│   │   ├── CovarianceContravariance/
+│   │   │   ├── Examples/
+│   │   │   │   ├── ContravarianceExample.cs
+│   │   │   │   ├── CovarianceExample.cs
+│   │   │   │   ├── InvarianceExample.cs
+│   │   │   │   └── RealWorldExample.cs
+│   │   │   ├── CovarianceContravariance.csproj
+│   │   │   ├── Program.cs
+│   │   │   ├── README.md
+│   │   │   └── WHY_THIS_PATTERN.md
+│   │   ├── GenericConstraints/
+│   │       ├── GenericConstraints.csproj
+│   │       ├── Program.cs
+│   │       ├── README.md
+│   │       └── WHY_THIS_PATTERN.md
+│   ├── 03-Advanced/
+│   │   ├── DesignPatterns/
+│   │   │   ├── Behavioral/
+│   │   │   │   ├── ChainOfResponsibilityPattern.cs
+│   │   │   │   ├── ObserverPattern.cs
+│   │   │   │   └── StrategyPattern.cs
+│   │   │   ├── Creational/
+│   │   │   │   ├── BuilderPattern.cs
+│   │   │   │   ├── FactoryPattern.cs
+│   │   │   │   └── SingletonPattern.cs
+│   │   │   ├── Structural/
+│   │   │   │   ├── AdapterPattern.cs
+│   │   │   │   ├── DecoratorPattern.cs
+│   │   │   │   └── ProxyPattern.cs
+│   │   │   ├── CAREER_IMPACT.md
+│   │   │   ├── DesignPatterns.csproj
+│   │   │   ├── Program.cs
+│   │   │   ├── README.md
+│   │   │   └── WHY_THIS_PATTERN.md
+│   │   ├── HighPerformance/
+│   │   │   └── WHY_THIS_PATTERN.md
+│   │   ├── ObservabilityPatterns/
+│   │   │   ├── Examples/
+│   │   │   ├── ObservabilityPatterns.csproj
+│   │   │   ├── Program.cs
+│   │   │   ├── README.md
+│   │   │   └── WHY_THIS_PATTERN.md
+│   │   ├── PerformanceOptimization/
+│   │   │   ├── Examples/
+│   │   │   │   ├── AsyncOptimization.cs
+│   │   │   │   ├── LinqOptimization.cs
+│   │   │   │   ├── SpanVsArray.cs
+│   │   │   │   └── StringOptimization.cs
+│   │   │   ├── CAREER_IMPACT.md
+│   │   │   ├── PerformanceOptimization.csproj
+│   │   │   ├── Program.cs
+│   │   │   ├── README.md
+│   │   │   └── WHY_THIS_PATTERN.md
+│   │   ├── ResiliencePatterns/
+│   │   │   ├── Program.cs
+│   │   │   ├── Program.cs.detailed
+│   │   │   ├── README.md
+│   │   │   ├── ResiliencePatterns.csproj
+│   │   │   └── WHY_THIS_PATTERN.md
+│   │   ├── SOLIDPrinciples/
+│   │       ├── DependencyInversion/
+│   │       │   ├── Correct.cs
+│   │       │   └── Violation.cs
+│   │       ├── InterfaceSegregation/
+│   │       │   ├── Correct.cs
+│   │       │   └── Violation.cs
+│   │       ├── LiskovSubstitution/
+│   │       │   ├── Correct.cs
+│   │       │   └── Violation.cs
+│   │       ├── OpenClosed/
+│   │       │   ├── Correct.cs
+│   │       │   └── Violation.cs
+│   │       ├── SingleResponsibility/
+│   │       │   ├── Correct.cs
+│   │       │   └── Violation.cs
+│   │       ├── Program.cs
+│   │       ├── README.md
+│   │       ├── SOLIDPrinciples.csproj
+│   │       └── WHY_THIS_PATTERN.md
+│   ├── 04-Expert/
+│   │   ├── AdvancedPerformance/
+│   │   │   ├── AdvancedPerformance.csproj
+│   │   │   ├── Program.cs
+│   │   │   └── README.md
+│   │   ├── NativeAOT/
+│   │   │   ├── Examples/
+│   │   │   ├── NativeAOT.csproj
+│   │   │   ├── Program.cs
+│   │   │   └── README.md
+│   │   ├── RoslynAnalyzersDemo/
+│   │   │   ├── Program.cs
+│   │   │   ├── README.md
+│   │   │   └── RoslynAnalyzersDemo.csproj
+│   │   ├── SourceGenerators/
+│   │       ├── Examples/
+│   │       │   ├── AutoMapExample.cs
+│   │       │   └── LoggerExample.cs
+│   │       ├── Program.cs
+│   │       ├── README.md
+│   │       └── SourceGenerators.csproj
+│   ├── 05-RealWorld/
+│   │   ├── MLNetIntegration/
+│   │   │   ├── Data/
+│   │   │   │   ├── housing-data.csv
+│   │   │   │   └── sentiment-data.csv
+│   │   │   ├── Examples/
+│   │   │   │   ├── BinaryClassificationExample.cs
+│   │   │   │   ├── MultiModelComparisonExample.cs
+│   │   │   │   └── RegressionExample.cs
+│   │   │   ├── Models/
+│   │   │   │   ├── HouseData.cs
+│   │   │   │   └── SentimentData.cs
+│   │   │   ├── MLNetIntegration.csproj
+│   │   │   ├── Program.cs
+│   │   │   └── README.md
+│   │   ├── MicroserviceTemplate/
+│   │   │   ├── Application/
+│   │   │   │   ├── Commands/
+│   │   │   │   │   ├── CreateProductCommand.cs
+│   │   │   │   │   └── CreateProductCommandHandler.cs
+│   │   │   │   ├── DTOs/
+│   │   │   │   │   └── ProductDto.cs
+│   │   │   │   ├── Queries/
+│   │   │   │   │   ├── GetAllProductsQuery.cs
+│   │   │   │   │   ├── GetAllProductsQueryHandler.cs
+│   │   │   │   │   ├── GetProductQuery.cs
+│   │   │   │   │   └── GetProductQueryHandler.cs
+│   │   │   │   ├── Validators/
+│   │   │   │       └── CreateProductValidator.cs
+│   │   │   ├── Domain/
+│   │   │   │   ├── Entities/
+│   │   │   │   │   └── Product.cs
+│   │   │   │   ├── Events/
+│   │   │   │   │   ├── IDomainEvent.cs
+│   │   │   │   │   └── ProductCreatedEvent.cs
+│   │   │   │   ├── Repositories/
+│   │   │   │   │   └── IProductRepository.cs
+│   │   │   │   ├── ValueObjects/
+│   │   │   │       └── Money.cs
+│   │   │   ├── Infrastructure/
+│   │   │   │   ├── Repositories/
+│   │   │   │   │   └── InMemoryProductRepository.cs
+│   │   │   │   └── DependencyInjection.cs
+│   │   │   ├── MicroserviceTemplate.csproj
+│   │   │   ├── Program.cs
+│   │   │   └── README.md
+│   │   ├── WebApiAdvanced/
+│   │       ├── Controllers/
+│   │       │   ├── AuthController.cs
+│   │       │   └── ProductsController.cs
+│   │       ├── Middleware/
+│   │       ├── Models/
+│   │       │   ├── ApiResponse.cs
+│   │       │   └── Product.cs
+│   │       ├── Services/
+│   │       │   ├── IProductService.cs
+│   │       │   └── ProductService.cs
+│   │       ├── Program.cs
+│   │       ├── README.md
+│   │       ├── WebApiAdvanced.csproj
+│   │       └── appsettings.json
+│   ├── 06-CuttingEdge/
+│   │   ├── AspireCloudStack/
+│   │   │   ├── AspireCloudStack.ApiService/
+│   │   │   │   ├── Controllers/
+│   │   │   │   │   ├── AuthController.cs
+│   │   │   │   │   ├── ProductsController.cs
+│   │   │   │   │   └── WeatherController.cs
+│   │   │   │   ├── Data/
+│   │   │   │   │   └── ApplicationDbContext.cs
+│   │   │   │   ├── Models/
+│   │   │   │   │   ├── Product.cs
+│   │   │   │   │   └── WeatherForecast.cs
+│   │   │   │   ├── Services/
+│   │   │   │   │   ├── IProductService.cs
+│   │   │   │   │   ├── IWeatherService.cs
+│   │   │   │   │   ├── ProductService.cs
+│   │   │   │   │   └── WeatherService.cs
+│   │   │   │   ├── AspireCloudStack.ApiService.csproj
+│   │   │   │   ├── Program.cs
+│   │   │   │   └── appsettings.json
+│   │   │   ├── AspireCloudStack.AppHost/
+│   │   │   │   ├── AspireCloudStack.AppHost.csproj
+│   │   │   │   ├── Program.cs
+│   │   │   │   └── appsettings.json
+│   │   │   ├── AspireCloudStack.ServiceDefaults/
+│   │   │   │   ├── AspireCloudStack.ServiceDefaults.csproj
+│   │   │   │   └── Extensions.cs
+│   │   │   ├── AspireCloudStack.Web/
+│   │   │   ├── AspireCloudStack.sln
+│   │   │   └── README.md
+│   │   ├── docs/
+│   │   │   ├── decisions/
+│   │   └── README.md
+│   ├── 07-CloudNative/
+│   │   ├── AspireVideoService/
+│   │   │   ├── VideoService.API/
+│   │   │   │   ├── Data/
+│   │   │   │   │   └── VideoDbContext.cs
+│   │   │   │   ├── Models/
+│   │   │   │   │   └── Video.cs
+│   │   │   │   ├── Properties/
+│   │   │   │   ├── Services/
+│   │   │   │   │   └── VideoProcessingClient.cs
+│   │   │   │   ├── Dockerfile
+│   │   │   │   ├── Program.cs
+│   │   │   │   ├── VideoService.API.csproj
+│   │   │   │   ├── VideoService.API.http
+│   │   │   │   ├── appsettings.Development.json
+│   │   │   │   └── appsettings.json
+│   │   │   ├── VideoService.AppHost/
+│   │   │   │   ├── Program.cs
+│   │   │   │   └── VideoService.AppHost.csproj
+│   │   │   ├── VideoService.ServiceDefaults/
+│   │   │   │   ├── Extensions.cs
+│   │   │   │   └── VideoService.ServiceDefaults.csproj
+│   │   │   ├── VideoService.Web/
+│   │   │   │   ├── Components/
+│   │   │   │   │   ├── Layout/
+│   │   │   │   │   │   ├── MainLayout.razor
+│   │   │   │   │   │   ├── MainLayout.razor.css
+│   │   │   │   │   │   ├── NavMenu.razor
+│   │   │   │   │   │   └── NavMenu.razor.css
+│   │   │   │   │   ├── Pages/
+│   │   │   │   │   │   ├── Counter.razor
+│   │   │   │   │   │   ├── Error.razor
+│   │   │   │   │   │   ├── Home.razor
+│   │   │   │   │   │   ├── Videos.razor
+│   │   │   │   │   │   └── Weather.razor
+│   │   │   │   │   ├── App.razor
+│   │   │   │   │   ├── Routes.razor
+│   │   │   │   │   └── _Imports.razor
+│   │   │   │   ├── Properties/
+│   │   │   │   ├── wwwroot/
+│   │   │   │   │   ├── bootstrap/
+│   │   │   │   │   │   ├── bootstrap.min.css
+│   │   │   │   │   │   └── bootstrap.min.css.map
+│   │   │   │   │   ├── app.css
+│   │   │   │   │   └── favicon.png
+│   │   │   │   ├── Program.cs
+│   │   │   │   ├── VideoService.Web.csproj
+│   │   │   │   ├── appsettings.Development.json
+│   │   │   │   └── appsettings.json
+│   │   │   ├── AspireVideoService.sln
+│   │   │   ├── QUICKSTART.md
+│   │   │   └── README.md
+│   │   └── README.md
+│   ├── 08-Capstone/
+│   │   ├── MicroVideoPlatform/
+│   │       ├── MicroVideoPlatform.Analytics.Function/
+│   │       │   ├── Functions/
+│   │       │   │   ├── RecommendationFunction.cs
+│   │       │   │   ├── SentimentAnalysisFunction.cs
+│   │       │   │   └── VideoProcessingFunction.cs
+│   │       │   ├── Models/
+│   │       │   │   ├── CommentData.cs
+│   │       │   │   └── VideoData.cs
+│   │       │   ├── Services/
+│   │       │   │   ├── VideoCommentAnalyzer.cs
+│   │       │   │   └── VideoRecommendationService.cs
+│   │       │   ├── training/
+│   │       │   │   └── train_sentiment_model.py
+│   │       │   ├── MicroVideoPlatform.Analytics.Function.csproj
+│   │       │   ├── Program.cs
+│   │       │   └── README.md
+│   │       ├── MicroVideoPlatform.Analytics.Tests/
+│   │       │   ├── MicroVideoPlatform.Analytics.Tests.csproj
+│   │       │   ├── VideoCommentAnalyzerTests.cs
+│   │       │   └── VideoRecommendationServiceTests.cs
+│   │       ├── MicroVideoPlatform.ApiGateway/
+│   │       │   ├── Controllers/
+│   │       │   │   └── AggregatedVideoController.cs
+│   │       │   ├── Middleware/
+│   │       │   ├── Models/
+│   │       │   │   └── AggregatedVideoResponse.cs
+│   │       │   ├── Policies/
+│   │       │   ├── Properties/
+│   │       │   ├── Services/
+│   │       │   │   └── VideoAggregationService.cs
+│   │       │   ├── Dockerfile
+│   │       │   ├── IMPLEMENTATION_STATUS.md
+│   │       │   ├── MicroVideoPlatform.ApiGateway.csproj
+│   │       │   ├── MicroVideoPlatform.ApiGateway.http
+│   │       │   ├── Program.cs
+│   │       │   ├── README.md
+│   │       │   ├── appsettings.Development.json
+│   │       │   └── appsettings.json
+│   │       ├── MicroVideoPlatform.Content.API/
+│   │       │   ├── Configuration/
+│   │       │   │   └── SensitiveDataDestructuringPolicy.cs
+│   │       │   ├── Controllers/
+│   │       │   │   └── VideosController.cs
+│   │       │   ├── Data/
+│   │       │   │   ├── Context/
+│   │       │   │   ├── Repositories/
+│   │       │   │   ├── VideoDbContext.cs
+│   │       │   │   └── VideoRepository.cs
+│   │       │   ├── Domain/
+│   │       │   │   ├── Entities/
+│   │       │   │       └── Video.cs
+│   │       │   ├── Middleware/
+│   │       │   │   ├── RequestRateLimitingMiddleware.cs
+│   │       │   │   └── SecurityHeadersMiddleware.cs
+│   │       │   ├── Properties/
+│   │       │   ├── Services/
+│   │       │   │   └── RabbitMQEventBus.cs
+│   │       │   ├── Dockerfile
+│   │       │   ├── MicroVideoPlatform.Content.API.csproj
+│   │       │   ├── MicroVideoPlatform.Content.API.http
+│   │       │   ├── Program.cs
+│   │       │   ├── appsettings.Development.json
+│   │       │   └── appsettings.json
+│   │       ├── MicroVideoPlatform.Processing.Worker/
+│   │       │   ├── Properties/
+│   │       │   ├── Dockerfile
+│   │       │   ├── MicroVideoPlatform.Processing.Worker.csproj
+│   │       │   ├── Program.cs
+│   │       │   ├── VideoProcessingWorker.cs
+│   │       │   ├── Worker.cs
+│   │       │   ├── appsettings.Development.json
+│   │       │   └── appsettings.json
+│   │       ├── MicroVideoPlatform.Shared/
+│   │       │   ├── Common/
+│   │       │   │   ├── Constants.cs
+│   │       │   │   └── Result.cs
+│   │       │   ├── Contracts/
+│   │       │   │   ├── IAnalyticsService.cs
+│   │       │   │   ├── IEventBus.cs
+│   │       │   │   ├── IVideoProcessingService.cs
+│   │       │   │   └── IVideoRepository.cs
+│   │       │   ├── DTOs/
+│   │       │   │   ├── VideoAnalyticsResultDto.cs
+│   │       │   │   ├── VideoDto.cs
+│   │       │   │   ├── VideoMetadataDto.cs
+│   │       │   │   └── VideoProcessingStatusDto.cs
+│   │       │   ├── Enums/
+│   │       │   │   ├── ProcessingStage.cs
+│   │       │   │   ├── VideoFormat.cs
+│   │       │   │   └── VideoStatus.cs
+│   │       │   ├── Events/
+│   │       │   │   ├── DomainEventBase.cs
+│   │       │   │   ├── VideoAnalyticsCompletedEvent.cs
+│   │       │   │   ├── VideoProcessingCompletedEvent.cs
+│   │       │   │   ├── VideoProcessingFailedEvent.cs
+│   │       │   │   └── VideoUploadedEvent.cs
+│   │       │   └── MicroVideoPlatform.Shared.csproj
+│   │       ├── MicroVideoPlatform.Web.UI/
+│   │       │   ├── Components/
+│   │       │   ├── Data/
+│   │       │   │   ├── WeatherForecast.cs
+│   │       │   │   └── WeatherForecastService.cs
+│   │       │   ├── Hubs/
+│   │       │   │   └── VideoHub.cs
+│   │       │   ├── Pages/
+│   │       │   │   ├── Counter.razor
+│   │       │   │   ├── Error.cshtml
+│   │       │   │   ├── Error.cshtml.cs
+│   │       │   │   ├── FetchData.razor
+│   │       │   │   ├── Index.razor
+│   │       │   │   ├── UploadVideo.razor
+│   │       │   │   ├── VideoDetail.razor
+│   │       │   │   ├── VideoList.razor
+│   │       │   │   └── _Host.cshtml
+│   │       │   ├── Properties/
+│   │       │   ├── Services/
+│   │       │   │   ├── AnalyticsApiClient.cs
+│   │       │   │   ├── IAnalyticsApiClient.cs
+│   │       │   │   ├── IVideoApiClient.cs
+│   │       │   │   ├── VideoApiClient.cs
+│   │       │   │   └── VideoHubClient.cs
+│   │       │   ├── Shared/
+│   │       │   │   ├── MainLayout.razor
+│   │       │   │   ├── MainLayout.razor.css
+│   │       │   │   ├── NavMenu.razor
+│   │       │   │   ├── NavMenu.razor.css
+│   │       │   │   └── SurveyPrompt.razor
+│   │       │   ├── State/
+│   │       │   │   ├── AppState.cs
+│   │       │   │   └── VideoStore.cs
+│   │       │   ├── wwwroot/
+│   │       │   │   ├── css/
+│   │       │   │   │   ├── bootstrap/
+│   │       │   │   │   │   ├── bootstrap.min.css
+│   │       │   │   │   │   └── bootstrap.min.css.map
+│   │       │   │   │   ├── open-iconic/
+│   │       │   │   │   │   ├── font/
+│   │       │   │   │   │   │   ├── css/
+│   │       │   │   │   │   │   │   └── open-iconic-bootstrap.min.css
+│   │       │   │   │   │   │   ├── fonts/
+│   │       │   │   │   │   │       ├── open-iconic.eot
+│   │       │   │   │   │   │       ├── open-iconic.otf
+│   │       │   │   │   │   │       ├── open-iconic.svg
+│   │       │   │   │   │   │       ├── open-iconic.ttf
+│   │       │   │   │   │   │       └── open-iconic.woff
+│   │       │   │   │   │   ├── FONT-LICENSE
+│   │       │   │   │   │   ├── ICON-LICENSE
+│   │       │   │   │   │   └── README.md
+│   │       │   │   │   └── site.css
+│   │       │   │   └── favicon.png
+│   │       │   ├── App.razor
+│   │       │   ├── MicroVideoPlatform.Web.UI.csproj
+│   │       │   ├── Program.cs
+│   │       │   ├── _Imports.razor
+│   │       │   ├── appsettings.Development.json
+│   │       │   └── appsettings.json
+│   │       ├── MicroVideoPlatform.Web.UI.Tests/
+│   │       │   ├── MainLayoutTests.cs
+│   │       │   ├── MicroVideoPlatform.Web.UI.Tests.csproj
+│   │       │   ├── UploadVideoTests.cs
+│   │       │   ├── Usings.cs
+│   │       │   ├── VideoDetailTests.cs
+│   │       │   └── VideoListTests.cs
+│   │       ├── docs/
+│   │       │   ├── ANALYTICS_FUNCTION_COMPLETION_REPORT.md
+│   │       │   ├── DEPLOYMENT_IMPLEMENTATION_REPORT.md
+│   │       │   ├── SECURITY-ADVANCED.md
+│   │       │   └── SECURITY_IMPLEMENTATION_REPORT.md
+│   │       ├── infrastructure/
+│   │       │   ├── README.md
+│   │       │   ├── main.tf
+│   │       │   └── terraform.tfvars.example
+│   │       ├── scripts/
+│   │       │   ├── init-db.sql
+│   │       │   └── rabbitmq.conf
+│   │       ├── CAPSTONE_COMPLETION_REPORT.md
+│   │       ├── DEPLOY.md
+│   │       ├── DOCKER_SETUP.md
+│   │       ├── Makefile
+│   │       ├── MicroVideoPlatform.sln
+│   │       ├── README.md
+│   │       ├── docker-compose.override.yml
+│   │       └── docker-compose.yml
+│   ├── 98-RealWorld-Problems/
+│   │   ├── 01-API-Rate-Limiting/
+│   │   │   ├── IMPLEMENTATION/
+│   │   │   │   ├── AdvancedRateLimiter.cs
+│   │   │   │   ├── BasicRateLimiter.cs
+│   │   │   │   └── DistributedRateLimiter.cs
+│   │   │   ├── COMPARISON.md
+│   │   │   ├── DECISION-GUIDE.md
+│   │   │   ├── PROBLEM.md
+│   │   │   ├── SOLUTION-A.md
+│   │   │   ├── SOLUTION-ADVANCED.md
+│   │   │   ├── SOLUTION-B.md
+│   │   │   ├── SOLUTION-BASIC.md
+│   │   │   └── SOLUTION-ENTERPRISE.md
+│   │   ├── 02-Cache-Strategy/
+│   │   │   ├── IMPLEMENTATION/
+│   │   │   │   └── CacheService.cs
+│   │   │   ├── COMPARISON.md
+│   │   │   ├── DECISION-GUIDE.md
+│   │   │   ├── DECISION-TREE.md
+│   │   │   ├── PROBLEM.md
+│   │   │   ├── SOLUTION-A.md
+│   │   │   ├── SOLUTION-ADVANCED.md
+│   │   │   ├── SOLUTION-B.md
+│   │   │   ├── SOLUTION-BASIC.md
+│   │   │   ├── SOLUTION-C.md
+│   │   │   └── SOLUTION-ENTERPRISE.md
+│   │   ├── 03-Database-Migration/
+│   │   │   ├── IMPLEMENTATION/
+│   │   │   ├── COMPARISON.md
+│   │   │   ├── DECISION-GUIDE.md
+│   │   │   ├── PROBLEM.md
+│   │   │   └── SOLUTION-ADVANCED.md
+│   │   ├── 03-N-Plus-One-Problem/
+│   │   │   ├── PROBLEM.md
+│   │   │   └── SOLUTION-A.md
+│   │   ├── 04-Microservice-Communication/
+│   │   │   ├── IMPLEMENTATION/
+│   │   │   ├── COMPARISON.md
+│   │   │   ├── DECISION-GUIDE.md
+│   │   │   ├── PROBLEM.md
+│   │   │   └── SOLUTION-ADVANCED.md
+│   │   ├── 04-Microservice-Error-Handling/
+│   │   │   └── PROBLEM.md
+│   │   ├── 05-Legacy-Code-Refactoring/
+│   │   │   ├── IMPLEMENTATION/
+│   │   │   ├── COMPARISON.md
+│   │   │   ├── DECISION-GUIDE.md
+│   │   │   ├── PROBLEM.md
+│   │   │   └── SOLUTION-ADVANCED.md
+│   │   ├── 06-Production-Incident-Response/
+│   │   │   ├── IMPLEMENTATION/
+│   │   │   ├── COMPARISON.md
+│   │   │   ├── DECISION-GUIDE.md
+│   │   │   ├── PROBLEM.md
+│   │   │   └── SOLUTION-ADVANCED.md
+│   │   ├── CAREER_IMPACT.md
+│   │   ├── COMPLETION_SUMMARY.md
+│   │   ├── README.md
+│   │   └── ZENGINLESTIRME_RAPORU.md
+│   ├── 99-Exercises/
+│   │   ├── Algorithms/
+│   │   │   ├── 01-BinarySearch/
+│   │   │   │   ├── BinarySearch.csproj
+│   │   │   │   ├── BinarySearchTests.cs
+│   │   │   │   ├── INSTRUCTIONS.md
+│   │   │   │   ├── Program.cs
+│   │   │   │   └── SOLUTION.md
+│   │   │   ├── 02-QuickSort/
+│   │   │   │   ├── INSTRUCTIONS.md
+│   │   │   │   ├── Program.cs
+│   │   │   │   ├── QuickSort.csproj
+│   │   │   │   ├── QuickSortTests.cs
+│   │   │   │   └── SOLUTION.md
+│   │   │   ├── 03-MergeSort/
+│   │   │   │   ├── INSTRUCTIONS.md
+│   │   │   │   ├── MergeSort.csproj
+│   │   │   │   ├── MergeSortTests.cs
+│   │   │   │   ├── Program.cs
+│   │   │   │   └── SOLUTION.md
+│   │   │   ├── BinarySearch/
+│   │   ├── DesignPatterns/
+│   │   │   ├── 01-Builder/
+│   │   │   │   ├── BuilderPattern.csproj
+│   │   │   │   ├── BuilderPatternTests.cs
+│   │   │   │   ├── INSTRUCTIONS.md
+│   │   │   │   ├── Models.cs
+│   │   │   │   ├── Program.cs
+│   │   │   │   └── SOLUTION.md
+│   │   │   ├── 02-Observer/
+│   │   │   │   ├── INSTRUCTIONS.md
+│   │   │   │   ├── Models.cs
+│   │   │   │   ├── ObserverPattern.csproj
+│   │   │   │   ├── ObserverPatternTests.cs
+│   │   │   │   ├── Program.cs
+│   │   │   │   └── SOLUTION.md
+│   │   │   ├── 03-Decorator/
+│   │   │   │   ├── docs/
+│   │   │   │   │   ├── learning-paths/
+│   │   │   │   │       ├── checklists/
+│   │   │   │   │       ├── project-templates/
+│   │   │   │   │           ├── path1/
+│   │   │   │   │           ├── path2/
+│   │   │   │   │           ├── path3/
+│   │   │   │   ├── DecoratorPattern.csproj
+│   │   │   │   ├── DecoratorPatternTests.cs
+│   │   │   │   ├── INSTRUCTIONS.md
+│   │   │   │   ├── Models.cs
+│   │   │   │   ├── Program.cs
+│   │   │   │   └── SOLUTION.md
+│   │   │   ├── FactoryPattern/
+│   │   │   │   ├── FactoryPattern.csproj
+│   │   │   │   ├── INSTRUCTIONS.md
+│   │   │   │   ├── IVehicle.cs
+│   │   │   │   ├── SOLUTION.md
+│   │   │   │   ├── VehicleFactory.cs
+│   │   │   │   ├── VehicleFactoryTests.cs
+│   │   │   │   └── Vehicles.cs
+│   │   │   ├── StrategyPattern/
+│   │   │       ├── BankTransferPaymentStrategy.cs
+│   │   │       ├── CartItem.cs
+│   │   │       ├── CreditCardPaymentStrategy.cs
+│   │   │       ├── INSTRUCTIONS.md
+│   │   │       ├── IPaymentStrategy.cs
+│   │   │       ├── PayPalPaymentStrategy.cs
+│   │   │       ├── SOLUTION.md
+│   │   │       ├── ShoppingCart.cs
+│   │   │       ├── ShoppingCartTests.cs
+│   │   │       └── StrategyPattern.csproj
+│   │   ├── Generics/
+│   │   │   ├── 01-Covariance/
+│   │   │   │   ├── Covariance.csproj
+│   │   │   │   ├── CovarianceTests.cs
+│   │   │   │   ├── INSTRUCTIONS.md
+│   │   │   │   ├── Models.cs
+│   │   │   │   ├── Program.cs
+│   │   │   │   └── SOLUTION.md
+│   │   │   ├── 02-Contravariance/
+│   │   │   │   ├── Contravariance.csproj
+│   │   │   │   ├── ContravarianceTests.cs
+│   │   │   │   ├── INSTRUCTIONS.md
+│   │   │   │   ├── Models.cs
+│   │   │   │   ├── Program.cs
+│   │   │   │   └── SOLUTION.md
+│   │   │   ├── 03-GenericConstraints/
+│   │   │       ├── GenericConstraints.csproj
+│   │   │       ├── GenericConstraintsTests.cs
+│   │   │       ├── INSTRUCTIONS.md
+│   │   │       ├── Models.cs
+│   │   │       ├── Program.cs
+│   │   │       └── SOLUTION.md
+│   │   ├── LINQ/
+│   │   │   ├── 01-BasicQueries/
+│   │   │   │   ├── BasicQueries.csproj
+│   │   │   │   ├── INSTRUCTIONS.md
+│   │   │   │   ├── LinqBasicTests.cs
+│   │   │   │   ├── Product.cs
+│   │   │   │   ├── Program.cs
+│   │   │   │   └── SOLUTION.md
+│   │   │   ├── 02-GroupingAggregation/
+│   │   │   │   ├── GroupingAggregation.csproj
+│   │   │   │   ├── INSTRUCTIONS.md
+│   │   │   │   ├── LinqGroupingTests.cs
+│   │   │   │   ├── Product.cs
+│   │   │   │   ├── Program.cs
+│   │   │   │   └── SOLUTION.md
+│   │   │   ├── 03-Joins/
+│   │   │   │   ├── INSTRUCTIONS.md
+│   │   │   │   ├── Joins.csproj
+│   │   │   │   ├── LinqJoinsTests.cs
+│   │   │   │   ├── Models.cs
+│   │   │   │   ├── Program.cs
+│   │   │   │   └── SOLUTION.md
+│   │   │   ├── BasicQueries/
+│   │   ├── docs/
+│   │   │   └── INTERACTIVE_LEARNING_IMPLEMENTATION_REPORT.md
+│   │   ├── INTERACTIVE_LEARNING_STATUS.md
+│   │   └── README.md
+│   ├── PROJECT_COMPLETION_SUMMARY.md
+│   └── README.md
+├── src/
+│   ├── AdvancedConcepts.Analyzers/
+│   │   ├── CodeFixes/
+│   │   │   ├── ConfigureAwaitCodeFixProvider.cs
+│   │   │   └── StringConcatenationCodeFixProvider.cs
+│   │   ├── Design/
+│   │   │   ├── ClassComplexityAnalyzer.cs
+│   │   │   ├── ImmutabilityAnalyzer.cs
+│   │   │   └── SolidViolationAnalyzer.cs
+│   │   ├── Performance/
+│   │   │   ├── AllocationAnalyzer.cs
+│   │   │   ├── AsyncAwaitAnalyzer.cs
+│   │   │   ├── ConfigureAwaitAnalyzer.cs
+│   │   │   ├── LinqPerformanceAnalyzer.cs
+│   │   │   └── StringConcatenationAnalyzer.cs
+│   │   ├── Security/
+│   │   │   ├── SqlInjectionAnalyzer.cs
+│   │   │   └── XssVulnerabilityAnalyzer.cs
+│   │   ├── AdvancedConcepts.Analyzers.csproj
+│   │   └── README.md
+│   ├── AdvancedConcepts.Core/
+│   │   ├── Advanced/
+│   │   │   ├── DependencyInjection/
+│   │   │   │   └── DIExample.cs
+│   │   │   ├── DesignPatterns/
+│   │   │   │   ├── BuilderPattern.cs
+│   │   │   │   └── FactoryPattern.cs
+│   │   │   ├── ExplicitImplicitConversion/
+│   │   │   │   ├── ConversionExamples.cs
+│   │   │   │   └── Temperature.cs
+│   │   │   ├── GenericCovarianceContravariance/
+│   │   │   │   ├── AnimalConsumer.cs
+│   │   │   │   ├── AnimalProducer.cs
+│   │   │   │   ├── CatConsumer.cs
+│   │   │   │   ├── CatProducer.cs
+│   │   │   │   ├── DogProducer.cs
+│   │   │   │   ├── IConsumer.cs
+│   │   │   │   └── IProducer.cs
+│   │   │   ├── HighPerformance/
+│   │   │   │   ├── ParallelProcessingExamples.cs
+│   │   │   │   └── SpanMemoryExamples.cs
+│   │   │   ├── ModernCSharp/
+│   │   │   │   ├── AdvancedPatternMatching.cs
+│   │   │   │   ├── CollectionExpressionsExample.cs
+│   │   │   │   └── PrimaryConstructorsExample.cs
+│   │   │   ├── Observability/
+│   │   │   │   ├── EnhancedSerilogExamples.cs
+│   │   │   │   ├── HealthCheckExamples.cs
+│   │   │   │   ├── OpenTelemetryExamples.cs
+│   │   │   │   └── StructuredLogging.cs
+│   │   │   ├── PerformanceBenchmarks/
+│   │   │   │   ├── BenchmarkRunner.cs
+│   │   │   │   ├── BoxingUnboxingBenchmark.cs
+│   │   │   │   └── CovarianceBenchmark.cs
+│   │   │   ├── Resilience/
+│   │   │   │   ├── FluentValidationExamples.cs
+│   │   │   │   ├── PollyResiliencePatterns.cs
+│   │   │   │   └── ResultPattern.cs
+│   │   │   ├── SOLIDPrinciples/
+│   │   │       └── SOLIDPrinciplesExamples.cs
+│   │   ├── Beginner/
+│   │   │   ├── Override-Upcast-Downcast/
+│   │   │   │   ├── Bike.cs
+│   │   │   │   ├── Car.cs
+│   │   │   │   └── Vehicle.cs
+│   │   │   ├── Polymorphism-AssignCompatibility/
+│   │   │   │   ├── Animal.cs
+│   │   │   │   ├── AssignmentCompatibility.cs
+│   │   │   │   ├── Cat.cs
+│   │   │   │   ├── Dog.cs
+│   │   │   │   └── Mammal.cs
+│   │   │   ├── Upcast-Downcast/
+│   │   │       ├── Employee.cs
+│   │   │       └── Manager.cs
+│   │   ├── Intermediate/
+│   │   │   ├── BoxingUnboxing/
+│   │   │   │   └── BoxingUnboxing.cs
+│   │   │   ├── CovarianceContravariance/
+│   │   │       ├── Covariance.cs
+│   │   │       └── CovarianceContravariance.cs
+│   │   ├── AdvancedConcepts.Core.csproj
+│   │   ├── GlobalUsings.cs
+│   │   └── Program.cs
+│   ├── AdvancedConcepts.SourceGenerators/
+│       ├── Attributes/
+│       │   ├── AutoMapAttribute.cs
+│       │   ├── LoggerMessageAttribute.cs
+│       │   └── ValidateAttribute.cs
+│       ├── AdvancedConcepts.SourceGenerators.csproj
+│       ├── AutoMapGenerator.cs
+│       ├── LoggerMessageGenerator.cs
+│       ├── README.md
+│       └── ValidationGenerator.cs
+├── tests/
+│   ├── AdvancedConcepts.IntegrationTests/
+│   │   ├── TestResults/
+│   │   │   ├── 6f161bdc-6749-427d-a5cc-4da133611626/
+│   │   │   │   └── coverage.cobertura.xml
+│   │   │   ├── 8cf666e6-c9b7-4761-a0ce-920648d87798/
+│   │   │   │   └── coverage.cobertura.xml
+│   │   │   ├── db812464-beb3-4ec1-903c-49b77e802b57/
+│   │   │       └── coverage.cobertura.xml
+│   │   ├── coverage/
+│   │   │   ├── coverage.cobertura.xml
+│   │   │   ├── coverage.info
+│   │   │   └── coverage.opencover.xml
+│   │   ├── AdvancedConcepts.IntegrationTests.csproj
+│   │   ├── GlobalUsings.cs
+│   │   ├── PerformanceIntegrationTests.cs
+│   │   └── Usings.cs
+│   ├── AdvancedConcepts.SourceGenerators.Tests/
+│   │   ├── Helpers/
+│   │   │   └── GeneratorTestHelper.cs
+│   │   ├── AdvancedConcepts.SourceGenerators.Tests.csproj
+│   │   ├── AutoMapGeneratorTests.cs
+│   │   ├── GlobalUsings.cs
+│   │   ├── LoggerMessageGeneratorTests.cs
+│   │   └── ValidationGeneratorTests.cs
+│   ├── AdvancedConcepts.Tests/
+│   │   ├── DesignPatternsTests.cs
+│   │   └── SOLIDPrinciplesTests.cs
+│   ├── AdvancedConcepts.UnitTests/
+│       ├── Advanced/
+│       │   ├── DependencyInjectionTests.cs
+│       │   ├── MoqExampleTests.cs
+│       │   └── PropertyBasedTests.cs
+│       ├── Beginner/
+│       │   └── PolymorphismTests.cs
+│       ├── HighPerformance/
+│       │   ├── ParallelProcessingTests.cs
+│       │   └── SpanMemoryTests.cs
+│       ├── Intermediate/
+│       │   ├── BoxingUnboxingTests.cs
+│       │   └── CovarianceContravarianceTests.cs
+│       ├── ModernCSharp/
+│       │   ├── PatternMatchingTests.cs
+│       │   └── PrimaryConstructorsTests.cs
+│       ├── TestResults/
+│       │   ├── 98a3011b-f766-40c1-95db-531af885c1fd/
+│       │   │   └── coverage.cobertura.xml
+│       │   ├── 9ca0724c-0d06-4eb6-8919-c00ec0104f18/
+│       │   │   └── coverage.cobertura.xml
+│       │   ├── b5f5cb00-e9e5-499e-9db1-c63f94e90c0a/
+│       │       └── coverage.cobertura.xml
+│       ├── coverage/
+│       │   ├── coverage.cobertura.xml
+│       │   ├── coverage.info
+│       │   └── coverage.opencover.xml
+│       ├── AdvancedConcepts.UnitTests.csproj
+│       ├── GlobalUsings.cs
+│       ├── ObservabilityTests.cs
+│       ├── ResilienceTests.cs
+│       ├── UnitTest1.cs
+│       └── Usings.cs
+├── AdvancedCsharpConcepts.sln
+├── CHANGELOG.md
+├── CODE_OF_CONDUCT.md
+├── CODE_REVIEW_REPORT.md
+├── CONTRIBUTING.md
+├── Directory.Build.props
+├── Directory.Build.targets
+├── Dockerfile
+├── ENTERPRISE_TRANSFORMATION_SUMMARY.md
+├── FUTURE_IMPROVEMENTS.md
+├── GAP_ANALYSIS.md
+├── GitVersion.yml
+├── LICENSE
+├── PRODUCTION_READY_REPORT.md
+├── README.md
+├── ROADMAP.md
+├── SECURITY.md
+├── SUPPORT.md
+├── cliff.toml
+├── docker-compose.yml
+└── sonar-project.properties

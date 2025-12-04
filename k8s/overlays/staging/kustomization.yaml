@@ -1,0 +1,97 @@
+# ==============================================
+# Kustomize Staging Overlay
+# Phase 9: Containerization & Cloud Native
+# ==============================================
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# Base configuration
+bases:
+  - ../../base
+
+# Namespace for staging
+namespace: staging
+
+# Labels specific to staging
+commonLabels:
+  environment: staging
+  tier: staging
+
+# Annotations
+commonAnnotations:
+  environment: "staging"
+  auto-deploy: "true"
+  monitoring: "enabled"
+
+# Name suffix
+nameSuffix: -staging
+
+# Images (use staging tag)
+images:
+  - name: advancedconcepts
+    newName: ghcr.io/dogaaydinn/advancedconcepts
+    newTag: staging
+
+# Replicas (moderate for staging)
+replicas:
+  - name: advancedconcepts
+    count: 2
+
+# Patches for staging environment
+patches:
+  # Moderate resource limits for staging
+  - patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/resources
+        value:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+    target:
+      kind: Deployment
+      name: advancedconcepts
+
+  # Staging environment variables
+  - patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/env/-
+        value:
+          name: ASPNETCORE_ENVIRONMENT
+          value: "Staging"
+      - op: add
+        path: /spec/template/spec/containers/0/env/-
+        value:
+          name: Serilog__MinimumLevel__Default
+          value: "Information"
+    target:
+      kind: Deployment
+      name: advancedconcepts
+
+  # Use LoadBalancer service for staging
+  - patch: |-
+      - op: replace
+        path: /spec/type
+        value: LoadBalancer
+    target:
+      kind: Service
+      name: advancedconcepts-service
+
+# ConfigMap patches for staging
+configMapGenerator:
+  - name: advancedconcepts-config-staging
+    behavior: merge
+    literals:
+      - ASPNETCORE_ENVIRONMENT=Staging
+      - DOTNET_ENVIRONMENT=Staging
+      - Serilog__MinimumLevel__Default=Information
+      - Features__EnableDetailedErrors=false
+      - Features__EnableBenchmarks=false
+      - ApplicationInsights__EnableAdaptiveSampling=true
+
+# Staging-specific resources
+resources:
+  - staging-hpa.yaml

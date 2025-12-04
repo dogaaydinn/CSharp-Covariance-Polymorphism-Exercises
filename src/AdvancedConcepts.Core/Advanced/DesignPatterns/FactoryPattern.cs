@@ -1,4 +1,4 @@
-namespace AdvancedCsharpConcepts.Advanced.DesignPatterns;
+namespace AdvancedConcepts.Core.Advanced.DesignPatterns;
 
 /// <summary>
 /// Factory Pattern - Creational design pattern for object creation.

@@ -1,0 +1,147 @@
+# ==============================================
+# Kubernetes ConfigMap
+# Phase 9: Containerization & Cloud Native
+# ==============================================
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: advancedconcepts-config
+  namespace: default
+  labels:
+    app: advancedconcepts
+    component: config
+    version: v1.0.0
+data:
+  # Application Settings
+  ASPNETCORE_ENVIRONMENT: "Production"
+  DOTNET_ENVIRONMENT: "Production"
+
+  # Logging Configuration
+  Serilog__MinimumLevel__Default: "Information"
+  Serilog__MinimumLevel__Override__Microsoft: "Warning"
+  Serilog__MinimumLevel__Override__System: "Warning"
+
+  # Seq Configuration (Structured Logging)
+  Serilog__WriteTo__0__Name: "Seq"
+  Serilog__WriteTo__0__Args__serverUrl: "http://seq-service:5341"
+
+  # Console Logging
+  Serilog__WriteTo__1__Name: "Console"
+  Serilog__WriteTo__1__Args__outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}"
+
+  # OpenTelemetry Configuration
+  OTEL_SERVICE_NAME: "advancedconcepts"
+  OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector:4317"
+  OTEL_TRACES_SAMPLER: "always_on"
+  OTEL_METRICS_EXPORTER: "prometheus"
+
+  # Prometheus Configuration
+  PROMETHEUS_PORT: "9090"
+  PROMETHEUS_SCRAPE_INTERVAL: "15s"
+
+  # Health Check Configuration
+  HealthChecks__Enabled: "true"
+  HealthChecks__UI__Enabled: "true"
+  HealthChecks__UI__Path: "/healthchecks-ui"
+
+  # Performance Configuration
+  ThreadPool__MinWorkerThreads: "10"
+  ThreadPool__MinCompletionPortThreads: "10"
+  GC__Server: "true"
+  GC__Concurrent: "true"
+  GC__RetainVM: "true"
+
+  # Application Insights (Azure)
+  ApplicationInsights__InstrumentationKey: ""  # Set via Secret
+  ApplicationInsights__EnableAdaptiveSampling: "true"
+
+  # Feature Flags
+  Features__EnableAdvancedExamples: "true"
+  Features__EnableBenchmarks: "false"  # Disabled in production
+  Features__EnableDetailedErrors: "false"
+
+---
+# ConfigMap for appsettings.json equivalent
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: advancedconcepts-appsettings
+  namespace: default
+  labels:
+    app: advancedconcepts
+    component: config
+    version: v1.0.0
+data:
+  appsettings.Production.json: |
+    {
+      "Logging": {
+        "LogLevel": {
+          "Default": "Information",
+          "Microsoft": "Warning",
+          "System": "Warning"
+        }
+      },
+      "Serilog": {
+        "Using": ["Serilog.Sinks.Console", "Serilog.Sinks.Seq"],
+        "MinimumLevel": {
+          "Default": "Information",
+          "Override": {
+            "Microsoft": "Warning",
+            "System": "Warning"
+          }
+        },
+        "WriteTo": [
+          {
+            "Name": "Console",
+            "Args": {
+              "outputTemplate": "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}"
+            }
+          },
+          {
+            "Name": "Seq",
+            "Args": {
+              "serverUrl": "http://seq-service:5341"
+            }
+          }
+        ],
+        "Enrich": ["FromLogContext", "WithMachineName", "WithThreadId"]
+      },
+      "OpenTelemetry": {
+        "ServiceName": "advancedconcepts",
+        "ExporterEndpoint": "http://otel-collector:4317",
+        "Tracing": {
+          "Enabled": true,
+          "Sampler": "always_on"
+        },
+        "Metrics": {
+          "Enabled": true,
+          "Exporter": "prometheus",
+          "Port": 9090
+        }
+      },
+      "HealthChecks": {
+        "Enabled": true,
+        "Checks": {
+          "Memory": {
+            "Enabled": true,
+            "ThresholdMB": 1024
+          },
+          "DiskSpace": {
+            "Enabled": true,
+            "ThresholdMB": 1024
+          }
+        }
+      },
+      "Performance": {
+        "ThreadPool": {
+          "MinWorkerThreads": 10,
+          "MinCompletionPortThreads": 10
+        },
+        "GarbageCollection": {
+          "Server": true,
+          "Concurrent": true,
+          "RetainVM": true
+        }
+      }
+    }

@@ -1,83 +1,117 @@
+# ==============================================
+# Docker Ignore Configuration
+# Phase 9: Containerization & Cloud Native
+# ==============================================
+# Optimizes Docker build context by excluding unnecessary files
+
 # Git
-.git
+.git/
 .gitignore
 .gitattributes
 
-# CI/CD
-.github
-.vscode
-.idea
-.vs
+# GitHub
+.github/
 
-# Build results
+# IDE and Editor
+.vs/
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Build outputs
 **/bin/
 **/obj/
 **/out/
-**/.vs/
-**/.vscode/
-**/.idea/
+**/publish/
+
+# Test results
 **/TestResults/
+**/coverage/
+**/StrykerOutput/
+**/.testcoverage/
+
+# Benchmark results
 **/BenchmarkDotNet.Artifacts/
 
 # NuGet
-**/.nuget/
-**/packages/
 *.nupkg
 *.snupkg
+packages/
+.nuget/
 
-# Test
-**/*Tests/
-**/coverage/
-**/*.trx
-**/*.coverage
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
 
 # Documentation
-**/docs/
-**/*.md
+docs/
+*.md
 !README.md
 
 # Docker
-**/.dockerignore
-**/Dockerfile*
-**/docker-compose*
+docker-compose*.yml
+Dockerfile
+.dockerignore
 
-# OS
-**/.DS_Store
-**/Thumbs.db
-**/*.swp
-**/*.swo
+# Kubernetes
+k8s/
+helm/
+*.yaml
+*.yml
+!appsettings*.json
+
+# CI/CD
+.github/
+*.sh
+*.ps1
 
 # Logs
-**/logs/
-**/*.log
+logs/
+*.log
 
-# Temporary
-**/tmp/
-**/temp/
-**/*.tmp
+# Temporary files
+tmp/
+temp/
+*.tmp
 
-# IDE
-**/*.user
-**/*.suo
-**/*.userosscache
-**/*.sln.docstates
+# Environment files
+.env
+.env.*
+*.env
 
-# ReSharper
-**/_ReSharper*/
-**/*.ReSharper
+# Archives
+*.zip
+*.tar
+*.gz
+*.tar.gz
 
-# JetBrains Rider
-**/.idea/
-**/*.sln.iml
-
-# Visual Studio Code
-**/.vscode/
+# Security
+*.key
+*.pem
+*.pfx
+*.p12
+**/secrets/
 
 # Node (if any)
-**/node_modules/
-**/npm-debug.log
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python (if any)
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
 
 # Misc
-*.cache
 *.bak
-*.old
+*.cache
+*.pid
+*.seed
+*.pid.lock

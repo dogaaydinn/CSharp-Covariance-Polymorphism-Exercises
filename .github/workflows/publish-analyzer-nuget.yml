@@ -1,0 +1,192 @@
+name: Publish Roslyn Analyzer to NuGet
+
+on:
+  push:
+    tags:
+      - 'analyzer-v*.*.*'  # Trigger on tags like analyzer-v1.0.0
+  workflow_dispatch:  # Allow manual trigger
+
+env:
+  DOTNET_VERSION: '8.0.x'
+  PROJECT_PATH: 'src/AdvancedConcepts.Analyzers/AdvancedConcepts.Analyzers.csproj'
+  NUGET_SOURCE: 'https://api.nuget.org/v3/index.json'
+
+jobs:
+  validate:
+    name: Validate Package
+    runs-on: ubuntu-latest
+
+    outputs:
+      version: ${{ steps.version.outputs.VERSION }}
+      semver: ${{ steps.gitversion.outputs.semVer }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for GitVersion
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v0
+        with:
+          versionSpec: '5.x'
+
+      - name: Determine Version
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v0
+        with:
+          useConfigFile: true
+          configFilePath: GitVersion.yml
+
+      - name: Extract version from tag or GitVersion
+        id: version
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]] || [[ -z "${GITHUB_REF##refs/tags/analyzer-v*}" ]]; then
+            # Manual trigger or tag-based release
+            if [[ ! -z "${GITHUB_REF##refs/tags/analyzer-v*}" ]]; then
+              VERSION=${GITHUB_REF#refs/tags/analyzer-v}
+            else
+              # Use GitVersion for manual triggers
+              VERSION="${{ steps.gitversion.outputs.semVer }}"
+            fi
+          else
+            # Use GitVersion
+            VERSION="${{ steps.gitversion.outputs.semVer }}"
+          fi
+
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "Package version: $VERSION"
+          echo "GitVersion SemVer: ${{ steps.gitversion.outputs.semVer }}"
+          echo "GitVersion MajorMinorPatch: ${{ steps.gitversion.outputs.majorMinorPatch }}"
+
+      - name: Restore dependencies
+        run: dotnet restore ${{ env.PROJECT_PATH }}
+
+      - name: Build analyzer
+        run: |
+          dotnet build ${{ env.PROJECT_PATH }} \
+            --configuration Release \
+            --no-restore \
+            /p:Version=${{ steps.version.outputs.VERSION }}
+
+      - name: Run analyzer tests
+        run: dotnet test tests/AdvancedConcepts.SourceGenerators.Tests/ --configuration Release --no-restore
+
+      - name: Pack NuGet package
+        run: |
+          dotnet pack ${{ env.PROJECT_PATH }} \
+            --configuration Release \
+            --no-build \
+            --output ./artifacts \
+            /p:PackageVersion=${{ steps.version.outputs.VERSION }} \
+            /p:RepositoryUrl=${{ github.server_url }}/${{ github.repository }} \
+            /p:RepositoryBranch=${{ github.ref_name }} \
+            /p:RepositoryCommit=${{ github.sha }}
+
+      - name: Verify package contents
+        run: |
+          echo "📦 Package contents:"
+          dotnet nuget verify ./artifacts/*.nupkg || echo "⚠️  Package verification not supported in this .NET version"
+
+          echo ""
+          echo "📋 Package metadata:"
+          unzip -l ./artifacts/*.nupkg | head -20
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuget-package
+          path: ./artifacts/*.nupkg
+          retention-days: 7
+
+  publish:
+    name: Publish to NuGet.org
+    runs-on: ubuntu-latest
+    needs: validate
+    if: github.event_name == 'push'  # Only publish on tag push, not manual dispatch
+    environment:
+      name: nuget-production
+      url: https://www.nuget.org/packages/AdvancedConcepts.Analyzers
+
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: nuget-package
+          path: ./artifacts
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Publish to NuGet.org
+        run: |
+          dotnet nuget push ./artifacts/*.nupkg \
+            --api-key ${{ secrets.NUGET_API_KEY }} \
+            --source ${{ env.NUGET_SOURCE }} \
+            --skip-duplicate
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ./artifacts/*.nupkg
+          body: |
+            ## AdvancedConcepts.Analyzers Release
+
+            ### What's New
+            See [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md) for details.
+
+            ### Installation
+            ```bash
+            dotnet add package AdvancedConcepts.Analyzers --version ${{ github.ref_name }}
+            ```
+
+            ### NuGet Package
+            https://www.nuget.org/packages/AdvancedConcepts.Analyzers/${{ github.ref_name }}
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Notify completion
+        run: |
+          echo "✅ Package published successfully!"
+          echo "📦 NuGet: https://www.nuget.org/packages/AdvancedConcepts.Analyzers"
+          echo "🏷️  Version: ${{ github.ref_name }}"
+
+  publish-github:
+    name: Publish to GitHub Packages
+    runs-on: ubuntu-latest
+    needs: validate
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: nuget-package
+          path: ./artifacts
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Publish to GitHub Packages
+        run: |
+          dotnet nuget push ./artifacts/*.nupkg \
+            --api-key ${{ secrets.GITHUB_TOKEN }} \
+            --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" \
+            --skip-duplicate
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

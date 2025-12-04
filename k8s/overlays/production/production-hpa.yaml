@@ -1,0 +1,47 @@
+# Horizontal Pod Autoscaler for Production
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: advancedconcepts-hpa-prod
+  namespace: production
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: advancedconcepts-prod
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 60
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 70
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300  # 5 minutes cooldown before scaling down
+      policies:
+        - type: Percent
+          value: 25  # Scale down max 25% at a time
+          periodSeconds: 60
+        - type: Pods
+          value: 1  # Or max 1 pod at a time
+          periodSeconds: 60
+      selectPolicy: Min  # Use the most conservative policy
+    scaleUp:
+      stabilizationWindowSeconds: 0  # Scale up immediately
+      policies:
+        - type: Percent
+          value: 50  # Scale up max 50% at a time
+          periodSeconds: 30
+        - type: Pods
+          value: 2  # Or max 2 pods at a time
+          periodSeconds: 30
+      selectPolicy: Max  # Use the most aggressive policy

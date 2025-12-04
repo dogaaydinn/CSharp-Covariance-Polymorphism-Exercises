@@ -1,0 +1,288 @@
+name: Security Scanning
+
+on:
+  push:
+    branches: [ master, main, develop ]
+  pull_request:
+    branches: [ master, main ]
+  schedule:
+    # Run security scans daily at 3 AM UTC
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+
+env:
+  DOTNET_VERSION: '8.0.x'
+
+jobs:
+  # Snyk vulnerability scanning
+  snyk:
+    name: Snyk Security Scan
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Restore dependencies
+      run: dotnet restore AdvancedCsharpConcepts.sln
+
+    - name: Run Snyk to check for vulnerabilities
+      uses: snyk/actions/dotnet@master
+      continue-on-error: true
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      with:
+        args: --severity-threshold=high --sarif-file-output=snyk.sarif
+
+    - name: Upload Snyk results to GitHub Security
+      uses: github/codeql-action/upload-sarif@v3
+      if: always()
+      with:
+        sarif_file: snyk.sarif
+
+    - name: Upload Snyk report
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: snyk-report
+        path: snyk.sarif
+        retention-days: 30
+
+  # OWASP Dependency-Check
+  dependency-check:
+    name: OWASP Dependency Check
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Restore dependencies
+      run: dotnet restore AdvancedCsharpConcepts.sln
+
+    - name: Run OWASP Dependency-Check
+      uses: dependency-check/Dependency-Check_Action@main
+      with:
+        project: 'AdvancedConcepts'
+        path: '.'
+        format: 'ALL'
+        args: >
+          --enableRetired
+          --enableExperimental
+          --scan '**/*.csproj'
+          --exclude '**/obj/**'
+          --exclude '**/bin/**'
+
+    - name: Upload Dependency-Check report
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: dependency-check-report
+        path: reports/
+        retention-days: 30
+
+    - name: Upload SARIF to GitHub Security
+      uses: github/codeql-action/upload-sarif@v3
+      if: always()
+      with:
+        sarif_file: reports/dependency-check-report.sarif
+      continue-on-error: true
+
+  # Secret scanning with Gitleaks
+  secret-scan:
+    name: Secret Scanning
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Full history for secret scanning
+
+    - name: Run Gitleaks
+      uses: gitleaks/gitleaks-action@v2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
+
+    - name: Upload Gitleaks report
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: gitleaks-report
+        path: gitleaks-report.json
+        retention-days: 30
+
+  # License compliance check
+  license-check:
+    name: License Compliance
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Install dotnet-project-licenses
+      run: dotnet tool install --global dotnet-project-licenses
+
+    - name: Restore dependencies
+      run: dotnet restore AdvancedCsharpConcepts.sln
+
+    - name: Generate license report
+      run: |
+        dotnet-project-licenses \
+          -i . \
+          -o \
+          -f json \
+          -e \
+          --export-license-texts \
+          > license-report.json
+
+    - name: Check for non-compliant licenses
+      run: |
+        echo "Checking for non-compliant licenses..."
+        # List of approved licenses
+        APPROVED_LICENSES="MIT|Apache-2.0|BSD-*|ISC|Unlicense"
+
+        # Check if any non-approved licenses exist
+        if grep -qvE "$APPROVED_LICENSES" license-report.json; then
+          echo "⚠️ Warning: Non-standard licenses detected"
+          echo "Please review license-report.json"
+        else
+          echo "✅ All licenses are compliant"
+        fi
+      continue-on-error: true
+
+    - name: Upload license report
+      uses: actions/upload-artifact@v4
+      with:
+        name: license-report
+        path: license-report.json
+        retention-days: 90
+
+  # Container image scanning
+  container-scan:
+    name: Container Security Scan
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main')
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Build Docker image
+      run: docker build -t advancedconcepts:scan --target final .
+
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: 'advancedconcepts:scan'
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+        severity: 'CRITICAL,HIGH'
+
+    - name: Upload Trivy results to GitHub Security
+      uses: github/codeql-action/upload-sarif@v3
+      if: always()
+      with:
+        sarif_file: 'trivy-results.sarif'
+
+    - name: Run Trivy for detailed report
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: 'advancedconcepts:scan'
+        format: 'table'
+        exit-code: '0'
+
+  # Security scorecard
+  scorecard:
+    name: OpenSSF Scorecard
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      id-token: write
+      contents: read
+      actions: read
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        persist-credentials: false
+
+    - name: Run OpenSSF Scorecard
+      uses: ossf/scorecard-action@v2
+      with:
+        results_file: results.sarif
+        results_format: sarif
+        publish_results: true
+
+    - name: Upload Scorecard results
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: results.sarif
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: scorecard-results
+        path: results.sarif
+        retention-days: 90
+
+  # Security summary
+  security-summary:
+    name: Security Summary
+    runs-on: ubuntu-latest
+    needs: [snyk, dependency-check, secret-scan, license-check]
+    if: always()
+
+    steps:
+    - name: Generate Security Summary
+      run: |
+        echo "## 🔒 Security Scan Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "| Scanner | Status |" >> $GITHUB_STEP_SUMMARY
+        echo "|---------|--------|" >> $GITHUB_STEP_SUMMARY
+        echo "| Snyk | ${{ needs.snyk.result }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| OWASP Dependency-Check | ${{ needs.dependency-check.result }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| Secret Scanning | ${{ needs.secret-scan.result }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| License Check | ${{ needs.license-check.result }} |" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Status Legend" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ **success**: No issues found" >> $GITHUB_STEP_SUMMARY
+        echo "- ⚠️ **failure**: Issues detected, review required" >> $GITHUB_STEP_SUMMARY
+        echo "- ℹ️ **skipped**: Scan skipped" >> $GITHUB_STEP_SUMMARY
+
+    - name: Check overall status
+      run: |
+        if [[ "${{ needs.snyk.result }}" == "failure" ]] || \
+           [[ "${{ needs.dependency-check.result }}" == "failure" ]] || \
+           [[ "${{ needs.secret-scan.result }}" == "failure" ]]; then
+          echo "⚠️ Security issues detected! Review security reports."
+          exit 1
+        fi
+        echo "✅ All security scans passed!"

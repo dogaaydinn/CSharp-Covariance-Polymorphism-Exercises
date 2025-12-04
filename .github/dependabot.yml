@@ -1,6 +1,6 @@
 version: 2
 updates:
-  # Enable version updates for NuGet packages
+  # NuGet packages - Main application
   - package-ecosystem: "nuget"
     directory: "/"
     schedule:
@@ -19,8 +19,11 @@ updates:
       prefix: "chore"
       prefix-development: "chore"
       include: "scope"
+    # Allow security updates for all packages
+    allow:
+      - dependency-type: "all"
     ignore:
-      # Ignore major version updates for stable packages
+      # Only ignore major version updates for non-security updates
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
     groups:
@@ -29,6 +32,8 @@ updates:
           - "*.Analyzers"
           - "SonarAnalyzer.*"
           - "Roslynator.*"
+          - "StyleCop.*"
+          - "Meziantou.*"
       testing:
         patterns:
           - "xunit*"
@@ -36,11 +41,28 @@ updates:
           - "NSubstitute"
           - "FluentAssertions"
           - "coverlet.*"
+          - "FsCheck*"
+          - "Bogus"
+          - "AutoFixture*"
       microsoft:
         patterns:
-          - "Microsoft.*"
+          - "Microsoft.Extensions.*"
+          - "Microsoft.NET.*"
+          - "Microsoft.CodeAnalysis.*"
+      security:
+        patterns:
+          - "SecurityCodeScan.*"
+      observability:
+        patterns:
+          - "Serilog*"
+          - "OpenTelemetry*"
+          - "System.Diagnostics.*"
+      resilience:
+        patterns:
+          - "Polly*"
+          - "FluentValidation*"
 
-  # Enable version updates for GitHub Actions
+  # GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
@@ -53,6 +75,25 @@ updates:
     labels:
       - "dependencies"
       - "github-actions"
+      - "security"
     commit-message:
       prefix: "ci"
+      include: "scope"
+
+  # Docker
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "dogaaydinn"
+    labels:
+      - "dependencies"
+      - "docker"
+      - "security"
+    commit-message:
+      prefix: "build"
       include: "scope"

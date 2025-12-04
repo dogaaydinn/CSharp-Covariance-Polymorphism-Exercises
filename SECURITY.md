@@ -4,10 +4,10 @@
 
 We release patches for security vulnerabilities in the following versions:
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 2.0.x   | :white_check_mark: |
-| 1.0.x   | :x:                |
+| Version | Supported          | .NET Version | End of Support |
+| ------- | ------------------ | ------------ | -------------- |
+| 1.0.x   | :white_check_mark: | .NET 8 LTS   | Nov 2026       |
+| < 1.0   | :x:                | -            | -              |
 
 ## Reporting a Vulnerability
 
@@ -72,14 +72,115 @@ When using this project:
 - Span&lt;T&gt; examples use stack allocation - ensure adequate stack size.
 - ArrayPool&lt;T&gt; buffers must be returned to avoid memory leaks.
 
-## Security Tools
+## Security Tools & Scanning
 
-We use the following tools to maintain security:
+We use comprehensive security tooling to maintain code security:
 
-- **Dependabot**: Automated dependency updates
-- **CodeQL**: Static code analysis
-- **dotnet format**: Code quality checks
-- **Unit Tests**: 100% critical path coverage
+### Automated Security Scanning
+- **Dependabot**: Automated dependency vulnerability alerts and updates (NuGet, GitHub Actions, Docker)
+- **CodeQL**: Advanced semantic code analysis for security vulnerabilities
+- **Snyk**: Open source vulnerability scanning and license compliance
+- **OWASP Dependency-Check**: CVE database scanning for known vulnerabilities
+- **Gitleaks**: Secret and credential detection in code and git history
+- **Trivy**: Container image vulnerability scanning
+- **OpenSSF Scorecard**: Security health metrics
+
+### Code Quality & Analysis
+- **6 Static Analyzers**: StyleCop, Roslynator, SonarAnalyzer, Meziantou, Microsoft.CodeAnalysis.NetAnalyzers, SecurityCodeScan
+- **dotnet format**: Code style and quality enforcement
+- **Pre-commit hooks**: Automated security checks before commits
+- **Mutation Testing**: Stryker.NET for test quality assurance
+
+### Testing & Coverage
+- **119 Unit Tests**: Comprehensive test coverage
+- **8 Integration Tests**: System-level testing
+- **Property-Based Testing**: FsCheck for edge case discovery
+- **Code Coverage**: Coverlet with ReportGenerator
+- **Performance Benchmarks**: BenchmarkDotNet for regression detection
+
+### Infrastructure Security
+- **Docker Security**: Multi-stage builds, non-root user, minimal attack surface
+- **Kubernetes**: Security contexts, resource limits, health checks
+- **SBOM Generation**: Software Bill of Materials for transparency
+- **License Compliance**: Automated license checking
+
+## Security Workflows
+
+Our CI/CD pipeline includes automated security checks on every commit:
+
+### On Every Push/PR
+- ✅ Build & compile with security analyzers
+- ✅ Run all tests (unit, integration, mutation)
+- ✅ Code coverage analysis
+- ✅ Static code analysis (6 analyzers)
+- ✅ Dependency vulnerability scanning
+
+### Daily Automated Scans
+- ✅ Snyk vulnerability scanning
+- ✅ OWASP Dependency-Check
+- ✅ Secret scanning with Gitleaks
+- ✅ Container image scanning with Trivy
+- ✅ License compliance checking
+
+### Weekly Scheduled
+- ✅ CodeQL semantic analysis
+- ✅ Dependabot dependency updates
+- ✅ OpenSSF Scorecard health check
+
+## Secrets Management
+
+### Development
+- **User Secrets**: Use `dotnet user-secrets` for local development
+- **Environment Variables**: Never commit `.env` files
+- **appsettings.Development.json**: Excluded from git
+
+### Production
+- **Azure Key Vault**: Recommended for cloud deployments
+- **AWS Secrets Manager**: Alternative cloud solution
+- **Kubernetes Secrets**: For K8s deployments
+- **GitHub Secrets**: For CI/CD workflows
+
+### Prevention
+- **Pre-commit hooks**: Gitleaks prevents secret commits
+- **GitHub Secret Scanning**: Automatic detection and alerts
+- **Security workflow**: Daily scans for exposed secrets
+
+## Compliance & Standards
+
+This project adheres to industry security standards and best practices:
+
+### Security Standards
+- **OWASP Top 10**: Protection against common web vulnerabilities
+- **CWE Top 25**: Mitigation of most dangerous software weaknesses
+- **NIST Guidelines**: Following cybersecurity framework recommendations
+- **OpenSSF Best Practices**: Open Source Security Foundation guidelines
+
+### Data Protection
+- **GDPR Compliance**: No personal data collection or storage
+- **Privacy by Design**: Security and privacy built-in from the start
+- **Transparency**: Open source code for full auditability
+
+### License Compliance
+- **MIT License**: Permissive open source license
+- **Dependency Scanning**: All dependencies checked for license compatibility
+- **SBOM Available**: Full Software Bill of Materials generated
+
+### Audit Trail
+- **Git History**: Complete commit history preserved
+- **Security Advisories**: Published through GitHub Security Advisories
+- **Vulnerability Disclosure**: Transparent reporting of security issues
+
+## Security Contacts
+
+For security-related inquiries:
+
+- **Security Email**: dogaaydinn@gmail.com
+- **GitHub Security**: Use GitHub's private vulnerability reporting
+- **Response Time**: 48 hours acknowledgment, 7 days for assessment
+
+## Bug Bounty Program
+
+Currently, we do not have a formal bug bounty program. However, we greatly appreciate responsible disclosure of security vulnerabilities and will publicly acknowledge security researchers who help improve our security (with their permission).
 
 ## Policy Updates
 
@@ -87,4 +188,6 @@ This security policy may be updated from time to time. Please check back regular
 
 ---
 
-**Last Updated**: 2025-01-16
+**Last Updated**: 2025-11-30
+**Version**: 2.0 (Phase 7 - Security & Compliance)
+**Next Review**: 2025-12-30

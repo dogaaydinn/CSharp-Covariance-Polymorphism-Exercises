@@ -1,0 +1,22 @@
+MSBuild version 17.9.4+90725d08d for .NET
+  Determining projects to restore...
+/Users/dogaaydin/CSharp-Covariance-Polymorphism-Exercises/tests/AdvancedConcepts.UnitTests/AdvancedConcepts.UnitTests.csproj : warning NU1603: AdvancedConcepts.UnitTests depends on Serilog.Sinks.TestCorrelator (>= 1.0.2) but Serilog.Sinks.TestCorrelator 1.0.2 was not found. An approximate best match of Serilog.Sinks.TestCorrelator 3.0.0.64 was resolved. [/Users/dogaaydin/CSharp-Covariance-Polymorphism-Exercises/AdvancedCsharpConcepts.sln]
+  All projects are up-to-date for restore.
+/Users/dogaaydin/CSharp-Covariance-Polymorphism-Exercises/tests/AdvancedConcepts.UnitTests/AdvancedConcepts.UnitTests.csproj : warning NU1603: AdvancedConcepts.UnitTests depends on Serilog.Sinks.TestCorrelator (>= 1.0.2) but Serilog.Sinks.TestCorrelator 1.0.2 was not found. An approximate best match of Serilog.Sinks.TestCorrelator 3.0.0.64 was resolved.
+  AdvancedConcepts.Core -> /Users/dogaaydin/CSharp-Covariance-Polymorphism-Exercises/src/AdvancedConcepts.Core/bin/Debug/net8.0/AdvancedConcepts.Core.dll
+  Building AdvancedConcepts.Core v1.0.0 for net8.0
+  AdvancedConcepts.Benchmarks -> /Users/dogaaydin/CSharp-Covariance-Polymorphism-Exercises/benchmarks/AdvancedConcepts.Benchmarks/bin/Debug/net8.0/AdvancedConcepts.Benchmarks.dll
+  AdvancedConcepts.IntegrationTests -> /Users/dogaaydin/CSharp-Covariance-Polymorphism-Exercises/tests/AdvancedConcepts.IntegrationTests/bin/Debug/net8.0/AdvancedConcepts.IntegrationTests.dll
+  Building AdvancedConcepts.Benchmarks v1.0.0 for net8.0
+  AdvancedConcepts.UnitTests -> /Users/dogaaydin/CSharp-Covariance-Polymorphism-Exercises/tests/AdvancedConcepts.UnitTests/bin/Debug/net8.0/AdvancedConcepts.UnitTests.dll
+  Building AdvancedConcepts.IntegrationTests v1.0.0 for net8.0
+  Building AdvancedConcepts.UnitTests v1.0.0 for net8.0
+
+Build succeeded.
+
+/Users/dogaaydin/CSharp-Covariance-Polymorphism-Exercises/tests/AdvancedConcepts.UnitTests/AdvancedConcepts.UnitTests.csproj : warning NU1603: AdvancedConcepts.UnitTests depends on Serilog.Sinks.TestCorrelator (>= 1.0.2) but Serilog.Sinks.TestCorrelator 1.0.2 was not found. An approximate best match of Serilog.Sinks.TestCorrelator 3.0.0.64 was resolved. [/Users/dogaaydin/CSharp-Covariance-Polymorphism-Exercises/AdvancedCsharpConcepts.sln]
+/Users/dogaaydin/CSharp-Covariance-Polymorphism-Exercises/tests/AdvancedConcepts.UnitTests/AdvancedConcepts.UnitTests.csproj : warning NU1603: AdvancedConcepts.UnitTests depends on Serilog.Sinks.TestCorrelator (>= 1.0.2) but Serilog.Sinks.TestCorrelator 1.0.2 was not found. An approximate best match of Serilog.Sinks.TestCorrelator 3.0.0.64 was resolved.
+    2 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.91

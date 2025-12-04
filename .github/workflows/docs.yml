@@ -1,0 +1,256 @@
+name: Documentation
+
+on:
+  push:
+    branches: [ master, main ]
+    paths:
+      - 'docs/**'
+      - 'src/**/*.cs'
+      - 'README.md'
+      - 'ROADMAP.md'
+      - 'ARCHITECTURE.md'
+  pull_request:
+    branches: [ master, main ]
+    paths:
+      - 'docs/**'
+  workflow_dispatch:
+
+env:
+  DOTNET_VERSION: '8.0.x'
+
+jobs:
+  # Build API documentation with DocFX
+  build-docs:
+    name: Build Documentation
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Install DocFX
+      run: dotnet tool install -g docfx
+
+    - name: Build project for XML documentation
+      run: dotnet build AdvancedCsharpConcepts.sln --configuration Release /p:GenerateDocumentationFile=true
+
+    - name: Create DocFX project (if not exists)
+      run: |
+        if [ ! -f "docfx.json" ]; then
+          cat > docfx.json << 'EOF'
+        {
+          "metadata": [
+            {
+              "src": [
+                {
+                  "files": [ "src/**/*.csproj" ],
+                  "exclude": [ "**/bin/**", "**/obj/**" ]
+                }
+              ],
+              "dest": "api",
+              "includePrivateMembers": false,
+              "disableGitFeatures": false,
+              "disableDefaultFilter": false,
+              "noRestore": false,
+              "namespaceLayout": "flattened",
+              "memberLayout": "samePage",
+              "allowCompilationErrors": false
+            }
+          ],
+          "build": {
+            "content": [
+              {
+                "files": [ "api/**.yml", "api/index.md" ]
+              },
+              {
+                "files": [
+                  "docs/**/*.md",
+                  "*.md",
+                  "toc.yml"
+                ]
+              }
+            ],
+            "resource": [
+              {
+                "files": [
+                  "docs/images/**"
+                ]
+              }
+            ],
+            "output": "_site",
+            "globalMetadata": {
+              "_appTitle": "Advanced C# Concepts",
+              "_appFooter": "Copyright © 2024 - Advanced C# Concepts",
+              "_enableSearch": true
+            },
+            "template": [
+              "default",
+              "modern"
+            ],
+            "markdownEngineName": "markdig"
+          }
+        }
+        EOF
+        fi
+
+    - name: Generate API metadata
+      run: docfx metadata docfx.json
+      continue-on-error: true
+
+    - name: Build documentation
+      run: docfx build docfx.json
+      continue-on-error: true
+
+    - name: Upload Documentation Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: documentation
+        path: _site/
+        retention-days: 30
+
+  # Deploy to GitHub Pages
+  deploy-pages:
+    name: Deploy to GitHub Pages
+    runs-on: ubuntu-latest
+    needs: build-docs
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main')
+    permissions:
+      contents: write
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Download Documentation
+      uses: actions/download-artifact@v4
+      with:
+        name: documentation
+        path: ./_site
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./_site
+        publish_branch: gh-pages
+        commit_message: 'docs: update documentation [skip ci]'
+        user_name: 'github-actions[bot]'
+        user_email: 'github-actions[bot]@users.noreply.github.com'
+
+    - name: Add deployment comment
+      if: github.event_name == 'push'
+      run: |
+        echo "## 📚 Documentation Deployed" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "Documentation has been deployed to GitHub Pages:" >> $GITHUB_STEP_SUMMARY
+        echo "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/" >> $GITHUB_STEP_SUMMARY
+
+  # Validate documentation links
+  validate-links:
+    name: Validate Documentation Links
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Check Markdown Links
+      uses: gaurav-nelson/github-action-markdown-link-check@v1
+      with:
+        use-quiet-mode: 'yes'
+        use-verbose-mode: 'yes'
+        config-file: '.github/markdown-link-check-config.json'
+        folder-path: 'docs/'
+      continue-on-error: true
+
+    - name: Check README Links
+      uses: gaurav-nelson/github-action-markdown-link-check@v1
+      with:
+        use-quiet-mode: 'yes'
+        file-path: 'README.md'
+      continue-on-error: true
+
+  # Generate diagrams
+  generate-diagrams:
+    name: Generate Architecture Diagrams
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Mermaid
+      run: npm install -g @mermaid-js/mermaid-cli
+
+    - name: Generate Mermaid Diagrams
+      run: |
+        mkdir -p docs/images/generated
+        # Find all .mmd files and convert to SVG
+        find docs -name "*.mmd" -exec sh -c '
+          for file; do
+            mmdc -i "$file" -o "${file%.mmd}.svg" -t dark -b transparent
+          done
+        ' sh {} +
+      continue-on-error: true
+
+    - name: Upload Diagrams
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: diagrams
+        path: docs/images/generated/*.svg
+
+  # Documentation quality check
+  doc-quality:
+    name: Documentation Quality Check
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Count Documentation
+      run: |
+        echo "## Documentation Statistics" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "| Metric | Count |" >> $GITHUB_STEP_SUMMARY
+        echo "|--------|-------|" >> $GITHUB_STEP_SUMMARY
+        echo "| Markdown Files | $(find . -name '*.md' | wc -l) |" >> $GITHUB_STEP_SUMMARY
+        echo "| Documentation Pages | $(find docs -name '*.md' | wc -l) |" >> $GITHUB_STEP_SUMMARY
+        echo "| Code Comments | $(find src -name '*.cs' -exec grep -c '///' {} + | awk '{s+=$1} END {print s}') |" >> $GITHUB_STEP_SUMMARY
+        echo "| Total Lines of Docs | $(find docs -name '*.md' -exec wc -l {} + | tail -1 | awk '{print $1}') |" >> $GITHUB_STEP_SUMMARY
+
+    - name: Check XML Documentation Coverage
+      run: |
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### XML Documentation Coverage" >> $GITHUB_STEP_SUMMARY
+        echo "Checking public API documentation..." >> $GITHUB_STEP_SUMMARY
+
+        # Count public methods/classes
+        total_public=$(grep -r "public " src --include="*.cs" | grep -E "(class|interface|enum|struct|method)" | wc -l)
+        # Count XML doc comments
+        total_documented=$(grep -r "/// <summary>" src --include="*.cs" | wc -l)
+
+        if [ $total_public -gt 0 ]; then
+          coverage=$((total_documented * 100 / total_public))
+          echo "- Public APIs: $total_public" >> $GITHUB_STEP_SUMMARY
+          echo "- Documented: $total_documented" >> $GITHUB_STEP_SUMMARY
+          echo "- Coverage: ~${coverage}%" >> $GITHUB_STEP_SUMMARY
+        fi
+
+    - name: Check for TODO/FIXME Comments
+      run: |
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Pending Documentation" >> $GITHUB_STEP_SUMMARY
+        todos=$(grep -r "TODO\|FIXME" docs --include="*.md" | wc -l || echo "0")
+        echo "- TODO/FIXME in docs: $todos" >> $GITHUB_STEP_SUMMARY
+
+        if [ $todos -gt 0 ]; then
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "⚠️ There are $todos pending documentation items" >> $GITHUB_STEP_SUMMARY
+        fi

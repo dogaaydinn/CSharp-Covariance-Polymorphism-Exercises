@@ -1,0 +1,171 @@
+# ==============================================
+# Kustomize Production Overlay
+# Phase 9: Containerization & Cloud Native
+# ==============================================
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# Base configuration
+bases:
+  - ../../base
+
+# Namespace for production
+namespace: production
+
+# Labels specific to production
+commonLabels:
+  environment: production
+  tier: production
+  criticality: high
+
+# Annotations
+commonAnnotations:
+  environment: "production"
+  auto-deploy: "false"  # Manual approval required
+  monitoring: "enabled"
+  backup: "enabled"
+  sla: "99.9"
+
+# Name suffix
+nameSuffix: -prod
+
+# Images (use stable/versioned tag)
+images:
+  - name: advancedconcepts
+    newName: ghcr.io/dogaaydinn/advancedconcepts
+    newTag: v1.0.0  # Use specific version, not 'latest'
+
+# Replicas (high for production)
+replicas:
+  - name: advancedconcepts
+    count: 3
+
+# Patches for production environment
+patches:
+  # Production resource limits (higher)
+  - patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/resources
+        value:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+    target:
+      kind: Deployment
+      name: advancedconcepts
+
+  # Production environment variables
+  - patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/env/-
+        value:
+          name: ASPNETCORE_ENVIRONMENT
+          value: "Production"
+      - op: add
+        path: /spec/template/spec/containers/0/env/-
+        value:
+          name: Serilog__MinimumLevel__Default
+          value: "Warning"
+      - op: add
+        path: /spec/template/spec/containers/0/env/-
+        value:
+          name: GC__Server
+          value: "true"
+    target:
+      kind: Deployment
+      name: advancedconcepts
+
+  # Production deployment strategy (RollingUpdate with careful settings)
+  - patch: |-
+      - op: add
+        path: /spec/strategy
+        value:
+          type: RollingUpdate
+          rollingUpdate:
+            maxSurge: 1
+            maxUnavailable: 0  # Zero downtime
+      - op: add
+        path: /spec/minReadySeconds
+        value: 30
+      - op: add
+        path: /spec/progressDeadlineSeconds
+        value: 600
+    target:
+      kind: Deployment
+      name: advancedconcepts
+
+  # Production health checks (stricter)
+  - patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/livenessProbe/initialDelaySeconds
+        value: 30
+      - op: replace
+        path: /spec/template/spec/containers/0/livenessProbe/periodSeconds
+        value: 10
+      - op: replace
+        path: /spec/template/spec/containers/0/livenessProbe/failureThreshold
+        value: 3
+      - op: replace
+        path: /spec/template/spec/containers/0/readinessProbe/initialDelaySeconds
+        value: 15
+      - op: replace
+        path: /spec/template/spec/containers/0/readinessProbe/periodSeconds
+        value: 5
+      - op: replace
+        path: /spec/template/spec/containers/0/readinessProbe/failureThreshold
+        value: 3
+    target:
+      kind: Deployment
+      name: advancedconcepts
+
+  # Use LoadBalancer service for production
+  - patch: |-
+      - op: replace
+        path: /spec/type
+        value: LoadBalancer
+      - op: add
+        path: /metadata/annotations
+        value:
+          service.beta.kubernetes.io/aws-load-balancer-type: "nlb"  # AWS example
+          service.beta.kubernetes.io/azure-load-balancer-internal: "false"  # Azure example
+    target:
+      kind: Service
+      name: advancedconcepts-service
+
+  # Pod Disruption Budget for high availability
+  - patch: |-
+      apiVersion: policy/v1
+      kind: PodDisruptionBudget
+      metadata:
+        name: advancedconcepts-pdb-prod
+        namespace: production
+      spec:
+        minAvailable: 2  # Always keep at least 2 pods running
+        selector:
+          matchLabels:
+            app: advancedconcepts
+            environment: production
+
+# ConfigMap patches for production
+configMapGenerator:
+  - name: advancedconcepts-config-prod
+    behavior: merge
+    literals:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - DOTNET_ENVIRONMENT=Production
+      - Serilog__MinimumLevel__Default=Warning
+      - Features__EnableDetailedErrors=false
+      - Features__EnableBenchmarks=false
+      - ApplicationInsights__EnableAdaptiveSampling=true
+      - GC__Server=true
+      - GC__Concurrent=true
+
+# Production-specific resources
+resources:
+  - production-hpa.yaml
+  - production-pdb.yaml
+  - production-pod-security-policy.yaml

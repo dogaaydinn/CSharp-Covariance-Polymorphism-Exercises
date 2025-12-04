@@ -1,0 +1,68 @@
+# ==============================================
+# Git Attributes Configuration
+# Phase 7: Security & Compliance
+# ==============================================
+
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Source code
+*.cs text diff=csharp
+*.csproj text diff=csharp
+*.sln text
+*.xaml text
+*.xml text
+*.json text
+*.yml text
+*.yaml text
+*.md text
+*.txt text
+*.sh text eol=lf
+*.ps1 text eol=crlf
+
+# Binary files
+*.dll binary
+*.exe binary
+*.nupkg binary
+*.snupkg binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+
+# Exclude from exports/archives
+.gitignore export-ignore
+.gitattributes export-ignore
+.editorconfig export-ignore
+.github/ export-ignore
+docs/ export-ignore
+tests/ export-ignore
+benchmarks/ export-ignore
+*.Tests/ export-ignore
+
+# Security: Prevent merge conflicts in lock files
+package-lock.json binary
+yarn.lock binary
+*.lock binary
+
+# Security: Mark sensitive files (never commit these)
+*.env filter=secret
+*.key filter=secret
+*.pem filter=secret
+*.pfx filter=secret
+*.p12 filter=secret
+*secret* filter=secret
+*password* filter=secret
+*credentials* filter=secret
+
+# Diff settings for generated files
+*.Designer.cs linguist-generated=true
+*.designer.cs linguist-generated=true
+**/obj/** linguist-generated=true
+**/bin/** linguist-generated=true
+
+# LFS (Large File Storage) - if needed
+# *.dll filter=lfs diff=lfs merge=lfs -text
+# *.exe filter=lfs diff=lfs merge=lfs -text

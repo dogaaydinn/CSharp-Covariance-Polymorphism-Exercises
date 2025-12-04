@@ -1,0 +1,90 @@
+# ==============================================
+# Kustomize Base Configuration
+# Phase 9: Containerization & Cloud Native
+# ==============================================
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# Metadata
+namespace: default
+
+# Common labels applied to all resources
+commonLabels:
+  app: advancedconcepts
+  managed-by: kustomize
+  project: advanced-csharp-concepts
+
+# Common annotations
+commonAnnotations:
+  documentation: "https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises"
+  version: "1.0.0"
+
+# Resources to include
+resources:
+  - deployment.yaml
+  - service.yaml
+  - configmap.yaml
+  - secret.yaml
+  - ingress.yaml
+  - network-policy.yaml
+
+# Images (can be overridden in overlays)
+images:
+  - name: advancedconcepts
+    newName: ghcr.io/dogaaydinn/advancedconcepts
+    newTag: latest
+
+# ConfigMap generator (for generating ConfigMaps from files)
+# configMapGenerator:
+#   - name: app-config
+#     files:
+#       - appsettings.json
+
+# Secret generator (for generating Secrets from files)
+# secretGenerator:
+#   - name: app-secrets
+#     files:
+#       - secret-key.txt
+#     type: Opaque
+
+# Namespace (optional, can override in overlays)
+# namespace: default
+
+# Name prefix for all resources (optional)
+# namePrefix: app-
+
+# Name suffix for all resources (optional)
+# nameSuffix: -v1
+
+# Replicas (can be overridden in overlays)
+replicas:
+  - name: advancedconcepts
+    count: 3
+
+# Resource patches (common patches for all environments)
+patches:
+  # Add resource limits/requests
+  - patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/resources
+        value:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+    target:
+      kind: Deployment
+      name: advancedconcepts
+
+# Variables (can be used in manifests)
+# vars:
+#   - name: APP_VERSION
+#     objref:
+#       kind: Deployment
+#       name: advancedconcepts
+#       apiVersion: apps/v1
+#     fieldref:
+#       fieldpath: metadata.labels.version

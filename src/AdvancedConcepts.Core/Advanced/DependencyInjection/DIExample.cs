@@ -1,7 +1,6 @@
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace AdvancedCsharpConcepts.Advanced.DependencyInjection;
+namespace AdvancedConcepts.Core.Advanced.DependencyInjection;
 
 /// <summary>
 /// Dependency Injection - Modern .NET dependency management.
@@ -51,8 +50,8 @@ public static class DIExample
 
         public DataProcessor(ILogger<DataProcessor> logger, IDataRepository repository)
         {
-            _logger = logger;
-            _repository = repository;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
         public async Task<int> ProcessDataAsync(string[] data)

@@ -105,19 +105,17 @@ public class PerformanceIntegrationTests
         // Arrange
         var data = Enumerable.Range(0, 100).ToArray();
 
-        // Act - Use Span for zero-allocation access
-        var span = data.AsSpan();
-
-        // Process chunks in parallel
+        // Act - Process chunks in parallel (using array directly as Span cannot be used in lambdas)
         var sum = 0;
         System.Threading.Tasks.Parallel.For(0, 4, i =>
         {
-            var chunkSize = span.Length / 4;
-            var chunk = span.Slice(i * chunkSize, chunkSize);
+            var chunkSize = data.Length / 4;
+            var startIndex = i * chunkSize;
             var localSum = 0;
-            foreach (var val in chunk)
+            // Process chunk using regular array access (Span cannot cross lambda boundaries)
+            for (var j = startIndex; j < startIndex + chunkSize && j < data.Length; j++)
             {
-                localSum += val;
+                localSum += data[j];
             }
             System.Threading.Interlocked.Add(ref sum, localSum);
         });

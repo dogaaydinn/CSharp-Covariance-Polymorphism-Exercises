@@ -3,11 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdvancedCsharpConcepts", "AdvancedCsharpConcepts\AdvancedCsharpConcepts.csproj", "{0DFCCDCF-05FC-4383-94EF-506F9363A01A}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdvancedCsharpConcepts.Tests", "AdvancedCsharpConcepts.Tests\AdvancedCsharpConcepts.Tests.csproj", "{55053A10-C3DA-4B1F-BD40-D442B215ED15}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC943}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdvancedCsharpConcepts.IntegrationTests", "AdvancedCsharpConcepts.IntegrationTests\AdvancedCsharpConcepts.IntegrationTests.csproj", "{B7F3E2D1-9A4C-4F5E-8D6B-1C2A3B4C5D6E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC944}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdvancedConcepts.Core", "src\AdvancedConcepts.Core\AdvancedConcepts.Core.csproj", "{0DFCCDCF-05FC-4383-94EF-506F9363A01A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdvancedConcepts.UnitTests", "tests\AdvancedConcepts.UnitTests\AdvancedConcepts.UnitTests.csproj", "{55053A10-C3DA-4B1F-BD40-D442B215ED15}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdvancedConcepts.IntegrationTests", "tests\AdvancedConcepts.IntegrationTests\AdvancedConcepts.IntegrationTests.csproj", "{B7F3E2D1-9A4C-4F5E-8D6B-1C2A3B4C5D6E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "benchmarks", "benchmarks", "{6D955C88-96FA-4218-8921-E6FD8BE64BFB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdvancedConcepts.Benchmarks", "benchmarks\AdvancedConcepts.Benchmarks\AdvancedConcepts.Benchmarks.csproj", "{52712CFD-9843-48B6-A7A9-B77601A0FEA9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,5 +40,15 @@ Global
 		{B7F3E2D1-9A4C-4F5E-8D6B-1C2A3B4C5D6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7F3E2D1-9A4C-4F5E-8D6B-1C2A3B4C5D6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B7F3E2D1-9A4C-4F5E-8D6B-1C2A3B4C5D6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52712CFD-9843-48B6-A7A9-B77601A0FEA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52712CFD-9843-48B6-A7A9-B77601A0FEA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52712CFD-9843-48B6-A7A9-B77601A0FEA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52712CFD-9843-48B6-A7A9-B77601A0FEA9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0DFCCDCF-05FC-4383-94EF-506F9363A01A} = {8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}
+		{55053A10-C3DA-4B1F-BD40-D442B215ED15} = {8BC9CEB8-8B4A-11D0-8D11-00A0C91BC943}
+		{B7F3E2D1-9A4C-4F5E-8D6B-1C2A3B4C5D6E} = {8BC9CEB8-8B4A-11D0-8D11-00A0C91BC943}
+		{52712CFD-9843-48B6-A7A9-B77601A0FEA9} = {6D955C88-96FA-4218-8921-E6FD8BE64BFB}
 	EndGlobalSection
 EndGlobal

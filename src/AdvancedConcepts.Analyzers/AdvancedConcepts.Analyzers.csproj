@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>12.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <IsRoslynComponent>true</IsRoslynComponent>
+    <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+
+    <!-- Package Information -->
+    <PackageId>AdvancedConcepts.Analyzers</PackageId>
+    <!-- Version will be set by GitVersion or CI/CD -->
+    <Version>1.0.0</Version>
+    <Description>Production-ready Roslyn code analyzers for performance, design, and security. Enforces SOLID principles, detects boxing/unboxing, prevents async void, and identifies immutable type violations. Built for enterprise .NET applications.</Description>
+    <Authors>Doga Aydin</Authors>
+    <Company>Advanced C# Concepts</Company>
+    <Product>Advanced C# Concepts - Roslyn Analyzers</Product>
+    <PackageTags>roslyn;analyzer;code-analysis;performance;security;solid;csharp;dotnet;code-quality;boxing;async;immutable;diagnostic</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <!-- <PackageIcon>icon.png</PackageIcon> -->
+    <Copyright>Copyright © 2024-2025 Doga Aydin</Copyright>
+    <PackageReleaseNotes>See https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/main/CHANGELOG.md</PackageReleaseNotes>
+
+    <!-- Development Only Package -->
+    <DevelopmentDependency>true</DevelopmentDependency>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+
+    <!-- Generate documentation XML -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.8.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.8.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+  </ItemGroup>
+
+</Project>

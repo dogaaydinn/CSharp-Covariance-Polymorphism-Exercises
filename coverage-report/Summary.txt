@@ -1,0 +1,72 @@
+Summary
+  Generated on: 4.12.2025 - 17:27:41
+  Coverage date: 1.12.2025 - 18:27:30
+  Parser: Cobertura
+  Assemblies: 1
+  Classes: 50
+  Files: 40
+  Line coverage: 3.7%
+  Covered lines: 103
+  Uncovered lines: 2667
+  Coverable lines: 2770
+  Total lines: 5507
+  Branch coverage: 4.9% (23 of 464)
+  Covered branches: 23
+  Total branches: 464
+  Method coverage: 2.4% (9 of 367)
+  Full method coverage: 2.1% (8 of 367)
+  Covered methods: 9
+  Fully covered methods: 8
+  Total methods: 367
+
+AdvancedConcepts.Core                                                                         3.7%
+  AdvancedConcepts.Core.Advanced.DependencyInjection.DIExample                                  0%
+  AdvancedConcepts.Core.Advanced.DesignPatterns.FactoryPattern                                  0%
+  AdvancedCsharpConcepts.Advanced.DesignPatterns.BuilderPattern                                 0%
+  AdvancedCsharpConcepts.Advanced.ExplicitImplicitConversion.ConversionExamples                 0%
+  AdvancedCsharpConcepts.Advanced.ExplicitImplicitConversion.Temperature                        0%
+  AdvancedCsharpConcepts.Advanced.ExplicitImplicitConversion.TemperatureCelsius                 0%
+  AdvancedCsharpConcepts.Advanced.ExplicitImplicitConversion.TemperatureFahrenheit              0%
+  AdvancedCsharpConcepts.Advanced.GenericCovarianceContravariance.AnimalConsumer                0%
+  AdvancedCsharpConcepts.Advanced.GenericCovarianceContravariance.AnimalProducer                0%
+  AdvancedCsharpConcepts.Advanced.GenericCovarianceContravariance.CatConsumer                   0%
+  AdvancedCsharpConcepts.Advanced.GenericCovarianceContravariance.CatProducer                   0%
+  AdvancedCsharpConcepts.Advanced.GenericCovarianceContravariance.DogProducer                   0%
+  AdvancedCsharpConcepts.Advanced.HighPerformance.ParallelProcessingExamples                 39.6%
+  AdvancedCsharpConcepts.Advanced.HighPerformance.SpanMemoryExamples                         34.9%
+  AdvancedCsharpConcepts.Advanced.ModernCSharp.AdvancedPatternMatching                          0%
+  AdvancedCsharpConcepts.Advanced.ModernCSharp.CollectionExpressionsExample                     0%
+  AdvancedCsharpConcepts.Advanced.ModernCSharp.PrimaryConstructorsExample                       0%
+  AdvancedCsharpConcepts.Advanced.Observability.EnhancedSerilogExamples                         0%
+  AdvancedCsharpConcepts.Advanced.Observability.HealthCheckExamples                             0%
+  AdvancedCsharpConcepts.Advanced.Observability.OpenTelemetryExamples                           0%
+  AdvancedCsharpConcepts.Advanced.Observability.StructuredLogging                               0%
+  AdvancedCsharpConcepts.Advanced.PerformanceBenchmarks.BenchmarkRunner                         0%
+  AdvancedCsharpConcepts.Advanced.PerformanceBenchmarks.BoxingUnboxingBenchmark                 0%
+  AdvancedCsharpConcepts.Advanced.PerformanceBenchmarks.CovarianceBenchmark                     0%
+  AdvancedCsharpConcepts.Advanced.Resilience.FluentValidationExamples                           0%
+  AdvancedCsharpConcepts.Advanced.Resilience.NotFoundError                                      0%
+  AdvancedCsharpConcepts.Advanced.Resilience.PollyResiliencePatterns                            0%
+  AdvancedCsharpConcepts.Advanced.Resilience.Result                                             0%
+  AdvancedCsharpConcepts.Advanced.Resilience.Result<T1, T2>                                     0%
+  AdvancedCsharpConcepts.Advanced.Resilience.ResultPatternExamples                              0%
+  AdvancedCsharpConcepts.Advanced.Resilience.UnauthorizedError                                  0%
+  AdvancedCsharpConcepts.Advanced.Resilience.ValidationError                                    0%
+  AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples                       0%
+  AdvancedCsharpConcepts.Beginner.Override_Upcast_Downcast.Bike                                 0%
+  AdvancedCsharpConcepts.Beginner.Override_Upcast_Downcast.Car                                  0%
+  AdvancedCsharpConcepts.Beginner.Override_Upcast_Downcast.Vehicle                              0%
+  AdvancedCsharpConcepts.Beginner.Polymorphism_AssignCompatibility.Animal                       0%
+  AdvancedCsharpConcepts.Beginner.Polymorphism_AssignCompatibility.AssignmentCompatibility      0%
+  AdvancedCsharpConcepts.Beginner.Polymorphism_AssignCompatibility.Cat                          0%
+  AdvancedCsharpConcepts.Beginner.Polymorphism_AssignCompatibility.Dog                          0%
+  AdvancedCsharpConcepts.Beginner.Polymorphism_AssignCompatibility.Mammal                       0%
+  AdvancedCsharpConcepts.Beginner.Upcast_Downcast.Employee                                      0%
+  AdvancedCsharpConcepts.Beginner.Upcast_Downcast.Manager                                       0%
+  AdvancedCsharpConcepts.Intermediate.BoxingUnboxing.BoxingUnboxingExamples                     0%
+  AdvancedCsharpConcepts.Intermediate.CovarianceContravariance.Animal                           0%
+  AdvancedCsharpConcepts.Intermediate.CovarianceContravariance.Cat                              0%
+  AdvancedCsharpConcepts.Intermediate.CovarianceContravariance.Cat<T>                           0%
+  AdvancedCsharpConcepts.Intermediate.CovarianceContravariance.Covariance                       0%
+  AdvancedCsharpConcepts.Intermediate.CovarianceContravariance.VarianceExamples                 0%
+  AdvancedCsharpConcepts.Program                                                                0%

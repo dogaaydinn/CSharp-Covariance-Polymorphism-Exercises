@@ -1,4 +1,4 @@
-﻿namespace AdvancedConcepts.Core.Advanced.ExplicitImplicitConversion;
+﻿namespace AdvancedCsharpConcepts.Advanced.ExplicitImplicitConversion;
 
 /// <summary>
 /// Demonstrates explicit and implicit conversion examples.

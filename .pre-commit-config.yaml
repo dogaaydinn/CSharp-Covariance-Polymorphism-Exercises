@@ -1,0 +1,132 @@
+# ==============================================
+# Pre-commit Hooks Configuration
+# Phase 7: Security & Compliance
+# ==============================================
+# Installation:
+#   pip install pre-commit
+#   pre-commit install
+# ==============================================
+
+repos:
+  # Secret detection with Gitleaks
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.2
+    hooks:
+      - id: gitleaks
+        name: Detect secrets with Gitleaks
+        description: Scan for secrets and credentials
+        entry: gitleaks protect --verbose --redact --staged
+        language: golang
+        pass_filenames: false
+
+  # General security and quality checks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: check-added-large-files
+        name: Check for large files
+        args: ['--maxkb=1000']
+      - id: check-case-conflict
+        name: Check for case conflicts
+      - id: check-merge-conflict
+        name: Check for merge conflicts
+      - id: check-yaml
+        name: Check YAML syntax
+      - id: check-json
+        name: Check JSON syntax
+      - id: check-xml
+        name: Check XML syntax
+      - id: detect-private-key
+        name: Detect private keys
+      - id: end-of-file-fixer
+        name: Fix end of files
+      - id: trailing-whitespace
+        name: Trim trailing whitespace
+        args: [--markdown-linebreak-ext=md]
+      - id: mixed-line-ending
+        name: Fix mixed line endings
+        args: [--fix=lf]
+
+  # .NET specific checks
+  - repo: local
+    hooks:
+      - id: dotnet-format
+        name: dotnet format
+        entry: dotnet format
+        language: system
+        types: [c#]
+        pass_filenames: false
+        description: Run dotnet format on the solution
+
+      - id: dotnet-restore
+        name: dotnet restore
+        entry: dotnet restore
+        language: system
+        files: \.(csproj|sln)$
+        pass_filenames: false
+        description: Restore NuGet packages
+
+  # Security scanning for dependencies
+  - repo: local
+    hooks:
+      - id: check-secrets-baseline
+        name: Check for hardcoded secrets
+        entry: bash -c 'if grep -r -i -E "(password|secret|api_key|apikey|token|bearer)\s*=\s*[\"'\''][^\"'\'']+[\"'\'']" --include="*.cs" --include="*.json" --exclude-dir=obj --exclude-dir=bin .; then echo "Potential hardcoded secrets found!"; exit 1; fi'
+        language: system
+        pass_filenames: false
+        description: Scan for hardcoded secrets in code
+
+      - id: check-connection-strings
+        name: Check for connection strings
+        entry: bash -c 'if grep -r -i "ConnectionString.*=.*Password=" --include="*.cs" --include="*.json" --exclude-dir=obj --exclude-dir=bin .; then echo "Hardcoded connection string found!"; exit 1; fi'
+        language: system
+        pass_filenames: false
+        description: Scan for hardcoded connection strings
+
+  # Markdown linting
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.39.0
+    hooks:
+      - id: markdownlint
+        name: Lint Markdown files
+        args: [--fix]
+
+  # Commit message linting
+  - repo: https://github.com/commitizen-tools/commitizen
+    rev: v3.14.1
+    hooks:
+      - id: commitizen
+        name: Check commit message format
+        stages: [commit-msg]
+
+# Global exclusions
+exclude: |
+  (?x)^(
+      .*\.min\.(js|css)$|
+      .*\.lock$|
+      package-lock\.json$|
+      \.git/.*|
+      obj/.*|
+      bin/.*|
+      BenchmarkDotNet\.Artifacts/.*|
+      StrykerOutput/.*|
+      coverage/.*|
+      TestResults/.*
+  )$
+
+# Configuration
+default_language_version:
+  python: python3.11
+
+# CI configuration
+ci:
+  autofix_commit_msg: |
+    [pre-commit.ci] auto fixes from pre-commit.com hooks
+
+    for more information, see https://pre-commit.ci
+  autofix_prs: true
+  autoupdate_branch: ''
+  autoupdate_commit_msg: '[pre-commit.ci] pre-commit autoupdate'
+  autoupdate_schedule: weekly
+  skip: []
+  submodules: false

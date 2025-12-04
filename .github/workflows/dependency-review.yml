@@ -1,0 +1,238 @@
+name: Dependency Review and Security
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+  push:
+    branches:
+      - main
+  schedule:
+    # Run weekly on Monday at 9am UTC
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+  security-events: write
+
+jobs:
+  dependency-review:
+    name: Dependency Review
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: high
+          deny-licenses: GPL-2.0, GPL-3.0
+          comment-summary-in-pr: always
+
+  dependency-submission:
+    name: Submit Dependency Graph
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Generate dependency graph
+        uses: advanced-security/component-detection-dependency-submission-action@v0.0.2
+        with:
+          directoryExclusionList: 'tests,benchmarks'
+
+  snyk-security:
+    name: Snyk Security Scan
+    runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/dotnet@master
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high --sarif-file-output=snyk.sarif
+
+      - name: Upload Snyk results to GitHub Code Scanning
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: snyk.sarif
+
+  audit-dotnet:
+    name: .NET Security Audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Run dotnet list package --vulnerable
+        id: vulnerable
+        run: |
+          echo "## 🔍 Vulnerable Packages" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Check for vulnerable packages
+          RESULT=$(dotnet list package --vulnerable --include-transitive 2>&1)
+
+          if echo "$RESULT" | grep -q "has the following vulnerable packages"; then
+            echo "⚠️ **Vulnerable packages found!**" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo "$RESULT" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            exit 1
+          else
+            echo "✅ **No vulnerable packages found**" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Check for deprecated packages
+        run: |
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 📦 Deprecated Packages" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          DEPRECATED=$(dotnet list package --deprecated 2>&1)
+
+          if echo "$DEPRECATED" | grep -q "deprecated"; then
+            echo "⚠️ **Deprecated packages found**" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo "$DEPRECATED" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          else
+            echo "✅ **No deprecated packages**" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Check for outdated packages
+        run: |
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 📈 Outdated Packages" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          OUTDATED=$(dotnet list package --outdated 2>&1 || true)
+
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "$OUTDATED" | head -50 >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+  license-check:
+    name: License Compliance Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Install dotnet-project-licenses
+        run: dotnet tool install --global dotnet-project-licenses
+
+      - name: Generate license report
+        run: |
+          dotnet-project-licenses --input . --output-directory ./licenses --export-license-texts --format markdown
+
+      - name: Check for problematic licenses
+        run: |
+          echo "## 📜 License Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Check for GPL licenses (usually problematic for commercial use)
+          if grep -r "GPL" ./licenses/ 2>/dev/null; then
+            echo "⚠️ **GPL licenses found - Review required**" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "✅ **No problematic licenses found**" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Upload license report
+        uses: actions/upload-artifact@v4
+        with:
+          name: license-report
+          path: ./licenses/
+          retention-days: 30
+
+  osv-scanner:
+    name: OSV Vulnerability Scanner
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run OSV Scanner
+        uses: google/osv-scanner-action@v1
+        continue-on-error: true
+        with:
+          scan-args: --lockfile=./AdvancedCsharpConcepts.sln
+
+  summary:
+    name: Security Summary
+    runs-on: ubuntu-latest
+    needs: [audit-dotnet, license-check, osv-scanner]
+    if: always()
+
+    steps:
+      - name: Generate summary
+        run: |
+          cat >> $GITHUB_STEP_SUMMARY << 'EOF'
+          ## 🔒 Security & Dependency Summary
+
+          ### Checks Performed
+          - ✅ .NET vulnerable package check
+          - ✅ Deprecated package check
+          - ✅ License compliance check
+          - ✅ OSV vulnerability scan
+
+          ### Recommendations
+          1. Review any vulnerable packages found
+          2. Update deprecated packages when possible
+          3. Ensure license compatibility
+          4. Monitor security advisories
+
+          ### Resources
+          - [GitHub Security Advisories](https://github.com/advisories)
+          - [NuGet Package Vulnerabilities](https://github.com/dotnet/announcements/issues?q=is%3Aopen+is%3Aissue+label%3ASecurity)
+          - [OWASP Dependency-Check](https://owasp.org/www-project-dependency-check/)
+          EOF

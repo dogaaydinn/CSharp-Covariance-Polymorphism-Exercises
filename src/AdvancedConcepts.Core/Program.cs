@@ -143,11 +143,11 @@ internal static class Program
         #endregion
 
         #region Upcasting-Downcasting
-         //Soru 2: Car sınıfındaki bir nesneyi Vehicle türüne cast et ve ardından tekrar Car türüne geri cast et. 
-         //Question 2: Cast an object of class Car to type Vehicle and then cast it back to type Car. 
+         //Soru 2: Car sınıfındaki bir nesneyi Vehicle türüne cast et ve ardından tekrar Car türüne geri cast et.
+         //Question 2: Cast an object of class Car to type Vehicle and then cast it back to type Car.
          Console.WriteLine("Upcasting-Downcasting:");
 Console.WriteLine("Cast an object of class Car to type Vehicle and then cast it back to type Car.");
-    
+
         Console.WriteLine("Upcasting:");
         Console.WriteLine("Check car class and CastExample method for understanding.\n");
         Car.CastExample();
@@ -174,7 +174,7 @@ Console.WriteLine("Cast an object of class Car to type Vehicle and then cast it 
         //Soru 2: Bir Employee sınıfı ile kalıtım yoluyla Manager sınıfını oluştur. Manager nesnesini Employee türüne atayıp, Manager’a geri çevirin (downcast). Bu işlemin başarı durumunu kontrol edin.
         //Question 2: Create the Manager class by inheritance from an Employee class. Assign the Manager object to the Employee type and downcast it back to Manager. Check the success of this operation.
         Console.WriteLine("Creating an Employee class and extending it by inheritance to Manager:");
-       
+
         Manager.DownCast();
         Console.WriteLine("Downcasting completed.\n");
 
@@ -186,7 +186,7 @@ Console.WriteLine("Cast an object of class Car to type Vehicle and then cast it 
         //Soru 1: IEnumerable<string> türünde bir liste oluştur ve bunu IEnumerable<object> türüne atamaya çalışın. Bu işlemin nasıl başarılı olduğunu açıklayın.
         // Question 1: Create a list of type IEnumerable<string> and try to assign it to type IEnumerable<object>. Explain how this succeeds.
         Console.WriteLine("Create a list of type IEnumerable<string> and try to assign it to type IEnumerable<object>. Explain how this succeeds.");
-        var covarianceContravariance = new CovarianceContravariance();
+        var covarianceContravariance = new VarianceExamples();
 
         Console.WriteLine("Contravariance:");
         covarianceContravariance.CovarianceExample();
@@ -204,12 +204,12 @@ Console.WriteLine("Cast an object of class Car to type Vehicle and then cast it 
         //Soru 1: Bir int değişkeni boxing ile object türüne dönüştürün. Daha sonra bunu tekrar int türüne unboxing yapın. Bu işlemler sırasında hafıza yönetimi açısından neler olduğunu açıklayın.
         //Question 1: Convert an int variable to object with boxing. Then unboxing it back to int type. Explain what happens during these operations in terms of memory management.
         Console.WriteLine("Convert an int variable to object type with boxing. Then unboxing it back to int type. Explain what happens during these operations in terms of memory management.");
-        BoxingUnboxing.BoxingUnboxingExample();
-        
+        BoxingUnboxingExamples.BoxingUnboxingExample();
+
         // Question 2: Using ArrayList, add data of different types (e.g. int and string). Then retrieve this data with unboxing and analyze the performance differences.
         //Soru 2: ArrayList kullanarak farklı türlerden veriler ekleyin (örneğin int ve string). Ardından bu verileri unboxing ile geri alın ve performans farklarını analiz edin.
         Console.WriteLine("ArrayList: Add data of different types (e.g. int and string) using ArrayList. Then retrieve this data with unboxing and analyze the performance differences.");
-        BoxingUnboxing.ArrayListExample();
+        BoxingUnboxingExamples.ArrayListExample();
         Console.WriteLine("Boxing ve Unboxing completed.\n");
 
         #endregion
@@ -230,7 +230,7 @@ Console.WriteLine("Cast an object of class Car to type Vehicle and then cast it 
         Console.WriteLine($"{tempF} = {convertedTempC}"); // 77 °F = 25 °C
 
         // Soru 2: Implicit ve explicit conversion örnekleri
-        var explicitImplicitConversion = new ExplicitImplicitConversion();
+        var explicitImplicitConversion = new ConversionExamples();
         explicitImplicitConversion.ConversionExample();
         Console.WriteLine("Explicit ve Implicit Conversion completed.\n");
 
@@ -242,15 +242,15 @@ Console.WriteLine("Cast an object of class Car to type Vehicle and then cast it 
         //Question 1: Define two generic interfaces like IProducer<Animal> and IConsumer<Animal>. Try to transform between them with covariance and contravariance.
         // Covariance (Out) Example
         Console.WriteLine("Generic Covariance ve Contravariance:");
-        
+
         IProducer<Animal> animalProducer = new CatProducer(); // You can use CatProducer as IProducer<Animal>.
-        var myAnimal = animalProducer.Produce(); // Covariant 
+        var myAnimal = animalProducer.Produce(); // Covariant
         myAnimal.Speak(); // Output: Cat meows
 
         // Contravariance (In) Example
         IConsumer<Cat> catConsumer = new AnimalConsumer(); // You can use AnimalConsumer as IConsumer<Cat>.
-        catConsumer.Consume(new Cat()); // Contravariant 
-        
+        catConsumer.Consume(new Cat()); // Contravariant
+
         //Soru 2: Aşağıdaki kodu inceleyin ve generics ile covariance'ın nasıl çalıştığını açıklayın:
         // Question 2: Analyze the following code and explain how generics and covariance work:
         // Func<Animal> animalProducer = () => new Dog();

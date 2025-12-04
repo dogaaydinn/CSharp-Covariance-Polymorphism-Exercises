@@ -1,0 +1,98 @@
+# ==============================================
+# Kustomize Development Overlay
+# Phase 9: Containerization & Cloud Native
+# ==============================================
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# Base configuration
+bases:
+  - ../../base
+
+# Namespace for development
+namespace: development
+
+# Labels specific to development
+commonLabels:
+  environment: development
+  tier: dev
+
+# Annotations
+commonAnnotations:
+  environment: "development"
+  auto-deploy: "true"
+
+# Name suffix
+nameSuffix: -dev
+
+# Images (use development tag)
+images:
+  - name: advancedconcepts
+    newName: ghcr.io/dogaaydinn/advancedconcepts
+    newTag: dev
+
+# Replicas (fewer replicas for development)
+replicas:
+  - name: advancedconcepts
+    count: 1
+
+# Patches for development environment
+patches:
+  # Reduce resource limits for development
+  - patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/resources
+        value:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "250m"
+    target:
+      kind: Deployment
+      name: advancedconcepts
+
+  # Enable debug logging
+  - patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/env/-
+        value:
+          name: ASPNETCORE_ENVIRONMENT
+          value: "Development"
+      - op: add
+        path: /spec/template/spec/containers/0/env/-
+        value:
+          name: Serilog__MinimumLevel__Default
+          value: "Debug"
+    target:
+      kind: Deployment
+      name: advancedconcepts
+
+  # Use NodePort service for easy local access
+  - patch: |-
+      - op: replace
+        path: /spec/type
+        value: NodePort
+      - op: add
+        path: /spec/ports/0/nodePort
+        value: 30080
+    target:
+      kind: Service
+      name: advancedconcepts-service
+
+# ConfigMap patches for development
+configMapGenerator:
+  - name: advancedconcepts-config-dev
+    behavior: merge
+    literals:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - DOTNET_ENVIRONMENT=Development
+      - Serilog__MinimumLevel__Default=Debug
+      - Features__EnableDetailedErrors=true
+      - Features__EnableBenchmarks=true
+
+# Development-specific resources
+resources:
+  - dev-ingress.yaml

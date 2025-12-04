@@ -14,7 +14,7 @@ namespace AdvancedCsharpConcepts.Intermediate.BoxingUnboxing;
 /// - Potential data loss when converting between types
 /// Use generic collections (List&lt;T&gt;) instead of non-generic ones (ArrayList) to avoid boxing overhead.
 /// </remarks>
-public class BoxingUnboxing
+public class BoxingUnboxingExamples
 {
     //Soru 1: Bir int değişkeni boxing ile object türüne dönüştürün. Daha sonra bunu tekrar int türüne unboxing yapın. Bu işlemler sırasında hafıza yönetimi açısından neler olduğunu açıklayın.
 

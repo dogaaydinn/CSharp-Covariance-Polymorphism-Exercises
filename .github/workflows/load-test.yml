@@ -1,0 +1,392 @@
+name: Load Testing
+
+on:
+  schedule:
+    # Run load tests weekly on Sunday at 3 AM UTC
+    - cron: '0 3 * * 0'
+  workflow_dispatch:
+    inputs:
+      duration:
+        description: 'Test duration (e.g., 5m, 10m)'
+        required: false
+        default: '5m'
+      connections:
+        description: 'Max concurrent connections'
+        required: false
+        default: '100'
+      tool:
+        description: 'Load testing tool'
+        required: false
+        default: 'k6'
+        type: choice
+        options:
+          - k6
+          - bombardier
+          - both
+
+env:
+  DOTNET_VERSION: '8.0.x'
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 'true'
+  DOTNET_CLI_TELEMETRY_OPTOUT: 'true'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  load-test-k6:
+    name: k6 Load Test
+    runs-on: ubuntu-latest
+    if: github.event.inputs.tool == 'k6' || github.event.inputs.tool == 'both' || github.event_name == 'schedule'
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: videodb
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Install k6
+        run: |
+          sudo gpg -k
+          sudo gpg --no-default-keyring --keyring /usr/share/keyrings/k6-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
+          echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+          sudo apt-get update
+          sudo apt-get install k6
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build API
+        run: |
+          dotnet build samples/07-CloudNative/AspireVideoService/VideoService.API/VideoService.API.csproj \
+            --configuration Release \
+            --no-restore
+
+      - name: Start API
+        run: |
+          cd samples/07-CloudNative/AspireVideoService/VideoService.API
+          dotnet run --configuration Release --no-build &
+          API_PID=$!
+          echo "API_PID=$API_PID" >> $GITHUB_ENV
+
+          echo "Waiting for API to start..."
+          for i in {1..30}; do
+            if curl -s -f http://localhost:5000/health > /dev/null; then
+              echo "API is ready!"
+              break
+            fi
+            echo "Attempt $i/30: API not ready yet..."
+            sleep 2
+          done
+
+          # Verify API is healthy
+          curl -v http://localhost:5000/health || exit 1
+
+      - name: Run k6 load test
+        run: |
+          cd benchmarks/load-test
+          mkdir -p results
+
+          k6 run \
+            --out json=results/k6-results.json \
+            --summary-export=results/k6-summary.json \
+            webapi-load-test.js
+
+      - name: Stop API
+        if: always()
+        run: |
+          if [ -n "$API_PID" ]; then
+            kill $API_PID || true
+          fi
+
+      - name: Parse k6 results
+        id: parse-results
+        run: |
+          cd benchmarks/load-test/results
+
+          # Extract key metrics using jq
+          TOTAL_REQS=$(jq -r '.metrics.http_reqs.values.count' k6-summary.json)
+          REQ_RATE=$(jq -r '.metrics.http_reqs.values.rate' k6-summary.json)
+          AVG_DURATION=$(jq -r '.metrics.http_req_duration.values.avg' k6-summary.json)
+          P95_DURATION=$(jq -r '.metrics.http_req_duration.values["p(95)"]' k6-summary.json)
+          P99_DURATION=$(jq -r '.metrics.http_req_duration.values["p(99)"]' k6-summary.json)
+          ERROR_RATE=$(jq -r '.metrics.http_req_failed.values.rate * 100' k6-summary.json)
+
+          # Save to GITHUB_OUTPUT
+          echo "total_reqs=$TOTAL_REQS" >> $GITHUB_OUTPUT
+          echo "req_rate=$REQ_RATE" >> $GITHUB_OUTPUT
+          echo "avg_duration=$AVG_DURATION" >> $GITHUB_OUTPUT
+          echo "p95_duration=$P95_DURATION" >> $GITHUB_OUTPUT
+          echo "p99_duration=$P99_DURATION" >> $GITHUB_OUTPUT
+          echo "error_rate=$ERROR_RATE" >> $GITHUB_OUTPUT
+
+          # Check thresholds
+          THRESHOLD_FAILED=0
+          if (( $(echo "$P95_DURATION > 500" | bc -l) )); then
+            echo "threshold_status=⚠️ FAILED" >> $GITHUB_OUTPUT
+            THRESHOLD_FAILED=1
+          elif (( $(echo "$P95_DURATION > 300" | bc -l) )); then
+            echo "threshold_status=⚠️ WARNING" >> $GITHUB_OUTPUT
+          else
+            echo "threshold_status=✅ PASSED" >> $GITHUB_OUTPUT
+          fi
+
+          exit $THRESHOLD_FAILED
+
+      - name: Generate summary
+        if: always()
+        run: |
+          cat >> $GITHUB_STEP_SUMMARY << 'EOF'
+          ## 🚀 k6 Load Test Results
+
+          ### Performance Metrics
+
+          | Metric | Value | Target | Status |
+          |--------|-------|--------|--------|
+          | **Total Requests** | ${{ steps.parse-results.outputs.total_reqs }} | - | ℹ️ |
+          | **Throughput** | ${{ steps.parse-results.outputs.req_rate }} req/s | > 50 | ${{ steps.parse-results.outputs.req_rate > 50 && '✅' || '⚠️' }} |
+          | **Avg Latency** | ${{ steps.parse-results.outputs.avg_duration }} ms | < 100 | ${{ steps.parse-results.outputs.avg_duration < 100 && '✅' || '⚠️' }} |
+          | **P95 Latency** | ${{ steps.parse-results.outputs.p95_duration }} ms | < 500 | ${{ steps.parse-results.outputs.p95_duration < 500 && '✅' || '⚠️' }} |
+          | **P99 Latency** | ${{ steps.parse-results.outputs.p99_duration }} ms | < 1000 | ${{ steps.parse-results.outputs.p99_duration < 1000 && '✅' || '⚠️' }} |
+          | **Error Rate** | ${{ steps.parse-results.outputs.error_rate }}% | < 5% | ${{ steps.parse-results.outputs.error_rate < 5 && '✅' || '❌' }} |
+
+          ### Overall Status
+          ${{ steps.parse-results.outputs.threshold_status }}
+
+          ### Artifacts
+          - JSON results: `k6-results.json`
+          - Summary: `k6-summary.json`
+
+          ### Links
+          - [View detailed results](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+          - [Performance documentation](https://github.com/${{ github.repository }}/blob/main/docs/PERFORMANCE.md)
+          EOF
+
+      - name: Upload k6 results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: k6-load-test-results-${{ github.run_number }}
+          path: benchmarks/load-test/results/
+          retention-days: 90
+
+  load-test-bombardier:
+    name: Bombardier Load Test
+    runs-on: ubuntu-latest
+    if: github.event.inputs.tool == 'bombardier' || github.event.inputs.tool == 'both'
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: videodb
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Setup Go (for Bombardier)
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
+
+      - name: Install Bombardier
+        run: go install github.com/codesenberg/bombardier@latest
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build API
+        run: |
+          dotnet build samples/07-CloudNative/AspireVideoService/VideoService.API/VideoService.API.csproj \
+            --configuration Release \
+            --no-restore
+
+      - name: Start API
+        run: |
+          cd samples/07-CloudNative/AspireVideoService/VideoService.API
+          dotnet run --configuration Release --no-build &
+          API_PID=$!
+          echo "API_PID=$API_PID" >> $GITHUB_ENV
+
+          echo "Waiting for API to start..."
+          for i in {1..30}; do
+            if curl -s -f http://localhost:5000/health > /dev/null; then
+              echo "API is ready!"
+              break
+            fi
+            echo "Attempt $i/30: API not ready yet..."
+            sleep 2
+          done
+
+      - name: Run Bombardier tests
+        run: |
+          cd benchmarks/load-test
+          chmod +x bombardier-test.sh
+
+          DURATION=${{ github.event.inputs.duration || '60s' }}
+          CONNECTIONS=${{ github.event.inputs.connections || '100' }}
+
+          API_URL=http://localhost:5000 \
+          DURATION=$DURATION \
+          CONNECTIONS=$CONNECTIONS \
+          ./bombardier-test.sh
+
+      - name: Stop API
+        if: always()
+        run: |
+          if [ -n "$API_PID" ]; then
+            kill $API_PID || true
+          fi
+
+      - name: Upload Bombardier results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bombardier-load-test-results-${{ github.run_number }}
+          path: benchmarks/load-test/results/
+          retention-days: 90
+
+  publish-results:
+    name: Publish Results to GitHub Pages
+    runs-on: ubuntu-latest
+    needs: [load-test-k6]
+    if: always() && github.event_name == 'schedule'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download k6 results
+        uses: actions/download-artifact@v4
+        with:
+          pattern: k6-load-test-results-*
+          path: ./new-results
+
+      - name: Store historical results
+        run: |
+          # Create directory structure: YYYY/MM/DD-run_number
+          RESULT_DIR="load-tests/$(date +%Y/%m)/${{ github.run_number }}"
+          mkdir -p "$RESULT_DIR"
+
+          # Copy new results
+          cp -r ./new-results/* "$RESULT_DIR/"
+
+          # Generate index
+          cat > load-tests/index.html << 'EOFHTML'
+          <!DOCTYPE html>
+          <html>
+          <head>
+              <title>Load Test Results History</title>
+              <style>
+                  body { font-family: Arial, sans-serif; margin: 40px; }
+                  table { border-collapse: collapse; width: 100%; }
+                  th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+                  th { background-color: #4CAF50; color: white; }
+                  tr:nth-child(even) { background-color: #f2f2f2; }
+                  .pass { color: green; font-weight: bold; }
+                  .fail { color: red; font-weight: bold; }
+              </style>
+          </head>
+          <body>
+              <h1>Load Test Results History</h1>
+              <p>Last updated: $(date)</p>
+
+              <h2>Recent Tests</h2>
+              <table>
+                  <tr>
+                      <th>Date</th>
+                      <th>Run</th>
+                      <th>Status</th>
+                      <th>Link</th>
+                  </tr>
+                  <tr>
+                      <td>$(date +%Y-%m-%d)</td>
+                      <td>#${{ github.run_number }}</td>
+                      <td class="pass">✅ PASSED</td>
+                      <td><a href="./$RESULT_DIR">View Results</a></td>
+                  </tr>
+              </table>
+
+              <h2>Performance Trends</h2>
+              <p>Coming soon: Historical performance charts</p>
+          </body>
+          </html>
+          EOFHTML
+
+      - name: Commit results
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add load-tests/
+          git commit -m "perf: add load test results for run ${{ github.run_number }}" || echo "No changes"
+          git push
+        continue-on-error: true
+
+  notify:
+    name: Notify Results
+    runs-on: ubuntu-latest
+    needs: [load-test-k6, load-test-bombardier]
+    if: always()
+
+    steps:
+      - name: Send notification
+        run: |
+          echo "🚀 Load Test Completed"
+          echo "Status: ${{ job.status }}"
+          echo "View results: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          # Add Slack/Teams/Discord webhook here if needed

@@ -3,3 +3,10 @@ obj/
 /packages/
 riderModule.iml
 /_ReSharper.Caches/
+
+# Load test results
+benchmarks/load-test/results/
+*.json
+!benchmarks/load-test/*.js
+!**/package.json
+!**/appsettings*.json

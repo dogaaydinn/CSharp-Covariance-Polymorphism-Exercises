@@ -1,0 +1,341 @@
+name: Publish to NuGet
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'  # Triggers on version tags (v1.0.0, v2.1.3, etc.)
+  workflow_dispatch:  # Manual trigger
+    inputs:
+      version:
+        description: 'Version to publish (e.g., 1.0.0)'
+        required: true
+        type: string
+      prerelease:
+        description: 'Is this a prerelease?'
+        required: false
+        type: boolean
+        default: false
+
+env:
+  DOTNET_VERSION: '8.0.x'
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1
+
+jobs:
+  validate:
+    name: Validate Release
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.set_version.outputs.version }}
+      is_prerelease: ${{ steps.set_version.outputs.is_prerelease }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for proper versioning
+
+      - name: Set version from tag or input
+        id: set_version
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            VERSION="${{ github.event.inputs.version }}"
+            IS_PRERELEASE="${{ github.event.inputs.prerelease }}"
+          else
+            # Extract version from tag (v1.2.3 -> 1.2.3)
+            VERSION=${GITHUB_REF#refs/tags/v}
+            # Check if prerelease (contains alpha, beta, rc, etc.)
+            if [[ "$VERSION" =~ (alpha|beta|rc|preview) ]]; then
+              IS_PRERELEASE=true
+            else
+              IS_PRERELEASE=false
+            fi
+          fi
+
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+          echo "is_prerelease=${IS_PRERELEASE}" >> $GITHUB_OUTPUT
+          echo "📦 Publishing version: ${VERSION}"
+          echo "🏷️ Prerelease: ${IS_PRERELEASE}"
+
+      - name: Validate version format
+        run: |
+          VERSION="${{ steps.set_version.outputs.version }}"
+          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.]+)?$ ]]; then
+            echo "❌ Invalid version format: $VERSION"
+            echo "Expected format: X.Y.Z or X.Y.Z-prerelease"
+            exit 1
+          fi
+          echo "✅ Version format is valid"
+
+      - name: Check if version already exists on NuGet
+        run: |
+          VERSION="${{ steps.set_version.outputs.version }}"
+
+          # Check Analyzers package
+          if curl -s "https://api.nuget.org/v3-flatcontainer/advancedconcepts.analyzers/index.json" | grep -q "\"$VERSION\""; then
+            echo "⚠️ Version $VERSION of AdvancedConcepts.Analyzers already exists on NuGet!"
+            exit 1
+          fi
+
+          # Check SourceGenerators package
+          if curl -s "https://api.nuget.org/v3-flatcontainer/advancedconcepts.sourcegenerators/index.json" | grep -q "\"$VERSION\""; then
+            echo "⚠️ Version $VERSION of AdvancedConcepts.SourceGenerators already exists on NuGet!"
+            exit 1
+          fi
+
+          echo "✅ Version $VERSION is available for publishing"
+
+  build-and-test:
+    name: Build & Test Packages
+    runs-on: ubuntu-latest
+    needs: validate
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore dependencies
+        run: dotnet restore AdvancedCsharpConcepts.sln
+
+      - name: Build solution (Release)
+        run: dotnet build AdvancedCsharpConcepts.sln --configuration Release --no-restore
+
+      - name: Run all tests
+        run: dotnet test AdvancedCsharpConcepts.sln --configuration Release --no-build --verbosity normal --collect:"XPlat Code Coverage"
+
+      - name: Generate coverage report
+        uses: danielpalme/ReportGenerator-GitHub-Action@5.3.11
+        with:
+          reports: '**/coverage.cobertura.xml'
+          targetdir: 'coverage-report'
+          reporttypes: 'MarkdownSummaryGithub'
+
+      - name: Add coverage to summary
+        run: cat coverage-report/SummaryGithub.md >> $GITHUB_STEP_SUMMARY
+
+  pack-packages:
+    name: Pack NuGet Packages
+    runs-on: ubuntu-latest
+    needs: [validate, build-and-test]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore dependencies
+        run: dotnet restore AdvancedCsharpConcepts.sln
+
+      - name: Pack Analyzers
+        run: |
+          dotnet pack src/AdvancedConcepts.Analyzers/AdvancedConcepts.Analyzers.csproj \
+            --configuration Release \
+            --no-restore \
+            --output ./packages \
+            /p:Version=${{ needs.validate.outputs.version }} \
+            /p:PackageVersion=${{ needs.validate.outputs.version }} \
+            /p:IncludeSymbols=true \
+            /p:SymbolPackageFormat=snupkg
+
+      - name: Pack SourceGenerators
+        run: |
+          dotnet pack src/AdvancedConcepts.SourceGenerators/AdvancedConcepts.SourceGenerators.csproj \
+            --configuration Release \
+            --no-restore \
+            --output ./packages \
+            /p:Version=${{ needs.validate.outputs.version }} \
+            /p:PackageVersion=${{ needs.validate.outputs.version }} \
+            /p:IncludeSymbols=true \
+            /p:SymbolPackageFormat=snupkg
+
+      - name: List packaged files
+        run: |
+          echo "📦 Packaged NuGet files:"
+          ls -lh ./packages/
+
+      - name: Verify package contents
+        run: |
+          echo "🔍 Verifying AdvancedConcepts.Analyzers package..."
+          dotnet nuget verify ./packages/AdvancedConcepts.Analyzers.${{ needs.validate.outputs.version }}.nupkg || true
+
+          echo "🔍 Verifying AdvancedConcepts.SourceGenerators package..."
+          dotnet nuget verify ./packages/AdvancedConcepts.SourceGenerators.${{ needs.validate.outputs.version }}.nupkg || true
+
+      - name: Upload packages as artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuget-packages
+          path: ./packages/*.nupkg
+          retention-days: 7
+
+      - name: Upload symbols as artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuget-symbols
+          path: ./packages/*.snupkg
+          retention-days: 7
+
+  publish-to-nuget:
+    name: Publish to NuGet.org
+    runs-on: ubuntu-latest
+    needs: [validate, pack-packages]
+    environment:
+      name: nuget-production
+      url: https://www.nuget.org/packages/AdvancedConcepts.Analyzers
+
+    steps:
+      - name: Download packages
+        uses: actions/download-artifact@v4
+        with:
+          name: nuget-packages
+          path: ./packages
+
+      - name: Download symbols
+        uses: actions/download-artifact@v4
+        with:
+          name: nuget-symbols
+          path: ./packages
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Publish Analyzers to NuGet
+        run: |
+          dotnet nuget push ./packages/AdvancedConcepts.Analyzers.${{ needs.validate.outputs.version }}.nupkg \
+            --api-key ${{ secrets.NUGET_API_KEY }} \
+            --source https://api.nuget.org/v3/index.json \
+            --skip-duplicate
+
+      - name: Publish Analyzers symbols
+        run: |
+          dotnet nuget push ./packages/AdvancedConcepts.Analyzers.${{ needs.validate.outputs.version }}.snupkg \
+            --api-key ${{ secrets.NUGET_API_KEY }} \
+            --source https://api.nuget.org/v3/index.json \
+            --skip-duplicate
+        continue-on-error: true
+
+      - name: Publish SourceGenerators to NuGet
+        run: |
+          dotnet nuget push ./packages/AdvancedConcepts.SourceGenerators.${{ needs.validate.outputs.version }}.nupkg \
+            --api-key ${{ secrets.NUGET_API_KEY }} \
+            --source https://api.nuget.org/v3/index.json \
+            --skip-duplicate
+
+      - name: Publish SourceGenerators symbols
+        run: |
+          dotnet nuget push ./packages/AdvancedConcepts.SourceGenerators.${{ needs.validate.outputs.version }}.snupkg \
+            --api-key ${{ secrets.NUGET_API_KEY }} \
+            --source https://api.nuget.org/v3/index.json \
+            --skip-duplicate
+        continue-on-error: true
+
+      - name: Create release summary
+        run: |
+          echo "# 📦 NuGet Packages Published Successfully!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Published Packages" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Package | Version | Link |" >> $GITHUB_STEP_SUMMARY
+          echo "|---------|---------|------|" >> $GITHUB_STEP_SUMMARY
+          echo "| AdvancedConcepts.Analyzers | ${{ needs.validate.outputs.version }} | [View on NuGet](https://www.nuget.org/packages/AdvancedConcepts.Analyzers/${{ needs.validate.outputs.version }}) |" >> $GITHUB_STEP_SUMMARY
+          echo "| AdvancedConcepts.SourceGenerators | ${{ needs.validate.outputs.version }} | [View on NuGet](https://www.nuget.org/packages/AdvancedConcepts.SourceGenerators/${{ needs.validate.outputs.version }}) |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Installation" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
+          echo "# Install Analyzers" >> $GITHUB_STEP_SUMMARY
+          echo "dotnet add package AdvancedConcepts.Analyzers --version ${{ needs.validate.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "# Install SourceGenerators" >> $GITHUB_STEP_SUMMARY
+          echo "dotnet add package AdvancedConcepts.SourceGenerators --version ${{ needs.validate.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+
+  create-github-release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: [validate, publish-to-nuget]
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download packages
+        uses: actions/download-artifact@v4
+        with:
+          name: nuget-packages
+          path: ./packages
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          # Get previous tag
+          PREVIOUS_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+
+          if [ -z "$PREVIOUS_TAG" ]; then
+            echo "📝 First release - no changelog"
+            CHANGELOG="Initial release of AdvancedConcepts packages."
+          else
+            echo "📝 Generating changelog from $PREVIOUS_TAG to v${{ needs.validate.outputs.version }}"
+            CHANGELOG=$(git log ${PREVIOUS_TAG}..HEAD --pretty=format:"- %s (%an)" --no-merges)
+          fi
+
+          # Save changelog to file
+          echo "$CHANGELOG" > changelog.txt
+
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGELOG" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ needs.validate.outputs.version }}
+          name: Release v${{ needs.validate.outputs.version }}
+          body: |
+            ## 📦 NuGet Packages Release v${{ needs.validate.outputs.version }}
+
+            ### Packages Published
+            - ✅ [AdvancedConcepts.Analyzers](https://www.nuget.org/packages/AdvancedConcepts.Analyzers/${{ needs.validate.outputs.version }})
+            - ✅ [AdvancedConcepts.SourceGenerators](https://www.nuget.org/packages/AdvancedConcepts.SourceGenerators/${{ needs.validate.outputs.version }})
+
+            ### Installation
+            ```bash
+            dotnet add package AdvancedConcepts.Analyzers --version ${{ needs.validate.outputs.version }}
+            dotnet add package AdvancedConcepts.SourceGenerators --version ${{ needs.validate.outputs.version }}
+            ```
+
+            ### Changes
+            ${{ steps.changelog.outputs.changelog }}
+
+            ---
+
+            🤖 *This release was automatically created by GitHub Actions*
+          files: |
+            ./packages/*.nupkg
+            ./packages/*.snupkg
+          draft: false
+          prerelease: ${{ needs.validate.outputs.is_prerelease == 'true' }}
+          generate_release_notes: true
+
+      - name: Notify success
+        run: |
+          echo "✅ GitHub Release created successfully!"
+          echo "🔗 Release URL: https://github.com/${{ github.repository }}/releases/tag/v${{ needs.validate.outputs.version }}"

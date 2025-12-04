@@ -1,0 +1,17 @@
+# Pod Disruption Budget for Production
+# Ensures high availability during voluntary disruptions (node drains, upgrades, etc.)
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: advancedconcepts-pdb-prod
+  namespace: production
+  labels:
+    app: advancedconcepts
+    environment: production
+spec:
+  minAvailable: 2  # Always keep at least 2 pods running
+  # Alternative: maxUnavailable: 1  # Allow max 1 pod to be unavailable
+  selector:
+    matchLabels:
+      app: advancedconcepts
+      environment: production

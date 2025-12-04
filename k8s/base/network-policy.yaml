@@ -1,0 +1,258 @@
+# ==============================================
+# Kubernetes Network Policies
+# Phase 9: Containerization & Cloud Native
+# ==============================================
+# Network policies enforce pod-to-pod communication rules
+
+# Default Deny All Ingress Traffic
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-ingress
+  namespace: default
+  labels:
+    app: advancedconcepts
+    component: network-policy
+spec:
+  podSelector: {}  # Applies to all pods in namespace
+  policyTypes:
+    - Ingress
+
+---
+# Allow Ingress from Ingress Controller
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-from-ingress-controller
+  namespace: default
+  labels:
+    app: advancedconcepts
+    component: network-policy
+spec:
+  podSelector:
+    matchLabels:
+      app: advancedconcepts
+  policyTypes:
+    - Ingress
+  ingress:
+    # Allow traffic from ingress-nginx namespace
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: ingress-nginx
+      ports:
+        - protocol: TCP
+          port: 8080  # Application port
+        - protocol: TCP
+          port: 9090  # Metrics port
+
+---
+# Allow Ingress from Monitoring (Prometheus)
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-from-prometheus
+  namespace: default
+  labels:
+    app: advancedconcepts
+    component: network-policy
+spec:
+  podSelector:
+    matchLabels:
+      app: advancedconcepts
+  policyTypes:
+    - Ingress
+  ingress:
+    # Allow Prometheus to scrape metrics
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: monitoring
+        - podSelector:
+            matchLabels:
+              app: prometheus
+      ports:
+        - protocol: TCP
+          port: 9090  # Metrics endpoint
+
+---
+# Allow Egress to DNS
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-dns-egress
+  namespace: default
+  labels:
+    app: advancedconcepts
+    component: network-policy
+spec:
+  podSelector:
+    matchLabels:
+      app: advancedconcepts
+  policyTypes:
+    - Egress
+  egress:
+    # Allow DNS queries
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              name: kube-system
+      ports:
+        - protocol: UDP
+          port: 53  # DNS
+
+---
+# Allow Egress to Seq (Logging)
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-seq-egress
+  namespace: default
+  labels:
+    app: advancedconcepts
+    component: network-policy
+spec:
+  podSelector:
+    matchLabels:
+      app: advancedconcepts
+  policyTypes:
+    - Egress
+  egress:
+    # Allow sending logs to Seq
+    - to:
+        - podSelector:
+            matchLabels:
+              app: seq
+      ports:
+        - protocol: TCP
+          port: 5341  # Seq ingestion
+
+---
+# Allow Egress to OpenTelemetry Collector
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-otel-egress
+  namespace: default
+  labels:
+    app: advancedconcepts
+    component: network-policy
+spec:
+  podSelector:
+    matchLabels:
+      app: advancedconcepts
+  policyTypes:
+    - Egress
+  egress:
+    # Allow sending traces/metrics to OTEL Collector
+    - to:
+        - podSelector:
+            matchLabels:
+              app: otel-collector
+      ports:
+        - protocol: TCP
+          port: 4317  # OTLP gRPC
+        - protocol: TCP
+          port: 4318  # OTLP HTTP
+
+---
+# Allow Egress to External APIs (if needed)
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-external-apis-egress
+  namespace: default
+  labels:
+    app: advancedconcepts
+    component: network-policy
+spec:
+  podSelector:
+    matchLabels:
+      app: advancedconcepts
+  policyTypes:
+    - Egress
+  egress:
+    # Allow HTTPS to external services
+    - to:
+        - namespaceSelector: {}  # Any namespace
+      ports:
+        - protocol: TCP
+          port: 443  # HTTPS
+    # Allow HTTP (if absolutely necessary)
+    - to:
+        - namespaceSelector: {}
+      ports:
+        - protocol: TCP
+          port: 80  # HTTP
+
+---
+# Allow Pod-to-Pod Communication (same app)
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-same-app-communication
+  namespace: default
+  labels:
+    app: advancedconcepts
+    component: network-policy
+spec:
+  podSelector:
+    matchLabels:
+      app: advancedconcepts
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # Allow traffic from other pods with same app label
+    - from:
+        - podSelector:
+            matchLabels:
+              app: advancedconcepts
+  egress:
+    # Allow traffic to other pods with same app label
+    - to:
+        - podSelector:
+            matchLabels:
+              app: advancedconcepts
+
+---
+# Strict Network Policy (Production)
+# Uncomment this to enforce strict zero-trust networking
+# apiVersion: networking.k8s.io/v1
+# kind: NetworkPolicy
+# metadata:
+#   name: strict-production-policy
+#   namespace: default
+# spec:
+#   podSelector:
+#     matchLabels:
+#       app: advancedconcepts
+#       environment: production
+#   policyTypes:
+#     - Ingress
+#     - Egress
+#   ingress:
+#     # Only allow ingress from specific sources
+#     - from:
+#         - namespaceSelector:
+#             matchLabels:
+#               name: ingress-nginx
+#       ports:
+#         - protocol: TCP
+#           port: 8080
+#   egress:
+#     # Only allow egress to specific destinations
+#     - to:
+#         - podSelector:
+#             matchLabels:
+#               app: seq
+#       ports:
+#         - protocol: TCP
+#           port: 5341
+#     - to:
+#         - namespaceSelector:
+#             matchLabels:
+#               name: kube-system
+#       ports:
+#         - protocol: UDP
+#           port: 53  # DNS only

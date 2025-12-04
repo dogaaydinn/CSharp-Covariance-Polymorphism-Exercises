@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>12.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsRoslynComponent>true</IsRoslynComponent>
+    <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+
+    <!-- Package Information -->
+    <PackageId>AdvancedConcepts.SourceGenerators</PackageId>
+    <Version>1.0.0</Version>
+    <Description>Compile-time source generators for automatic code generation including DTO mapping, builder patterns, logging, and validation. Eliminates reflection overhead and boilerplate code.</Description>
+    <Authors>Advanced Concepts Team</Authors>
+    <Company>Advanced Concepts</Company>
+    <Product>Advanced C# Concepts</Product>
+    <PackageTags>roslyn;source-generator;code-generation;dto;logging;validation;csharp;dotnet;compile-time;performance</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>icon.png</PackageIcon>
+    <Copyright>Copyright © 2024 Advanced Concepts Team</Copyright>
+    <PackageReleaseNotes>See https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/releases</PackageReleaseNotes>
+
+    <!-- Development Only Package -->
+    <DevelopmentDependency>true</DevelopmentDependency>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.8.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+  </ItemGroup>
+
+</Project>

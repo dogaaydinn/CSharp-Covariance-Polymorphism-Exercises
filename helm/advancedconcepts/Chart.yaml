@@ -1,0 +1,15 @@
+apiVersion: v2
+name: advancedconcepts
+description: A Helm chart for Advanced C# Concepts application
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+keywords:
+  - dotnet
+  - csharp
+  - enterprise
+maintainers:
+  - name: Doğa Aydın
+    email: dogaaydinn@gmail.com
+sources:
+  - https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises

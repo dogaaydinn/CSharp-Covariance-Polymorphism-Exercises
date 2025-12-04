@@ -1,4 +1,5 @@
 using Serilog;
+using Serilog.Context;
 using Serilog.Events;
 
 namespace AdvancedCsharpConcepts.Advanced.Observability;
@@ -20,7 +21,6 @@ public static class StructuredLogging
             .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
             .Enrich.FromLogContext()
             .Enrich.WithThreadId()
-            .Enrich.WithMachineName()
             .WriteTo.Console(
                 outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}")
             .WriteTo.File(
@@ -91,7 +91,8 @@ public static class StructuredLogging
 
             var tasks = itemList.Select((item, index) => Task.Run(() =>
             {
-                using (_logger.BeginScope(new { TaskId = Task.CurrentId, ItemIndex = index }))
+                using (LogContext.PushProperty("TaskId", Task.CurrentId))
+                using (LogContext.PushProperty("ItemIndex", index))
                 {
                     _logger.Debug("Processing item {Index} on thread {ThreadId}", index, Environment.CurrentManagedThreadId);
                     return item.Length;
@@ -124,7 +125,8 @@ public static class StructuredLogging
 
         public void HandleApiRequest(string endpoint, Dictionary<string, string> parameters)
         {
-            using (_logger.BeginScope(new { Endpoint = endpoint, Parameters = parameters }))
+            using (LogContext.PushProperty("Endpoint", endpoint))
+            using (LogContext.PushProperty("Parameters", parameters))
             {
                 _logger.Information("Processing API request to {Endpoint}", endpoint);
 

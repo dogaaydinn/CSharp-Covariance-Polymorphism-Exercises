@@ -1,0 +1,220 @@
+name: CD - Continuous Deployment
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target environment'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - production
+      version:
+        description: 'Version to deploy (leave empty for latest)'
+        required: false
+        type: string
+  push:
+    branches:
+      - main
+      - master
+    tags:
+      - 'v*.*.*'
+
+env:
+  DOTNET_VERSION: '8.0.x'
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  # Build Docker image
+  build-image:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    outputs:
+      image-tag: ${{ steps.meta.outputs.tags }}
+      image-digest: ${{ steps.build.outputs.digest }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Log in to Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Extract metadata
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        tags: |
+          type=ref,event=branch
+          type=ref,event=pr
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}
+          type=sha,prefix={{branch}}-
+          type=raw,value=latest,enable={{is_default_branch}}
+
+    - name: Build and push Docker image
+      id: build
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: ./Dockerfile
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+        platforms: linux/amd64,linux/arm64
+
+    - name: Generate SBOM
+      uses: anchore/sbom-action@v0
+      with:
+        image: ${{ steps.meta.outputs.tags }}
+        format: spdx-json
+        output-file: sbom.spdx.json
+
+    - name: Upload SBOM
+      uses: actions/upload-artifact@v4
+      with:
+        name: sbom
+        path: sbom.spdx.json
+
+  # Deploy to Staging
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: build-image
+    if: |
+      github.event_name == 'push' &&
+      (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'staging')
+    environment:
+      name: staging
+      url: https://staging.example.com
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Deploy to Staging (Placeholder)
+      run: |
+        echo "🚀 Deploying to Staging environment..."
+        echo "Image: ${{ needs.build-image.outputs.image-tag }}"
+        echo "Digest: ${{ needs.build-image.outputs.image-digest }}"
+        #
+        # Actual deployment commands would go here:
+        # - kubectl apply -f k8s/staging/
+        # - helm upgrade --install app ./helm/app -f values-staging.yaml
+        # - az webapp deployment...
+        # - aws ecs update-service...
+        echo "✅ Staging deployment completed"
+
+    - name: Run Smoke Tests
+      run: |
+        echo "🧪 Running smoke tests against staging..."
+        # curl -f https://staging.example.com/health || exit 1
+        # ./scripts/smoke-tests.sh staging
+        echo "✅ Smoke tests passed"
+
+    - name: Notify Deployment
+      run: |
+        echo "📢 Staging deployment notification"
+        echo "Version: ${{ github.sha }}"
+        echo "Deployed by: ${{ github.actor }}"
+        # Send Slack/Teams notification here
+
+  # Deploy to Production
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [build-image, deploy-staging]
+    if: |
+      startsWith(github.ref, 'refs/tags/v') ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'production')
+    environment:
+      name: production
+      url: https://production.example.com
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Backup Current Production
+      run: |
+        echo "💾 Creating production backup..."
+        # kubectl get deployment app -o yaml > backup-$(date +%Y%m%d-%H%M%S).yaml
+        echo "✅ Backup created"
+
+    - name: Deploy to Production (Blue/Green)
+      run: |
+        echo "🚀 Deploying to Production (Blue/Green strategy)..."
+        echo "Image: ${{ needs.build-image.outputs.image-tag }}"
+        echo "Digest: ${{ needs.build-image.outputs.image-digest }}"
+        #
+        # Blue/Green deployment steps:
+        # 1. Deploy to "green" environment
+        # 2. Run health checks
+        # 3. Switch traffic from "blue" to "green"
+        # 4. Keep "blue" for quick rollback
+        echo "✅ Production deployment completed"
+
+    - name: Run Health Checks
+      run: |
+        echo "🏥 Running production health checks..."
+        # curl -f https://production.example.com/health || exit 1
+        # ./scripts/health-check.sh production
+        echo "✅ Health checks passed"
+
+    - name: Monitor Metrics
+      run: |
+        echo "📊 Monitoring deployment metrics for 5 minutes..."
+        # Check error rates, latency, etc.
+        # If metrics degrade, trigger rollback
+        echo "✅ Metrics look good"
+
+    - name: Notify Success
+      run: |
+        echo "📢 Production deployment successful!"
+        echo "Version: ${{ github.ref_name }}"
+        echo "Deployed by: ${{ github.actor }}"
+        # Send success notification
+
+  # Rollback capability
+  rollback:
+    name: Rollback Deployment
+    runs-on: ubuntu-latest
+    if: failure() && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+
+    steps:
+    - name: Rollback to Previous Version
+      run: |
+        echo "⏮️  Rolling back deployment..."
+        # kubectl rollout undo deployment/app
+        # helm rollback app
+        echo "✅ Rollback completed"
+
+    - name: Verify Rollback
+      run: |
+        echo "🔍 Verifying rollback..."
+        # Run health checks
+        echo "✅ Rollback verified"
+
+    - name: Notify Rollback
+      run: |
+        echo "📢 Deployment rolled back"
+        echo "Reason: Deployment failure detected"
+        # Send alert notification

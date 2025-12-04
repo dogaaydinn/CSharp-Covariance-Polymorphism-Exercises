@@ -7,7 +7,7 @@ namespace AdvancedCsharpConcepts.Intermediate.CovarianceContravariance;
 /// Covariance: Allows using a more derived type (IEnumerable&lt;Derived&gt; → IEnumerable&lt;Base&gt;)
 /// Contravariance: Allows using a less derived type (Action&lt;Base&gt; → Action&lt;Derived&gt;)
 /// </remarks>
-public class CovarianceContravariance
+public class VarianceExamples
 {
     //IEnumerable<string> türünde bir liste oluştur
     //bunu IEnumerable<object> türüne atamaya çalışın. Bu işlemin nasıl başarılı olduğunu açıklayın.
