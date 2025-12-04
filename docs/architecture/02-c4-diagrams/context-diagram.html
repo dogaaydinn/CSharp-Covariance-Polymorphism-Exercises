@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>C4 Model: System Context Diagram | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="C4 Model: System Context Diagram | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/02-c4-diagrams/context-diagram.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="c4-model-system-context-diagram">C4 Model: System Context Diagram</h1>
+
+<h2 id="overview">Overview</h2>
+<p>The System Context diagram shows the Advanced C# Concepts system and how it fits into the world around it. This is a high-level view showing the system's users and external dependencies.</p>
+<h2 id="diagram">Diagram</h2>
+<pre><code class="lang-mermaid">C4Context
+    title System Context Diagram - Advanced C# Concepts
+
+    Person(developer, &quot;Developer&quot;, &quot;Software engineer learning advanced C# concepts&quot;)
+    Person(educator, &quot;Educator&quot;, &quot;Teacher using examples for training&quot;)
+    Person(contributor, &quot;Contributor&quot;, &quot;Open source contributor&quot;)
+
+    System(advancedConcepts, &quot;Advanced C# Concepts&quot;, &quot;Educational framework demonstrating enterprise-grade C# patterns, performance optimization, and best practices&quot;)
+
+    System_Ext(nuget, &quot;NuGet.org&quot;, &quot;Package distribution platform&quot;)
+    System_Ext(github, &quot;GitHub&quot;, &quot;Source control and CI/CD&quot;)
+    System_Ext(dockerhub, &quot;GitHub Container Registry&quot;, &quot;Container image registry&quot;)
+    System_Ext(seq, &quot;Seq&quot;, &quot;Structured log aggregation&quot;)
+    System_Ext(prometheus, &quot;Prometheus&quot;, &quot;Metrics collection&quot;)
+    System_Ext(grafana, &quot;Grafana&quot;, &quot;Metrics visualization&quot;)
+
+    Rel(developer, advancedConcepts, &quot;Uses&quot;, &quot;Learns advanced C# concepts&quot;)
+    Rel(educator, advancedConcepts, &quot;Uses&quot;, &quot;Teaches from examples&quot;)
+    Rel(contributor, advancedConcepts, &quot;Contributes to&quot;, &quot;HTTPS/Git&quot;)
+
+    Rel(advancedConcepts, nuget, &quot;Publishes packages to&quot;, &quot;HTTPS&quot;)
+    Rel(advancedConcepts, github, &quot;Hosted on&quot;, &quot;HTTPS/Git&quot;)
+    Rel(advancedConcepts, dockerhub, &quot;Publishes images to&quot;, &quot;HTTPS&quot;)
+    Rel(advancedConcepts, seq, &quot;Sends logs to&quot;, &quot;HTTP&quot;)
+    Rel(advancedConcepts, prometheus, &quot;Exposes metrics to&quot;, &quot;HTTP&quot;)
+    Rel(grafana, prometheus, &quot;Queries metrics from&quot;, &quot;HTTP&quot;)
+
+    UpdateLayoutConfig($c4ShapeInRow=&quot;3&quot;, $c4BoundaryInRow=&quot;2&quot;)
+</code></pre>
+<h2 id="system-users">System Users</h2>
+<h3 id="primary-users">Primary Users</h3>
+<h4 id="developer">Developer</h4>
+<ul>
+<li><strong>Role:</strong> Individual learning advanced C# concepts</li>
+<li><strong>Goals:</strong>
+<ul>
+<li>Learn covariance and contravariance</li>
+<li>Understand polymorphism patterns</li>
+<li>Master performance optimization</li>
+<li>Study enterprise architecture patterns</li>
+</ul>
+</li>
+<li><strong>Interactions:</strong>
+<ul>
+<li>Reads documentation</li>
+<li>Runs code examples</li>
+<li>Executes benchmarks</li>
+<li>Studies test patterns</li>
+</ul>
+</li>
+</ul>
+<h4 id="educator">Educator</h4>
+<ul>
+<li><strong>Role:</strong> Teacher or trainer using the system for education</li>
+<li><strong>Goals:</strong>
+<ul>
+<li>Teach advanced C# concepts</li>
+<li>Demonstrate best practices</li>
+<li>Show real-world examples</li>
+<li>Provide hands-on exercises</li>
+</ul>
+</li>
+<li><strong>Interactions:</strong>
+<ul>
+<li>Uses examples in courses</li>
+<li>References documentation</li>
+<li>Assigns exercises to students</li>
+<li>Demonstrates patterns</li>
+</ul>
+</li>
+</ul>
+<h4 id="contributor">Contributor</h4>
+<ul>
+<li><strong>Role:</strong> Open source contributor improving the system</li>
+<li><strong>Goals:</strong>
+<ul>
+<li>Add new examples</li>
+<li>Improve documentation</li>
+<li>Fix bugs</li>
+<li>Enhance performance</li>
+</ul>
+</li>
+<li><strong>Interactions:</strong>
+<ul>
+<li>Forks repository</li>
+<li>Creates pull requests</li>
+<li>Reviews code</li>
+<li>Participates in discussions</li>
+</ul>
+</li>
+</ul>
+<h2 id="external-systems">External Systems</h2>
+<h3 id="nugetorg">NuGet.org</h3>
+<ul>
+<li><strong>Purpose:</strong> Package distribution platform</li>
+<li><strong>Interaction:</strong> System publishes NuGet packages</li>
+<li><strong>Protocol:</strong> HTTPS</li>
+<li><strong>Frequency:</strong> On new releases</li>
+<li><strong>Packages:</strong>
+<ul>
+<li>AdvancedConcepts.Core</li>
+<li>Future: Additional libraries</li>
+</ul>
+</li>
+</ul>
+<h3 id="github">GitHub</h3>
+<ul>
+<li><strong>Purpose:</strong> Source control, CI/CD, and collaboration</li>
+<li><strong>Interactions:</strong>
+<ul>
+<li>Source code hosting</li>
+<li>Issue tracking</li>
+<li>Pull request reviews</li>
+<li>CI/CD pipelines (GitHub Actions)</li>
+<li>Container registry (GHCR)</li>
+<li>Documentation hosting (GitHub Pages)</li>
+</ul>
+</li>
+<li><strong>Protocol:</strong> HTTPS/Git</li>
+<li><strong>Frequency:</strong> Continuous</li>
+</ul>
+<h3 id="github-container-registry">GitHub Container Registry</h3>
+<ul>
+<li><strong>Purpose:</strong> Docker image hosting</li>
+<li><strong>Interaction:</strong> System publishes Docker images</li>
+<li><strong>Protocol:</strong> HTTPS</li>
+<li><strong>Frequency:</strong> On new releases and commits to main</li>
+<li><strong>Images:</strong>
+<ul>
+<li><code>ghcr.io/dogaaydinn/advancedconcepts:latest</code></li>
+<li><code>ghcr.io/dogaaydinn/advancedconcepts:v1.0.0</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="seq">Seq</h3>
+<ul>
+<li><strong>Purpose:</strong> Structured log aggregation and analysis</li>
+<li><strong>Interaction:</strong> System sends structured logs</li>
+<li><strong>Protocol:</strong> HTTP</li>
+<li><strong>Frequency:</strong> Real-time (async)</li>
+<li><strong>Port:</strong> 5341</li>
+<li><strong>Environment:</strong> Development and staging</li>
+</ul>
+<h3 id="prometheus">Prometheus</h3>
+<ul>
+<li><strong>Purpose:</strong> Metrics collection and storage</li>
+<li><strong>Interaction:</strong> System exposes metrics endpoint</li>
+<li><strong>Protocol:</strong> HTTP</li>
+<li><strong>Frequency:</strong> Scraped every 15 seconds</li>
+<li><strong>Port:</strong> 9090</li>
+<li><strong>Metrics:</strong>
+<ul>
+<li>Request counters</li>
+<li>Duration histograms</li>
+<li>Active connections gauge</li>
+</ul>
+</li>
+</ul>
+<h3 id="grafana">Grafana</h3>
+<ul>
+<li><strong>Purpose:</strong> Metrics visualization and dashboards</li>
+<li><strong>Interaction:</strong> Queries Prometheus for metrics</li>
+<li><strong>Protocol:</strong> HTTP</li>
+<li><strong>Frequency:</strong> Real-time</li>
+<li><strong>Port:</strong> 3000</li>
+<li><strong>Dashboards:</strong>
+<ul>
+<li>Application performance</li>
+<li>Resource utilization</li>
+<li>Error rates</li>
+</ul>
+</li>
+</ul>
+<h2 id="system-scope">System Scope</h2>
+<h3 id="in-scope">In Scope</h3>
+<ul>
+<li>✅ Advanced C# concept demonstrations</li>
+<li>✅ Performance optimization examples</li>
+<li>✅ Enterprise architecture patterns</li>
+<li>✅ Testing strategies and examples</li>
+<li>✅ CI/CD pipeline automation</li>
+<li>✅ Documentation and tutorials</li>
+<li>✅ Observability and monitoring</li>
+</ul>
+<h3 id="out-of-scope">Out of Scope</h3>
+<ul>
+<li>❌ Production application runtime</li>
+<li>❌ User authentication/authorization</li>
+<li>❌ Database persistence</li>
+<li>❌ External API integrations</li>
+<li>❌ Payment processing</li>
+<li>❌ User management</li>
+</ul>
+<h2 id="technology-context">Technology Context</h2>
+<h3 id="development-environment">Development Environment</h3>
+<ul>
+<li><strong>.NET 8 LTS:</strong> Runtime and SDK</li>
+<li><strong>C# 12:</strong> Programming language</li>
+<li><strong>Visual Studio / Rider / VS Code:</strong> IDEs</li>
+</ul>
+<h3 id="build--deployment">Build &amp; Deployment</h3>
+<ul>
+<li><strong>GitHub Actions:</strong> CI/CD platform</li>
+<li><strong>Docker:</strong> Containerization</li>
+<li><strong>Kubernetes:</strong> Container orchestration (optional)</li>
+<li><strong>Helm:</strong> Package management for K8s</li>
+</ul>
+<h3 id="observability-stack">Observability Stack</h3>
+<ul>
+<li><strong>Serilog:</strong> Structured logging</li>
+<li><strong>OpenTelemetry:</strong> Distributed tracing and metrics</li>
+<li><strong>Seq:</strong> Log aggregation (development)</li>
+<li><strong>Prometheus:</strong> Metrics storage</li>
+<li><strong>Grafana:</strong> Visualization</li>
+</ul>
+<h3 id="quality--security">Quality &amp; Security</h3>
+<ul>
+<li><strong>6 Analyzers:</strong> Code quality</li>
+<li><strong>xUnit:</strong> Testing framework</li>
+<li><strong>BenchmarkDotNet:</strong> Performance testing</li>
+<li><strong>Stryker.NET:</strong> Mutation testing</li>
+<li><strong>Snyk, OWASP, Gitleaks:</strong> Security scanning</li>
+</ul>
+<h2 id="security-considerations">Security Considerations</h2>
+<h3 id="authentication">Authentication</h3>
+<ul>
+<li><strong>GitHub:</strong> OAuth for contributors</li>
+<li><strong>NuGet.org:</strong> API key for package publishing</li>
+<li><strong>Container Registry:</strong> GitHub token authentication</li>
+</ul>
+<h3 id="data-protection">Data Protection</h3>
+<ul>
+<li><strong>No PII collected:</strong> Educational system with no user data</li>
+<li><strong>Secrets management:</strong> GitHub Secrets for CI/CD</li>
+<li><strong>Container security:</strong> Non-root user, minimal attack surface</li>
+</ul>
+<h3 id="network-security">Network Security</h3>
+<ul>
+<li><strong>HTTPS:</strong> All external communications</li>
+<li><strong>TLS:</strong> Encrypted connections</li>
+<li><strong>Firewall:</strong> Kubernetes network policies (when deployed)</li>
+</ul>
+<h2 id="deployment-context">Deployment Context</h2>
+<h3 id="environments">Environments</h3>
+<h4 id="local-development">Local Development</h4>
+<ul>
+<li>Docker Compose with all services</li>
+<li>Console output for logs</li>
+<li>In-memory metrics</li>
+</ul>
+<h4 id="staging">Staging</h4>
+<ul>
+<li>Kubernetes cluster</li>
+<li>Seq for log aggregation</li>
+<li>Prometheus + Grafana for metrics</li>
+</ul>
+<h4 id="production-future">Production (Future)</h4>
+<ul>
+<li>Kubernetes cluster with autoscaling</li>
+<li>Cloud-native logging (Application Insights / CloudWatch)</li>
+<li>High availability setup</li>
+</ul>
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://c4model.com/">C4 Model</a></li>
+<li><a href="https://c4model.com/#SystemContextDiagram">System Context Documentation</a></li>
+<li><a href="https://mermaid.js.org/syntax/c4.html">Mermaid C4 Diagrams</a></li>
+</ul>
+<hr>
+<p><strong>Abstraction Level:</strong> Level 1 - System Context
+<strong>Target Audience:</strong> Everyone (technical and non-technical)
+<strong>Last Updated:</strong> 2025-11-30</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/02-c4-diagrams/context-diagram.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

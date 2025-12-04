@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>ADR-0008: Blazor Server for Web Frontend | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="ADR-0008: Blazor Server for Web Frontend | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/01-architecture-decision-records/0008-blazor-server-frontend.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="adr-0008-blazor-server-for-web-frontend">ADR-0008: Blazor Server for Web Frontend</h1>
+
+<p><strong>Status:</strong> Accepted
+<strong>Date:</strong> 2025-12-02
+<strong>Deciders:</strong> Architecture Team
+<strong>Technical Story:</strong> Frontend technology selection for video management UI</p>
+<h2 id="context">Context</h2>
+<p>The AspireVideoService needs a web frontend for:</p>
+<ul>
+<li>Browsing video library</li>
+<li>Adding new videos</li>
+<li>Viewing video details and status</li>
+<li>Incrementing view counts</li>
+<li>Demonstrating service discovery from frontend</li>
+</ul>
+<p>Requirements:</p>
+<ul>
+<li>.NET-based (consistent technology stack)</li>
+<li>Modern UI framework</li>
+<li>Real-time updates support</li>
+<li>Simple deployment</li>
+<li>Type-safe API consumption</li>
+<li>Educational value (demonstrate .NET full-stack)</li>
+</ul>
+<h2 id="decision">Decision</h2>
+<p>We will use <strong>Blazor Server</strong> for the web frontend.</p>
+<p>Configuration:</p>
+<ul>
+<li>Rendering Mode: Interactive Server</li>
+<li>API Communication: HttpClient with service discovery</li>
+<li>State Management: Component state (scoped)</li>
+<li>UI Framework: Bootstrap 5 (included in template)</li>
+</ul>
+<h2 id="consequences">Consequences</h2>
+<h3 id="positive">Positive</h3>
+<ul>
+<li><strong>C# Full-Stack</strong>: Write frontend in C# (consistent with backend)</li>
+<li><strong>Type Safety</strong>: Compile-time checking of API models</li>
+<li><strong>Code Sharing</strong>: Share DTOs and models between API and Web</li>
+<li><strong>No JavaScript</strong>: Minimal JavaScript required</li>
+<li><strong>Real-Time</strong>: SignalR built-in for real-time updates</li>
+<li><strong>Tooling</strong>: Full Visual Studio/Rider IntelliSense support</li>
+<li><strong>Debugging</strong>: Server-side debugging with breakpoints</li>
+<li><strong>Simple Deployment</strong>: Single .NET deployment (no Node.js/npm)</li>
+<li><strong>Aspire Integration</strong>: First-class Aspire support with service discovery</li>
+<li><strong>Security</strong>: Server-side rendering reduces attack surface</li>
+</ul>
+<h3 id="negative">Negative</h3>
+<ul>
+<li><strong>SignalR Dependency</strong>: Requires persistent WebSocket connection</li>
+<li><strong>Server Load</strong>: UI state maintained on server (memory per user)</li>
+<li><strong>Latency</strong>: Every UI interaction requires server round-trip (50-200ms)</li>
+<li><strong>Scalability</strong>: More challenging to scale than stateless SPAs</li>
+<li><strong>Offline</strong>: Cannot work offline (requires server connection)</li>
+<li><strong>Bandwidth</strong>: More bandwidth than Blazor WebAssembly for large payloads</li>
+</ul>
+<h3 id="neutral">Neutral</h3>
+<ul>
+<li><strong>Learning Curve</strong>: Developers must learn Blazor component model</li>
+<li><strong>Ecosystem</strong>: Smaller ecosystem than React/Angular (but growing)</li>
+<li><strong>Browser Support</strong>: Requires modern browsers (SignalR requirement)</li>
+</ul>
+<h2 id="alternatives-considered">Alternatives Considered</h2>
+<h3 id="alternative-1-blazor-webassembly">Alternative 1: Blazor WebAssembly</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Client-Side</strong>: No server resources for UI state</li>
+<li><strong>Offline</strong>: Can work offline once loaded</li>
+<li><strong>Scalability</strong>: Pure static files (CDN-friendly)</li>
+<li><strong>Low Latency</strong>: No round-trips for UI interactions</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Download Size</strong>: 2-3MB initial download (.NET runtime in browser)</li>
+<li><strong>Startup Time</strong>: 3-5 second cold start</li>
+<li><strong>No Real-Time</strong>: Must implement own SignalR client</li>
+<li><strong>API Authentication</strong>: More complex (JWT tokens, CORS)</li>
+<li><strong>Limited APIs</strong>: Cannot use all .NET APIs (file system, etc.)</li>
+</ul>
+<p><strong>Why rejected:</strong> Slower initial load and more complex for educational sample. Blazor Server provides better developer experience for this use case.</p>
+<h3 id="alternative-2-react--typescript">Alternative 2: React + TypeScript</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Industry Standard</strong>: Most popular frontend framework</li>
+<li><strong>Rich Ecosystem</strong>: Massive component library ecosystem</li>
+<li><strong>Performance</strong>: Highly optimized, fast rendering</li>
+<li><strong>Developer Pool</strong>: Easier to find React developers</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Separate Stack</strong>: JavaScript/TypeScript (not .NET)</li>
+<li><strong>Build Tooling</strong>: Requires Node.js, npm, Webpack/Vite</li>
+<li><strong>No Type Sharing</strong>: Cannot share C# types with API</li>
+<li><strong>API Typing</strong>: Must manually create TypeScript types or use codegen</li>
+<li><strong>Deployment</strong>: Separate deployment pipeline</li>
+</ul>
+<p><strong>Why rejected:</strong> Educational sample focuses on .NET ecosystem. React would dilute the message and add complexity (Node.js setup, npm, etc.).</p>
+<h3 id="alternative-3-aspnet-core-mvc-razor-pages">Alternative 3: ASP.NET Core MVC (Razor Pages)</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Mature</strong>: 10+ years of production use</li>
+<li><strong>Simple</strong>: Server-side rendering, no JavaScript</li>
+<li><strong>Performance</strong>: Fast page loads</li>
+<li><strong>SEO</strong>: Great for public-facing sites</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Not SPA</strong>: Full page reloads on navigation</li>
+<li><strong>Limited Interactivity</strong>: Requires JavaScript for dynamic UI</li>
+<li><strong>Old-School</strong>: Doesn't demonstrate modern .NET frontend</li>
+<li><strong>No Real-Time</strong>: Must implement SignalR manually</li>
+</ul>
+<p><strong>Why rejected:</strong> Blazor is the modern .NET frontend approach. MVC/Razor Pages feel dated compared to SPAs.</p>
+<h3 id="alternative-4-angular">Alternative 4: Angular</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Enterprise</strong>: Strong in enterprise environments</li>
+<li><strong>Complete Framework</strong>: Batteries-included</li>
+<li><strong>TypeScript First</strong>: Built for TypeScript</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Separate Stack</strong>: JavaScript/TypeScript ecosystem</li>
+<li><strong>Complex</strong>: Steeper learning curve than React</li>
+<li><strong>Heavyweight</strong>: Larger bundle sizes</li>
+<li><strong>Declining Popularity</strong>: Losing market share to React/Vue</li>
+</ul>
+<p><strong>Why rejected:</strong> Same reasons as React, plus Angular is more complex and less popular.</p>
+<h3 id="alternative-5-vuejs">Alternative 5: Vue.js</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Simple</strong>: Easier learning curve than React/Angular</li>
+<li><strong>Lightweight</strong>: Smaller bundle sizes</li>
+<li><strong>Progressive</strong>: Can adopt incrementally</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Separate Stack</strong>: JavaScript/TypeScript</li>
+<li><strong>Smaller Ecosystem</strong>: Fewer enterprise-grade components</li>
+<li><strong>Less Adoption</strong>: Smaller in enterprise compared to React</li>
+</ul>
+<p><strong>Why rejected:</strong> Same reasons as React/Angular.</p>
+<h2 id="related-decisions">Related Decisions</h2>
+<ul>
+<li><a href="0001-adopting-dotnet-8-platform.html">ADR-0001</a>: Blazor Server requires .NET 8</li>
+<li><a href="0002-using-dotnet-aspire.html">ADR-0002</a>: Aspire provides Blazor integration</li>
+<li><a href="0011-service-discovery-pattern.html">ADR-0011</a>: Blazor uses service discovery for API calls</li>
+</ul>
+<h2 id="related-links">Related Links</h2>
+<ul>
+<li><a href="https://learn.microsoft.com/aspnet/core/blazor/">Blazor Documentation</a></li>
+<li><a href="https://learn.microsoft.com/aspnet/core/blazor/hosting-models">Blazor Server vs WebAssembly</a></li>
+<li><a href="https://learn.microsoft.com/dotnet/aspire/frameworks/framework-blazor">Aspire Blazor Component</a></li>
+<li><a href="https://learn.microsoft.com/aspnet/core/signalr/">SignalR Documentation</a></li>
+</ul>
+<h2 id="notes">Notes</h2>
+<ul>
+<li><p><strong>When to Use Blazor Server</strong>:</p>
+<ul>
+<li>Internal admin tools</li>
+<li>Line-of-business apps</li>
+<li>Real-time dashboards</li>
+<li>Educational samples (like this)</li>
+</ul>
+</li>
+<li><p><strong>When to Use Blazor WebAssembly</strong>:</p>
+<ul>
+<li>Public-facing websites</li>
+<li>PWAs (Progressive Web Apps)</li>
+<li>Offline-first applications</li>
+<li>High-traffic sites (CDN-friendly)</li>
+</ul>
+</li>
+<li><p><strong>Performance Optimization</strong>:</p>
+<ul>
+<li>Use <code>@rendermode InteractiveServer</code> for interactive components only</li>
+<li>Static rendering for read-only content</li>
+<li>Virtualization for large lists (<code>&lt;Virtualize&gt;</code>)</li>
+<li>Pre-rendering for faster initial load</li>
+</ul>
+</li>
+<li><p><strong>API Communication Pattern</strong>:</p>
+<pre><code class="lang-csharp">@inject IHttpClientFactory HttpClientFactory
+
+var client = HttpClientFactory.CreateClient(&quot;api&quot;);
+var videos = await client.GetFromJsonAsync&lt;List&lt;Video&gt;&gt;(&quot;/api/videos&quot;);
+</code></pre>
+</li>
+<li><p><strong>State Management</strong>:</p>
+<ul>
+<li>Component state for simple scenarios (this sample)</li>
+<li>Fluxor for complex state management (future)</li>
+<li>Cascading parameters for cross-component state</li>
+</ul>
+</li>
+<li><p><strong>Production Considerations</strong>:</p>
+<ul>
+<li>Enable compression for SignalR</li>
+<li>Configure circuit timeout (default 30 seconds)</li>
+<li>Monitor SignalR connection counts</li>
+<li>Use sticky sessions with load balancers</li>
+<li>Consider Redis backplane for multi-server deployments</li>
+</ul>
+</li>
+<li><p><strong>Future</strong>: Blazor United (.NET 8+) combines Server and WebAssembly for best of both worlds</p>
+</li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/01-architecture-decision-records/0008-blazor-server-frontend.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

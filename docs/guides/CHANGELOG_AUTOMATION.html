@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Changelog Automation Guide | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Changelog Automation Guide | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/guides/CHANGELOG_AUTOMATION.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="changelog-automation-guide">Changelog Automation Guide</h1>
+
+<h2 id="overview">Overview</h2>
+<p>This guide covers automating changelog generation using various tools and techniques, following the Keep a Changelog format and Conventional Commits standard.</p>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ul>
+<li><a href="#keep-a-changelog-format">Keep a Changelog Format</a></li>
+<li><a href="#automated-generation-tools">Automated Generation Tools</a></li>
+<li><a href="#git-cliff-configuration">git-cliff Configuration</a></li>
+<li><a href="#conventional-changelog-setup">conventional-changelog Setup</a></li>
+<li><a href="#github-release-notes">GitHub Release Notes</a></li>
+<li><a href="#migration-guides">Migration Guides</a></li>
+<li><a href="#best-practices">Best Practices</a></li>
+</ul>
+<h2 id="keep-a-changelog-format">Keep a Changelog Format</h2>
+<h3 id="structure">Structure</h3>
+<pre><code class="lang-markdown"># Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+### Added
+- New features that have been added
+
+### Changed
+- Changes in existing functionality
+
+### Deprecated
+- Features that will be removed in upcoming releases
+
+### Removed
+- Features that have been removed
+
+### Fixed
+- Bug fixes
+
+### Security
+- Security improvements or vulnerability fixes
+
+## [1.0.0] - 2025-01-15
+
+### Added
+- Initial release
+- User authentication system
+- REST API endpoints
+
+### Changed
+- Improved performance by 50%
+
+### Fixed
+- Fixed memory leak in background service
+
+## [0.9.0] - 2024-12-01
+
+### Added
+- Beta release
+- Core functionality
+
+[Unreleased]: https://github.com/user/repo/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/user/repo/compare/v0.9.0...v1.0.0
+[0.9.0]: https://github.com/user/repo/releases/tag/v0.9.0
+</code></pre>
+<h3 id="categories">Categories</h3>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Description</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Added</strong></td>
+<td>New features</td>
+<td>New APIs, new capabilities</td>
+</tr>
+<tr>
+<td><strong>Changed</strong></td>
+<td>Changes to existing features</td>
+<td>API modifications, behavior changes</td>
+</tr>
+<tr>
+<td><strong>Deprecated</strong></td>
+<td>Soon-to-be removed features</td>
+<td>Warnings about future removals</td>
+</tr>
+<tr>
+<td><strong>Removed</strong></td>
+<td>Removed features</td>
+<td>Deleted APIs, removed functionality</td>
+</tr>
+<tr>
+<td><strong>Fixed</strong></td>
+<td>Bug fixes</td>
+<td>Crash fixes, correctness improvements</td>
+</tr>
+<tr>
+<td><strong>Security</strong></td>
+<td>Security fixes</td>
+<td>Vulnerability patches, security enhancements</td>
+</tr>
+</tbody>
+</table>
+<h3 id="writing-good-changelog-entries">Writing Good Changelog Entries</h3>
+<p><strong>Good Examples:</strong></p>
+<pre><code class="lang-markdown">### Added
+- User authentication with OAuth2 support for Google and GitHub
+- RESTful API endpoints for user management (GET, POST, PUT, DELETE)
+- Real-time notifications using SignalR
+- Batch processing capability for large data imports
+
+### Fixed
+- Fixed null reference exception in UserService.GetUserById() (#123)
+- Corrected timezone handling in date calculations (#456)
+- Resolved memory leak in background job processor (#789)
+</code></pre>
+<p><strong>Bad Examples:</strong></p>
+<pre><code class="lang-markdown">### Added
+- Stuff
+- Various improvements
+- Updated code
+
+### Fixed
+- Bug fixes
+- Some issues
+</code></pre>
+<h2 id="automated-generation-tools">Automated Generation Tools</h2>
+<h3 id="tool-comparison">Tool Comparison</h3>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Language</th>
+<th>Features</th>
+<th>Best For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>git-cliff</strong></td>
+<td>Rust</td>
+<td>Fast, regex-based, highly customizable</td>
+<td>Large repos, complex rules</td>
+</tr>
+<tr>
+<td><strong>conventional-changelog</strong></td>
+<td>Node.js</td>
+<td>Conventional Commits focused</td>
+<td>JavaScript/TypeScript projects</td>
+</tr>
+<tr>
+<td><strong>semantic-release</strong></td>
+<td>Node.js</td>
+<td>Full release automation</td>
+<td>Automated releases</td>
+</tr>
+<tr>
+<td><strong>GitVersion</strong></td>
+<td>.NET</td>
+<td>Version calculation + changelog</td>
+<td>.NET projects</td>
+</tr>
+<tr>
+<td><strong>github-changelog-generator</strong></td>
+<td>Ruby</td>
+<td>GitHub-specific</td>
+<td>GitHub projects</td>
+</tr>
+</tbody>
+</table>
+<h2 id="git-cliff-configuration">git-cliff Configuration</h2>
+<h3 id="installation">Installation</h3>
+<pre><code class="lang-bash"># Install via cargo (Rust)
+cargo install git-cliff
+
+# Or download binary from GitHub releases
+# https://github.com/orhun/git-cliff/releases
+
+# Or via package managers:
+# macOS
+brew install git-cliff
+
+# Windows
+scoop install git-cliff
+
+# Linux
+# Download from releases or build from source
+</code></pre>
+<h3 id="configuration-file">Configuration File</h3>
+<p>Create <code>cliff.toml</code> in project root:</p>
+<pre><code class="lang-toml">[changelog]
+# Changelog header
+header = &quot;&quot;&quot;
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).\n
+&quot;&quot;&quot;
+
+# Template for changelog body
+body = &quot;&quot;&quot;
+{% if version %}\
+    ## [{{ version | trim_start_matches(pat=&quot;v&quot;) }}] - {{ timestamp | date(format=&quot;%Y-%m-%d&quot;) }}
+{% else %}\
+    ## [Unreleased]
+{% endif %}\
+{% for group, commits in commits | group_by(attribute=&quot;group&quot;) %}
+    ### {{ group | upper_first }}
+    {% for commit in commits %}
+        - {% if commit.breaking %}[**BREAKING**] {% endif %}{{ commit.message | upper_first }}\
+          {% if commit.github.pr_number %} ([#{{ commit.github.pr_number }}]({{ commit.github.pr_url }})){% endif %}\
+    {% endfor %}
+{% endfor %}\n
+&quot;&quot;&quot;
+
+# Changelog footer
+footer = &quot;&quot;&quot;
+&lt;!-- generated by git-cliff --&gt;
+&quot;&quot;&quot;
+
+# Remove conventional commit prefixes from changelog entries
+trim = true
+
+[git]
+# Parse commits based on conventional commit style
+conventional_commits = true
+
+# Filter commits based on regex
+filter_commits = false
+
+# Regex for preprocessing commit messages
+commit_preprocessors = [
+    { pattern = '\((\w+\s)?#([0-9]+)\)', replace = &quot;([#${2}](https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/issues/${2}))&quot; },
+]
+
+# Regex for parsing and grouping commits
+commit_parsers = [
+    { message = &quot;^feat&quot;, group = &quot;Features&quot; },
+    { message = &quot;^fix&quot;, group = &quot;Bug Fixes&quot; },
+    { message = &quot;^doc&quot;, group = &quot;Documentation&quot; },
+    { message = &quot;^perf&quot;, group = &quot;Performance&quot; },
+    { message = &quot;^refactor&quot;, group = &quot;Refactoring&quot; },
+    { message = &quot;^style&quot;, group = &quot;Styling&quot; },
+    { message = &quot;^test&quot;, group = &quot;Testing&quot; },
+    { message = &quot;^chore\\(release\\): prepare for&quot;, skip = true },
+    { message = &quot;^chore&quot;, group = &quot;Miscellaneous Tasks&quot; },
+    { body = &quot;.*security&quot;, group = &quot;Security&quot; },
+]
+
+# Protect breaking changes from being skipped
+protect_breaking_commits = false
+
+# Filter out commits that are not conventional
+filter_unconventional = true
+
+# Split commits by newlines
+split_commits = false
+
+# Sort by oldest first
+sort_commits = &quot;oldest&quot;
+
+[remote.github]
+owner = &quot;dogaaydinn&quot;
+repo = &quot;CSharp-Covariance-Polymorphism-Exercises&quot;
+token = &quot;&quot;
+</code></pre>
+<h3 id="usage">Usage</h3>
+<pre><code class="lang-bash"># Generate changelog from all commits
+git cliff
+
+# Generate for specific range
+git cliff v1.0.0..HEAD
+
+# Generate for latest version only
+git cliff --latest
+
+# Output to file
+git cliff --output CHANGELOG.md
+
+# Generate unreleased changes
+git cliff --unreleased
+
+# Prepend to existing changelog
+git cliff --prepend CHANGELOG.md
+
+# Tag and generate
+git cliff --tag v1.1.0 --prepend CHANGELOG.md
+
+# Include all commits (even unconventional)
+git cliff --include-path &quot;*&quot; --all
+</code></pre>
+<h3 id="github-actions-integration">GitHub Actions Integration</h3>
+<pre><code class="lang-yaml"># .github/workflows/changelog.yml
+name: Generate Changelog
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  changelog:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate Changelog
+        uses: orhun/git-cliff-action@v2
+        with:
+          config: cliff.toml
+          args: --latest --strip header
+        env:
+          OUTPUT: CHANGELOG_BODY.md
+
+      - name: Update Changelog
+        run: |
+          git cliff --tag ${{ github.ref_name }} --prepend CHANGELOG.md
+          git config user.name &quot;github-actions[bot]&quot;
+          git config user.email &quot;github-actions[bot]@users.noreply.github.com&quot;
+          git add CHANGELOG.md
+          git commit -m &quot;docs: update CHANGELOG for ${{ github.ref_name }}&quot;
+          git push
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          body_path: CHANGELOG_BODY.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+</code></pre>
+<h2 id="conventional-changelog-setup">conventional-changelog Setup</h2>
+<h3 id="installation-1">Installation</h3>
+<pre><code class="lang-bash"># Install conventional-changelog-cli
+npm install -g conventional-changelog-cli
+
+# Or as dev dependency
+npm install --save-dev conventional-changelog-cli
+</code></pre>
+<h3 id="packagejson-configuration">Package.json Configuration</h3>
+<pre><code class="lang-json">{
+  &quot;scripts&quot;: {
+    &quot;changelog&quot;: &quot;conventional-changelog -p angular -i CHANGELOG.md -s&quot;,
+    &quot;changelog:all&quot;: &quot;conventional-changelog -p angular -i CHANGELOG.md -s -r 0&quot;
+  },
+  &quot;devDependencies&quot;: {
+    &quot;conventional-changelog-cli&quot;: &quot;^4.1.0&quot;
+  }
+}
+</code></pre>
+<h3 id="usage-1">Usage</h3>
+<pre><code class="lang-bash"># Generate changelog (append)
+npm run changelog
+
+# Generate full changelog (regenerate all)
+npm run changelog:all
+
+# Generate for first release
+conventional-changelog -p angular -i CHANGELOG.md -s -r 0
+
+# Preview without writing
+conventional-changelog -p angular
+
+# Use custom preset
+conventional-changelog -p conventionalcommits -i CHANGELOG.md -s
+</code></pre>
+<h3 id="presets">Presets</h3>
+<table>
+<thead>
+<tr>
+<th>Preset</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>angular</code></td>
+<td>Angular commit conventions</td>
+</tr>
+<tr>
+<td><code>atom</code></td>
+<td>Atom conventions</td>
+</tr>
+<tr>
+<td><code>conventionalcommits</code></td>
+<td>Conventional Commits spec</td>
+</tr>
+<tr>
+<td><code>ember</code></td>
+<td>Ember.js conventions</td>
+</tr>
+<tr>
+<td><code>eslint</code></td>
+<td>ESLint conventions</td>
+</tr>
+<tr>
+<td><code>jshint</code></td>
+<td>JSHint conventions</td>
+</tr>
+</tbody>
+</table>
+<h3 id="custom-configuration">Custom Configuration</h3>
+<p>Create <code>.changelogrc</code>:</p>
+<pre><code class="lang-json">{
+  &quot;types&quot;: [
+    {&quot;type&quot;: &quot;feat&quot;, &quot;section&quot;: &quot;Features&quot;},
+    {&quot;type&quot;: &quot;fix&quot;, &quot;section&quot;: &quot;Bug Fixes&quot;},
+    {&quot;type&quot;: &quot;perf&quot;, &quot;section&quot;: &quot;Performance Improvements&quot;},
+    {&quot;type&quot;: &quot;docs&quot;, &quot;section&quot;: &quot;Documentation&quot;},
+    {&quot;type&quot;: &quot;style&quot;, &quot;section&quot;: &quot;Styles&quot;, &quot;hidden&quot;: true},
+    {&quot;type&quot;: &quot;refactor&quot;, &quot;section&quot;: &quot;Code Refactoring&quot;},
+    {&quot;type&quot;: &quot;test&quot;, &quot;section&quot;: &quot;Tests&quot;, &quot;hidden&quot;: true},
+    {&quot;type&quot;: &quot;build&quot;, &quot;section&quot;: &quot;Build System&quot;},
+    {&quot;type&quot;: &quot;ci&quot;, &quot;section&quot;: &quot;CI/CD&quot;, &quot;hidden&quot;: true},
+    {&quot;type&quot;: &quot;chore&quot;, &quot;section&quot;: &quot;Chores&quot;, &quot;hidden&quot;: true}
+  ],
+  &quot;issueUrlFormat&quot;: &quot;https://github.com/user/repo/issues/{{id}}&quot;,
+  &quot;commitUrlFormat&quot;: &quot;https://github.com/user/repo/commit/{{hash}}&quot;,
+  &quot;compareUrlFormat&quot;: &quot;https://github.com/user/repo/compare/{{previousTag}}...{{currentTag}}&quot;,
+  &quot;userUrlFormat&quot;: &quot;https://github.com/{{user}}&quot;
+}
+</code></pre>
+<h2 id="github-release-notes">GitHub Release Notes</h2>
+<h3 id="automatic-release-notes">Automatic Release Notes</h3>
+<p>GitHub can automatically generate release notes from pull requests:</p>
+<pre><code class="lang-yaml"># .github/release.yml
+changelog:
+  exclude:
+    labels:
+      - ignore-for-release
+    authors:
+      - octocat
+  categories:
+    - title: Breaking Changes 🛠
+      labels:
+        - breaking-change
+        - breaking
+    - title: New Features 🎉
+      labels:
+        - feature
+        - enhancement
+    - title: Bug Fixes 🐛
+      labels:
+        - bug
+        - fix
+    - title: Performance Improvements ⚡
+      labels:
+        - performance
+    - title: Documentation 📚
+      labels:
+        - documentation
+    - title: Other Changes
+      labels:
+        - &quot;*&quot;
+</code></pre>
+<h3 id="manual-release-creation">Manual Release Creation</h3>
+<pre><code class="lang-yaml"># In release.yml workflow
+- name: Create Release
+  uses: softprops/action-gh-release@v1
+  with:
+    tag_name: ${{ github.ref }}
+    name: Release ${{ github.ref_name }}
+    body: |
+      ## What's Changed
+
+      ### Features
+      - New authentication system
+      - Enhanced caching layer
+
+      ### Bug Fixes
+      - Fixed memory leak in service
+      - Corrected validation logic
+
+      **Full Changelog**: https://github.com/${{ github.repository }}/compare/v1.0.0...v1.1.0
+    draft: false
+    prerelease: false
+</code></pre>
+<h3 id="release-notes-template">Release Notes Template</h3>
+<pre><code class="lang-markdown">## 🚀 What's New in v{{ version }}
+
+### ✨ Features
+{{ features }}
+
+### 🐛 Bug Fixes
+{{ bug_fixes }}
+
+### ⚡ Performance
+{{ performance }}
+
+### 📚 Documentation
+{{ documentation }}
+
+### 🔒 Security
+{{ security }}
+
+## 📦 Installation
+
+### NuGet
+```bash
+dotnet add package AdvancedConcepts.Core --version {{ version }}
+</code></pre>
+<h3 id="docker">Docker</h3>
+<pre><code class="lang-bash">docker pull ghcr.io/dogaaydinn/advancedconcepts:{{ version }}
+</code></pre>
+<h2 id="-links">🔗 Links</h2>
+<ul>
+<li><strong>Documentation</strong>: <a href="https://docs.example.com">https://docs.example.com</a></li>
+<li><strong>Full Changelog</strong>: {{ changelog_url }}</li>
+<li><strong>Migration Guide</strong>: {{ migration_guide_url }}</li>
+</ul>
+<h2 id="-contributors">👥 Contributors</h2>
+<p>{{ contributors }}</p>
+<hr>
+<p><strong>Note:</strong> This release requires .NET 8.0 or later.</p>
+<pre><code>
+## Migration Guides
+
+### Structure
+
+```markdown
+# Migration Guide: v1.x to v2.0
+
+## Overview
+
+This guide helps you migrate from v1.x to v2.0 of Advanced C# Concepts.
+
+## Breaking Changes
+
+### 1. Authentication API Redesign
+
+**Impact:** High - All authentication code must be updated
+
+**Before (v1.x):**
+```csharp
+var auth = new Authenticator();
+auth.Login(username, password);
+</code></pre>
+<p><strong>After (v2.0):</strong></p>
+<pre><code class="lang-csharp">var auth = new AuthenticationService();
+await auth.AuthenticateAsync(new Credentials(username, password));
+</code></pre>
+<p><strong>Migration Steps:</strong></p>
+<ol>
+<li>Replace <code>Authenticator</code> with <code>AuthenticationService</code></li>
+<li>Change synchronous calls to async</li>
+<li>Use <code>Credentials</code> class instead of separate parameters</li>
+</ol>
+<h3 id="2-configuration-system">2. Configuration System</h3>
+<p><strong>Impact:</strong> Medium - Configuration loading changed</p>
+<p><strong>Before (v1.x):</strong></p>
+<pre><code class="lang-csharp">var config = ConfigurationLoader.Load(&quot;appsettings.json&quot;);
+</code></pre>
+<p><strong>After (v2.0):</strong></p>
+<pre><code class="lang-csharp">var config = new ConfigurationBuilder()
+    .AddJsonFile(&quot;appsettings.json&quot;)
+    .Build();
+</code></pre>
+<h2 id="deprecated-features">Deprecated Features</h2>
+<p>The following features are deprecated and will be removed in v3.0:</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Alternative</th>
+<th>Removal Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>UserService.GetUser(int id)</code></td>
+<td><code>UserService.GetUserAsync(int id)</code></td>
+<td>v3.0</td>
+</tr>
+<tr>
+<td><code>Logger.Write(string)</code></td>
+<td>Use <code>ILogger</code> instead</td>
+<td>v3.0</td>
+</tr>
+</tbody>
+</table>
+<h2 id="new-features">New Features</h2>
+<h3 id="enhanced-logging">Enhanced Logging</h3>
+<pre><code class="lang-csharp">// New structured logging
+_logger.LogInformation(&quot;User {UserId} logged in from {IpAddress}&quot;,
+    userId, ipAddress);
+</code></pre>
+<h3 id="performance-improvements">Performance Improvements</h3>
+<ul>
+<li>50% faster startup time</li>
+<li>30% reduction in memory usage</li>
+<li>Improved LINQ query performance</li>
+</ul>
+<h2 id="migration-checklist">Migration Checklist</h2>
+<ul>
+<li>[ ] Update NuGet package to v2.0.0</li>
+<li>[ ] Replace <code>Authenticator</code> with <code>AuthenticationService</code></li>
+<li>[ ] Convert synchronous auth calls to async</li>
+<li>[ ] Update configuration loading code</li>
+<li>[ ] Replace deprecated <code>UserService.GetUser()</code> calls</li>
+<li>[ ] Update logging to use <code>ILogger</code></li>
+<li>[ ] Run full test suite</li>
+<li>[ ] Update documentation</li>
+</ul>
+<h2 id="support">Support</h2>
+<p>If you encounter issues during migration:</p>
+<ul>
+<li>Check <a href="https://github.com/user/repo/issues">GitHub Issues</a></li>
+<li>Read the <a href="https://docs.example.com">v2.0 Documentation</a></li>
+<li>Ask for help in <a href="https://github.com/user/repo/discussions">Discussions</a></li>
+</ul>
+<pre><code>
+## Best Practices
+
+### 1. Changelog Maintenance
+
+- ✅ Update changelog with every release
+- ✅ Write user-facing descriptions
+- ✅ Link to issues and PRs
+- ✅ Group changes by type
+- ✅ Include breaking change warnings
+
+### 2. Automation
+
+- ✅ Generate changelog automatically from commits
+- ✅ Validate conventional commits in CI
+- ✅ Auto-update changelog on release
+- ✅ Include changelog in GitHub releases
+- ✅ Test automation before production use
+
+### 3. Content Quality
+
+- ✅ Focus on user impact, not implementation
+- ✅ Provide migration guidance for breaking changes
+- ✅ Include code examples
+- ✅ Link to detailed documentation
+- ✅ Thank contributors
+
+### 4. Versioning
+
+- ✅ Follow semantic versioning strictly
+- ✅ Tag all releases
+- ✅ Include version in changelog
+- ✅ Maintain unreleased section
+- ✅ Compare links between versions
+
+### 5. Distribution
+
+- ✅ Include changelog in package
+- ✅ Display in GitHub releases
+- ✅ Link from documentation
+- ✅ Announce major changes
+- ✅ Archive old versions
+
+## Example Workflow
+
+```yaml
+# Complete changelog automation workflow
+name: Release Automation
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate Changelog
+        run: |
+          # Install git-cliff
+          wget https://github.com/orhun/git-cliff/releases/latest/download/git-cliff-x86_64-unknown-linux-gnu.tar.gz
+          tar -xzf git-cliff-x86_64-unknown-linux-gnu.tar.gz
+          chmod +x git-cliff
+
+          # Generate changelog
+          ./git-cliff --tag ${{ github.ref_name }} --prepend CHANGELOG.md
+          ./git-cliff --latest --strip header --output RELEASE_NOTES.md
+
+      - name: Commit Changelog
+        run: |
+          git config user.name &quot;github-actions[bot]&quot;
+          git config user.email &quot;github-actions[bot]@users.noreply.github.com&quot;
+          git add CHANGELOG.md
+          git commit -m &quot;docs: update CHANGELOG for ${{ github.ref_name }}&quot; || true
+          git push || true
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          body_path: RELEASE_NOTES.md
+          files: |
+            LICENSE
+            README.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+</code></pre>
+<h2 id="tools-comparison">Tools Comparison</h2>
+<h3 id="choosing-the-right-tool">Choosing the Right Tool</h3>
+<p><strong>Use git-cliff if:</strong></p>
+<ul>
+<li>You need maximum flexibility</li>
+<li>You have complex commit patterns</li>
+<li>You want fast performance</li>
+<li>You prefer configuration files</li>
+</ul>
+<p><strong>Use conventional-changelog if:</strong></p>
+<ul>
+<li>You're in a Node.js ecosystem</li>
+<li>You follow Angular commit style</li>
+<li>You want simple setup</li>
+<li>You need ecosystem integration</li>
+</ul>
+<p><strong>Use GitHub's auto-generated notes if:</strong></p>
+<ul>
+<li>You use pull requests extensively</li>
+<li>You want minimal setup</li>
+<li>You label PRs consistently</li>
+<li>GitHub UI is sufficient</li>
+</ul>
+<p><strong>Use semantic-release if:</strong></p>
+<ul>
+<li>You want full automation</li>
+<li>You need version bumping too</li>
+<li>You can adopt strict conventions</li>
+<li>You want zero manual intervention</li>
+</ul>
+<h2 id="resources">Resources</h2>
+<ul>
+<li><a href="https://keepachangelog.com/">Keep a Changelog</a></li>
+<li><a href="https://git-cliff.org/">git-cliff Documentation</a></li>
+<li><a href="https://github.com/conventional-changelog/conventional-changelog">conventional-changelog</a></li>
+<li><a href="https://semantic-release.gitbook.io/">Semantic Release</a></li>
+<li><a href="https://docs.github.com/en/repositories/releasing-projects-on-github/automatically-generated-release-notes">GitHub Release Notes</a></li>
+</ul>
+<hr>
+<p><strong>Last Updated:</strong> 2025-12-01
+<strong>Version:</strong> 1.0</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/guides/CHANGELOG_AUTOMATION.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

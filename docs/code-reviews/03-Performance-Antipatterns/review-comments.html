@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>CODE REVIEW: PR #167 - Add Order Processing Feature | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="CODE REVIEW: PR #167 - Add Order Processing Feature | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/code-reviews/03-Performance-Antipatterns/review-comments.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="code-review-pr-167---add-order-processing-feature">CODE REVIEW: PR #167 - Add Order Processing Feature</h1>
+
+<p><strong>PR Number:</strong> #167
+<strong>Author:</strong> @junior-dev (Junior Developer, 10 months experience)
+<strong>Reviewer:</strong> @senior-dev (Senior Developer)
+<strong>Date:</strong> 2024-12-03
+<strong>Status:</strong> 🔴 MAJOR CHANGES REQUIRED - PERFORMANCE CRITICAL</p>
+<hr>
+<h2 id="-genel-değerlendİrme">📊 GENEL DEĞERLENDİRME</h2>
+<table>
+<thead>
+<tr>
+<th>Kriter</th>
+<th>Durum</th>
+<th>Not</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Code compiles</td>
+<td>✅ PASS</td>
+<td>Builds successfully</td>
+</tr>
+<tr>
+<td>Tests pass</td>
+<td>⚠️ WARNING</td>
+<td>No performance tests</td>
+</tr>
+<tr>
+<td>Functional correctness</td>
+<td>✅ PASS</td>
+<td>Logic is correct</td>
+</tr>
+<tr>
+<td>Performance</td>
+<td>🚨 CRITICAL</td>
+<td>Multiple critical issues</td>
+</tr>
+<tr>
+<td>Async/await usage</td>
+<td>❌ FAIL</td>
+<td>Deadlock risks, blocking calls</td>
+</tr>
+<tr>
+<td>Database efficiency</td>
+<td>❌ FAIL</td>
+<td>N+1 query problems</td>
+</tr>
+<tr>
+<td>Memory management</td>
+<td>⚠️ WARNING</td>
+<td>Resource leaks</td>
+</tr>
+<tr>
+<td><strong>Overall Recommendation</strong></td>
+<td><strong>🔴 MAJOR CHANGES REQUIRED</strong></td>
+<td><strong>Will not scale</strong></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="-critical-performance-issues">🚨 CRITICAL PERFORMANCE ISSUES</h2>
+<h3 id="1-async-void---exception-black-hole-">1. <strong>Async Void - Exception Black Hole</strong> 🔴</h3>
+<p><strong>File:</strong> <code>OrderService.cs</code>, Lines 19-30
+<strong>Severity:</strong> CRITICAL</p>
+<pre><code class="lang-csharp">// ❌ CURRENT CODE:
+public async void ProcessOrder(int orderId)
+{
+    var order = GetOrderById(orderId).Result; // Also problematic!
+    // ...
+}
+</code></pre>
+<p><strong>💬 Senior Comment:</strong></p>
+<p>@junior-dev <strong>NEVER use async void!</strong> This is a ticking time bomb.</p>
+<p><strong>Problems:</strong></p>
+<ol>
+<li><strong>Exceptions disappear:</strong> If this throws, your app crashes (no try-catch can catch it)</li>
+<li><strong>Can't await:</strong> Caller can't wait for completion</li>
+<li><strong>No return value:</strong> Can't get result or handle errors</li>
+<li><strong>Fire-and-forget:</strong> Execution continues without knowing if it succeeded</li>
+</ol>
+<p><strong>Real-World Incident:</strong></p>
+<blockquote>
+<p>&quot;2021: Company used async void for payment processing. Exception occurred, but no logging (exception disappeared). User charged twice. Result: $50K refunds + bad reviews.&quot;</p>
+</blockquote>
+<p><strong>Required Fix:</strong></p>
+<pre><code class="lang-csharp">// ✅ CORRECT: async Task
+public async Task ProcessOrderAsync(int orderId)
+{
+    try
+    {
+        var order = await GetOrderByIdAsync(orderId); // Proper await
+
+        var log = new StringBuilder();
+        foreach (var item in order.Items)
+        {
+            log.AppendLine($&quot;Processing item {item.ProductId}&quot;);
+        }
+
+        _logger.LogInformation(log.ToString());
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, &quot;Failed to process order {OrderId}&quot;, orderId);
+        throw; // Re-throw after logging
+    }
+}
+</code></pre>
+<p><strong>When to use async void:</strong></p>
+<ul>
+<li>✅ Event handlers ONLY (button click, etc.)</li>
+<li>❌ NEVER for business logic</li>
+</ul>
+<p><strong>Action Required:</strong> Change to async Task immediately</p>
+<hr>
+<h3 id="2-blocking-async-with-result---deadlock-city-">2. <strong>Blocking Async with .Result - Deadlock City</strong> 🔴</h3>
+<p><strong>File:</strong> <code>OrderService.cs</code>, Line 21
+<strong>Severity:</strong> CRITICAL</p>
+<pre><code class="lang-csharp">// ❌ CURRENT CODE:
+public async void ProcessOrder(int orderId)
+{
+    var order = GetOrderById(orderId).Result; // ❌ DEADLOCK RISK!
+    // ...
+}
+</code></pre>
+<p><strong>💬 Senior Comment:</strong></p>
+<p>@junior-dev <strong>This WILL cause deadlocks in ASP.NET Core!</strong></p>
+<p><strong>Why This Causes Deadlock:</strong></p>
+<pre><code>1. Main thread calls ProcessOrder()
+2. ProcessOrder() calls GetOrderById().Result
+3. .Result BLOCKS main thread waiting for task
+4. Task tries to return to main thread (synchronization context)
+5. Main thread is blocked, can't accept result
+6. DEADLOCK! App hangs forever.
+</code></pre>
+<p><strong>Performance Impact:</strong></p>
+<pre><code>Without .Result: 100 requests/sec ✅
+With .Result: 10 requests/sec (90% slower!) ❌
+Under load: Deadlocks, timeouts, app hang
+</code></pre>
+<p><strong>Required Fix:</strong></p>
+<pre><code class="lang-csharp">// ✅ CORRECT: await, not .Result
+public async Task ProcessOrderAsync(int orderId)
+{
+    var order = await GetOrderByIdAsync(orderId); // Non-blocking!
+    // ...
+}
+</code></pre>
+<p><strong>NEVER do this:</strong></p>
+<ul>
+<li>❌ <code>.Result</code></li>
+<li>❌ <code>.Wait()</code></li>
+<li>❌ <code>.GetAwaiter().GetResult()</code></li>
+</ul>
+<p><strong>ALWAYS do this:</strong></p>
+<ul>
+<li>✅ <code>await</code></li>
+</ul>
+<p><strong>Action Required:</strong> Replace ALL .Result with await</p>
+<hr>
+<h3 id="3-threadsleep---thread-pool-starvation-">3. <strong>Thread.Sleep - Thread Pool Starvation</strong> 🔴</h3>
+<p><strong>File:</strong> <code>OrderService.cs</code>, Line 37
+<strong>Severity:</strong> CRITICAL</p>
+<pre><code class="lang-csharp">// ❌ CURRENT CODE:
+public Task&lt;Order&gt; GetOrderById(int id)
+{
+    Thread.Sleep(1000); // ❌ Blocks thread for 1 second!
+    var order = _orders.FirstOrDefault(o =&gt; o.Id == id);
+    return Task.FromResult(order);
+}
+</code></pre>
+<p><strong>💬 Senior Comment:</strong></p>
+<p>@junior-dev <strong>Thread.Sleep in async code = performance killer!</strong></p>
+<p><strong>Impact:</strong></p>
+<pre><code>Thread pool has 100 threads (example)
+10 concurrent requests with Thread.Sleep(1000):
+→ 10 threads blocked for 1 second each
+→ 90 threads available
+
+100 concurrent requests:
+→ 100 threads blocked
+→ 0 threads available
+→ New requests WAIT for thread
+→ App appears &quot;frozen&quot;
+</code></pre>
+<p><strong>Performance:</strong></p>
+<pre><code>With Thread.Sleep(1000):
+- Throughput: 100 requests/sec (max)
+- Latency: 1+ seconds
+- Thread pool exhaustion under load
+
+With await Task.Delay(1000):
+- Throughput: 10,000+ requests/sec
+- Latency: 1 second (CPU free during wait)
+- Thread pool healthy
+</code></pre>
+<p><strong>Required Fix:</strong></p>
+<pre><code class="lang-csharp">// ✅ CORRECT: async all the way
+public async Task&lt;Order&gt; GetOrderByIdAsync(int id)
+{
+    await Task.Delay(1000); // Non-blocking delay
+
+    var order = await _dbContext.Orders
+        .FirstOrDefaultAsync(o =&gt; o.Id == id);
+
+    return order;
+}
+</code></pre>
+<p><strong>Key Principle:</strong></p>
+<blockquote>
+<p>&quot;In async code, NEVER block. Use await, not Thread.Sleep or .Result.&quot;</p>
+</blockquote>
+<p><strong>Action Required:</strong> Replace Thread.Sleep with await Task.Delay</p>
+<hr>
+<h3 id="4-n1-query-problem---database-overload-">4. <strong>N+1 Query Problem - Database Overload</strong> 🔴</h3>
+<p><strong>File:</strong> <code>OrderService.cs</code>, Lines 44-61
+<strong>Severity:</strong> CRITICAL</p>
+<pre><code class="lang-csharp">// ❌ CURRENT CODE:
+public List&lt;OrderDto&gt; GetOrdersWithCustomerInfo()
+{
+    var orders = _orders.ToList(); // 1 query
+    var result = new List&lt;OrderDto&gt;();
+
+    foreach (var order in orders) // N iterations
+    {
+        // ❌ 1 query PER order!
+        var customer = GetCustomerById(order.CustomerId).Result;
+
+        result.Add(new OrderDto { /* ... */ });
+    }
+
+    return result;
+}
+</code></pre>
+<p><strong>💬 Senior Comment:</strong></p>
+<p>@junior-dev <strong>Classic N+1 query problem! This will kill your database.</strong></p>
+<p><strong>Performance Impact:</strong></p>
+<pre><code>Scenario: 1000 orders
+
+CURRENT (N+1):
+- Queries: 1 (orders) + 1000 (customers) = 1001 queries
+- Time: 1001 × 10ms = 10 seconds ❌
+- Database load: VERY HIGH
+
+FIXED (JOIN):
+- Queries: 1 (orders + customers join)
+- Time: 1 × 20ms = 0.02 seconds ✅
+- Database load: LOW
+
+Improvement: 500x faster! 🚀
+</code></pre>
+<p><strong>Real-World Incident:</strong></p>
+<blockquote>
+<p>&quot;Black Friday 2020: E-commerce site had N+1 query on order list page. 1000 orders = 1001 queries. Database CPU hit 100%. Site down for 3 hours. Lost $500K revenue.&quot;</p>
+</blockquote>
+<p><strong>Required Fix:</strong></p>
+<pre><code class="lang-csharp">// ✅ CORRECT: Use JOIN or Include
+public async Task&lt;List&lt;OrderDto&gt;&gt; GetOrdersWithCustomerInfoAsync()
+{
+    // Single query with JOIN
+    var ordersWithCustomers = await _dbContext.Orders
+        .Include(o =&gt; o.Customer) // EF Core: Load customer with order
+        .Select(o =&gt; new OrderDto
+        {
+            OrderId = o.Id,
+            CustomerName = o.Customer.Name,
+            Total = o.Total
+        })
+        .ToListAsync();
+
+    return ordersWithCustomers;
+}
+
+// Alternative: Load all customers once
+public async Task&lt;List&lt;OrderDto&gt;&gt; GetOrdersWithCustomerInfoAsync()
+{
+    var orders = await _dbContext.Orders.ToListAsync();
+    var customerIds = orders.Select(o =&gt; o.CustomerId).Distinct();
+
+    // Single query for all customers
+    var customers = await _dbContext.Customers
+        .Where(c =&gt; customerIds.Contains(c.Id))
+        .ToListAsync();
+
+    var customerDict = customers.ToDictionary(c =&gt; c.Id);
+
+    return orders.Select(o =&gt; new OrderDto
+    {
+        OrderId = o.Id,
+        CustomerName = customerDict[o.CustomerId].Name,
+        Total = o.Total
+    }).ToList();
+}
+</code></pre>
+<p><strong>Action Required:</strong> Fix ALL N+1 query problems</p>
+<hr>
+<h2 id="-major-performance-issues">⚠️ MAJOR PERFORMANCE ISSUES</h2>
+<h3 id="5-string-concatenation-in-loop---memory-explosion-">5. <strong>String Concatenation in Loop - Memory Explosion</strong> ⚠️</h3>
+<p><strong>File:</strong> <code>OrderService.cs</code>, Lines 25-28
+<strong>Severity:</strong> MAJOR</p>
+<pre><code class="lang-csharp">// ❌ CURRENT CODE:
+string log = &quot;&quot;;
+foreach (var item in order.Items)
+{
+    log += $&quot;Processing item {item.ProductId}\n&quot;; // ❌ Creates NEW string each time!
+}
+</code></pre>
+<p><strong>💬 Senior Comment:</strong></p>
+<p>@junior-dev <strong>String concatenation in loop = performance killer!</strong></p>
+<p><strong>Why This is Bad:</strong></p>
+<pre><code class="lang-csharp">// Strings are IMMUTABLE in C#
+// Each += creates a NEW string and copies ALL previous data
+
+Iteration 1: log = &quot;&quot;
+            log = &quot;&quot; + &quot;Line 1\n&quot;  → New string (6 bytes)
+
+Iteration 2: log = &quot;Line 1\n&quot;
+            log = &quot;Line 1\n&quot; + &quot;Line 2\n&quot;  → New string (12 bytes), copies 6 bytes
+
+Iteration 3: log = &quot;Line 1\nLine 2\n&quot;
+            log = &quot;Line 1\nLine 2\n&quot; + &quot;Line 3\n&quot;  → New string (18 bytes), copies 12 bytes
+
+// Total copies: 0 + 6 + 12 + ... = O(n²) complexity!
+</code></pre>
+<p><strong>Performance:</strong></p>
+<pre><code>1,000 items:
+- String concatenation: 500ms, 500KB allocations ❌
+- StringBuilder: 5ms, 50KB allocations ✅
+- Improvement: 100x faster!
+
+10,000 items:
+- String concatenation: 50 seconds! ❌
+- StringBuilder: 50ms ✅
+- Improvement: 1000x faster!
+</code></pre>
+<p><strong>Required Fix:</strong></p>
+<pre><code class="lang-csharp">// ✅ CORRECT: Use StringBuilder
+var log = new StringBuilder();
+foreach (var item in order.Items)
+{
+    log.AppendLine($&quot;Processing item {item.ProductId}&quot;);
+}
+
+_logger.LogInformation(log.ToString());
+</code></pre>
+<p><strong>When to use StringBuilder:</strong></p>
+<ul>
+<li>✅ String concatenation in loop</li>
+<li>✅ Building large strings (&gt; 5 concatenations)</li>
+<li>❌ Single concatenation (string + string is fine)</li>
+</ul>
+<p><strong>Action Required:</strong> Replace string concatenation with StringBuilder</p>
+<hr>
+<h3 id="6-multiple-tolist-calls---wasted-iterations-">6. <strong>Multiple ToList() Calls - Wasted Iterations</strong> ⚠️</h3>
+<p><strong>File:</strong> <code>OrderService.cs</code>, Lines 85-91
+<strong>Severity:</strong> MAJOR</p>
+<pre><code class="lang-csharp">// ❌ CURRENT CODE:
+return _orders
+    .ToList() // ❌ Iteration 1: Copy all to list
+    .Where(o =&gt; o.CreatedAt &gt; DateTime.Now.AddDays(-7))
+    .ToList() // ❌ Iteration 2: Copy filtered to list
+    .OrderByDescending(o =&gt; o.CreatedAt)
+    .ToList(); // Iteration 3: Copy ordered to list (only this is needed!)
+</code></pre>
+<p><strong>💬 Senior Comment:</strong></p>
+<p>@junior-dev <strong>LINQ is lazy by default. Don't force enumeration unnecessarily!</strong></p>
+<p><strong>Performance:</strong></p>
+<pre><code>1,000 orders:
+- 3× ToList(): 3× full iterations = 3ms ❌
+- 1× ToList(): 1× iteration = 1ms ✅
+
+100,000 orders:
+- 3× ToList(): 300ms ❌
+- 1× ToList(): 100ms ✅
+</code></pre>
+<p><strong>Required Fix:</strong></p>
+<pre><code class="lang-csharp">// ✅ CORRECT: Single ToList() at the end
+return _orders
+    .Where(o =&gt; o.CreatedAt &gt; DateTime.Now.AddDays(-7))
+    .OrderByDescending(o =&gt; o.CreatedAt)
+    .ToList(); // Only enumerate once!
+</code></pre>
+<p><strong>LINQ Performance Rules:</strong></p>
+<ol>
+<li>Filter (<code>Where</code>) BEFORE ordering</li>
+<li>Project (<code>Select</code>) BEFORE <code>ToList()</code> (less data to copy)</li>
+<li>Only ONE <code>ToList()</code> at the END</li>
+<li>Use <code>Any()</code> instead of <code>Count() &gt; 0</code></li>
+<li>Use <code>FirstOrDefault()</code> instead of <code>Where().First()</code></li>
+</ol>
+<p><strong>Action Required:</strong> Remove unnecessary ToList() calls</p>
+<hr>
+<h3 id="7-tolist-before-filtering---loading-too-much-data-">7. <strong>ToList() Before Filtering - Loading Too Much Data</strong> ⚠️</h3>
+<p><strong>File:</strong> <code>OrderService.cs</code>, Lines 94-101
+<strong>Severity:</strong> MAJOR</p>
+<pre><code class="lang-csharp">// ❌ CURRENT CODE:
+public List&lt;Order&gt; GetHighValueOrders()
+{
+    // ❌ Loads ALL 1 million orders into memory!
+    var allOrders = _orders.ToList();
+
+    // Then filters (memory already blown)
+    return allOrders.Where(o =&gt; o.Total &gt; 1000).ToList();
+}
+</code></pre>
+<p><strong>💬 Senior Comment:</strong></p>
+<p>@junior-dev <strong>NEVER ToList() before filtering! Filter at database level!</strong></p>
+<p><strong>Performance:</strong></p>
+<pre><code>Database has 1,000,000 orders
+Only 1,000 orders have Total &gt; 1000 (0.1%)
+
+CURRENT (ToList first):
+- Loads: 1,000,000 orders into memory (500MB!) ❌
+- Filters: In memory
+- Time: 5 seconds
+- Memory: 500MB
+
+FIXED (Filter first):
+- Database filters: WHERE Total &gt; 1000
+- Loads: 1,000 orders (500KB) ✅
+- Time: 0.05 seconds
+- Memory: 500KB
+
+Improvement: 100x faster, 1000x less memory! 🚀
+</code></pre>
+<p><strong>Required Fix:</strong></p>
+<pre><code class="lang-csharp">// ✅ CORRECT: Filter at database level
+public async Task&lt;List&lt;Order&gt;&gt; GetHighValueOrdersAsync()
+{
+    return await _dbContext.Orders
+        .Where(o =&gt; o.Total &gt; 1000) // Translates to SQL WHERE clause
+        .ToListAsync();
+}
+</code></pre>
+<p><strong>Golden Rule:</strong></p>
+<blockquote>
+<p>&quot;Filter BEFORE ToList(). Push filtering to the database, not in-memory.&quot;</p>
+</blockquote>
+<p><strong>Action Required:</strong> Move filtering before ToList()</p>
+<hr>
+<h3 id="8-resource-leaks---file-handles-not-closed-">8. <strong>Resource Leaks - File Handles Not Closed</strong> ⚠️</h3>
+<p><strong>File:</strong> <code>OrderService.cs</code>, Lines 125-132
+<strong>Severity:</strong> MAJOR</p>
+<pre><code class="lang-csharp">// ❌ CURRENT CODE:
+public string ReadOrderFile(string path)
+{
+    var stream = new FileStream(path, FileMode.Open);
+    var reader = new StreamReader(stream);
+    return reader.ReadToEnd();
+    // ❌ Stream and reader NEVER disposed!
+}
+</code></pre>
+<p><strong>💬 Senior Comment:</strong></p>
+<p>@junior-dev <strong>Resource leak! File handles will exhaust under load.</strong></p>
+<p><strong>Impact:</strong></p>
+<pre><code>Each call opens file but never closes it
+100 calls = 100 open file handles
+1000 calls = 1000 open file handles
+Operating system limit: ~1024 handles
+Result: &quot;Too many open files&quot; error, app crash
+</code></pre>
+<p><strong>Required Fix:</strong></p>
+<pre><code class="lang-csharp">// ✅ CORRECT: Use using statement
+public string ReadOrderFile(string path)
+{
+    using (var stream = new FileStream(path, FileMode.Open))
+    using (var reader = new StreamReader(stream))
+    {
+        return reader.ReadToEnd();
+    } // Automatically disposed here
+}
+
+// ✅ BETTER: C# 8+ using declaration
+public string ReadOrderFile(string path)
+{
+    using var stream = new FileStream(path, FileMode.Open);
+    using var reader = new StreamReader(stream);
+    return reader.ReadToEnd();
+} // Automatically disposed at end of method
+
+// ✅ BEST: Use File helper
+public string ReadOrderFile(string path)
+{
+    return File.ReadAllText(path); // Handles disposal automatically
+}
+</code></pre>
+<p><strong>Always dispose:</strong></p>
+<ul>
+<li>FileStream</li>
+<li>StreamReader/StreamWriter</li>
+<li>HttpClient (as singleton, not per-request!)</li>
+<li>DbContext</li>
+<li>Anything implementing IDisposable</li>
+</ul>
+<p><strong>Action Required:</strong> Add using statements for all IDisposable</p>
+<hr>
+<h2 id="-minor-issues-optimizations">💡 MINOR ISSUES (Optimizations)</h2>
+<h3 id="9-creating-objects-in-loop-unnecessarily-">9. <strong>Creating Objects in Loop Unnecessarily</strong> 💡</h3>
+<p><strong>File:</strong> <code>OrderService.cs</code>, Lines 135-149
+<strong>Severity:</strong> MINOR</p>
+<pre><code class="lang-csharp">// ❌ CURRENT CODE:
+foreach (var order in _orders)
+{
+    // ❌ Creates NEW DateTime for EACH iteration!
+    var threshold = DateTime.Now.AddDays(-30);
+
+    if (order.CreatedAt &gt; threshold)
+    {
+        // ...
+    }
+}
+</code></pre>
+<p><strong>Required Fix:</strong></p>
+<pre><code class="lang-csharp">// ✅ CORRECT: Create once before loop
+var threshold = DateTime.Now.AddDays(-30);
+
+foreach (var order in _orders)
+{
+    if (order.CreatedAt &gt; threshold)
+    {
+        // ...
+    }
+}
+</code></pre>
+<hr>
+<h3 id="10-unnecessary-linq-operations-">10. <strong>Unnecessary LINQ Operations</strong> 💡</h3>
+<p><strong>File:</strong> <code>OrderService.cs</code>, Lines 152-157
+<strong>Severity:</strong> MINOR</p>
+<pre><code class="lang-csharp">// ❌ CURRENT CODE:
+return _orders.Select(o =&gt; o.Id).Count();
+// Select creates unnecessary enumeration
+</code></pre>
+<p><strong>Required Fix:</strong></p>
+<pre><code class="lang-csharp">// ✅ CORRECT: Direct Count()
+return _orders.Count();
+</code></pre>
+<hr>
+<h3 id="11-fake-async-async-over-sync-">11. <strong>Fake Async (Async Over Sync)</strong> 💡</h3>
+<p><strong>File:</strong> <code>OrderService.cs</code>, Lines 174-181
+<strong>Severity:</strong> MINOR</p>
+<pre><code class="lang-csharp">// ❌ CURRENT CODE:
+public async Task&lt;int&gt; GetTotalOrdersAsync()
+{
+    // ❌ No actual async work, just wrapping sync code
+    return await Task.Run(() =&gt; _orders.Count);
+}
+</code></pre>
+<p><strong>💬 Senior Comment:</strong></p>
+<p>@junior-dev <strong>Don't wrap sync code in Task.Run. It wastes thread pool resources.</strong></p>
+<p><strong>Required Fix:</strong></p>
+<pre><code class="lang-csharp">// ✅ CORRECT: Return result directly
+public Task&lt;int&gt; GetTotalOrdersAsync()
+{
+    return Task.FromResult(_orders.Count);
+}
+
+// Or just make it synchronous:
+public int GetTotalOrders()
+{
+    return _orders.Count;
+}
+</code></pre>
+<hr>
+<h2 id="-action-items">🎯 ACTION ITEMS</h2>
+<h3 id="-p0-critical---must-fix">🚨 P0 (CRITICAL - Must Fix):</h3>
+<ul>
+<li>[ ] <strong>Change async void to async Task</strong></li>
+<li>[ ] <strong>Remove ALL .Result calls</strong> (use await)</li>
+<li>[ ] <strong>Replace Thread.Sleep with await Task.Delay</strong></li>
+<li>[ ] <strong>Fix N+1 query problems</strong> (use Include or batching)</li>
+<li>[ ] <strong>Use StringBuilder for string concatenation in loops</strong></li>
+</ul>
+<h3 id="-p1-major---should-fix">⚠️ P1 (MAJOR - Should Fix):</h3>
+<ul>
+<li>[ ] <strong>Remove unnecessary ToList() calls</strong></li>
+<li>[ ] <strong>Filter BEFORE ToList()</strong> (database-level filtering)</li>
+<li>[ ] <strong>Add using statements</strong> for IDisposable resources</li>
+<li>[ ] <strong>Fix closure capturing in loop</strong></li>
+</ul>
+<h3 id="-p2-minor---nice-to-have">💡 P2 (MINOR - Nice to Have):</h3>
+<ul>
+<li>[ ] Move object creation out of loops</li>
+<li>[ ] Remove unnecessary Select() operations</li>
+<li>[ ] Remove fake async (Task.Run wrapping)</li>
+<li>[ ] Add performance tests</li>
+</ul>
+<hr>
+<h2 id="-performance-benchmarks">📚 PERFORMANCE BENCHMARKS</h2>
+<p><strong>What I'll show you in pair programming:</strong></p>
+<pre><code class="lang-csharp">// Benchmark results (1000 orders):
+
+// String concatenation vs StringBuilder
+String concatenation: 450ms
+StringBuilder: 4.5ms
+Improvement: 100x ✅
+
+// N+1 query vs JOIN
+N+1 query: 10,000ms (10 seconds)
+JOIN query: 20ms
+Improvement: 500x ✅
+
+// ToList() before vs after filtering
+ToList first: 500MB memory, 5s
+Filter first: 500KB memory, 0.05s
+Improvement: 100x ✅
+
+// .Result vs await
+.Result: Deadlocks under load ❌
+await: No deadlocks ✅
+</code></pre>
+<hr>
+<h2 id="-learning-resources">📝 LEARNING RESOURCES</h2>
+<p><strong>Recommended Reading:</strong></p>
+<ol>
+<li><strong>Async/Await:</strong> <code>samples/Advanced/AsyncAwaitPatterns/</code></li>
+<li><strong>LINQ Performance:</strong> <code>samples/Intermediate/LINQOptimization/</code></li>
+<li><strong>N+1 Query:</strong> <code>samples/Advanced/DatabasePatterns/EagerLoading.cs</code></li>
+<li><strong>StringBuilder:</strong> <code>samples/Intermediate/StringPerformance/</code></li>
+</ol>
+<p><strong>External Resources:</strong></p>
+<ul>
+<li>Stephen Cleary's &quot;Async/Await Best Practices&quot;</li>
+<li>Microsoft: &quot;Performance Best Practices&quot;</li>
+<li>BenchmarkDotNet for performance testing</li>
+</ul>
+<hr>
+<h2 id="-next-steps">🤝 NEXT STEPS</h2>
+<ol>
+<li><strong>Read this review</strong> (take notes)</li>
+<li><strong>Pair programming tomorrow</strong> (2pm, 3 hours)
+<ul>
+<li>Fix async/await issues together</li>
+<li>Profile code with BenchmarkDotNet</li>
+<li>Measure before/after performance</li>
+</ul>
+</li>
+<li><strong>Fix P0 issues</strong> (critical)</li>
+<li><strong>Request re-review</strong></li>
+</ol>
+<p><strong>Estimated Time:</strong> 2 days (1 day pair programming + 1 day solo)</p>
+<hr>
+<p><strong>Reviewer:</strong> @senior-dev
+<strong>Review Date:</strong> 2024-12-03
+<strong>Review Time:</strong> 50 minutes
+<strong>Follow-up:</strong> Pair programming tomorrow 2pm (bring laptop!)</p>
+<p><strong>Status:</strong> 🔴 MAJOR CHANGES REQUIRED - WILL NOT SCALE</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/code-reviews/03-Performance-Antipatterns/review-comments.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

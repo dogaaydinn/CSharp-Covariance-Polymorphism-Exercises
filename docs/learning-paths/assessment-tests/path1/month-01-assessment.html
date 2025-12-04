@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Month 1 Comprehensive Assessment - C# Fundamentals &amp; OOP | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Month 1 Comprehensive Assessment - C# Fundamentals &amp; OOP | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../../favicon.ico">
+      <link rel="stylesheet" href="../../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/assessment-tests/path1/month-01-assessment.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../../index.html">
+            <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="month-1-comprehensive-assessment---c-fundamentals--oop">Month 1 Comprehensive Assessment - C# Fundamentals &amp; OOP</h1>
+
+<p><strong>Path</strong>: 1 - Junior Developer
+<strong>Month</strong>: 1 (Weeks 1-4)
+<strong>Topics</strong>: C# syntax, OOP, Polymorphism, Inheritance, Casting, Collections, Boxing/Unboxing
+<strong>Duration</strong>: 60 minutes
+<strong>Passing Score</strong>: 80% (16/20 correct)
+<strong>Total Points</strong>: 20</p>
+<hr>
+<h2 id="section-1-multiple-choice-10-questions-05-points-each--5-points">Section 1: Multiple Choice (10 questions, 0.5 points each = 5 points)</h2>
+<ol>
+<li><p>What's the correct order of access modifiers from most to least restrictive?</p>
+<ul>
+<li>a) private, protected, internal, public</li>
+<li>b) public, internal, protected, private</li>
+<li>c) private, internal, protected, public</li>
+<li>d) private, protected, public, internal</li>
+</ul>
+</li>
+<li><p>Which allows a method to be overridden?</p>
+<ul>
+<li>a) abstract or virtual</li>
+<li>b) sealed or static</li>
+<li>c) readonly or const</li>
+<li>d) ref or out</li>
+</ul>
+</li>
+<li><p>What's true about abstract classes?</p>
+<ul>
+<li>a) Cannot have constructors</li>
+<li>b) Can be instantiated</li>
+<li>c) Must have at least one abstract member</li>
+<li>d) Can have both abstract and concrete members</li>
+</ul>
+</li>
+<li><p>Upcasting is:</p>
+<ul>
+<li>a) Always explicit</li>
+<li>b) Always implicit and safe</li>
+<li>c) Not allowed in C#</li>
+<li>d) Only works with interfaces</li>
+</ul>
+</li>
+<li><p>Which operator checks type without casting?</p>
+<ul>
+<li>a) as</li>
+<li>b) is</li>
+<li>c) typeof</li>
+<li>d) cast</li>
+</ul>
+</li>
+<li><p>Array covariance allows:</p>
+<ul>
+<li>a) Dog[] to Cat[]</li>
+<li>b) Dog[] to Animal[]</li>
+<li>c) List<dog> to List<animal></animal></dog></li>
+<li>d) All generic collections</li>
+</ul>
+</li>
+<li><p>What exception occurs with invalid array covariance?</p>
+<ul>
+<li>a) NullReferenceException</li>
+<li>b) ArrayTypeMismatchException</li>
+<li>c) InvalidCastException</li>
+<li>d) ArgumentException</li>
+</ul>
+</li>
+<li><p>Boxing converts:</p>
+<ul>
+<li>a) Reference to value type</li>
+<li>b) Value to reference type</li>
+<li>c) Int to string</li>
+<li>d) String to int</li>
+</ul>
+</li>
+<li><p>Which collection avoids boxing for value types?</p>
+<ul>
+<li>a) ArrayList</li>
+<li>b) Hashtable</li>
+<li>c) List<t></t></li>
+<li>d) object[]</li>
+</ul>
+</li>
+<li><p>IEnumerable<t> provides:</t></p>
+<ul>
+<li>a) Random access</li>
+<li>b) Forward iteration</li>
+<li>c) Sorting</li>
+<li>d) Indexing</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="section-2-short-answer-6-questions-15-points-each--9-points">Section 2: Short Answer (6 questions, 1.5 points each = 9 points)</h2>
+<ol start="11">
+<li><p>Explain polymorphism with a real-world example. How does it improve code flexibility?</p>
+</li>
+<li><p>What's the difference between method overriding and method hiding? Give code examples of each.</p>
+</li>
+<li><p>Why is the Liskov Substitution Principle important? Give an example of a violation.</p>
+</li>
+<li><p>Explain array covariance in C#. Why is it both useful and potentially dangerous?</p>
+</li>
+<li><p>Describe the performance impact of boxing in a high-frequency loop (1 million iterations). How would you avoid it?</p>
+</li>
+<li><p>Compare and contrast <code>virtual</code> methods, <code>abstract</code> methods, and interface methods. When would you use each?</p>
+</li>
+</ol>
+<hr>
+<h2 id="section-3-code-analysis--implementation-3-questions-2-points-each--6-points">Section 3: Code Analysis &amp; Implementation (3 questions, 2 points each = 6 points)</h2>
+<ol start="17">
+<li><strong>Fix this code</strong> - Identify all errors and provide corrected version:</li>
+</ol>
+<pre><code class="lang-csharp">public class Shape
+{
+    public void Draw()
+    {
+        Console.WriteLine(&quot;Drawing shape&quot;);
+    }
+}
+
+public class Circle : Shape
+{
+    public void Draw()
+    {
+        Console.WriteLine(&quot;Drawing circle&quot;);
+    }
+}
+
+// Usage
+Shape shape = new Circle();
+shape.Draw(); // What prints? What's the problem?
+</code></pre>
+<ol start="18">
+<li><strong>Implement this</strong> - Create an animal hierarchy with proper polymorphism:</li>
+</ol>
+<pre><code class="lang-csharp">// Requirements:
+// 1. Abstract Animal base class with Name property
+// 2. Abstract MakeSound() method
+// 3. Virtual Eat() method with default implementation
+// 4. Dog and Cat derived classes
+// 5. Demonstrate polymorphism in Main()
+</code></pre>
+<ol start="19">
+<li><strong>Optimize this</strong> - Refactor to avoid boxing:</li>
+</ol>
+<pre><code class="lang-csharp">ArrayList numbers = new ArrayList();
+for (int i = 0; i &lt; 1000000; i++)
+{
+    numbers.Add(i);
+    object obj = numbers[i];
+    int value = (int)obj;
+    Console.WriteLine(value);
+}
+</code></pre>
+<hr>
+<h2 id="answer-key">Answer Key</h2>
+<h3 id="section-1-multiple-choice">Section 1: Multiple Choice</h3>
+<ol>
+<li><strong>a</strong> | 2. <strong>a</strong> | 3. <strong>d</strong> | 4. <strong>b</strong> | 5. <strong>b</strong> | 6. <strong>b</strong> | 7. <strong>b</strong> | 8. <strong>b</strong> | 9. <strong>c</strong> | 10. <strong>b</strong></li>
+</ol>
+<h3 id="section-2-short-answer">Section 2: Short Answer</h3>
+<p><strong>11. Polymorphism</strong> (1.5 pts):</p>
+<ul>
+<li>Definition: Different objects responding to same method differently</li>
+<li>Example: Animal hierarchy where Dog.MakeSound() = &quot;Woof&quot;, Cat.MakeSound() = &quot;Meow&quot;</li>
+<li>Flexibility: Can process List<animal> without knowing specific types</animal></li>
+<li>Extensibility: Add new animals without changing existing code</li>
+</ul>
+<p><strong>12. Override vs Hiding</strong> (1.5 pts):</p>
+<pre><code class="lang-csharp">// Overriding (polymorphic)
+class Base { public virtual void Method() {} }
+class Derived : Base { public override void Method() {} }
+
+// Hiding (not polymorphic)
+class Base2 { public void Method() {} }
+class Derived2 : Base2 { public new void Method() {} }
+</code></pre>
+<ul>
+<li>Override: Replaces base implementation, works polymorphically</li>
+<li>Hiding: Creates separate method, breaks polymorphism</li>
+</ul>
+<p><strong>13. LSP</strong> (1.5 pts):</p>
+<ul>
+<li>LSP: Derived classes must be substitutable for base class</li>
+<li>Violation example: Square inheriting Rectangle
+<ul>
+<li>Rectangle has independent width/height setters</li>
+<li>Square violates this (width = height always)</li>
+<li>Breaks expectation, leads to bugs</li>
+</ul>
+</li>
+<li>Importance: Ensures inheritance hierarchies are logically sound</li>
+</ul>
+<p><strong>14. Array Covariance</strong> (1.5 pts):</p>
+<ul>
+<li>Allows: <code>Animal[] animals = new Dog[5];</code> (reference types only)</li>
+<li>Useful: Store related types in one array</li>
+<li>Dangerous: Runtime exception if wrong type assigned
+<ul>
+<li><code>animals[0] = new Cat();</code> throws ArrayTypeMismatchException</li>
+</ul>
+</li>
+<li>Generic collections don't have this issue (invariant)</li>
+</ul>
+<p><strong>15. Boxing Performance</strong> (1.5 pts):</p>
+<ul>
+<li>1M boxing operations = 1M heap allocations</li>
+<li>High GC pressure → frequent collections → pauses (100-500ms)</li>
+<li>Memory: Each box = 12-16 bytes overhead + value</li>
+<li>Avoidance: Use List<int> instead of ArrayList, generics over object</int></li>
+</ul>
+<p><strong>16. Virtual/Abstract/Interface</strong> (1.5 pts):</p>
+<ul>
+<li><strong>Virtual</strong>: Optional override, has default implementation
+<ul>
+<li>Use: Common behavior, customizable</li>
+</ul>
+</li>
+<li><strong>Abstract</strong>: Mandatory override, no implementation
+<ul>
+<li>Use: Contract that derived classes must fulfill</li>
+</ul>
+</li>
+<li><strong>Interface</strong>: Contract only, multiple allowed
+<ul>
+<li>Use: Define capabilities, support multiple inheritance</li>
+</ul>
+</li>
+</ul>
+<h3 id="section-3-code-analysis">Section 3: Code Analysis</h3>
+<p><strong>17. Fix Shape/Circle</strong> (2 pts):
+<strong>Problems</strong>:</p>
+<ul>
+<li>Shape.Draw() not virtual → no polymorphism</li>
+<li>Circle.Draw() not override → hides instead</li>
+<li>Result: Prints &quot;Drawing shape&quot; not &quot;Drawing circle&quot;</li>
+</ul>
+<p><strong>Fixed</strong>:</p>
+<pre><code class="lang-csharp">public class Shape
+{
+    public virtual void Draw() // Added virtual
+    {
+        Console.WriteLine(&quot;Drawing shape&quot;);
+    }
+}
+
+public class Circle : Shape
+{
+    public override void Draw() // Added override
+    {
+        Console.WriteLine(&quot;Drawing circle&quot;);
+    }
+}
+
+// Now correctly prints &quot;Drawing circle&quot;
+</code></pre>
+<p><strong>18. Animal Hierarchy</strong> (2 pts):</p>
+<pre><code class="lang-csharp">public abstract class Animal
+{
+    public string Name { get; set; }
+
+    public abstract void MakeSound();
+
+    public virtual void Eat()
+    {
+        Console.WriteLine($&quot;{Name} is eating&quot;);
+    }
+}
+
+public class Dog : Animal
+{
+    public override void MakeSound()
+    {
+        Console.WriteLine($&quot;{Name}: Woof!&quot;);
+    }
+}
+
+public class Cat : Animal
+{
+    public override void MakeSound()
+    {
+        Console.WriteLine($&quot;{Name}: Meow!&quot;);
+    }
+
+    public override void Eat()
+    {
+        Console.WriteLine($&quot;{Name} is eating fish&quot;);
+    }
+}
+
+// Main
+List&lt;Animal&gt; animals = new()
+{
+    new Dog { Name = &quot;Buddy&quot; },
+    new Cat { Name = &quot;Whiskers&quot; }
+};
+
+foreach (var animal in animals)
+{
+    animal.MakeSound();
+    animal.Eat();
+}
+</code></pre>
+<p><strong>19. Optimize Boxing</strong> (2 pts):</p>
+<pre><code class="lang-csharp">List&lt;int&gt; numbers = new List&lt;int&gt;(); // Generic, no boxing
+for (int i = 0; i &lt; 1000000; i++)
+{
+    numbers.Add(i); // No boxing
+    int value = numbers[i]; // No unboxing
+    Console.WriteLine(value); // Still boxes for WriteLine
+}
+
+// Even better: avoid unnecessary operations
+List&lt;int&gt; numbers = Enumerable.Range(0, 1000000).ToList();
+</code></pre>
+<p><strong>Performance Improvement</strong>:</p>
+<ul>
+<li>ArrayList version: 3M allocations (add, get, WriteLine)</li>
+<li>List<int> version: 1M allocations (only WriteLine)</int></li>
+<li>66% reduction in allocations</li>
+</ul>
+<hr>
+<h2 id="grading-rubric">Grading Rubric</h2>
+<table>
+<thead>
+<tr>
+<th>Section</th>
+<th>Max Points</th>
+<th>Criteria</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Multiple Choice</td>
+<td>5</td>
+<td>0.5 per correct answer</td>
+</tr>
+<tr>
+<td>Short Answer (each)</td>
+<td>1.5 × 6 = 9</td>
+<td>Full: Complete answer. Partial: 0.75-1.0. Wrong: 0</td>
+</tr>
+<tr>
+<td>Code Fix (Q17)</td>
+<td>2</td>
+<td>Full: All errors found + fixed. Partial: 1.0. Wrong: 0</td>
+</tr>
+<tr>
+<td>Code Implement (Q18)</td>
+<td>2</td>
+<td>Full: All requirements met. Partial: 1.0-1.5. Wrong: 0</td>
+</tr>
+<tr>
+<td>Code Optimize (Q19)</td>
+<td>2</td>
+<td>Full: Correct + explanation. Partial: 1.0-1.5. Wrong: 0</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>20</strong></td>
+<td><strong>Pass: 16 points (80%)</strong></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="next-steps">Next Steps</h2>
+<p><strong>If you passed (≥16 pts)</strong>: Congratulations! Proceed to Month 2 (LINQ Mastery)</p>
+<p><strong>If you didn't pass (&lt;16 pts)</strong>: Review weak areas:</p>
+<ul>
+<li>Score 0-5: Review all Month 1 materials</li>
+<li>Score 6-10: Focus on OOP and polymorphism</li>
+<li>Score 11-15: Practice code implementation</li>
+</ul>
+<p><strong>Study Resources</strong>:</p>
+<ul>
+<li><code>samples/01-Beginner/</code> (all samples)</li>
+<li><code>samples/02-Intermediate/ArrayCovariance/</code>, <code>BoxingUnboxing/</code></li>
+<li><code>samples/99-Exercises/LINQ/01-BasicQueries/</code> (for LINQ basics)</li>
+</ul>
+<hr>
+<p><em>Assessment Version: 1.0</em>
+<em>Last Updated: 2025-12-02</em></p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/assessment-tests/path1/month-01-assessment.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

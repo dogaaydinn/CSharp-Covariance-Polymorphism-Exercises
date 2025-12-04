@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>6. Build Custom Roslyn Analyzers | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="6. Build Custom Roslyn Analyzers | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/decisions/0006-build-custom-roslyn-analyzers.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="6-build-custom-roslyn-analyzers">6. Build Custom Roslyn Analyzers</h1>
+
+<p><strong>Status:</strong> ✅ Accepted</p>
+<p><strong>Date:</strong> 2024-12-01</p>
+<p><strong>Deciders:</strong> Architecture Team, Code Quality Team</p>
+<p><strong>Technical Story:</strong> Implementation in <code>src/AdvancedConcepts.Analyzers</code></p>
+<hr>
+<h2 id="context-and-problem-statement">Context and Problem Statement</h2>
+<p>Code quality and consistency are critical in enterprise applications. We need to enforce:</p>
+<ul>
+<li>Architecture rules (e.g., Domain layer can't reference Infrastructure)</li>
+<li>Naming conventions (e.g., interfaces must start with 'I')</li>
+<li>Performance best practices (e.g., avoid async void)</li>
+<li>Security patterns (e.g., validate user input)</li>
+<li>Custom business rules</li>
+</ul>
+<p><strong>Traditional approach problems:</strong></p>
+<ul>
+<li>Manual code reviews miss issues</li>
+<li>StyleCop/SonarQube don't understand our domain</li>
+<li>Rules are documented but not enforced</li>
+<li>Issues discovered late (in PR or production)</li>
+</ul>
+<p><strong>We need a solution that:</strong></p>
+<ul>
+<li>Enforces rules at compile-time</li>
+<li>Provides immediate feedback in IDE</li>
+<li>Integrates with existing build pipeline</li>
+<li>Can be customized for our specific needs</li>
+</ul>
+<hr>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li><strong>Shift-Left</strong> - Catch issues during development, not in PR</li>
+<li><strong>Consistency</strong> - Enforce team standards automatically</li>
+<li><strong>Custom Rules</strong> - Apply domain-specific constraints</li>
+<li><strong>Developer Experience</strong> - Instant feedback with code fixes</li>
+<li><strong>CI/CD Integration</strong> - Fail builds on violations</li>
+</ul>
+<hr>
+<h2 id="considered-options">Considered Options</h2>
+<ul>
+<li><strong>Option 1</strong> - Custom Roslyn Analyzers</li>
+<li><strong>Option 2</strong> - StyleCop + SonarQube (off-the-shelf analyzers)</li>
+<li><strong>Option 3</strong> - Manual code reviews only</li>
+<li><strong>Option 4</strong> - Git pre-commit hooks with regex</li>
+</ul>
+<hr>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p><strong>Chosen option:</strong> &quot;Custom Roslyn Analyzers&quot;, because they provide compile-time enforcement of our specific architectural and business rules with instant IDE feedback and automated code fixes.</p>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li><strong>Instant Feedback</strong> - Red squiggles in IDE immediately</li>
+<li><strong>Automated Fixes</strong> - Code fix providers can auto-correct violations</li>
+<li><strong>Compile-Time</strong> - Violations cause build failures</li>
+<li><strong>Custom Rules</strong> - Enforce our specific architecture</li>
+<li><strong>Educational</strong> - Helps team learn best practices</li>
+<li><strong>IDE Integration</strong> - Works in VS, VS Code, Rider</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li><strong>Complex Implementation</strong> - Roslyn API has steep learning curve</li>
+<li><strong>Maintenance</strong> - Analyzers need updates for new rules</li>
+<li><strong>False Positives</strong> - May need suppressions for edge cases</li>
+<li><strong>Build Time</strong> - Adds ~1-2 seconds to compilation</li>
+</ul>
+<hr>
+<h2 id="pros-and-cons-of-the-options">Pros and Cons of the Options</h2>
+<h3 id="custom-roslyn-analyzers-chosen">Custom Roslyn Analyzers (Chosen)</h3>
+<p><strong>What Are Roslyn Analyzers?</strong></p>
+<p>Roslyn analyzers are compiler plugins that analyze code during compilation and report diagnostics (warnings/errors) with optional automatic code fixes.</p>
+<p><strong>Architecture:</strong></p>
+<pre><code>Your Code (*.cs)
+    ↓
+Roslyn Compiler
+    ↓
+Syntax Analysis → Semantic Analysis
+    ↓
+Custom Analyzers (inspect syntax trees)
+    ↓
+Diagnostics (errors/warnings)
+    ↓
+Code Fix Providers (optional automated fixes)
+    ↓
+IDE Display (red/green squiggles)
+</code></pre>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Real-time feedback</strong> - See violations while typing</li>
+<li><strong>Compile-time enforcement</strong> - Can't build with errors</li>
+<li><strong>Code fix providers</strong> - Auto-fix violations with Ctrl+.</li>
+<li><strong>Works everywhere</strong> - VS, VS Code, Rider, dotnet build</li>
+<li><strong>Team-specific rules</strong> - Enforce your architecture</li>
+<li><strong>Educational</strong> - Explains why violation is bad</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Complex to write</strong> - Roslyn API is difficult</li>
+<li><strong>Testing required</strong> - Need unit tests for analyzers</li>
+<li><strong>Performance</strong> - Slow analyzers impact IDE responsiveness</li>
+<li><strong>Versioning</strong> - Roslyn APIs can change</li>
+</ul>
+<p><strong>Example 1: Architecture Rule Analyzer</strong></p>
+<pre><code class="lang-csharp">// Rule: Domain layer must not reference Infrastructure layer
+[DiagnosticAnalyzer(LanguageNames.CSharp)]
+public class DomainMustNotReferenceInfrastructureAnalyzer : DiagnosticAnalyzer
+{
+    public const string DiagnosticId = &quot;ARCH001&quot;;
+
+    private static readonly DiagnosticDescriptor Rule = new(
+        id: DiagnosticId,
+        title: &quot;Domain layer must not reference Infrastructure&quot;,
+        messageFormat: &quot;Type '{0}' from Domain layer references '{1}' from Infrastructure layer. This violates Clean Architecture principles.&quot;,
+        category: &quot;Architecture&quot;,
+        defaultSeverity: DiagnosticSeverity.Error,
+        isEnabledByDefault: true,
+        description: &quot;Domain layer should have no dependencies. It defines interfaces that Infrastructure implements.&quot;);
+
+    public override ImmutableArray&lt;DiagnosticDescriptor&gt; SupportedDiagnostics =&gt; ImmutableArray.Create(Rule);
+
+    public override void Initialize(AnalysisContext context)
+    {
+        context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
+        context.EnableConcurrentExecution();
+
+        // Analyze every time a type is referenced
+        context.RegisterSymbolAction(AnalyzeSymbol, SymbolKind.NamedType);
+    }
+
+    private void AnalyzeSymbol(SymbolAnalysisContext context)
+    {
+        var namedType = (INamedTypeSymbol)context.Symbol;
+
+        // Check if this type is in Domain namespace
+        if (!namedType.ContainingNamespace.ToString().Contains(&quot;.Domain&quot;))
+            return;
+
+        // Check all referenced types
+        foreach (var referencedType in GetReferencedTypes(namedType))
+        {
+            // Check if referenced type is in Infrastructure
+            if (referencedType.ContainingNamespace.ToString().Contains(&quot;.Infrastructure&quot;))
+            {
+                var diagnostic = Diagnostic.Create(
+                    Rule,
+                    namedType.Locations[0],
+                    namedType.Name,
+                    referencedType.Name);
+
+                context.ReportDiagnostic(diagnostic);
+            }
+        }
+    }
+}
+
+// Usage - This code will NOT compile:
+namespace MyApp.Domain.Entities
+{
+    using MyApp.Infrastructure.Data; // ❌ ARCH001 Error!
+
+    public class Product
+    {
+        public ApplicationDbContext Context { get; set; } // ❌ Domain can't reference Infrastructure!
+    }
+}
+
+// IDE shows:
+// Error ARCH001: Type 'Product' from Domain layer references 'ApplicationDbContext' from Infrastructure layer.
+//                This violates Clean Architecture principles.
+</code></pre>
+<p><strong>Example 2: Performance Analyzer with Code Fix</strong></p>
+<pre><code class="lang-csharp">// Rule: Avoid String Concatenation in Loops
+[DiagnosticAnalyzer(LanguageNames.CSharp)]
+public class AvoidStringConcatInLoopAnalyzer : DiagnosticAnalyzer
+{
+    public const string DiagnosticId = &quot;PERF001&quot;;
+
+    private static readonly DiagnosticDescriptor Rule = new(
+        id: DiagnosticId,
+        title: &quot;Avoid string concatenation in loops&quot;,
+        messageFormat: &quot;String concatenation in loop detected. Use StringBuilder for better performance.&quot;,
+        category: &quot;Performance&quot;,
+        defaultSeverity: DiagnosticSeverity.Warning,
+        isEnabledByDefault: true,
+        description: &quot;String is immutable. Each concatenation creates a new string object. Use StringBuilder instead.&quot;);
+
+    public override ImmutableArray&lt;DiagnosticDescriptor&gt; SupportedDiagnostics =&gt; ImmutableArray.Create(Rule);
+
+    public override void Initialize(AnalysisContext context)
+    {
+        context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
+        context.EnableConcurrentExecution();
+
+        context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.AddAssignmentExpression);
+    }
+
+    private void AnalyzeNode(SyntaxNodeAnalysisContext context)
+    {
+        var assignment = (AssignmentExpressionSyntax)context.Node;
+
+        // Check if left side is string type
+        var typeInfo = context.SemanticModel.GetTypeInfo(assignment.Left);
+        if (typeInfo.Type?.SpecialType != SpecialType.System_String)
+            return;
+
+        // Check if we're inside a loop
+        if (!IsInsideLoop(assignment))
+            return;
+
+        var diagnostic = Diagnostic.Create(Rule, assignment.GetLocation());
+        context.ReportDiagnostic(diagnostic);
+    }
+
+    private bool IsInsideLoop(SyntaxNode node)
+    {
+        return node.Ancestors().Any(n =&gt;
+            n is ForStatementSyntax ||
+            n is ForEachStatementSyntax ||
+            n is WhileStatementSyntax ||
+            n is DoStatementSyntax);
+    }
+}
+
+// Code Fix Provider (automated fix)
+[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(StringConcatCodeFixProvider))]
+public class StringConcatCodeFixProvider : CodeFixProvider
+{
+    public override ImmutableArray&lt;string&gt; FixableDiagnosticIds =&gt; ImmutableArray.Create(&quot;PERF001&quot;);
+
+    public override async Task RegisterCodeFixesAsync(CodeFixContext context)
+    {
+        var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken);
+        var diagnostic = context.Diagnostics.First();
+        var diagnosticSpan = diagnostic.Location.SourceSpan;
+        var node = root.FindToken(diagnosticSpan.Start).Parent;
+
+        // Register code fix
+        context.RegisterCodeFix(
+            CodeAction.Create(
+                title: &quot;Convert to StringBuilder&quot;,
+                createChangedDocument: c =&gt; ConvertToStringBuilder(context.Document, node, c),
+                equivalenceKey: &quot;ConvertToStringBuilder&quot;),
+            diagnostic);
+    }
+
+    private async Task&lt;Document&gt; ConvertToStringBuilder(Document document, SyntaxNode node, CancellationToken ct)
+    {
+        // Implementation that rewrites code to use StringBuilder
+        // ...
+    }
+}
+
+// Bad Code (triggers analyzer):
+string result = &quot;&quot;;
+for (int i = 0; i &lt; 1000; i++)
+{
+    result += i.ToString(); // ⚠️ PERF001 Warning with green squiggle
+}
+
+// Press Ctrl+. (Quick Fix) → &quot;Convert to StringBuilder&quot;
+// Analyzer automatically fixes to:
+var result = new StringBuilder();
+for (int i = 0; i &lt; 1000; i++)
+{
+    result.Append(i.ToString()); // ✅ Fixed!
+}
+</code></pre>
+<p><strong>Example 3: Security Analyzer</strong></p>
+<pre><code class="lang-csharp">// Rule: User Input Must Be Validated
+[DiagnosticAnalyzer(LanguageNames.CSharp)]
+public class ValidateUserInputAnalyzer : DiagnosticAnalyzer
+{
+    public const string DiagnosticId = &quot;SEC001&quot;;
+
+    private static readonly DiagnosticDescriptor Rule = new(
+        id: DiagnosticId,
+        title: &quot;User input must be validated&quot;,
+        messageFormat: &quot;Parameter '{0}' receives user input but is not validated. Apply [Required] or [StringLength] attributes.&quot;,
+        category: &quot;Security&quot;,
+        defaultSeverity: DiagnosticSeverity.Warning,
+        isEnabledByDefault: true,
+        description: &quot;All user input should be validated to prevent injection attacks.&quot;);
+
+    public override void Initialize(AnalysisContext context)
+    {
+        context.RegisterSymbolAction(AnalyzeMethod, SymbolKind.Method);
+    }
+
+    private void AnalyzeMethod(SymbolAnalysisContext context)
+    {
+        var method = (IMethodSymbol)context.Symbol;
+
+        // Check if method is HTTP POST/PUT endpoint
+        if (!HasHttpAttribute(method, &quot;HttpPost&quot;, &quot;HttpPut&quot;))
+            return;
+
+        foreach (var parameter in method.Parameters)
+        {
+            // Check if parameter has validation attributes
+            if (!HasValidationAttribute(parameter))
+            {
+                var diagnostic = Diagnostic.Create(
+                    Rule,
+                    parameter.Locations[0],
+                    parameter.Name);
+
+                context.ReportDiagnostic(diagnostic);
+            }
+        }
+    }
+}
+
+// Bad Code:
+[HttpPost]
+public IActionResult Create(string name, decimal price) // ⚠️ SEC001: Parameters not validated
+{
+    // Potential SQL injection, XSS, etc.
+    return Ok();
+}
+
+// Good Code:
+[HttpPost]
+public IActionResult Create(
+    [Required, StringLength(100)] string name,  // ✅ Validated
+    [Range(0.01, 1000000)] decimal price)       // ✅ Validated
+{
+    return Ok();
+}
+</code></pre>
+<h3 id="stylecop--sonarqube-off-the-shelf">StyleCop + SonarQube (Off-the-Shelf)</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Ready to use out-of-the-box</li>
+<li>Hundreds of rules included</li>
+<li>Industry-standard</li>
+<li>No development required</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Generic rules</strong> - Can't enforce our architecture</li>
+<li><strong>Limited customization</strong> - Can't add custom rules</li>
+<li><strong>Configuration overhead</strong> - Many irrelevant rules</li>
+<li><strong>False positives</strong> - Rules not tailored to our code</li>
+</ul>
+<p><strong>Why Insufficient Alone:</strong>
+StyleCop enforces formatting and general best practices, but can't enforce <strong>domain-specific rules</strong> like &quot;Domain can't reference Infrastructure&quot; or &quot;All API endpoints must return Result<t>&quot;. We use StyleCop <strong>plus</strong> custom analyzers.</t></p>
+<h3 id="manual-code-reviews-only">Manual Code Reviews Only</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Human judgment</li>
+<li>Can catch complex issues</li>
+<li>No tooling required</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Inconsistent</strong> - Reviewers miss issues</li>
+<li><strong>Slow feedback</strong> - Only during PR review</li>
+<li><strong>Doesn't scale</strong> - Reviewers become bottleneck</li>
+<li><strong>No automated fixes</strong> - Manual corrections required</li>
+</ul>
+<p><strong>Why Rejected:</strong>
+Manual reviews are essential but <strong>insufficient alone</strong>. Analyzers catch 80% of issues automatically, freeing reviewers to focus on complex logic and design.</p>
+<h3 id="git-pre-commit-hooks-with-regex">Git Pre-Commit Hooks with Regex</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Simple to implement</li>
+<li>Fast execution</li>
+<li>No compilation required</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Regex is fragile</strong> - Can't understand code semantics</li>
+<li><strong>False positives</strong> - Regex matches comments, strings</li>
+<li><strong>No IDE integration</strong> - Only runs on commit</li>
+<li><strong>No code fixes</strong> - Can't auto-correct</li>
+<li><strong>Can be bypassed</strong> - git commit --no-verify</li>
+</ul>
+<p><strong>Example (fragile):</strong></p>
+<pre><code class="lang-bash"># Pre-commit hook
+if grep -r &quot;catch (Exception)&quot; src/; then
+    echo &quot;Error: Don't catch generic Exception!&quot;
+    exit 1
+fi
+
+# ❌ False positive: Matches comments
+// Don't use: catch (Exception) ex
+
+# ❌ False positive: Matches strings
+var errorMessage = &quot;catch (Exception) is bad&quot;;
+</code></pre>
+<p><strong>Why Rejected:</strong>
+Regex can't understand code structure. Roslyn analyzers understand syntax trees and can differentiate between code, comments, and strings.</p>
+<hr>
+<h2 id="real-world-analyzer-examples">Real-World Analyzer Examples</h2>
+<h3 id="example-4-enforce-result-pattern">Example 4: Enforce Result<t> Pattern</t></h3>
+<pre><code class="lang-csharp">// Rule: API endpoints must return Result&lt;T&gt;, not bare types
+[DiagnosticAnalyzer(LanguageNames.CSharp)]
+public class ApiMustReturnResultAnalyzer : DiagnosticAnalyzer
+{
+    // Implementation checks that all [HttpGet/Post/Put/Delete] methods
+    // return ActionResult&lt;Result&lt;T&gt;&gt;, not ActionResult&lt;T&gt;
+
+    // Bad:
+    [HttpGet]
+    public ActionResult&lt;Product&gt; Get(int id) // ⚠️ Must return Result&lt;Product&gt;
+    {
+        return product; // What if not found? Throws exception or returns null?
+    }
+
+    // Good:
+    [HttpGet]
+    public ActionResult&lt;Result&lt;Product&gt;&gt; Get(int id) // ✅ Explicit success/failure
+    {
+        var product = _repo.GetById(id);
+        return product != null
+            ? Result&lt;Product&gt;.Success(product)
+            : Result&lt;Product&gt;.Failure(&quot;Product not found&quot;);
+    }
+}
+</code></pre>
+<h3 id="example-5-enforce-async-naming-convention">Example 5: Enforce Async Naming Convention</h3>
+<pre><code class="lang-csharp">// Rule: Async methods must end with &quot;Async&quot;
+[DiagnosticAnalyzer(LanguageNames.CSharp)]
+public class AsyncMethodNamingAnalyzer : DiagnosticAnalyzer
+{
+    // Bad:
+    public async Task&lt;Product&gt; GetProduct(int id) // ⚠️ Should be &quot;GetProductAsync&quot;
+    {
+        return await _repo.GetByIdAsync(id);
+    }
+
+    // Good:
+    public async Task&lt;Product&gt; GetProductAsync(int id) // ✅
+    {
+        return await _repo.GetByIdAsync(id);
+    }
+}
+</code></pre>
+<h3 id="example-6-detect-async-void">Example 6: Detect Async Void</h3>
+<pre><code class="lang-csharp">// Rule: Avoid async void (except event handlers)
+[DiagnosticAnalyzer(LanguageNames.CSharp)]
+public class AvoidAsyncVoidAnalyzer : DiagnosticAnalyzer
+{
+    // Bad:
+    public async void ProcessData() // ❌ Error: async void swallows exceptions!
+    {
+        await _service.ProcessAsync();
+    }
+
+    // Good:
+    public async Task ProcessDataAsync() // ✅
+    {
+        await _service.ProcessAsync();
+    }
+
+    // Exception (allowed):
+    private async void Button_Click(object sender, EventArgs e) // ✅ Event handler
+    {
+        await ProcessDataAsync();
+    }
+}
+</code></pre>
+<hr>
+<h2 id="implementation-guidelines">Implementation Guidelines</h2>
+<h3 id="project-structure">Project Structure</h3>
+<pre><code>Solution
+├── YourApp.Analyzers
+│   ├── Analyzers/
+│   │   ├── ArchitectureAnalyzers/
+│   │   │   ├── DomainMustNotReferenceInfrastructureAnalyzer.cs
+│   │   │   └── ControllersMustBeInPresentationLayerAnalyzer.cs
+│   │   ├── PerformanceAnalyzers/
+│   │   │   ├── AvoidStringConcatInLoopAnalyzer.cs
+│   │   │   └── UseAsyncMethodsAnalyzer.cs
+│   │   └── SecurityAnalyzers/
+│   │       └── ValidateUserInputAnalyzer.cs
+│   ├── CodeFixes/
+│   │   ├── StringConcatCodeFixProvider.cs
+│   │   └── AsyncNamingCodeFixProvider.cs
+│   └── YourApp.Analyzers.csproj
+├── YourApp.Analyzers.Tests (xUnit)
+└── YourApp (consumes analyzers)
+</code></pre>
+<h3 id="analyzer-project-configuration">Analyzer Project Configuration</h3>
+<pre><code class="lang-xml">&lt;Project Sdk=&quot;Microsoft.NET.Sdk&quot;&gt;
+  &lt;PropertyGroup&gt;
+    &lt;TargetFramework&gt;netstandard2.0&lt;/TargetFramework&gt;
+    &lt;EnforceExtendedAnalyzerRules&gt;true&lt;/EnforceExtendedAnalyzerRules&gt;
+    &lt;IsRoslynComponent&gt;true&lt;/IsRoslynComponent&gt;
+  &lt;/PropertyGroup&gt;
+
+  &lt;ItemGroup&gt;
+    &lt;PackageReference Include=&quot;Microsoft.CodeAnalysis.CSharp&quot; Version=&quot;4.8.0&quot; PrivateAssets=&quot;all&quot; /&gt;
+    &lt;PackageReference Include=&quot;Microsoft.CodeAnalysis.Analyzers&quot; Version=&quot;3.3.4&quot; PrivateAssets=&quot;all&quot; /&gt;
+  &lt;/ItemGroup&gt;
+&lt;/Project&gt;
+</code></pre>
+<h3 id="consuming-project">Consuming Project</h3>
+<pre><code class="lang-xml">&lt;ItemGroup&gt;
+  &lt;ProjectReference Include=&quot;..\YourApp.Analyzers\YourApp.Analyzers.csproj&quot;
+                    OutputItemType=&quot;Analyzer&quot;
+                    ReferenceOutputAssembly=&quot;false&quot; /&gt;
+&lt;/ItemGroup&gt;
+
+&lt;!-- Treat analyzer warnings as errors in CI --&gt;
+&lt;PropertyGroup Condition=&quot;'$(CI)' == 'true'&quot;&gt;
+  &lt;TreatWarningsAsErrors&gt;true&lt;/TreatWarningsAsErrors&gt;
+&lt;/PropertyGroup&gt;
+</code></pre>
+<h3 id="suppressing-false-positives">Suppressing False Positives</h3>
+<pre><code class="lang-csharp">// Suppress specific violation
+#pragma warning disable ARCH001
+public class Product
+{
+    public ApplicationDbContext Context { get; set; } // Intentional for this case
+}
+#pragma warning restore ARCH001
+
+// Or use attribute
+[SuppressMessage(&quot;Architecture&quot;, &quot;ARCH001&quot;, Justification = &quot;Legacy code migration&quot;)]
+public class LegacyProduct { }
+</code></pre>
+<hr>
+<h2 id="testing-analyzers">Testing Analyzers</h2>
+<pre><code class="lang-csharp">[Fact]
+public async Task DomainReferencingInfrastructure_ReportsDiagnostic()
+{
+    var test = @&quot;
+namespace MyApp.Domain
+{
+    using MyApp.Infrastructure;
+
+    public class Product
+    {
+        public DbContext Context { get; set; }
+    }
+}&quot;;
+
+    var expected = DiagnosticResult
+        .CompilerError(&quot;ARCH001&quot;)
+        .WithSpan(7, 16, 7, 23)
+        .WithArguments(&quot;Product&quot;, &quot;DbContext&quot;);
+
+    await VerifyCS.VerifyAnalyzerAsync(test, expected);
+}
+</code></pre>
+<hr>
+<h2 id="links">Links</h2>
+<ul>
+<li><a href="https://learn.microsoft.com/en-us/dotnet/csharp/roslyn-sdk/tutorials/how-to-write-csharp-analyzer-code-fix">Roslyn Analyzer Tutorial</a></li>
+<li><a href="https://github.com/dotnet/roslyn-sdk/tree/main/samples/CSharp/Analyzers">Roslyn Analyzer Samples</a></li>
+<li><a href="https://github.com/dotnet/roslyn/blob/main/docs/analyzers/Analyzer%20Cookbook.md">Analyzer Cookbook</a></li>
+<li><a href="../../src/AdvancedConcepts.Analyzers">Sample Implementation</a></li>
+</ul>
+<hr>
+<h2 id="notes">Notes</h2>
+<p><strong>Common Analyzer Categories:</strong></p>
+<ul>
+<li><strong>Architecture</strong> (ARCH001-099): Layer dependencies, folder structure</li>
+<li><strong>Performance</strong> (PERF001-099): String concatenation, LINQ, async/await</li>
+<li><strong>Security</strong> (SEC001-099): Validation, SQL injection, XSS</li>
+<li><strong>Design</strong> (DESIGN001-099): Naming conventions, return types</li>
+<li><strong>Maintainability</strong> (MAINT001-099): Complexity, duplication</li>
+</ul>
+<p><strong>Severity Levels:</strong></p>
+<ul>
+<li><strong>Error</strong>: Build fails (architecture violations)</li>
+<li><strong>Warning</strong>: Build succeeds but should be fixed (performance issues)</li>
+<li><strong>Info</strong>: Suggestions (optional improvements)</li>
+</ul>
+<p><strong>Performance Considerations:</strong></p>
+<ul>
+<li>Analyzers run on every keystroke in IDE</li>
+<li>Keep analysis fast (&lt; 10ms per file)</li>
+<li>Use <code>EnableConcurrentExecution()</code> for parallelism</li>
+<li>Cache expensive computations</li>
+</ul>
+<p><strong>Review Date:</strong> 2025-12-01</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/decisions/0006-build-custom-roslyn-analyzers.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Yapılması Gerekenler - CI/CD Kurulumu | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Yapılması Gerekenler - CI/CD Kurulumu | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/YAPILMASI_GEREKENLER.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="yapılması-gerekenler---cicd-kurulumu">Yapılması Gerekenler - CI/CD Kurulumu</h1>
+
+<h2 id="-genel-bakış">🎯 Genel Bakış</h2>
+<p>Bu dokümanda, yeni oluşturulan production-grade CI/CD pipeline'larını aktif hale getirmek için yapılması gereken tüm adımlar detaylı olarak açıklanmıştır.</p>
+<hr>
+<h2 id="-öncelikli-görevler-kritik">✅ Öncelikli Görevler (Kritik)</h2>
+<h3 id="1-github-secrets-yapılandırması-zorunlu">1. GitHub Secrets Yapılandırması (Zorunlu)</h3>
+<h4 id="11-nuget-api-key-oluşturma">1.1. NuGet API Key Oluşturma</h4>
+<p><strong>Neden Gerekli:</strong> NuGet paketlerini yayınlamak için gerekli</p>
+<p><strong>Adımlar:</strong></p>
+<ol>
+<li><a href="https://www.nuget.org/">https://www.nuget.org/</a> adresine git</li>
+<li>Hesabına giriş yap (yoksa kayıt ol)</li>
+<li>Sağ üst köşeden <strong>API Keys</strong> sekmesine tıkla</li>
+<li><strong>Create</strong> butonuna bas</li>
+<li>Ayarları yapılandır:
+<ul>
+<li><strong>Key Name:</strong> <code>GitHub Actions - Advanced Concepts</code></li>
+<li><strong>Expiration:</strong> <code>365 days</code> (1 yıl)</li>
+<li><strong>Scopes:</strong> <code>Push new packages and package versions</code></li>
+<li><strong>Select Packages:</strong> <code>All Packages</code> veya sadece <code>AdvancedConcepts.*</code></li>
+</ul>
+</li>
+<li><strong>Create</strong> butonuna bas</li>
+<li>API Key'i kopyala (bir daha göremezsin!)</li>
+</ol>
+<h4 id="12-sonarcloud-token-oluşturma">1.2. SonarCloud Token Oluşturma</h4>
+<p><strong>Neden Gerekli:</strong> Kod kalitesi analizi için gerekli</p>
+<p><strong>Adımlar:</strong></p>
+<ol>
+<li><a href="https://sonarcloud.io/">https://sonarcloud.io/</a> adresine git</li>
+<li>GitHub hesabınla giriş yap</li>
+<li>Sağ üst köşeden <strong>My Account</strong> → <strong>Security</strong> sekmesine git</li>
+<li><strong>Generate Tokens</strong> bölümüne gel</li>
+<li>Token oluştur:
+<ul>
+<li><strong>Name:</strong> <code>GitHub Actions CI</code></li>
+<li><strong>Type:</strong> <code>User Token</code></li>
+<li><strong>Expiration:</strong> <code>No expiration</code> veya <code>1 year</code></li>
+</ul>
+</li>
+<li><strong>Generate</strong> butonuna bas</li>
+<li>Token'ı kopyala</li>
+</ol>
+<h4 id="13-github-secrets-ekleme">1.3. GitHub Secrets Ekleme</h4>
+<p><strong>Adımlar:</strong></p>
+<ol>
+<li>GitHub repository'ne git</li>
+<li><strong>Settings</strong> → <strong>Secrets and variables</strong> → <strong>Actions</strong> sekmesine tıkla</li>
+<li><strong>New repository secret</strong> butonuna bas</li>
+<li>İlk secret'ı ekle:
+<ul>
+<li><strong>Name:</strong> <code>NUGET_API_KEY</code></li>
+<li><strong>Secret:</strong> (NuGet API key'ini yapıştır)</li>
+<li><strong>Add secret</strong> butonuna bas</li>
+</ul>
+</li>
+<li>İkinci secret'ı ekle:
+<ul>
+<li><strong>Name:</strong> <code>SONAR_TOKEN</code></li>
+<li><strong>Secret:</strong> (SonarCloud token'ını yapıştır)</li>
+<li><strong>Add secret</strong> butonuna bas</li>
+</ul>
+</li>
+</ol>
+<p><strong>Doğrulama:</strong></p>
+<ul>
+<li>Settings → Secrets and variables → Actions sayfasında 2 secret görmelisin:
+<ul>
+<li>✅ <code>NUGET_API_KEY</code></li>
+<li>✅ <code>SONAR_TOKEN</code></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="2-sonarcloud-projesini-yapılandırma">2. SonarCloud Projesini Yapılandırma</h3>
+<h4 id="21-projeyi-sonarclouda-İmport-etme">2.1. Projeyi SonarCloud'a İmport Etme</h4>
+<p><strong>Adımlar:</strong></p>
+<ol>
+<li><a href="https://sonarcloud.io/">https://sonarcloud.io/</a> adresine git</li>
+<li>Sağ üst köşeden <strong>+</strong> → <strong>Analyze new project</strong> seçeneğine tıkla</li>
+<li><strong>GitHub</strong> seçeneğini seç</li>
+<li>Repository listesinden projeyi seç:
+<ul>
+<li><code>CSharp-Covariance-Polymorphism-Exercises</code></li>
+</ul>
+</li>
+<li><strong>Set Up</strong> butonuna bas</li>
+<li>Analysis Method olarak <strong>GitHub Actions</strong> seç</li>
+<li>Bilgileri not et:
+<ul>
+<li><strong>Organization:</strong> <code>dogaaydinn</code></li>
+<li><strong>Project Key:</strong> <code>dogaaydinn_CSharp-Covariance-Polymorphism-Exercises</code></li>
+</ul>
+</li>
+</ol>
+<h4 id="22-sonarcloud-yapılandırmasını-doğrulama">2.2. SonarCloud Yapılandırmasını Doğrulama</h4>
+<p><strong>Kontrol Edilecekler:</strong></p>
+<ul>
+<li><code>sonar-project.properties</code> dosyasındaki bilgiler doğru mu?</li>
+<li>Organization ve project key eşleşiyor mu?</li>
+</ul>
+<p><strong>Gerekirse Düzenleme:</strong></p>
+<pre><code class="lang-bash"># sonar-project.properties dosyasını aç ve doğrula
+cat sonar-project.properties
+
+# Eğer organization veya project key farklıysa düzenle
+# Organization: SonarCloud'daki organization ismin
+# Project Key: SonarCloud'da gösterilen project key
+</code></pre>
+<hr>
+<h3 id="3-github-actions-İzinlerini-yapılandırma">3. GitHub Actions İzinlerini Yapılandırma</h3>
+<h4 id="31-workflow-permissions">3.1. Workflow Permissions</h4>
+<p><strong>Neden Gerekli:</strong> Container Registry'ye push yapabilmek için</p>
+<p><strong>Adımlar:</strong></p>
+<ol>
+<li>GitHub repository → <strong>Settings</strong> sekmesine git</li>
+<li><strong>Actions</strong> → <strong>General</strong> sekmesine tıkla</li>
+<li>Aşağı kaydır ve <strong>Workflow permissions</strong> bölümüne gel</li>
+<li>Şu seçenekleri seç:
+<ul>
+<li>✅ <strong>Read and write permissions</strong></li>
+<li>✅ <strong>Allow GitHub Actions to create and approve pull requests</strong></li>
+</ul>
+</li>
+<li><strong>Save</strong> butonuna bas</li>
+</ol>
+<h4 id="32-github-packages-permissions">3.2. GitHub Packages Permissions</h4>
+<p><strong>Adımlar:</strong></p>
+<ol>
+<li>Settings → <strong>Actions</strong> → <strong>General</strong></li>
+<li><strong>Workflow permissions</strong> bölümünde:
+<ul>
+<li>✅ Read and write permissions seçili olmalı</li>
+</ul>
+</li>
+<li>Bu sayede GHCR'ye (GitHub Container Registry) push yapılabilir</li>
+</ol>
+<hr>
+<h3 id="4-environment-yapılandırması-opsiyonel-ama-önerilen">4. Environment Yapılandırması (Opsiyonel ama Önerilen)</h3>
+<h4 id="41-nuget-production-environment-oluşturma">4.1. NuGet Production Environment Oluşturma</h4>
+<p><strong>Neden Gerekli:</strong> Yanlışlıkla NuGet'e paket yayınlamayı önlemek için</p>
+<p><strong>Adımlar:</strong></p>
+<ol>
+<li>Settings → <strong>Environments</strong> sekmesine git</li>
+<li><strong>New environment</strong> butonuna bas</li>
+<li>Environment bilgilerini gir:
+<ul>
+<li><strong>Name:</strong> <code>nuget-production</code></li>
+</ul>
+</li>
+<li><strong>Configure environment</strong> butonuna bas</li>
+<li>Protection rules ekle:
+<ul>
+<li>✅ <strong>Required reviewers:</strong> 1 (kendi kullanıcı adını ekle)</li>
+<li>⏰ <strong>Wait timer:</strong> 0 minutes (opsiyonel)</li>
+<li>🌿 <strong>Deployment branches:</strong> <code>main</code> ve <code>master</code> (diğerleri bloklu)</li>
+</ul>
+</li>
+<li><strong>Save protection rules</strong> butonuna bas</li>
+</ol>
+<h4 id="42-staging-environment-İleride-kullanmak-için">4.2. Staging Environment (İleride kullanmak için)</h4>
+<p><strong>Adımlar:</strong></p>
+<ol>
+<li><strong>New environment</strong> → Name: <code>staging</code></li>
+<li>Protection rules: Yok (otomatik deployment için)</li>
+<li><strong>Environment URL:</strong> <code>https://staging.example.com</code> (şimdilik placeholder)</li>
+</ol>
+<h4 id="43-production-environment-İleride-kullanmak-için">4.3. Production Environment (İleride kullanmak için)</h4>
+<p><strong>Adımlar:</strong></p>
+<ol>
+<li><strong>New environment</strong> → Name: <code>production</code></li>
+<li>Protection rules:
+<ul>
+<li>✅ Required reviewers: 2</li>
+<li>⏰ Wait timer: 30 minutes</li>
+</ul>
+</li>
+<li><strong>Environment URL:</strong> <code>https://example.com</code> (şimdilik placeholder)</li>
+</ol>
+<hr>
+<h2 id="-test-ve-doğrulama">🔄 Test ve Doğrulama</h2>
+<h3 id="5-ci-pipelineı-test-etme">5. CI Pipeline'ı Test Etme</h3>
+<h4 id="51-pull-request-ile-test">5.1. Pull Request ile Test</h4>
+<p><strong>Adımlar:</strong></p>
+<ol>
+<li>Yeni bir branch oluştur:</li>
+</ol>
+<pre><code class="lang-bash">git checkout -b test/ci-pipeline
+</code></pre>
+<ol start="2">
+<li>Küçük bir değişiklik yap:</li>
+</ol>
+<pre><code class="lang-bash">echo &quot;# CI/CD Test&quot; &gt;&gt; docs/CI_TEST.md
+git add docs/CI_TEST.md
+git commit -m &quot;test: verify CI pipeline&quot;
+git push origin test/ci-pipeline
+</code></pre>
+<ol start="3">
+<li><p>GitHub'da Pull Request oluştur:</p>
+<ul>
+<li><strong>Compare:</strong> <code>test/ci-pipeline</code> → <code>main</code></li>
+<li><strong>Title:</strong> <code>Test: Verify CI Pipeline</code></li>
+<li><strong>Create pull request</strong> butonuna bas</li>
+</ul>
+</li>
+<li><p>Actions sekmesinde workflow'ların çalıştığını kontrol et:</p>
+<ul>
+<li>✅ <strong>CI Pipeline</strong> - Çalışıyor mu?</li>
+<li>✅ <strong>Build &amp; Test</strong> - 3 platform (Ubuntu, Windows, macOS) çalışıyor mu?</li>
+<li>✅ <strong>Code Quality</strong> - SonarCloud analizi çalışıyor mu?</li>
+<li>✅ <strong>Coverage Gate</strong> - Coverage raporu oluşuyor mu?</li>
+</ul>
+</li>
+</ol>
+<h4 id="52-beklenen-sonuçlar">5.2. Beklenen Sonuçlar</h4>
+<p><strong>Başarılı Olması Gerekenler:</strong></p>
+<ul>
+<li>✅ Build &amp; Test (ubuntu-latest) - PASS</li>
+<li>✅ Build &amp; Test (windows-latest) - PASS</li>
+<li>✅ Build &amp; Test (macos-latest) - PASS</li>
+<li>✅ Code Quality &amp; Static Analysis - PASS</li>
+<li>⚠️ SonarCloud analysis - İlk kez çalışırsa bazı uyarılar normal</li>
+</ul>
+<p><strong>Başarısız Olabilecekler (Normal):</strong></p>
+<ul>
+<li>⚠️ Code Formatting - Eğer kod formatlanmamışsa düzelt:</li>
+</ul>
+<pre><code class="lang-bash">dotnet format AdvancedCsharpConcepts.sln
+git add .
+git commit -m &quot;style: format code&quot;
+git push
+</code></pre>
+<ul>
+<li>⚠️ SonarCloud Quality Gate - İlk kez çalışırsa threshold'ları ayarla</li>
+</ul>
+<hr>
+<h3 id="6-container-build-pipelineı-test-etme">6. Container Build Pipeline'ı Test Etme</h3>
+<h4 id="61-manuel-trigger-ile-test">6.1. Manuel Trigger ile Test</h4>
+<p><strong>Adımlar:</strong></p>
+<ol>
+<li>GitHub → <strong>Actions</strong> sekmesine git</li>
+<li>Sol taraftan <strong>Build &amp; Push Container</strong> workflow'unu seç</li>
+<li><strong>Run workflow</strong> butonuna bas</li>
+<li>Branch seç: <code>main</code> veya <code>test/ci-pipeline</code></li>
+<li><strong>Run workflow</strong> onaylama butonuna bas</li>
+</ol>
+<h4 id="62-build-processi-İzleme">6.2. Build Process'i İzleme</h4>
+<p><strong>Kontrol Edilecekler:</strong></p>
+<ul>
+<li>✅ Docker image build ediliyor mu?</li>
+<li>✅ Trivy security scan çalışıyor mu?</li>
+<li>✅ Grype scan çalışıyor mu?</li>
+<li>✅ Container startup test geçiyor mu?</li>
+<li>✅ Dive analysis çalışıyor mu?</li>
+</ul>
+<h4 id="63-image-push-sadece-mainmaster-branch">6.3. Image Push (Sadece main/master branch)</h4>
+<p><strong>Not:</strong> Pull Request'lerde image push edilmez, sadece build edilir.</p>
+<p><strong>Main branch'e push edildiğinde:</strong></p>
+<ul>
+<li>✅ Image GitHub Container Registry'ye push edilir</li>
+<li>✅ Image Cosign ile imzalanır</li>
+<li>✅ Build provenance attestation eklenir</li>
+</ul>
+<hr>
+<h3 id="7-nuget-publishing-pipelineı-test-etme-opsiyonel">7. NuGet Publishing Pipeline'ı Test Etme (Opsiyonel)</h3>
+<p><strong>⚠️ UYARI:</strong> Bu gerçek NuGet.org'a paket yayınlar! Test için önce private registry kullanmayı düşün.</p>
+<h4 id="71-test-tag-oluşturma">7.1. Test Tag Oluşturma</h4>
+<p><strong>Adımlar:</strong></p>
+<ol>
+<li>Eğer test etmek istiyorsan prerelease tag kullan:</li>
+</ol>
+<pre><code class="lang-bash">git tag v0.0.1-test
+git push origin v0.0.1-test
+</code></pre>
+<ol start="2">
+<li><p>GitHub → <strong>Actions</strong> → <strong>Publish to NuGet</strong> workflow'unu izle</p>
+</li>
+<li><p>Workflow çalışırken:</p>
+<ul>
+<li>✅ Validate Release job - Version kontrolü</li>
+<li>✅ Build &amp; Test - Test suite çalışıyor mu?</li>
+<li>✅ Pack Packages - .nupkg dosyaları oluşuyor mu?</li>
+<li>⏸️ Publish to NuGet - Environment approval bekliyor</li>
+</ul>
+</li>
+<li><p><strong>Environment approval:</strong></p>
+<ul>
+<li>Workflow sana bildirim gönderecek</li>
+<li><strong>Review deployments</strong> butonuna bas</li>
+<li><strong>Approve and deploy</strong> veya <strong>Reject</strong> seç</li>
+</ul>
+</li>
+</ol>
+<p><strong>İlk Test için Öneri:</strong></p>
+<ul>
+<li>❌ Gerçek versiyonla (v1.0.0) test etme</li>
+<li>✅ Test versiyonuyla (v0.0.1-test) dene</li>
+<li>✅ Veya manual workflow dispatch kullan</li>
+</ul>
+<hr>
+<h2 id="-kontrol-listesi">📋 Kontrol Listesi</h2>
+<h3 id="önce-yapılması-gerekenler-kritik">Önce Yapılması Gerekenler (Kritik)</h3>
+<ul>
+<li>[ ] <strong>NUGET_API_KEY</strong> secret'ı eklendi</li>
+<li>[ ] <strong>SONAR_TOKEN</strong> secret'ı eklendi</li>
+<li>[ ] GitHub Actions workflow permissions ayarlandı (Read &amp; Write)</li>
+<li>[ ] SonarCloud projesi oluşturuldu ve yapılandırıldı</li>
+<li>[ ] <code>nuget-production</code> environment oluşturuldu (approval rules ile)</li>
+</ul>
+<h3 id="test-adımları">Test Adımları</h3>
+<ul>
+<li>[ ] Test branch oluşturuldu ve PR açıldı</li>
+<li>[ ] CI Pipeline PR'da çalıştı ve geçti</li>
+<li>[ ] Code formatting kontrol edildi (gerekirse <code>dotnet format</code> çalıştırıldı)</li>
+<li>[ ] SonarCloud analizi çalıştı</li>
+<li>[ ] Coverage report oluştu</li>
+<li>[ ] Container build workflow manuel çalıştırıldı</li>
+<li>[ ] Security scan'ler (Trivy, Grype) geçti</li>
+<li>[ ] Container startup test geçti</li>
+</ul>
+<h3 id="opsiyonel-ama-önerilen">Opsiyonel ama Önerilen</h3>
+<ul>
+<li>[ ] Staging environment oluşturuldu</li>
+<li>[ ] Production environment oluşturuldu</li>
+<li>[ ] README.md'ye workflow badges eklendi</li>
+<li>[ ] NuGet publishing test edildi (prerelease tag ile)</li>
+<li>[ ] Container image pull edildi ve local'de test edildi</li>
+</ul>
+<hr>
+<h2 id="-sorun-giderme">🚨 Sorun Giderme</h2>
+<h3 id="sonar_token-not-provided-hatası">&quot;SONAR_TOKEN not provided&quot; Hatası</h3>
+<p><strong>Çözüm:</strong></p>
+<ol>
+<li>SonarCloud'dan yeni token al</li>
+<li>GitHub Secrets'a ekle</li>
+<li>Workflow'u yeniden çalıştır</li>
+</ol>
+<h3 id="permission-denied---container-registry">&quot;Permission denied&quot; - Container Registry</h3>
+<p><strong>Çözüm:</strong></p>
+<ol>
+<li>Settings → Actions → General → Workflow permissions</li>
+<li>&quot;Read and write permissions&quot; seç</li>
+<li>Save</li>
+</ol>
+<h3 id="nuget-push-409-conflict-hatası">NuGet Push &quot;409 Conflict&quot; Hatası</h3>
+<p><strong>Çözüm:</strong></p>
+<ul>
+<li>Bu version zaten yayınlanmış</li>
+<li>Version numarasını artır (v1.0.1, v1.0.2, vb.)</li>
+</ul>
+<h3 id="code-formatting-fails">Code Formatting Fails</h3>
+<p><strong>Çözüm:</strong></p>
+<pre><code class="lang-bash"># Tüm kodu formatla
+dotnet format AdvancedCsharpConcepts.sln
+
+# Değişiklikleri commit et
+git add .
+git commit -m &quot;style: format code&quot;
+git push
+</code></pre>
+<hr>
+<h2 id="-İlk-kurulum-sonrası-beklenen-durum">📊 İlk Kurulum Sonrası Beklenen Durum</h2>
+<h3 id="github-actions-tab">GitHub Actions Tab</h3>
+<p><strong>Workflows görünür olmalı:</strong></p>
+<ul>
+<li>✅ CI Pipeline</li>
+<li>✅ Build &amp; Push Container</li>
+<li>✅ Publish to NuGet</li>
+</ul>
+<h3 id="secrets">Secrets</h3>
+<p><strong>Settings → Secrets and variables → Actions:</strong></p>
+<ul>
+<li>✅ NUGET_API_KEY</li>
+<li>✅ SONAR_TOKEN</li>
+<li>✅ GITHUB_TOKEN (otomatik)</li>
+</ul>
+<h3 id="environments">Environments</h3>
+<p><strong>Settings → Environments:</strong></p>
+<ul>
+<li>✅ nuget-production (approval required)</li>
+<li>✅ staging (opsiyonel)</li>
+<li>✅ production (opsiyonel)</li>
+</ul>
+<h3 id="sonarcloud">SonarCloud</h3>
+<p><strong>Dashboard görünümü:</strong></p>
+<ul>
+<li>✅ Proje import edilmiş</li>
+<li>✅ İlk analiz tamamlanmış</li>
+<li>✅ Quality Gate tanımlı (varsayılan veya özel)</li>
+</ul>
+<hr>
+<h2 id="-tamamlandıktan-sonra-kullanım">🎉 Tamamlandıktan Sonra Kullanım</h2>
+<h3 id="nuget-paketi-yayınlama">NuGet Paketi Yayınlama</h3>
+<pre><code class="lang-bash"># Version tag oluştur
+git tag v1.0.0
+
+# Tag'i push et
+git push origin v1.0.0
+
+# GitHub Actions otomatik olarak:
+# 1. Testleri çalıştırır
+# 2. Paketleri build eder
+# 3. NuGet'e yayınlar (approval sonrası)
+# 4. GitHub Release oluşturur
+</code></pre>
+<h3 id="container-image-build">Container Image Build</h3>
+<pre><code class="lang-bash"># Sadece main'e push et
+git push origin main
+
+# GitHub Actions otomatik olarak:
+# 1. Multi-arch image build eder
+# 2. Security scan'ler yapar
+# 3. GHCR'ye push eder
+# 4. Image'ı imzalar
+</code></pre>
+<h3 id="pull-request-açma">Pull Request Açma</h3>
+<pre><code class="lang-bash"># Feature branch oluştur
+git checkout -b feature/my-feature
+
+# Değişiklik yap ve push et
+git push origin feature/my-feature
+
+# PR oluştur - CI otomatik çalışır:
+# 1. Build &amp; test (3 platform)
+# 2. Code quality check
+# 3. Coverage report
+# 4. SonarCloud analysis
+# 5. Security scan
+</code></pre>
+<hr>
+<h2 id="-ek-kaynaklar">📚 Ek Kaynaklar</h2>
+<p><strong>Dokümantasyon:</strong></p>
+<ul>
+<li><a href="CICD_WORKFLOWS.html">CI/CD Workflows - Detaylı Döküman</a></li>
+<li><a href="QUICK_START_CICD.html">Quick Start Guide</a></li>
+<li><a href="decisions/README.html">Architecture Decision Records</a></li>
+</ul>
+<p><strong>Dış Bağlantılar:</strong></p>
+<ul>
+<li><a href="https://sonarcloud.io/dashboard?id=dogaaydinn_CSharp-Covariance-Polymorphism-Exercises">SonarCloud Dashboard</a></li>
+<li><a href="https://www.nuget.org/profiles/dogaaydinn">NuGet.org Packages</a></li>
+<li><a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/pkgs/container/csharp-covariance-polymorphism-exercises">GitHub Container Registry</a></li>
+</ul>
+<hr>
+<h2 id="-tahmini-süre">⏰ Tahmini Süre</h2>
+<table>
+<thead>
+<tr>
+<th>Görev</th>
+<th>Süre</th>
+<th>Zorunluluk</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GitHub Secrets yapılandırma</td>
+<td>10 dakika</td>
+<td>✅ Kritik</td>
+</tr>
+<tr>
+<td>SonarCloud kurulum</td>
+<td>15 dakika</td>
+<td>✅ Kritik</td>
+</tr>
+<tr>
+<td>Actions permissions</td>
+<td>5 dakika</td>
+<td>✅ Kritik</td>
+</tr>
+<tr>
+<td>Environment kurulum</td>
+<td>10 dakika</td>
+<td>⚠️ Önerilen</td>
+</tr>
+<tr>
+<td>Test workflows</td>
+<td>20 dakika</td>
+<td>⚠️ Önerilen</td>
+</tr>
+<tr>
+<td><strong>TOPLAM</strong></td>
+<td><strong>~1 saat</strong></td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="-son-kontrol">✅ Son Kontrol</h2>
+<p>Herşey tamamlandıktan sonra bu checklist'i işaretle:</p>
+<ul>
+<li>[ ] Tüm secrets eklendi ve doğrulandı</li>
+<li>[ ] SonarCloud başarıyla çalıştı</li>
+<li>[ ] Test PR'ı oluşturuldu ve CI geçti</li>
+<li>[ ] Container build test edildi</li>
+<li>[ ] Environment protection rules aktif</li>
+<li>[ ] Dokümantasyon okundu</li>
+<li>[ ] İlk başarılı build tamamlandı</li>
+</ul>
+<p><strong>🎯 Başarılı kurulum sonrası:</strong></p>
+<ul>
+<li>CI/CD pipeline'lar otomatik çalışacak</li>
+<li>Her PR'da kalite kontrolleri yapılacak</li>
+<li>Tag push'larında otomatik NuGet yayını olacak</li>
+<li>Main branch'e her push'da container build edilecek</li>
+</ul>
+<hr>
+<p><strong>Son Güncelleme:</strong> 2024-12-02</p>
+<p><strong>Hazırlayan:</strong> Claude Code (Advanced CI/CD Implementation)</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/YAPILMASI_GEREKENLER.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

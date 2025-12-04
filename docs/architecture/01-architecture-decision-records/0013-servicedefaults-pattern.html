@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>ADR-0013: ServiceDefaults Pattern for Cross-Cutting Concerns | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="ADR-0013: ServiceDefaults Pattern for Cross-Cutting Concerns | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/01-architecture-decision-records/0013-servicedefaults-pattern.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="adr-0013-servicedefaults-pattern-for-cross-cutting-concerns">ADR-0013: ServiceDefaults Pattern for Cross-Cutting Concerns</h1>
+
+<p><strong>Status:</strong> Accepted
+<strong>Date:</strong> 2025-12-02
+<strong>Deciders:</strong> Architecture Team
+<strong>Technical Story:</strong> Consistent configuration across microservices</p>
+<h2 id="context">Context</h2>
+<p>Microservices require consistent configuration for:</p>
+<ul>
+<li>OpenTelemetry (tracing, metrics, logging)</li>
+<li>Service discovery</li>
+<li>Health checks</li>
+<li>HTTP client resilience (retry, circuit breaker, timeout)</li>
+<li>Logging configuration</li>
+<li>Error handling</li>
+</ul>
+<p>Without standardization, each service implements these differently, leading to:</p>
+<ul>
+<li>Inconsistent observability</li>
+<li>Repeated configuration code</li>
+<li>Configuration drift</li>
+<li>Higher maintenance burden</li>
+</ul>
+<h2 id="decision">Decision</h2>
+<p>We will use the <strong>ServiceDefaults</strong> pattern: a shared library that provides standard configuration for all cross-cutting concerns.</p>
+<p>Implementation:</p>
+<ul>
+<li><code>VideoService.ServiceDefaults</code> project</li>
+<li>Single <code>AddServiceDefaults()</code> extension method</li>
+<li>All services call <code>builder.AddServiceDefaults()</code></li>
+<li>OpenTelemetry, service discovery, resilience configured automatically</li>
+</ul>
+<h2 id="consequences">Consequences</h2>
+<h3 id="positive">Positive</h3>
+<ul>
+<li><strong>DRY Principle</strong>: Configuration defined once, reused everywhere</li>
+<li><strong>Consistency</strong>: All services configured identically</li>
+<li><strong>Easy Updates</strong>: Change once, affects all services</li>
+<li><strong>Onboarding</strong>: New services get best practices automatically</li>
+<li><strong>Standards Enforcement</strong>: Impossible to forget health checks or observability</li>
+</ul>
+<h3 id="negative">Negative</h3>
+<ul>
+<li><strong>Shared Dependency</strong>: All services depend on ServiceDefaults</li>
+<li><strong>Less Flexibility</strong>: Harder to customize per-service</li>
+<li><strong>Breaking Changes</strong>: Changes affect all services</li>
+</ul>
+<h3 id="neutral">Neutral</h3>
+<ul>
+<li><strong>Convention Over Configuration</strong>: Opinionated but consistent</li>
+</ul>
+<h2 id="related-decisions">Related Decisions</h2>
+<ul>
+<li><a href="0002-using-dotnet-aspire.html">ADR-0002</a>: Aspire recommends ServiceDefaults pattern</li>
+<li><a href="0007-opentelemetry-for-observability.html">ADR-0007</a>: OpenTelemetry configured in ServiceDefaults</li>
+</ul>
+<h2 id="related-links">Related Links</h2>
+<ul>
+<li><a href="https://learn.microsoft.com/dotnet/aspire/fundamentals/service-defaults">Aspire ServiceDefaults</a></li>
+</ul>
+<h2 id="notes">Notes</h2>
+<p>ServiceDefaults configuration:</p>
+<pre><code class="lang-csharp">public static IHostApplicationBuilder AddServiceDefaults(this IHostApplicationBuilder builder)
+{
+    builder.ConfigureOpenTelemetry();
+    builder.AddDefaultHealthChecks();
+    builder.Services.AddServiceDiscovery();
+    builder.Services.ConfigureHttpClientDefaults(http =&gt;
+    {
+        http.AddServiceDiscovery();
+        http.AddStandardResilienceHandler();
+    });
+    return builder;
+}
+</code></pre>
+<p>Usage in services:</p>
+<pre><code class="lang-csharp">var builder = WebApplication.CreateBuilder(args);
+builder.AddServiceDefaults(); // ← One line for everything!
+</code></pre>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/01-architecture-decision-records/0013-servicedefaults-pattern.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

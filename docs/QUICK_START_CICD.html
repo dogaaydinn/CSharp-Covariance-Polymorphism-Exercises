@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>CI/CD Quick Start Guide | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="CI/CD Quick Start Guide | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/QUICK_START_CICD.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="cicd-quick-start-guide">CI/CD Quick Start Guide</h1>
+
+<h2 id="-quick-reference-for-common-tasks">🚀 Quick Reference for Common Tasks</h2>
+<h3 id="release-a-new-nuget-package">Release a New NuGet Package</h3>
+<p><strong>Option 1: Via Git Tag (Recommended)</strong></p>
+<pre><code class="lang-bash"># Create and push a version tag
+git tag v1.0.0
+git push origin v1.0.0
+</code></pre>
+<p><strong>Option 2: Via GitHub UI</strong></p>
+<ol>
+<li>Go to <strong>Actions</strong> → <strong>Publish to NuGet</strong></li>
+<li>Click <strong>Run workflow</strong></li>
+<li>Enter version (e.g., <code>1.0.0</code>)</li>
+<li>Select if prerelease</li>
+<li>Click <strong>Run workflow</strong></li>
+</ol>
+<p><strong>What happens:</strong></p>
+<ol>
+<li>✅ Validates version format</li>
+<li>✅ Checks version doesn't exist on NuGet</li>
+<li>✅ Builds solution</li>
+<li>✅ Runs all tests</li>
+<li>✅ Packs NuGet packages</li>
+<li>✅ Publishes to NuGet.org</li>
+<li>✅ Creates GitHub release</li>
+</ol>
+<p><strong>Result:</strong> Package available at <a href="https://www.nuget.org/packages/AdvancedConcepts.Analyzers/">https://www.nuget.org/packages/AdvancedConcepts.Analyzers/</a></p>
+<hr>
+<h3 id="build-and-push-docker-image">Build and Push Docker Image</h3>
+<p><strong>Automatic (Recommended)</strong></p>
+<pre><code class="lang-bash"># Just push to main - workflow runs automatically
+git push origin main
+</code></pre>
+<p><strong>Manual Trigger</strong></p>
+<ol>
+<li>Go to <strong>Actions</strong> → <strong>Build &amp; Push Container</strong></li>
+<li>Click <strong>Run workflow</strong></li>
+<li>Select branch</li>
+<li>Click <strong>Run workflow</strong></li>
+</ol>
+<p><strong>What happens:</strong></p>
+<ol>
+<li>✅ Builds multi-arch image (amd64, arm64)</li>
+<li>✅ Scans for vulnerabilities (Trivy, Grype)</li>
+<li>✅ Generates SBOM</li>
+<li>✅ Tests container startup</li>
+<li>✅ Pushes to GitHub Container Registry</li>
+<li>✅ Signs image with Cosign</li>
+</ol>
+<p><strong>Pull Image:</strong></p>
+<pre><code class="lang-bash">docker pull ghcr.io/dogaaydinn/csharp-covariance-polymorphism-exercises:latest
+docker run -p 8080:8080 ghcr.io/dogaaydinn/csharp-covariance-polymorphism-exercises:latest
+</code></pre>
+<hr>
+<h3 id="check-code-quality-before-pr">Check Code Quality Before PR</h3>
+<p><strong>Local Check:</strong></p>
+<pre><code class="lang-bash"># Format code
+dotnet format AdvancedCsharpConcepts.sln
+
+# Build with analyzers
+dotnet build AdvancedCsharpConcepts.sln --configuration Release
+
+# Run tests
+dotnet test AdvancedCsharpConcepts.sln --configuration Release
+</code></pre>
+<p><strong>CI Pipeline:</strong></p>
+<ul>
+<li>Automatically runs on every pull request</li>
+<li>Results appear as PR checks</li>
+<li>SonarCloud report added as comment</li>
+</ul>
+<hr>
+<h2 id="-setup-requirements">🔧 Setup Requirements</h2>
+<h3 id="1-configure-github-secrets">1. Configure GitHub Secrets</h3>
+<p><strong>Required Secrets:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Secret</th>
+<th>How to Get</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>NUGET_API_KEY</code></td>
+<td><a href="https://www.nuget.org/account/apikeys">NuGet.org</a> → Create API Key</td>
+</tr>
+<tr>
+<td><code>SONAR_TOKEN</code></td>
+<td><a href="https://sonarcloud.io/account/security">SonarCloud</a> → Generate Token</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Add Secrets:</strong></p>
+<ol>
+<li>Go to <strong>Settings</strong> → <strong>Secrets and variables</strong> → <strong>Actions</strong></li>
+<li>Click <strong>New repository secret</strong></li>
+<li>Add <code>NUGET_API_KEY</code> and <code>SONAR_TOKEN</code></li>
+</ol>
+<h3 id="2-configure-sonarcloud">2. Configure SonarCloud</h3>
+<ol>
+<li>Go to <a href="https://sonarcloud.io/">https://sonarcloud.io/</a></li>
+<li>Click <strong>+</strong> → <strong>Analyze new project</strong></li>
+<li>Select GitHub repository</li>
+<li>Copy organization and project key</li>
+<li>Update <code>sonar-project.properties</code> with your keys</li>
+</ol>
+<h3 id="3-enable-github-container-registry">3. Enable GitHub Container Registry</h3>
+<ol>
+<li>Go to <strong>Settings</strong> → <strong>Actions</strong> → <strong>General</strong></li>
+<li>Scroll to <strong>Workflow permissions</strong></li>
+<li>Select <strong>Read and write permissions</strong></li>
+<li>Check <strong>Allow GitHub Actions to create and approve pull requests</strong></li>
+<li>Click <strong>Save</strong></li>
+</ol>
+<hr>
+<h2 id="-viewing-results">📊 Viewing Results</h2>
+<h3 id="ci-pipeline-results">CI Pipeline Results</h3>
+<p><strong>Location:</strong> Actions → CI Pipeline → Latest run</p>
+<p><strong>What to Check:</strong></p>
+<ul>
+<li>✅ <strong>Build &amp; Test</strong>: All platforms passed?</li>
+<li>✅ <strong>Code Quality</strong>: SonarCloud grade A-C?</li>
+<li>✅ <strong>Coverage</strong>: &gt; 80%?</li>
+<li>✅ <strong>Security</strong>: No vulnerabilities?</li>
+<li>✅ <strong>Mutation</strong>: &gt; 70% score?</li>
+</ul>
+<p><strong>SonarCloud Dashboard:</strong>
+<a href="https://sonarcloud.io/dashboard?id=dogaaydinn_CSharp-Covariance-Polymorphism-Exercises">https://sonarcloud.io/dashboard?id=dogaaydinn_CSharp-Covariance-Polymorphism-Exercises</a></p>
+<h3 id="nuget-package-status">NuGet Package Status</h3>
+<p><strong>Check Published Packages:</strong></p>
+<ul>
+<li><a href="https://www.nuget.org/packages/AdvancedConcepts.Analyzers/">https://www.nuget.org/packages/AdvancedConcepts.Analyzers/</a></li>
+<li><a href="https://www.nuget.org/packages/AdvancedConcepts.SourceGenerators/">https://www.nuget.org/packages/AdvancedConcepts.SourceGenerators/</a></li>
+</ul>
+<p><strong>Download Stats:</strong></p>
+<pre><code class="lang-bash"># View package info
+dotnet nuget list AdvancedConcepts.Analyzers --source https://api.nuget.org/v3/index.json
+</code></pre>
+<h3 id="container-registry">Container Registry</h3>
+<p><strong>View Published Images:</strong>
+<a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/pkgs/container/csharp-covariance-polymorphism-exercises">https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/pkgs/container/csharp-covariance-polymorphism-exercises</a></p>
+<p><strong>Inspect Image:</strong></p>
+<pre><code class="lang-bash"># List tags
+docker images ghcr.io/dogaaydinn/csharp-covariance-polymorphism-exercises
+
+# Inspect image
+docker inspect ghcr.io/dogaaydinn/csharp-covariance-polymorphism-exercises:latest
+
+# View image history
+docker history ghcr.io/dogaaydinn/csharp-covariance-polymorphism-exercises:latest
+</code></pre>
+<hr>
+<h2 id="-troubleshooting">🐛 Troubleshooting</h2>
+<h3 id="pipeline-fails-on-format-check">Pipeline Fails on Format Check</h3>
+<pre><code>Error: Files not formatted correctly
+</code></pre>
+<p><strong>Fix:</strong></p>
+<pre><code class="lang-bash">dotnet format AdvancedCsharpConcepts.sln
+git add .
+git commit -m &quot;style: format code&quot;
+git push
+</code></pre>
+<h3 id="sonarcloud-analysis-fails">SonarCloud Analysis Fails</h3>
+<pre><code>Error: Please provide SONAR_TOKEN
+</code></pre>
+<p><strong>Fix:</strong></p>
+<ol>
+<li>Generate token at <a href="https://sonarcloud.io/account/security">https://sonarcloud.io/account/security</a></li>
+<li>Add to GitHub Secrets as <code>SONAR_TOKEN</code></li>
+<li>Re-run workflow</li>
+</ol>
+<h3 id="nuget-push-fails">NuGet Push Fails</h3>
+<pre><code>Error: Response status code does not indicate success: 409 (Conflict - version already exists)
+</code></pre>
+<p><strong>Fix:</strong></p>
+<ul>
+<li>Package version already published</li>
+<li>Increment version number and create new tag:</li>
+</ul>
+<pre><code class="lang-bash">git tag v1.0.1
+git push origin v1.0.1
+</code></pre>
+<h3 id="container-build-fails">Container Build Fails</h3>
+<pre><code>Error: buildx failed with: ERROR: failed to solve
+</code></pre>
+<p><strong>Fix:</strong></p>
+<ol>
+<li>Check Dockerfile syntax</li>
+<li>Verify all .csproj files exist</li>
+<li>Run locally:</li>
+</ol>
+<pre><code class="lang-bash">docker build --target final -t test .
+</code></pre>
+<h3 id="security-scan-finds-vulnerabilities">Security Scan Finds Vulnerabilities</h3>
+<pre><code>Trivy scan found HIGH severity vulnerabilities
+</code></pre>
+<p><strong>Fix:</strong></p>
+<ol>
+<li>Update base image version in Dockerfile</li>
+<li>Update NuGet packages:</li>
+</ol>
+<pre><code class="lang-bash">dotnet list package --outdated
+dotnet add package [PackageName] --version [NewVersion]
+</code></pre>
+<hr>
+<h2 id="-metrics-dashboard">📈 Metrics Dashboard</h2>
+<h3 id="key-performance-indicators">Key Performance Indicators</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Target</th>
+<th>Current</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Build Success Rate</td>
+<td>&gt; 95%</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Test Coverage</td>
+<td>&gt; 80%</td>
+<td>-</td>
+<td>View in SonarCloud</td>
+</tr>
+<tr>
+<td>Mutation Score</td>
+<td>&gt; 70%</td>
+<td>-</td>
+<td>View in Stryker report</td>
+</tr>
+<tr>
+<td>SonarCloud Grade</td>
+<td>A-B</td>
+<td>-</td>
+<td>View in SonarCloud</td>
+</tr>
+<tr>
+<td>Build Time</td>
+<td>&lt; 10 min</td>
+<td>~5 min</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Container Size</td>
+<td>&lt; 150 MB</td>
+<td>~105 MB</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Security Vulns</td>
+<td>0 high/critical</td>
+<td>-</td>
+<td>View in Trivy</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="-workflow-status-badges">🎯 Workflow Status Badges</h2>
+<p>Add to your README.md:</p>
+<pre><code class="lang-markdown">[![CI Pipeline](https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/actions/workflows/ci.yml/badge.svg)](https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/actions/workflows/ci.yml)
+
+[![Publish to NuGet](https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/actions/workflows/publish-nuget.yml/badge.svg)](https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/actions/workflows/publish-nuget.yml)
+
+[![Build &amp; Push Container](https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/actions/workflows/build-container.yml/badge.svg)](https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/actions/workflows/build-container.yml)
+
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=dogaaydinn_CSharp-Covariance-Polymorphism-Exercises&amp;metric=alert_status)](https://sonarcloud.io/dashboard?id=dogaaydinn_CSharp-Covariance-Polymorphism-Exercises)
+
+[![Coverage](https://codecov.io/gh/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/branch/master/graph/badge.svg)](https://codecov.io/gh/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises)
+</code></pre>
+<hr>
+<h2 id="-common-workflows">🔄 Common Workflows</h2>
+<h3 id="deploy-to-staging">Deploy to Staging</h3>
+<pre><code class="lang-bash"># Push to develop branch
+git checkout develop
+git merge feature/my-feature
+git push origin develop
+
+# Automatic:
+# 1. CI pipeline runs
+# 2. Container builds and pushes
+# 3. Deploys to staging (if configured)
+</code></pre>
+<h3 id="deploy-to-production">Deploy to Production</h3>
+<pre><code class="lang-bash"># Create pull request to main
+# After review and approval:
+git checkout main
+git merge develop
+git push origin main
+
+# Manual step required for production deployment
+# Go to Actions → Build &amp; Push Container → deploy-production
+# Click &quot;Review deployments&quot; → &quot;Approve&quot;
+</code></pre>
+<h3 id="rollback-release">Rollback Release</h3>
+<pre><code class="lang-bash"># Option 1: Revert commit
+git revert &lt;commit-sha&gt;
+git push origin main
+
+# Option 2: Rollback to previous tag
+git checkout v1.0.0
+git tag v1.0.1-rollback
+git push origin v1.0.1-rollback
+</code></pre>
+<hr>
+<h2 id="-additional-resources">📚 Additional Resources</h2>
+<ul>
+<li><a href="CICD_WORKFLOWS.html">Full CI/CD Documentation</a></li>
+<li><a href="decisions/README.html">Architecture Decision Records</a></li>
+<li><a href="../CONTRIBUTING.html">Contributing Guide</a></li>
+<li><a href="../SECURITY.html">Security Policy</a></li>
+</ul>
+<hr>
+<h2 id="-support">🆘 Support</h2>
+<p><strong>Issues:</strong> <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/issues">GitHub Issues</a></p>
+<p><strong>Discussions:</strong> <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/discussions">GitHub Discussions</a></p>
+<hr>
+<p><strong>Last Updated:</strong> 2024-12-02</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/QUICK_START_CICD.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

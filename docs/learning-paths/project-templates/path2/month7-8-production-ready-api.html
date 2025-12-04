@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Path 2 - Months 7-8 Capstone: Production-Ready API with Observability | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Path 2 - Months 7-8 Capstone: Production-Ready API with Observability | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../../favicon.ico">
+      <link rel="stylesheet" href="../../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/project-templates/path2/month7-8-production-ready-api.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../../index.html">
+            <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="path-2---months-7-8-capstone-production-ready-api-with-observability">Path 2 - Months 7-8 Capstone: Production-Ready API with Observability</h1>
+
+<p><strong>Difficulty</strong>: ⭐⭐⭐⭐☆ (Advanced)
+<strong>Estimated Time</strong>: 50-60 hours
+<strong>Prerequisites</strong>: Months 1-6 of Path 2 completed</p>
+<hr>
+<h2 id="-project-overview">🎯 Project Overview</h2>
+<p>Take any previous API and make it production-ready with complete observability stack: structured logging, distributed tracing, health checks, circuit breaker, retry policies, and monitoring.</p>
+<h3 id="learning-objectives">Learning Objectives</h3>
+<ul>
+<li>✅ Structured logging with Serilog</li>
+<li>✅ OpenTelemetry and distributed tracing</li>
+<li>✅ Health checks and readiness probes</li>
+<li>✅ Circuit breaker pattern (Polly)</li>
+<li>✅ Retry and timeout policies</li>
+<li>✅ Monitoring dashboards</li>
+<li>✅ Load testing</li>
+</ul>
+<hr>
+<h2 id="-requirements">📋 Requirements</h2>
+<h3 id="1-structured-logging-with-serilog">1. Structured Logging with Serilog</h3>
+<pre><code class="lang-csharp">// Program.cs
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .MinimumLevel.Override(&quot;Microsoft&quot;, LogEventLevel.Warning)
+    .Enrich.FromLogContext()
+    .Enrich.WithMachineName()
+    .Enrich.WithEnvironmentName()
+    .Enrich.WithProperty(&quot;Application&quot;, &quot;MyApi&quot;)
+    .WriteTo.Console(new JsonFormatter())
+    .WriteTo.Seq(&quot;http://seq:5341&quot;)
+    .CreateLogger();
+
+// Usage
+_logger.LogInformation(&quot;Processing order {OrderId} for customer {CustomerId}&quot;,
+    orderId, customerId);
+
+_logger.LogWarning(&quot;Payment failed for order {OrderId}. Reason: {Reason}&quot;,
+    orderId, reason);
+</code></pre>
+<h3 id="2-opentelemetry-tracing">2. OpenTelemetry Tracing</h3>
+<pre><code class="lang-csharp">// Program.cs
+builder.Services.AddOpenTelemetry()
+    .WithTracing(tracing =&gt;
+    {
+        tracing
+            .AddAspNetCoreInstrumentation()
+            .AddHttpClientInstrumentation()
+            .AddEntityFrameworkCoreInstrumentation()
+            .AddSource(&quot;MyApi&quot;)
+            .AddJaegerExporter(options =&gt;
+            {
+                options.AgentHost = &quot;jaeger&quot;;
+                options.AgentPort = 6831;
+            });
+    });
+
+// Usage with custom spans
+private readonly ActivitySource _activitySource = new(&quot;MyApi&quot;);
+
+public async Task&lt;Order&gt; ProcessOrder(Guid orderId)
+{
+    using var activity = _activitySource.StartActivity(&quot;ProcessOrder&quot;);
+    activity?.SetTag(&quot;order.id&quot;, orderId);
+
+    try
+    {
+        var order = await _orderRepository.GetByIdAsync(orderId);
+        activity?.SetTag(&quot;order.total&quot;, order.TotalAmount);
+
+        // Process order...
+
+        activity?.SetStatus(ActivityStatusCode.Ok);
+        return order;
+    }
+    catch (Exception ex)
+    {
+        activity?.SetStatus(ActivityStatusCode.Error, ex.Message);
+        throw;
+    }
+}
+</code></pre>
+<h3 id="3-health-checks">3. Health Checks</h3>
+<pre><code class="lang-csharp">// Program.cs
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck&lt;ApplicationDbContext&gt;(&quot;database&quot;)
+    .AddRabbitMQ(rabbitConnectionString, name: &quot;rabbitmq&quot;)
+    .AddRedis(redisConnectionString, name: &quot;redis&quot;)
+    .AddUrlGroup(new Uri(&quot;https://external-api.com/health&quot;), name: &quot;external-api&quot;);
+
+app.MapHealthChecks(&quot;/health&quot;, new HealthCheckOptions
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
+
+app.MapHealthChecks(&quot;/health/ready&quot;, new HealthCheckOptions
+{
+    Predicate = check =&gt; check.Tags.Contains(&quot;ready&quot;)
+});
+
+app.MapHealthChecks(&quot;/health/live&quot;, new HealthCheckOptions
+{
+    Predicate = _ =&gt; false // Always healthy if app is running
+});
+</code></pre>
+<h3 id="4-resilience-with-polly">4. Resilience with Polly</h3>
+<pre><code class="lang-csharp">// Retry policy
+var retryPolicy = Policy
+    .Handle&lt;HttpRequestException&gt;()
+    .Or&lt;TimeoutException&gt;()
+    .WaitAndRetryAsync(
+        retryCount: 3,
+        sleepDurationProvider: attempt =&gt; TimeSpan.FromSeconds(Math.Pow(2, attempt)),
+        onRetry: (exception, timeSpan, retryCount, context) =&gt;
+        {
+            _logger.LogWarning(
+                &quot;Retry {RetryCount} after {Delay}s due to: {Exception}&quot;,
+                retryCount, timeSpan.TotalSeconds, exception.Message);
+        });
+
+// Circuit breaker
+var circuitBreakerPolicy = Policy
+    .Handle&lt;HttpRequestException&gt;()
+    .CircuitBreakerAsync(
+        handledEventsAllowedBeforeBreaking: 5,
+        durationOfBreak: TimeSpan.FromSeconds(30),
+        onBreak: (exception, duration) =&gt;
+        {
+            _logger.LogError(&quot;Circuit breaker opened for {Duration}s&quot;, duration.TotalSeconds);
+        },
+        onReset: () =&gt;
+        {
+            _logger.LogInformation(&quot;Circuit breaker reset&quot;);
+        });
+
+// Combine policies
+var policyWrap = Policy.WrapAsync(retryPolicy, circuitBreakerPolicy);
+
+// Usage
+await policyWrap.ExecuteAsync(async () =&gt;
+{
+    return await _httpClient.GetAsync(&quot;https://external-api.com/data&quot;);
+});
+</code></pre>
+<h3 id="5-metrics-and-monitoring">5. Metrics and Monitoring</h3>
+<pre><code class="lang-csharp">using System.Diagnostics.Metrics;
+
+public class OrderMetrics
+{
+    private static readonly Meter _meter = new(&quot;MyApi.Orders&quot;, &quot;1.0.0&quot;);
+    private static readonly Counter&lt;long&gt; _ordersCreated = _meter.CreateCounter&lt;long&gt;(&quot;orders.created&quot;);
+    private static readonly Histogram&lt;double&gt; _orderProcessingDuration = _meter.CreateHistogram&lt;double&gt;(&quot;orders.processing.duration&quot;, &quot;ms&quot;);
+    private static readonly ObservableGauge&lt;int&gt; _pendingOrders = _meter.CreateObservableGauge(&quot;orders.pending&quot;, () =&gt; GetPendingOrdersCount());
+
+    public void RecordOrderCreated(string status)
+    {
+        _ordersCreated.Add(1, new KeyValuePair&lt;string, object?&gt;(&quot;status&quot;, status));
+    }
+
+    public void RecordProcessingDuration(double durationMs, string status)
+    {
+        _orderProcessingDuration.Record(durationMs,
+            new KeyValuePair&lt;string, object?&gt;(&quot;status&quot;, status));
+    }
+
+    private static int GetPendingOrdersCount()
+    {
+        // Query database for pending orders
+        return 42;
+    }
+}
+</code></pre>
+<hr>
+<h2 id="-observability-stack">🎯 Observability Stack</h2>
+<h3 id="docker-compose-setup">Docker Compose Setup</h3>
+<pre><code class="lang-yaml">version: '3.8'
+
+services:
+  api:
+    build: .
+    ports:
+      - &quot;5000:80&quot;
+    environment:
+      - SeqUrl=http://seq:5341
+      - JaegerHost=jaeger
+    depends_on:
+      - seq
+      - jaeger
+      - prometheus
+
+  seq:
+    image: datalust/seq:latest
+    ports:
+      - &quot;5341:80&quot;
+    environment:
+      - ACCEPT_EULA=Y
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - &quot;6831:6831/udp&quot;
+      - &quot;16686:16686&quot;
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - &quot;9090:9090&quot;
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - &quot;3000:3000&quot;
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - prometheus
+</code></pre>
+<hr>
+<h2 id="-milestones">🎯 Milestones</h2>
+<ol>
+<li><strong>Week 1-2</strong>: Add Serilog structured logging</li>
+<li><strong>Week 3-4</strong>: Implement OpenTelemetry tracing</li>
+<li><strong>Week 5-6</strong>: Add health checks and Polly resilience</li>
+<li><strong>Week 7</strong>: Set up monitoring stack (Prometheus, Grafana)</li>
+<li><strong>Week 8</strong>: Load testing and optimization</li>
+</ol>
+<hr>
+<h2 id="-evaluation">✅ Evaluation</h2>
+<table>
+<thead>
+<tr>
+<th>Criteria</th>
+<th>Weight</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Structured Logging</td>
+<td>20%</td>
+</tr>
+<tr>
+<td>Distributed Tracing</td>
+<td>20%</td>
+</tr>
+<tr>
+<td>Health Checks</td>
+<td>15%</td>
+</tr>
+<tr>
+<td>Resilience Patterns</td>
+<td>20%</td>
+</tr>
+<tr>
+<td>Monitoring Dashboard</td>
+<td>15%</td>
+</tr>
+<tr>
+<td>Load Testing</td>
+<td>10%</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Pass</strong>: 75%</p>
+<hr>
+<h2 id="-resources">📚 Resources</h2>
+<ul>
+<li><code>samples/03-Advanced/Observability/</code></li>
+<li>Serilog: <a href="https://serilog.net/">https://serilog.net/</a></li>
+<li>OpenTelemetry: <a href="https://opentelemetry.io/">https://opentelemetry.io/</a></li>
+<li>Polly: <a href="https://github.com/App-vNext/Polly">https://github.com/App-vNext/Polly</a></li>
+<li>Health Checks: <a href="https://learn.microsoft.com/en-us/aspnet/core/host-and-deploy/health-checks">https://learn.microsoft.com/en-us/aspnet/core/host-and-deploy/health-checks</a></li>
+</ul>
+<hr>
+<p><em>Template Version: 1.0</em></p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/project-templates/path2/month7-8-production-ready-api.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

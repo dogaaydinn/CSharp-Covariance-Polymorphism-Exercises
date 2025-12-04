@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Native AOT Compilation Guide | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Native AOT Compilation Guide | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/guides/NATIVE_AOT.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="native-aot-compilation-guide">Native AOT Compilation Guide</h1>
+
+<h2 id="overview">Overview</h2>
+<p>Native Ahead-of-Time (AOT) compilation enables .NET applications to compile to native code ahead of time, rather than using Just-In-Time (JIT) compilation at runtime. This guide covers preparing your C# application for Native AOT compilation.</p>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ul>
+<li><a href="#what-is-native-aot">What is Native AOT?</a></li>
+<li><a href="#benefits-and-trade-offs">Benefits and Trade-offs</a></li>
+<li><a href="#getting-started">Getting Started</a></li>
+<li><a href="#preparing-code-for-aot">Preparing Code for AOT</a></li>
+<li><a href="#resolving-trim-warnings">Resolving Trim Warnings</a></li>
+<li><a href="#eliminating-reflection">Eliminating Reflection</a></li>
+<li><a href="#source-generator-based-serialization">Source Generator-Based Serialization</a></li>
+<li><a href="#build-configuration">Build Configuration</a></li>
+<li><a href="#performance-targets">Performance Targets</a></li>
+<li><a href="#compatibility-checklist">Compatibility Checklist</a></li>
+<li><a href="#troubleshooting">Troubleshooting</a></li>
+</ul>
+<h2 id="what-is-native-aot">What is Native AOT?</h2>
+<p>Native AOT compiles your .NET application to native machine code during the build process, producing a self-contained executable with:</p>
+<ul>
+<li>No JIT compilation at runtime</li>
+<li>No dependency on .NET runtime</li>
+<li>Native OS executable format</li>
+</ul>
+<h3 id="how-it-works">How It Works</h3>
+<pre><code>C# Source Code → Roslyn Compiler → IL Code → AOT Compiler → Native Machine Code
+</code></pre>
+<p>Traditional .NET:</p>
+<pre><code>C# → IL → JIT (runtime) → Machine Code
+</code></pre>
+<p>Native AOT:</p>
+<pre><code>C# → IL → AOT (build time) → Machine Code
+</code></pre>
+<h2 id="benefits-and-trade-offs">Benefits and Trade-offs</h2>
+<h3 id="benefits-">Benefits ✅</h3>
+<ul>
+<li><strong>Fast Startup</strong>: Application starts in &lt;50ms (vs 500ms+ with JIT)</li>
+<li><strong>Small Memory Footprint</strong>: &lt;30MB typical (vs 100MB+ with runtime)</li>
+<li><strong>Self-Contained</strong>: No .NET runtime installation required</li>
+<li><strong>Smaller Deployment Size</strong>: Trimmed and optimized</li>
+<li><strong>Better Performance</strong>: No JIT compilation overhead</li>
+<li><strong>Reduced Attack Surface</strong>: No JIT code generation at runtime</li>
+</ul>
+<h3 id="trade-offs-">Trade-offs ⚠️</h3>
+<ul>
+<li><strong>Limited Reflection</strong>: Dynamic code generation not supported</li>
+<li><strong>Larger Executable</strong>: Single-file includes all dependencies</li>
+<li><strong>Longer Build Time</strong>: Compilation happens at build time</li>
+<li><strong>Platform-Specific</strong>: Must build for each target platform</li>
+<li><strong>Library Compatibility</strong>: Not all NuGet packages support AOT</li>
+</ul>
+<h2 id="getting-started">Getting Started</h2>
+<h3 id="1-project-configuration">1. Project Configuration</h3>
+<p>Update your <code>.csproj</code> file:</p>
+<pre><code class="lang-xml">&lt;Project Sdk=&quot;Microsoft.NET.Sdk&quot;&gt;
+  &lt;PropertyGroup&gt;
+    &lt;OutputType&gt;Exe&lt;/OutputType&gt;
+    &lt;TargetFramework&gt;net8.0&lt;/TargetFramework&gt;
+    &lt;PublishAot&gt;true&lt;/PublishAot&gt;
+    &lt;InvariantGlobalization&gt;false&lt;/InvariantGlobalization&gt;
+
+    &lt;!-- Optional: Enable trim analyzers --&gt;
+    &lt;EnableTrimAnalyzer&gt;true&lt;/EnableTrimAnalyzer&gt;
+    &lt;EnableSingleFileAnalyzer&gt;true&lt;/EnableSingleFileAnalyzer&gt;
+    &lt;EnableAotAnalyzer&gt;true&lt;/EnableAotAnalyzer&gt;
+
+    &lt;!-- Optional: Trim options --&gt;
+    &lt;TrimMode&gt;full&lt;/TrimMode&gt;
+    &lt;IlcOptimizationPreference&gt;Speed&lt;/IlcOptimizationPreference&gt;
+    &lt;IlcGenerateStackTraceData&gt;false&lt;/IlcGenerateStackTraceData&gt;
+  &lt;/PropertyGroup&gt;
+&lt;/Project&gt;
+</code></pre>
+<h3 id="2-publish-for-native-aot">2. Publish for Native AOT</h3>
+<pre><code class="lang-bash"># Publish for current platform
+dotnet publish -c Release
+
+# Publish for specific platform
+dotnet publish -c Release -r win-x64
+dotnet publish -c Release -r linux-x64
+dotnet publish -c Release -r osx-arm64
+</code></pre>
+<h3 id="3-verify-aot-compatibility">3. Verify AOT Compatibility</h3>
+<pre><code class="lang-bash"># Run AOT compatibility analysis
+dotnet publish -c Release /p:PublishAot=true /p:TrimmerSingleWarn=false
+
+# Check for trim warnings
+dotnet build /p:EnableTrimAnalyzer=true
+</code></pre>
+<h2 id="preparing-code-for-aot">Preparing Code for AOT</h2>
+<h3 id="1-avoid-dynamic-code-generation">1. Avoid Dynamic Code Generation</h3>
+<p>❌ <strong>Not AOT-Compatible:</strong></p>
+<pre><code class="lang-csharp">// Dynamic assembly generation
+var assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(...);
+
+// Expression tree compilation
+Expression&lt;Func&lt;int, int&gt;&gt; expr = x =&gt; x * 2;
+var compiled = expr.Compile(); // Uses JIT
+
+// Dynamic proxy generation
+var proxy = DispatchProxy.Create&lt;IService, ServiceProxy&gt;();
+</code></pre>
+<p>✅ <strong>AOT-Compatible Alternatives:</strong></p>
+<pre><code class="lang-csharp">// Use source generators instead of dynamic generation
+[AutoGenerate]
+public partial class Service : IService
+{
+    // Generated at compile time
+}
+
+// Use static delegates instead of expression compilation
+Func&lt;int, int&gt; func = static x =&gt; x * 2;
+
+// Use compile-time proxies
+public class ServiceProxy : IService
+{
+    private readonly IService _inner;
+    public ServiceProxy(IService inner) =&gt; _inner = inner;
+
+    public void DoWork() =&gt; _inner.DoWork();
+}
+</code></pre>
+<h3 id="2-use-type-safe-reflection">2. Use Type-Safe Reflection</h3>
+<p>❌ <strong>Not AOT-Compatible:</strong></p>
+<pre><code class="lang-csharp">// Runtime type discovery
+var types = Assembly.GetTypes();
+foreach (var type in types)
+{
+    var instance = Activator.CreateInstance(type);
+}
+
+// String-based reflection
+var method = type.GetMethod(&quot;MethodName&quot;);
+method.Invoke(instance, parameters);
+</code></pre>
+<p>✅ <strong>AOT-Compatible Alternatives:</strong></p>
+<pre><code class="lang-csharp">// Use generic constraints
+public T Create&lt;T&gt;() where T : new()
+{
+    return new T(); // Direct instantiation
+}
+
+// Use static factories
+public interface IFactory&lt;out T&gt;
+{
+    T Create();
+}
+
+public class UserFactory : IFactory&lt;User&gt;
+{
+    public User Create() =&gt; new User();
+}
+
+// Use direct method calls
+public void CallMethod(IService service)
+{
+    service.DoWork(); // Direct call through interface
+}
+</code></pre>
+<h2 id="resolving-trim-warnings">Resolving Trim Warnings</h2>
+<h3 id="understanding-trim-warnings">Understanding Trim Warnings</h3>
+<p>Trim warnings indicate code that may not work correctly after trimming:</p>
+<pre><code>warning IL2026: Using member 'Type.GetMethod(String)' which has 'RequiresUnreferencedCodeAttribute'
+can break functionality when trimming application code.
+</code></pre>
+<h3 id="common-warning-categories">Common Warning Categories</h3>
+<h4 id="il2026-requiresunreferencedcode">IL2026: RequiresUnreferencedCode</h4>
+<pre><code class="lang-csharp">// Code that requires unreferenced code
+[RequiresUnreferencedCode(&quot;Uses reflection&quot;)]
+public void ProcessType(Type type)
+{
+    var methods = type.GetMethods(); // May be trimmed
+}
+</code></pre>
+<p><strong>Solution:</strong> Use source generators or preserve with attributes</p>
+<pre><code class="lang-csharp">// Option 1: Source generator
+[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods)]
+Type type = typeof(MyClass);
+
+// Option 2: Preserve specific members
+[DynamicDependency(DynamicallyAccessedMemberTypes.PublicMethods, typeof(MyClass))]
+public void ProcessType()
+{
+    var methods = typeof(MyClass).GetMethods();
+}
+</code></pre>
+<h4 id="il2070-unrecognized-value-passed-to-parameter">IL2070: Unrecognized Value Passed to Parameter</h4>
+<pre><code class="lang-csharp">public void Process(Type type) // Compiler doesn't know what type this is
+{
+    var properties = type.GetProperties();
+}
+</code></pre>
+<p><strong>Solution:</strong> Add annotations</p>
+<pre><code class="lang-csharp">public void Process(
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)]
+    Type type)
+{
+    var properties = type.GetProperties(); // Preserved
+}
+</code></pre>
+<h3 id="preserving-types">Preserving Types</h3>
+<pre><code class="lang-csharp">// Preserve entire assembly
+[assembly: UnconditionalSuppressMessage(&quot;Trimming&quot;, &quot;IL2026&quot;,
+    Justification = &quot;Legacy library&quot;)]
+
+// Preserve specific type
+[DynamicallyAccessedMembers(
+    DynamicallyAccessedMemberTypes.PublicProperties |
+    DynamicallyAccessedMemberTypes.PublicMethods)]
+Type preservedType = typeof(MyClass);
+
+// Preserve through dependency
+[DynamicDependency(nameof(MyClass.MyMethod), typeof(MyClass))]
+public void CallIndirectly()
+{
+    // MyClass.MyMethod won't be trimmed
+}
+</code></pre>
+<h2 id="eliminating-reflection">Eliminating Reflection</h2>
+<h3 id="1-json-serialization">1. JSON Serialization</h3>
+<p>❌ <strong>Reflection-Based (Not AOT-Compatible):</strong></p>
+<pre><code class="lang-csharp">using System.Text.Json;
+
+var user = new User { Id = 1, Name = &quot;John&quot; };
+var json = JsonSerializer.Serialize(user); // Uses reflection
+var deserialized = JsonSerializer.Deserialize&lt;User&gt;(json);
+</code></pre>
+<p>✅ <strong>Source Generator-Based (AOT-Compatible):</strong></p>
+<pre><code class="lang-csharp">using System.Text.Json;
+using System.Text.Json.Serialization;
+
+// Define source generation context
+[JsonSerializable(typeof(User))]
+[JsonSerializable(typeof(List&lt;User&gt;))]
+[JsonSerializable(typeof(Dictionary&lt;string, User&gt;))]
+[JsonSourceGenerationOptions(WriteIndented = true)]
+internal partial class AppJsonSerializerContext : JsonSerializerContext
+{
+}
+
+// Use the generated context
+var user = new User { Id = 1, Name = &quot;John&quot; };
+var json = JsonSerializer.Serialize(user, AppJsonSerializerContext.Default.User);
+var deserialized = JsonSerializer.Deserialize&lt;User&gt;(json, AppJsonSerializerContext.Default.User);
+</code></pre>
+<h3 id="2-dependency-injection">2. Dependency Injection</h3>
+<p>❌ <strong>Reflection-Based:</strong></p>
+<pre><code class="lang-csharp">// Runtime assembly scanning
+services.AddControllers(); // Scans assemblies for controllers
+services.AddAutoMapper(Assembly.GetExecutingAssembly());
+</code></pre>
+<p>✅ <strong>Explicit Registration:</strong></p>
+<pre><code class="lang-csharp">// Explicit service registration
+services.AddSingleton&lt;IUserService, UserService&gt;();
+services.AddScoped&lt;IRepository&lt;User&gt;, UserRepository&gt;();
+services.AddTransient&lt;IEmailService, EmailService&gt;();
+
+// Manual controller registration
+services.AddControllers()
+    .AddApplicationPart(typeof(UserController).Assembly)
+    .AddControllersAsServices();
+
+// Explicit mapping configuration
+services.AddSingleton&lt;IMapper&gt;(sp =&gt;
+{
+    var config = new MapperConfiguration(cfg =&gt;
+    {
+        cfg.CreateMap&lt;User, UserDto&gt;();
+        cfg.CreateMap&lt;UserDto, User&gt;();
+    });
+    return config.CreateMapper();
+});
+</code></pre>
+<h3 id="3-configuration-binding">3. Configuration Binding</h3>
+<p>❌ <strong>Reflection-Based:</strong></p>
+<pre><code class="lang-csharp">var settings = configuration.GetSection(&quot;AppSettings&quot;).Get&lt;AppSettings&gt;();
+</code></pre>
+<p>✅ <strong>Source Generator-Based:</strong></p>
+<pre><code class="lang-csharp">// Use ConfigurationBinder source generator (NET 8+)
+var settings = configuration.GetSection(&quot;AppSettings&quot;).Get&lt;AppSettings&gt;(
+    options =&gt; options.BindNonPublicProperties = false);
+
+// Or bind manually
+var settings = new AppSettings
+{
+    ConnectionString = configuration[&quot;AppSettings:ConnectionString&quot;],
+    MaxRetries = int.Parse(configuration[&quot;AppSettings:MaxRetries&quot;]),
+    Timeout = TimeSpan.Parse(configuration[&quot;AppSettings:Timeout&quot;])
+};
+</code></pre>
+<h2 id="source-generator-based-serialization">Source Generator-Based Serialization</h2>
+<h3 id="json-serialization-context">JSON Serialization Context</h3>
+<p>Complete example with multiple types:</p>
+<pre><code class="lang-csharp">using System.Text.Json.Serialization;
+
+// Domain models
+public record User(int Id, string Name, string Email);
+public record Product(int Id, string Name, decimal Price);
+public record Order(int Id, int UserId, List&lt;int&gt; ProductIds);
+
+// API response types
+public record ApiResponse&lt;T&gt;(bool Success, T? Data, string? Error);
+public record PaginatedResponse&lt;T&gt;(List&lt;T&gt; Items, int Total, int Page, int PageSize);
+
+// Single source generation context for entire application
+[JsonSerializable(typeof(User))]
+[JsonSerializable(typeof(Product))]
+[JsonSerializable(typeof(Order))]
+[JsonSerializable(typeof(List&lt;User&gt;))]
+[JsonSerializable(typeof(List&lt;Product&gt;))]
+[JsonSerializable(typeof(List&lt;Order&gt;))]
+[JsonSerializable(typeof(ApiResponse&lt;User&gt;))]
+[JsonSerializable(typeof(ApiResponse&lt;Product&gt;))]
+[JsonSerializable(typeof(ApiResponse&lt;Order&gt;))]
+[JsonSerializable(typeof(PaginatedResponse&lt;User&gt;))]
+[JsonSerializable(typeof(PaginatedResponse&lt;Product&gt;))]
+[JsonSerializable(typeof(Dictionary&lt;string, string&gt;))]
+[JsonSourceGenerationOptions(
+    WriteIndented = true,
+    PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase,
+    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+    GenerationMode = JsonSourceGenerationMode.Metadata | JsonSourceGenerationMode.Serialization)]
+internal partial class AppJsonContext : JsonSerializerContext
+{
+}
+
+// Usage in application
+public class UserService
+{
+    private readonly HttpClient _httpClient;
+
+    public UserService(HttpClient httpClient)
+    {
+        _httpClient = httpClient;
+    }
+
+    public async Task&lt;User?&gt; GetUserAsync(int id)
+    {
+        var response = await _httpClient.GetStringAsync($&quot;/api/users/{id}&quot;);
+        return JsonSerializer.Deserialize(response, AppJsonContext.Default.User);
+    }
+
+    public async Task&lt;List&lt;User&gt;&gt; GetUsersAsync()
+    {
+        var response = await _httpClient.GetStringAsync(&quot;/api/users&quot;);
+        return JsonSerializer.Deserialize(response, AppJsonContext.Default.ListUser)
+            ?? new List&lt;User&gt;();
+    }
+
+    public async Task CreateUserAsync(User user)
+    {
+        var json = JsonSerializer.Serialize(user, AppJsonContext.Default.User);
+        var content = new StringContent(json, Encoding.UTF8, &quot;application/json&quot;);
+        await _httpClient.PostAsync(&quot;/api/users&quot;, content);
+    }
+}
+</code></pre>
+<h3 id="aspnet-core-integration">ASP.NET Core Integration</h3>
+<pre><code class="lang-csharp">// Program.cs
+var builder = WebApplication.CreateBuilder(args);
+
+// Configure JSON options with source generation
+builder.Services.ConfigureHttpJsonOptions(options =&gt;
+{
+    options.SerializerOptions.TypeInfoResolverChain.Insert(0, AppJsonContext.Default);
+});
+
+builder.Services.AddControllers()
+    .AddJsonOptions(options =&gt;
+    {
+        options.JsonSerializerOptions.TypeInfoResolverChain.Insert(0, AppJsonContext.Default);
+    });
+
+var app = builder.Build();
+app.MapControllers();
+app.Run();
+
+// Controller automatically uses the context
+[ApiController]
+[Route(&quot;api/[controller]&quot;)]
+public class UsersController : ControllerBase
+{
+    [HttpGet(&quot;{id}&quot;)]
+    public ActionResult&lt;User&gt; GetUser(int id)
+    {
+        // Serialization uses AppJsonContext automatically
+        return Ok(new User(id, &quot;John Doe&quot;, &quot;john@example.com&quot;));
+    }
+}
+</code></pre>
+<h2 id="build-configuration">Build Configuration</h2>
+<h3 id="project-file-configuration">Project File Configuration</h3>
+<p>Complete <code>.csproj</code> with all AOT options:</p>
+<pre><code class="lang-xml">&lt;Project Sdk=&quot;Microsoft.NET.Sdk&quot;&gt;
+  &lt;PropertyGroup&gt;
+    &lt;OutputType&gt;Exe&lt;/OutputType&gt;
+    &lt;TargetFramework&gt;net8.0&lt;/TargetFramework&gt;
+    &lt;Nullable&gt;enable&lt;/Nullable&gt;
+    &lt;ImplicitUsings&gt;enable&lt;/ImplicitUsings&gt;
+
+    &lt;!-- Native AOT Configuration --&gt;
+    &lt;PublishAot&gt;true&lt;/PublishAot&gt;
+
+    &lt;!-- Trimming Options --&gt;
+    &lt;PublishTrimmed&gt;true&lt;/PublishTrimmed&gt;
+    &lt;TrimMode&gt;full&lt;/TrimMode&gt;
+
+    &lt;!-- Analyzers --&gt;
+    &lt;EnableTrimAnalyzer&gt;true&lt;/EnableTrimAnalyzer&gt;
+    &lt;EnableSingleFileAnalyzer&gt;true&lt;/EnableSingleFileAnalyzer&gt;
+    &lt;EnableAotAnalyzer&gt;true&lt;/EnableAotAnalyzer&gt;
+
+    &lt;!-- Optimization --&gt;
+    &lt;IlcOptimizationPreference&gt;Speed&lt;/IlcOptimizationPreference&gt;
+    &lt;IlcInstructionSet&gt;native&lt;/IlcInstructionSet&gt;
+
+    &lt;!-- Reduce size (optional) --&gt;
+    &lt;IlcGenerateStackTraceData&gt;false&lt;/IlcGenerateStackTraceData&gt;
+    &lt;IlcFoldIdenticalMethodBodies&gt;true&lt;/IlcFoldIdenticalMethodBodies&gt;
+
+    &lt;!-- Globalization --&gt;
+    &lt;InvariantGlobalization&gt;false&lt;/InvariantGlobalization&gt;
+
+    &lt;!-- Single file --&gt;
+    &lt;PublishSingleFile&gt;true&lt;/PublishSingleFile&gt;
+    &lt;SelfContained&gt;true&lt;/SelfContained&gt;
+  &lt;/PropertyGroup&gt;
+
+  &lt;!-- AOT-compatible packages --&gt;
+  &lt;ItemGroup&gt;
+    &lt;PackageReference Include=&quot;Microsoft.Extensions.Hosting&quot; Version=&quot;8.0.0&quot; /&gt;
+    &lt;PackageReference Include=&quot;Microsoft.Extensions.Http&quot; Version=&quot;8.0.0&quot; /&gt;
+    &lt;PackageReference Include=&quot;System.Text.Json&quot; Version=&quot;8.0.0&quot; /&gt;
+  &lt;/ItemGroup&gt;
+
+  &lt;!-- Trim warnings as errors (strict mode) --&gt;
+  &lt;PropertyGroup Condition=&quot;'$(Configuration)' == 'Release'&quot;&gt;
+    &lt;TrimmerSingleWarn&gt;false&lt;/TrimmerSingleWarn&gt;
+    &lt;WarningsAsErrors&gt;$(WarningsAsErrors);IL2026;IL2087;IL2091&lt;/WarningsAsErrors&gt;
+  &lt;/PropertyGroup&gt;
+&lt;/Project&gt;
+</code></pre>
+<h3 id="build-scripts">Build Scripts</h3>
+<p><strong>build-aot.sh</strong> (Linux/macOS):</p>
+<pre><code class="lang-bash">#!/bin/bash
+set -e
+
+echo &quot;Building Native AOT for multiple platforms...&quot;
+
+# Clean previous builds
+dotnet clean -c Release
+
+# Build for Linux x64
+echo &quot;Building for linux-x64...&quot;
+dotnet publish -c Release -r linux-x64 --self-contained \
+  -p:PublishAot=true \
+  -p:StripSymbols=true \
+  -o ./publish/linux-x64
+
+# Build for Windows x64
+echo &quot;Building for win-x64...&quot;
+dotnet publish -c Release -r win-x64 --self-contained \
+  -p:PublishAot=true \
+  -o ./publish/win-x64
+
+# Build for macOS ARM64
+echo &quot;Building for osx-arm64...&quot;
+dotnet publish -c Release -r osx-arm64 --self-contained \
+  -p:PublishAot=true \
+  -o ./publish/osx-arm64
+
+# Display sizes
+echo &quot;&quot;
+echo &quot;Build sizes:&quot;
+du -h ./publish/*/AdvancedConcepts*
+
+echo &quot;&quot;
+echo &quot;Build complete!&quot;
+</code></pre>
+<p><strong>build-aot.ps1</strong> (Windows):</p>
+<pre><code class="lang-powershell">Write-Host &quot;Building Native AOT for multiple platforms...&quot; -ForegroundColor Green
+
+# Clean previous builds
+dotnet clean -c Release
+
+# Build for Windows x64
+Write-Host &quot;Building for win-x64...&quot; -ForegroundColor Cyan
+dotnet publish -c Release -r win-x64 --self-contained `
+  -p:PublishAot=true `
+  -p:StripSymbols=true `
+  -o ./publish/win-x64
+
+# Build for Linux x64 (cross-compile)
+Write-Host &quot;Building for linux-x64...&quot; -ForegroundColor Cyan
+dotnet publish -c Release -r linux-x64 --self-contained `
+  -p:PublishAot=true `
+  -o ./publish/linux-x64
+
+# Display sizes
+Write-Host &quot;`nBuild sizes:&quot; -ForegroundColor Green
+Get-ChildItem ./publish/*/AdvancedConcepts* | ForEach-Object {
+    &quot;{0:N2} MB - {1}&quot; -f ($_.Length / 1MB), $_.FullName
+}
+
+Write-Host &quot;`nBuild complete!&quot; -ForegroundColor Green
+</code></pre>
+<h2 id="performance-targets">Performance Targets</h2>
+<h3 id="startup-time-50ms">Startup Time: &lt;50ms</h3>
+<p><strong>Measure startup time:</strong></p>
+<pre><code class="lang-csharp">using System.Diagnostics;
+
+public class Program
+{
+    private static readonly Stopwatch StartupTimer = Stopwatch.StartNew();
+
+    public static void Main(string[] args)
+    {
+        // Application initialization
+        var builder = WebApplication.CreateBuilder(args);
+        var app = builder.Build();
+
+        app.MapGet(&quot;/&quot;, () =&gt; &quot;Hello World&quot;);
+
+        StartupTimer.Stop();
+        Console.WriteLine($&quot;Startup time: {StartupTimer.ElapsedMilliseconds}ms&quot;);
+
+        app.Run();
+    }
+}
+</code></pre>
+<p><strong>Optimization techniques:</strong></p>
+<ol>
+<li>Minimize DI container registrations</li>
+<li>Use source generators instead of reflection</li>
+<li>Lazy-load non-critical services</li>
+<li>Defer expensive initialization to background tasks</li>
+</ol>
+<h3 id="memory-footprint-30mb">Memory Footprint: &lt;30MB</h3>
+<p><strong>Measure memory usage:</strong></p>
+<pre><code class="lang-bash"># Linux
+ps aux | grep AdvancedConcepts
+
+# Windows
+Get-Process AdvancedConcepts | Select-Object WorkingSet64
+
+# Cross-platform in code
+var process = Process.GetCurrentProcess();
+Console.WriteLine($&quot;Memory: {process.WorkingSet64 / 1024 / 1024} MB&quot;);
+</code></pre>
+<p><strong>Optimization techniques:</strong></p>
+<ol>
+<li>Enable aggressive trimming</li>
+<li>Disable stack trace data in production</li>
+<li>Use <code>ArrayPool&lt;T&gt;</code> and <code>MemoryPool&lt;T&gt;</code></li>
+<li>Implement proper <code>IDisposable</code> patterns</li>
+</ol>
+<h3 id="binary-size">Binary Size</h3>
+<p>Typical sizes with Native AOT:</p>
+<table>
+<thead>
+<tr>
+<th>Platform</th>
+<th>Size</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>linux-x64</td>
+<td>8-12 MB</td>
+<td>With trimming and compression</td>
+</tr>
+<tr>
+<td>win-x64</td>
+<td>10-15 MB</td>
+<td>Windows executable overhead</td>
+</tr>
+<tr>
+<td>osx-arm64</td>
+<td>8-12 MB</td>
+<td>Apple Silicon optimized</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Size optimization:</strong></p>
+<pre><code class="lang-xml">&lt;PropertyGroup&gt;
+  &lt;!-- Aggressive size reduction --&gt;
+  &lt;IlcGenerateStackTraceData&gt;false&lt;/IlcGenerateStackTraceData&gt;
+  &lt;IlcOptimizationPreference&gt;Size&lt;/IlcOptimizationPreference&gt;
+  &lt;IlcFoldIdenticalMethodBodies&gt;true&lt;/IlcFoldIdenticalMethodBodies&gt;
+  &lt;DebuggerSupport&gt;false&lt;/DebuggerSupport&gt;
+  &lt;EnableUnsafeBinaryFormatterSerialization&gt;false&lt;/EnableUnsafeBinaryFormatterSerialization&gt;
+  &lt;EventSourceSupport&gt;false&lt;/EventSourceSupport&gt;
+  &lt;UseSystemResourceKeys&gt;true&lt;/UseSystemResourceKeys&gt;
+  &lt;InvariantGlobalization&gt;true&lt;/InvariantGlobalization&gt;
+&lt;/PropertyGroup&gt;
+</code></pre>
+<h2 id="compatibility-checklist">Compatibility Checklist</h2>
+<h3 id="-aot-compatible-patterns">✅ AOT-Compatible Patterns</h3>
+<ul>
+<li>[x] Direct type instantiation (<code>new T()</code> with constraints)</li>
+<li>[x] Interface-based polymorphism</li>
+<li>[x] Generic methods with constraints</li>
+<li>[x] LINQ (most operations)</li>
+<li>[x] Async/await</li>
+<li>[x] Source generators</li>
+<li>[x] Static methods and properties</li>
+<li>[x] Value types (structs)</li>
+<li>[x] Records</li>
+<li>[x] Pattern matching</li>
+</ul>
+<h3 id="-aot-incompatible-patterns">❌ AOT-Incompatible Patterns</h3>
+<ul>
+<li>[ ] <code>Activator.CreateInstance(Type)</code></li>
+<li>[ ] <code>Assembly.Load</code> / <code>Assembly.LoadFrom</code></li>
+<li>[ ] Dynamic code generation (Emit, DynamicMethod)</li>
+<li>[ ] Expression tree compilation</li>
+<li>[ ] MakeGenericType / MakeGenericMethod</li>
+<li>[ ] Type.GetType(string)</li>
+<li>[ ] Reflection.Emit</li>
+<li>[ ] COM interop</li>
+<li>[ ] Built-in serialization (BinaryFormatter, SoapFormatter)</li>
+</ul>
+<h3 id="package-compatibility">Package Compatibility</h3>
+<p><strong>AOT-Compatible:</strong></p>
+<ul>
+<li>✅ System.Text.Json (with source generators)</li>
+<li>✅ Microsoft.Extensions.* (most packages)</li>
+<li>✅ Dapper</li>
+<li>✅ NLog</li>
+<li>✅ Serilog</li>
+<li>✅ BenchmarkDotNet (with limitations)</li>
+</ul>
+<p><strong>Not AOT-Compatible:</strong></p>
+<ul>
+<li>❌ Entity Framework Core (full version)</li>
+<li>❌ Newtonsoft.Json</li>
+<li>❌ AutoMapper (runtime version)</li>
+<li>❌ Moq</li>
+<li>❌ Castle.DynamicProxy</li>
+</ul>
+<p><strong>Partially Compatible:</strong></p>
+<ul>
+<li>⚠️ ASP.NET Core (Minimal APIs: yes, MVC: limited)</li>
+<li>⚠️ gRPC (with source generation)</li>
+<li>⚠️ SignalR (limited)</li>
+</ul>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<h3 id="common-issues">Common Issues</h3>
+<h4 id="issue-trimwarning-il2026">Issue: TrimWarning IL2026</h4>
+<p><strong>Error:</strong></p>
+<pre><code>warning IL2026: Using member 'JsonSerializer.Deserialize&lt;T&gt;(String, JsonSerializerOptions)'
+which has 'RequiresUnreferencedCodeAttribute' can break functionality when trimming.
+</code></pre>
+<p><strong>Solution:</strong>
+Use source-generated serialization context:</p>
+<pre><code class="lang-csharp">// Instead of:
+var obj = JsonSerializer.Deserialize&lt;MyClass&gt;(json);
+
+// Use:
+var obj = JsonSerializer.Deserialize(json, AppJsonContext.Default.MyClass);
+</code></pre>
+<h4 id="issue-runtime-typeloadexception">Issue: Runtime TypeLoadException</h4>
+<p><strong>Error:</strong></p>
+<pre><code>System.TypeLoadException: Could not load type 'MyNamespace.MyClass'
+</code></pre>
+<p><strong>Solution:</strong>
+Add type preservation:</p>
+<pre><code class="lang-csharp">[DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(MyClass))]
+</code></pre>
+<h4 id="issue-method-not-found-at-runtime">Issue: Method Not Found at Runtime</h4>
+<p><strong>Error:</strong></p>
+<pre><code>System.MissingMethodException: Method not found: 'MyMethod'
+</code></pre>
+<p><strong>Solution:</strong>
+Ensure method is referenced or preserved:</p>
+<pre><code class="lang-csharp">[DynamicDependency(nameof(MyMethod), typeof(MyClass))]
+</code></pre>
+<h4 id="issue-large-binary-size">Issue: Large Binary Size</h4>
+<p><strong>Problem:</strong> Published binary is &gt;100MB</p>
+<p><strong>Solution:</strong></p>
+<ol>
+<li>Enable trimming: <code>&lt;PublishTrimmed&gt;true&lt;/PublishTrimmed&gt;</code></li>
+<li>Use invariant globalization if possible</li>
+<li>Disable debug symbols: <code>&lt;DebugType&gt;None&lt;/DebugType&gt;</code></li>
+<li>Review dependencies - remove unused packages</li>
+</ol>
+<h4 id="issue-slow-startup-despite-aot">Issue: Slow Startup Despite AOT</h4>
+<p><strong>Problem:</strong> Startup time &gt;100ms</p>
+<p><strong>Solution:</strong></p>
+<ol>
+<li>Profile with <code>dotnet-trace</code>: <code>dotnet trace collect --name AdvancedConcepts</code></li>
+<li>Lazy-load services</li>
+<li>Minimize synchronous initialization</li>
+<li>Use <code>IHostedService</code> for background startup tasks</li>
+</ol>
+<h3 id="debugging-aot-applications">Debugging AOT Applications</h3>
+<pre><code class="lang-bash"># Enable debugging symbols
+dotnet publish -c Release -r linux-x64 -p:PublishAot=true -p:StripSymbols=false
+
+# Debug with GDB (Linux)
+gdb ./AdvancedConcepts
+(gdb) run
+(gdb) backtrace
+
+# Debug with LLDB (macOS)
+lldb ./AdvancedConcepts
+(lldb) run
+(lldb) bt
+
+# Performance profiling
+dotnet-trace collect --name AdvancedConcepts --providers Microsoft-Windows-DotNETRuntime
+
+# Memory profiling
+dotnet-gcdump collect -p &lt;PID&gt;
+</code></pre>
+<h2 id="best-practices">Best Practices</h2>
+<ol>
+<li><strong>Start Early</strong>: Enable AOT analyzers from the beginning</li>
+<li><strong>Incremental Migration</strong>: Convert one module at a time</li>
+<li><strong>Test Thoroughly</strong>: AOT can expose runtime issues</li>
+<li><strong>Use Source Generators</strong>: Prefer compile-time over runtime generation</li>
+<li><strong>Explicit Registration</strong>: Avoid assembly scanning and auto-discovery</li>
+<li><strong>Measure Performance</strong>: Track startup time and memory usage</li>
+<li><strong>CI/CD Integration</strong>: Include AOT builds in pipelines</li>
+<li><strong>Documentation</strong>: Document AOT-incompatible APIs</li>
+</ol>
+<h2 id="resources">Resources</h2>
+<ul>
+<li><a href="https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/">Native AOT Deployment</a></li>
+<li><a href="https://learn.microsoft.com/en-us/dotnet/core/deploying/trimming/prepare-libraries-for-trimming">Prepare .NET Libraries for Trimming</a></li>
+<li><a href="https://learn.microsoft.com/en-us/dotnet/core/deploying/trimming/fixing-warnings">Introduction to AOT Warnings</a></li>
+<li><a href="https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/source-generation">System.Text.Json Source Generation</a></li>
+</ul>
+<hr>
+<p><strong>Last Updated:</strong> 2025-12-01
+<strong>Version:</strong> 1.0</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/guides/NATIVE_AOT.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

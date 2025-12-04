@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>ADR-0015: StyleCop and Analyzers for Code Quality | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="ADR-0015: StyleCop and Analyzers for Code Quality | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/01-architecture-decision-records/0015-stylecop-code-quality.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="adr-0015-stylecop-and-analyzers-for-code-quality">ADR-0015: StyleCop and Analyzers for Code Quality</h1>
+
+<p><strong>Status:</strong> Accepted
+<strong>Date:</strong> 2025-12-02
+<strong>Deciders:</strong> Architecture Team
+<strong>Technical Story:</strong> Code quality and consistency enforcement</p>
+<h2 id="context">Context</h2>
+<p>C# projects benefit from automated code quality checks for:</p>
+<ul>
+<li>Consistent code style across team</li>
+<li>Early detection of potential bugs</li>
+<li>Best practice enforcement</li>
+<li>Reduced code review time</li>
+</ul>
+<p>Without analyzers:</p>
+<ul>
+<li>Inconsistent naming conventions</li>
+<li>Style debates in code reviews</li>
+<li>Bugs slip through</li>
+<li>Lower code quality</li>
+</ul>
+<h2 id="decision">Decision</h2>
+<p>Enable <strong>StyleCop.Analyzers</strong> and <strong>.NET analyzers</strong> in all projects for automated code quality enforcement.</p>
+<p>Configuration:</p>
+<ul>
+<li>StyleCop.Analyzers 1.2.0-beta</li>
+<li>.NET analyzers enabled by default (.NET 8)</li>
+<li>Warnings as informational (not blocking)</li>
+<li>Team can adjust rules via <code>.editorconfig</code></li>
+</ul>
+<h2 id="consequences">Consequences</h2>
+<h3 id="positive">Positive</h3>
+<ul>
+<li><strong>Consistent Style</strong>: Enforced naming conventions (PascalCase, camelCase)</li>
+<li><strong>Documentation</strong>: Encourages XML documentation comments</li>
+<li><strong>Best Practices</strong>: Detects common mistakes (async/await, null checks)</li>
+<li><strong>Automatic</strong>: IDE shows warnings in real-time</li>
+<li><strong>Teachable</strong>: New developers learn best practices</li>
+</ul>
+<h3 id="negative">Negative</h3>
+<ul>
+<li><strong>Noise</strong>: 100+ warnings in new projects</li>
+<li><strong>Opinionated</strong>: Some rules may not fit team preferences</li>
+<li><strong>Refactoring</strong>: Old code generates many warnings</li>
+</ul>
+<h3 id="neutral">Neutral</h3>
+<ul>
+<li><strong>Configuration</strong>: Requires <code>.editorconfig</code> for customization</li>
+</ul>
+<h2 id="alternatives-considered">Alternatives Considered</h2>
+<h3 id="alternative-1-no-analyzers">Alternative 1: No Analyzers</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Zero setup</li>
+<li>No warnings</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li>Inconsistent code style</li>
+<li>More bugs</li>
+<li>Lower quality</li>
+</ul>
+<p><strong>Why rejected:</strong> Code quality matters.</p>
+<h3 id="alternative-2-resharperrider-only">Alternative 2: ReSharper/Rider Only</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Powerful refactoring</li>
+<li>Rich inspections</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li>IDE-specific (doesn't work in VS Code)</li>
+<li>Not in CI/CD</li>
+<li>Commercial license ($150/year)</li>
+</ul>
+<p><strong>Why rejected:</strong> Analyzers work everywhere (VS, Rider, VS Code, CI/CD).</p>
+<h2 id="related-links">Related Links</h2>
+<ul>
+<li><a href="https://github.com/DotNetAnalyzers/StyleCopAnalyzers">StyleCop.Analyzers</a></li>
+<li><a href="https://learn.microsoft.com/dotnet/fundamentals/code-analysis/overview">.NET Code Analysis</a></li>
+</ul>
+<h2 id="notes">Notes</h2>
+<p>Common warnings:</p>
+<ul>
+<li>SA1633: Missing file header (can disable)</li>
+<li>SA1200: Using directives placement</li>
+<li>MA0004: ConfigureAwait(false) usage</li>
+</ul>
+<p>Disable specific rules in <code>.editorconfig</code>:</p>
+<pre><code class="lang-ini">[*.cs]
+dotnet_diagnostic.SA1633.severity = none
+</code></pre>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/01-architecture-decision-records/0015-stylecop-code-quality.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

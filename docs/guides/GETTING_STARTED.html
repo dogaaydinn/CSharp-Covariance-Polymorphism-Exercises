@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Getting Started with Advanced C# Concepts | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Getting Started with Advanced C# Concepts | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/guides/GETTING_STARTED.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="getting-started-with-advanced-c-concepts">Getting Started with Advanced C# Concepts</h1>
+
+<p>Welcome to Advanced C# Concepts! This guide will help you get up and running quickly.</p>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ul>
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#quick-start">Quick Start</a></li>
+<li><a href="#project-structure">Project Structure</a></li>
+<li><a href="#running-examples">Running Examples</a></li>
+<li><a href="#running-tests">Running Tests</a></li>
+<li><a href="#running-benchmarks">Running Benchmarks</a></li>
+<li><a href="#using-docker">Using Docker</a></li>
+<li><a href="#next-steps">Next Steps</a></li>
+</ul>
+<h2 id="prerequisites">Prerequisites</h2>
+<h3 id="required">Required</h3>
+<ul>
+<li><p><strong>.NET 8 SDK</strong> (8.0.201 or later)</p>
+<ul>
+<li>Download: <a href="https://dotnet.microsoft.com/download/dotnet/8.0">https://dotnet.microsoft.com/download/dotnet/8.0</a></li>
+<li>Verify: <code>dotnet --version</code></li>
+</ul>
+</li>
+<li><p><strong>Git</strong> for version control</p>
+<ul>
+<li>Download: <a href="https://git-scm.com/downloads">https://git-scm.com/downloads</a></li>
+<li>Verify: <code>git --version</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="recommended">Recommended</h3>
+<ul>
+<li><p><strong>IDE:</strong> One of the following</p>
+<ul>
+<li><a href="https://visualstudio.microsoft.com/">Visual Studio 2022</a> (Community, Professional, or Enterprise)</li>
+<li><a href="https://www.jetbrains.com/rider/">JetBrains Rider</a></li>
+<li><a href="https://code.visualstudio.com/">Visual Studio Code</a> with C# extension</li>
+</ul>
+</li>
+<li><p><strong>Docker Desktop</strong> (optional, for observability stack)</p>
+<ul>
+<li>Download: <a href="https://www.docker.com/products/docker-desktop">https://www.docker.com/products/docker-desktop</a></li>
+<li>Verify: <code>docker --version</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="installation">Installation</h2>
+<h3 id="1-clone-the-repository">1. Clone the Repository</h3>
+<pre><code class="lang-bash"># HTTPS
+git clone https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises.git
+
+# Or SSH
+git clone git@github.com:dogaaydinn/CSharp-Covariance-Polymorphism-Exercises.git
+
+# Navigate to project directory
+cd CSharp-Covariance-Polymorphism-Exercises
+</code></pre>
+<h3 id="2-restore-dependencies">2. Restore Dependencies</h3>
+<pre><code class="lang-bash"># Restore NuGet packages
+dotnet restore
+
+# This downloads all required packages (may take a few minutes)
+</code></pre>
+<h3 id="3-build-the-solution">3. Build the Solution</h3>
+<pre><code class="lang-bash"># Build in Debug mode
+dotnet build
+
+# Or build in Release mode
+dotnet build --configuration Release
+</code></pre>
+<p>Expected output:</p>
+<pre><code>Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+</code></pre>
+<h3 id="4-verify-installation">4. Verify Installation</h3>
+<pre><code class="lang-bash"># Run tests to verify everything works
+dotnet test
+
+# Expected: All tests should pass
+</code></pre>
+<h2 id="quick-start">Quick Start</h2>
+<h3 id="run-your-first-example">Run Your First Example</h3>
+<pre><code class="lang-bash"># Run the main application
+dotnet run --project src/AdvancedConcepts.Core
+</code></pre>
+<p>This will execute all example categories in sequence:</p>
+<ol>
+<li>Beginner examples (Polymorphism basics)</li>
+<li>Intermediate examples (Boxing, Covariance, Contravariance)</li>
+<li>Advanced examples (Pattern matching, LINQ, async/await)</li>
+<li>Enterprise patterns (SOLID, Polly, FluentValidation)</li>
+</ol>
+<h3 id="explore-specific-topics">Explore Specific Topics</h3>
+<p>The project is organized into progressive difficulty levels:</p>
+<h4 id="beginner-level">Beginner Level</h4>
+<pre><code class="lang-bash"># Location: src/AdvancedConcepts.Core/Beginner/
+</code></pre>
+<ul>
+<li><strong>PolymorphismBasics.cs</strong> - Virtual methods, method overriding</li>
+<li><strong>InheritanceExamples.cs</strong> - Class hierarchies</li>
+<li><strong>InterfaceBasics.cs</strong> - Interface implementation</li>
+</ul>
+<h4 id="intermediate-level">Intermediate Level</h4>
+<pre><code class="lang-bash"># Location: src/AdvancedConcepts.Core/Intermediate/
+</code></pre>
+<ul>
+<li><strong>BoxingUnboxingExamples.cs</strong> - Value/reference type conversion</li>
+<li><strong>CovarianceExamples.cs</strong> - Covariant generic interfaces</li>
+<li><strong>ContravarianceExamples.cs</strong> - Contravariant generic interfaces</li>
+<li><strong>GenericVarianceExamples.cs</strong> - Combined variance scenarios</li>
+</ul>
+<h4 id="advanced-level">Advanced Level</h4>
+<pre><code class="lang-bash"># Location: src/AdvancedConcepts.Core/Advanced/
+</code></pre>
+<ul>
+<li><strong>PatternMatchingExamples.cs</strong> - Modern C# pattern matching</li>
+<li><strong>LinqAdvancedExamples.cs</strong> - Advanced LINQ operations</li>
+<li><strong>AsyncAwaitExamples.cs</strong> - Asynchronous programming</li>
+<li><strong>PerformancePatterns.cs</strong> - Span<t>, Memory<t>, ArrayPool<t></t></t></t></li>
+<li><strong>DIExamples.cs</strong> - Dependency injection patterns</li>
+<li><strong>PollyExamples.cs</strong> - Resilience and fault handling</li>
+<li><strong>ValidationExamples.cs</strong> - FluentValidation usage</li>
+<li><strong>ResultPattern.cs</strong> - Railway-oriented programming</li>
+<li><strong>EnhancedSerilogExamples.cs</strong> - Structured logging</li>
+<li><strong>OpenTelemetryExamples.cs</strong> - Distributed tracing &amp; metrics</li>
+<li><strong>HealthCheckExamples.cs</strong> - Application health monitoring</li>
+</ul>
+<h2 id="project-structure">Project Structure</h2>
+<pre><code>CSharp-Covariance-Polymorphism-Exercises/
+├── src/
+│   └── AdvancedConcepts.Core/          # Main application
+│       ├── Beginner/                    # Beginner examples
+│       ├── Intermediate/                # Intermediate examples
+│       ├── Advanced/                    # Advanced examples
+│       └── Program.cs                   # Entry point
+├── tests/
+│   ├── AdvancedConcepts.UnitTests/     # 119 unit tests
+│   └── AdvancedConcepts.IntegrationTests/  # 9 integration tests
+├── benchmarks/
+│   └── AdvancedConcepts.Benchmarks/    # Performance benchmarks
+├── docs/
+│   ├── architecture/                    # Architecture documentation
+│   ├── guides/                          # User guides
+│   └── security/                        # Security documentation
+├── .github/
+│   └── workflows/                       # CI/CD pipelines
+├── docker-compose.yml                   # Observability stack
+├── Dockerfile                           # Container definition
+└── README.md                            # Project overview
+</code></pre>
+<h2 id="running-examples">Running Examples</h2>
+<h3 id="run-all-examples">Run All Examples</h3>
+<pre><code class="lang-bash">dotnet run --project src/AdvancedConcepts.Core
+</code></pre>
+<h3 id="run-specific-examples-modify-programcs">Run Specific Examples (modify Program.cs)</h3>
+<p>Edit <code>src/AdvancedConcepts.Core/Program.cs</code> to focus on specific examples:</p>
+<pre><code class="lang-csharp">// Focus on just polymorphism
+var polymorphism = new PolymorphismBasics();
+polymorphism.Demonstrate();
+
+// Focus on covariance
+var covariance = new CovarianceExamples();
+covariance.DemonstrateCovariance();
+</code></pre>
+<h3 id="with-logging">With Logging</h3>
+<pre><code class="lang-bash"># Run with verbose logging
+dotnet run --project src/AdvancedConcepts.Core --verbosity detailed
+</code></pre>
+<h2 id="running-tests">Running Tests</h2>
+<h3 id="run-all-tests">Run All Tests</h3>
+<pre><code class="lang-bash"># Run all tests (unit + integration)
+dotnet test
+
+# Run with verbose output
+dotnet test --verbosity normal
+</code></pre>
+<h3 id="run-specific-test-projects">Run Specific Test Projects</h3>
+<pre><code class="lang-bash"># Unit tests only
+dotnet test tests/AdvancedConcepts.UnitTests
+
+# Integration tests only
+dotnet test tests/AdvancedConcepts.IntegrationTests
+</code></pre>
+<h3 id="run-tests-with-coverage">Run Tests with Coverage</h3>
+<pre><code class="lang-bash"># Generate code coverage report
+dotnet test --collect:&quot;XPlat Code Coverage&quot;
+
+# Coverage report will be in TestResults/ directory
+</code></pre>
+<h3 id="run-tests-in-watch-mode">Run Tests in Watch Mode</h3>
+<pre><code class="lang-bash"># Auto-run tests on file changes
+dotnet watch test --project tests/AdvancedConcepts.UnitTests
+</code></pre>
+<h3 id="run-specific-test-classes">Run Specific Test Classes</h3>
+<pre><code class="lang-bash"># Filter by test class name
+dotnet test --filter &quot;FullyQualifiedName~BoxingUnboxing&quot;
+
+# Filter by test method name
+dotnet test --filter &quot;Name~WhenGiven&quot;
+</code></pre>
+<h2 id="running-benchmarks">Running Benchmarks</h2>
+<h3 id="prerequisites-for-benchmarks">Prerequisites for Benchmarks</h3>
+<ul>
+<li>Build in <strong>Release</strong> mode (required for accurate measurements)</li>
+<li>Close other applications to minimize interference</li>
+<li>Disable power-saving mode</li>
+<li>Run multiple times to establish baseline</li>
+</ul>
+<h3 id="run-all-benchmarks">Run All Benchmarks</h3>
+<pre><code class="lang-bash">dotnet run --project benchmarks/AdvancedConcepts.Benchmarks --configuration Release
+</code></pre>
+<h3 id="run-specific-benchmark-categories">Run Specific Benchmark Categories</h3>
+<pre><code class="lang-bash"># Boxing benchmarks only
+dotnet run --project benchmarks/AdvancedConcepts.Benchmarks -c Release -- --filter *Boxing*
+
+# LINQ benchmarks only
+dotnet run --project benchmarks/AdvancedConcepts.Benchmarks -c Release -- --filter *Linq*
+
+# Span benchmarks only
+dotnet run --project benchmarks/AdvancedConcepts.Benchmarks -c Release -- --filter *Span*
+</code></pre>
+<h3 id="view-benchmark-results">View Benchmark Results</h3>
+<p>Results are saved in <code>BenchmarkDotNet.Artifacts/results/</code>:</p>
+<ul>
+<li><strong>HTML report:</strong> <code>results-*.html</code> (open in browser)</li>
+<li><strong>Markdown report:</strong> <code>*-report.md</code></li>
+<li><strong>CSV data:</strong> <code>*-report.csv</code></li>
+</ul>
+<h2 id="using-docker">Using Docker</h2>
+<h3 id="start-observability-stack">Start Observability Stack</h3>
+<pre><code class="lang-bash"># Start Seq (logs), Prometheus (metrics), Grafana (dashboards)
+docker-compose up -d
+</code></pre>
+<h3 id="access-services">Access Services</h3>
+<ul>
+<li><strong>Seq (Logs):</strong> http://localhost:5342</li>
+<li><strong>Prometheus (Metrics):</strong> http://localhost:9090</li>
+<li><strong>Grafana (Dashboards):</strong> http://localhost:3000
+<ul>
+<li>Default credentials: admin/admin</li>
+</ul>
+</li>
+</ul>
+<h3 id="view-application-logs-in-seq">View Application Logs in Seq</h3>
+<ol>
+<li>Start Docker Compose: <code>docker-compose up -d</code></li>
+<li>Run application: <code>dotnet run --project src/AdvancedConcepts.Core</code></li>
+<li>Open Seq: http://localhost:5342</li>
+<li>See structured logs with queryable properties</li>
+</ol>
+<h3 id="query-metrics-in-prometheus">Query Metrics in Prometheus</h3>
+<ol>
+<li>Open Prometheus: http://localhost:9090</li>
+<li>Try queries:
+<ul>
+<li><code>http_requests_total</code> - Total HTTP requests</li>
+<li><code>request_duration_seconds</code> - Request duration histogram</li>
+<li><code>active_connections</code> - Current active connections</li>
+</ul>
+</li>
+</ol>
+<h3 id="view-dashboards-in-grafana">View Dashboards in Grafana</h3>
+<ol>
+<li>Open Grafana: http://localhost:3000</li>
+<li>Login (admin/admin)</li>
+<li>Go to Dashboards</li>
+<li>Import dashboards or create custom visualizations</li>
+</ol>
+<h3 id="stop-services">Stop Services</h3>
+<pre><code class="lang-bash"># Stop all containers
+docker-compose down
+
+# Stop and remove volumes
+docker-compose down -v
+</code></pre>
+<h2 id="ide-setup">IDE Setup</h2>
+<h3 id="visual-studio-2022">Visual Studio 2022</h3>
+<ol>
+<li>Open <code>AdvancedCsharpConcepts.sln</code></li>
+<li>Build → Build Solution (Ctrl+Shift+B)</li>
+<li>Test → Run All Tests (Ctrl+R, A)</li>
+<li>Right-click project → Set as Startup Project</li>
+<li>Press F5 to run</li>
+</ol>
+<h3 id="jetbrains-rider">JetBrains Rider</h3>
+<ol>
+<li>Open <code>AdvancedCsharpConcepts.sln</code></li>
+<li>Build → Build Solution (Ctrl+Shift+F9)</li>
+<li>Run → Run All Tests (Ctrl+T, L)</li>
+<li>Right-click project → Run (Alt+Shift+F10)</li>
+</ol>
+<h3 id="visual-studio-code">Visual Studio Code</h3>
+<ol>
+<li>Open project folder</li>
+<li>Install C# extension (ms-dotnettools.csharp)</li>
+<li>Press F5 to run</li>
+<li>View → Command Palette → &quot;.NET: Run All Tests&quot;</li>
+</ol>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<h3 id="build-errors">Build Errors</h3>
+<p><strong>Error:</strong> SDK not found</p>
+<pre><code class="lang-bash"># Solution: Install .NET 8 SDK
+# Download from https://dotnet.microsoft.com/download/dotnet/8.0
+</code></pre>
+<p><strong>Error:</strong> Restore failed</p>
+<pre><code class="lang-bash"># Solution: Clear NuGet cache and restore
+dotnet nuget locals all --clear
+dotnet restore
+</code></pre>
+<h3 id="test-failures">Test Failures</h3>
+<p><strong>Flaky integration tests:</strong></p>
+<pre><code class="lang-bash"># Solution: Re-run tests
+dotnet test --no-build
+</code></pre>
+<p><strong>Missing dependencies:</strong></p>
+<pre><code class="lang-bash"># Solution: Restore and rebuild
+dotnet restore
+dotnet build
+</code></pre>
+<h3 id="docker-issues">Docker Issues</h3>
+<p><strong>Port already in use:</strong></p>
+<pre><code class="lang-bash"># Solution: Change ports in docker-compose.yml or stop conflicting services
+# Check what's using the port:
+# Windows: netstat -ano | findstr :5342
+# Linux/Mac: lsof -i :5342
+</code></pre>
+<p><strong>Container won't start:</strong></p>
+<pre><code class="lang-bash"># Solution: Pull latest images
+docker-compose pull
+docker-compose up -d
+</code></pre>
+<h2 id="next-steps">Next Steps</h2>
+<h3 id="learning-path">Learning Path</h3>
+<ol>
+<li><p><strong>Start with Beginner examples</strong></p>
+<ul>
+<li>Understand polymorphism basics</li>
+<li>Learn inheritance patterns</li>
+<li>Master interface implementation</li>
+</ul>
+</li>
+<li><p><strong>Move to Intermediate topics</strong></p>
+<ul>
+<li>Explore boxing/unboxing</li>
+<li>Understand covariance</li>
+<li>Master contravariance</li>
+</ul>
+</li>
+<li><p><strong>Advance to Complex patterns</strong></p>
+<ul>
+<li>Modern pattern matching</li>
+<li>LINQ optimization</li>
+<li>Async/await best practices</li>
+</ul>
+</li>
+<li><p><strong>Study Enterprise patterns</strong></p>
+<ul>
+<li>SOLID principles in practice</li>
+<li>Resilience with Polly</li>
+<li>Validation with FluentValidation</li>
+<li>Result pattern (Railway-oriented programming)</li>
+</ul>
+</li>
+<li><p><strong>Master Performance</strong></p>
+<ul>
+<li>Run benchmarks</li>
+<li>Analyze memory allocation</li>
+<li>Optimize hot paths</li>
+<li>Use Span<t> and Memory<t></t></t></li>
+</ul>
+</li>
+</ol>
+<h3 id="explore-documentation">Explore Documentation</h3>
+<ul>
+<li><strong><a href="../architecture/01-architecture-decision-records/">Architecture Decision Records</a></strong> - Understand design decisions</li>
+<li><strong><a href="../architecture/02-c4-diagrams/">C4 Diagrams</a></strong> - Visualize system architecture</li>
+<li><strong><a href="../security/BEST_PRACTICES.html">Security Best Practices</a></strong> - Learn security patterns</li>
+</ul>
+<h3 id="contribute">Contribute</h3>
+<p>Want to contribute? See our <a href="../../CONTRIBUTING.html">Contributing Guide</a> for:</p>
+<ul>
+<li>Development setup</li>
+<li>Coding standards</li>
+<li>Pull request process</li>
+</ul>
+<h3 id="get-help">Get Help</h3>
+<ul>
+<li><strong><a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/discussions">GitHub Discussions</a></strong> - Ask questions</li>
+<li><strong><a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/issues">Issue Tracker</a></strong> - Report bugs</li>
+<li><strong><a href="../../SUPPORT.html">Support Guide</a></strong> - Get support</li>
+</ul>
+<h2 id="additional-resources">Additional Resources</h2>
+<h3 id="microsoft-documentation">Microsoft Documentation</h3>
+<ul>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/">C# Programming Guide</a></li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/core/whats-new/performance-improvements">.NET Performance Tips</a></li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/csharp/async">Async Programming</a></li>
+</ul>
+<h3 id="books">Books</h3>
+<ul>
+<li>&quot;C# in Depth&quot; by Jon Skeet</li>
+<li>&quot;CLR via C#&quot; by Jeffrey Richter</li>
+<li>&quot;Pro .NET Performance&quot; by Sasha Goldshtein</li>
+</ul>
+<h3 id="online-courses">Online Courses</h3>
+<ul>
+<li><a href="https://learn.microsoft.com/en-us/training/paths/get-started-c-sharp-part-1/">Microsoft Learn - C#</a></li>
+<li><a href="https://www.pluralsight.com/paths/csharp">Pluralsight - Advanced C#</a></li>
+</ul>
+<hr>
+<p><strong>Ready to dive in? Start with:</strong> <code>dotnet run --project src/AdvancedConcepts.Core</code></p>
+<p><strong>Have questions?</strong> Check our <a href="../../SUPPORT.html">Support Guide</a> or create a <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/discussions">Discussion</a></p>
+<p>Happy coding! 🚀</p>
+<hr>
+<p><strong>Last Updated:</strong> 2025-11-30
+<strong>Version:</strong> 1.0</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/guides/GETTING_STARTED.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

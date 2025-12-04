@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>15. Deploy to Kubernetes | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="15. Deploy to Kubernetes | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/decisions/0015-deploy-to-kubernetes.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="15-deploy-to-kubernetes">15. Deploy to Kubernetes</h1>
+
+<p><strong>Status:</strong> ✅ Accepted</p>
+<p><strong>Date:</strong> 2024-12-01</p>
+<p><strong>Deciders:</strong> Architecture Team, DevOps Team, SRE Team</p>
+<p><strong>Technical Story:</strong> Implementation in <code>k8s/</code> and <code>helm/</code> directories</p>
+<hr>
+<h2 id="context-and-problem-statement">Context and Problem Statement</h2>
+<p>Production microservices require:</p>
+<ul>
+<li><strong>High Availability</strong> - No single point of failure</li>
+<li><strong>Auto-Scaling</strong> - Handle traffic spikes</li>
+<li><strong>Self-Healing</strong> - Automatic restart of failed containers</li>
+<li><strong>Rolling Updates</strong> - Zero-downtime deployments</li>
+<li><strong>Service Discovery</strong> - Services find each other automatically</li>
+<li><strong>Load Balancing</strong> - Distribute traffic across instances</li>
+</ul>
+<p><strong>Docker Compose limitations:</strong></p>
+<ul>
+<li>Single host only (no clustering)</li>
+<li>No auto-scaling</li>
+<li>No self-healing</li>
+<li>Manual updates</li>
+<li>Limited load balancing</li>
+</ul>
+<p><strong>Requirements:</strong></p>
+<ul>
+<li>Container orchestration at scale</li>
+<li>Multi-node clustering</li>
+<li>Declarative configuration</li>
+<li>Rolling updates</li>
+<li>Health checks and auto-restart</li>
+<li>Industry standard</li>
+</ul>
+<hr>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li><strong>Scalability</strong> - Run 1 to 1000 instances</li>
+<li><strong>High Availability</strong> - Multi-node, multi-zone</li>
+<li><strong>Auto-Scaling</strong> - CPU/memory-based scaling</li>
+<li><strong>Self-Healing</strong> - Automatic recovery</li>
+<li><strong>Industry Standard</strong> - Kubernetes is ubiquitous</li>
+<li><strong>Cloud Native</strong> - Works on all clouds (Azure AKS, AWS EKS, GCP GKE)</li>
+</ul>
+<hr>
+<h2 id="considered-options">Considered Options</h2>
+<ul>
+<li><strong>Option 1</strong> - Kubernetes (K8s)</li>
+<li><strong>Option 2</strong> - Docker Swarm</li>
+<li><strong>Option 3</strong> - Azure Container Apps</li>
+<li><strong>Option 4</strong> - AWS ECS/Fargate</li>
+</ul>
+<hr>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p><strong>Chosen option:</strong> &quot;Kubernetes&quot;, because it's the industry-standard container orchestration platform with the largest ecosystem, cloud-agnostic deployment, and unmatched features for scaling, self-healing, and service discovery.</p>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li><strong>Cloud Agnostic</strong> - Works on Azure (AKS), AWS (EKS), GCP (GKE), on-prem</li>
+<li><strong>Auto-Scaling</strong> - Horizontal Pod Autoscaler (HPA)</li>
+<li><strong>Self-Healing</strong> - Automatic restart of failed pods</li>
+<li><strong>Rolling Updates</strong> - Zero-downtime deployments</li>
+<li><strong>Service Discovery</strong> - Built-in DNS</li>
+<li><strong>Load Balancing</strong> - Automatic distribution</li>
+<li><strong>Secrets Management</strong> - Secure credential storage</li>
+<li><strong>Helm</strong> - Package manager for Kubernetes</li>
+<li><strong>Ecosystem</strong> - Istio, Prometheus, Grafana, cert-manager, etc.</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li><strong>Complexity</strong> - Steep learning curve</li>
+<li><strong>Operational Overhead</strong> - Need K8s expertise</li>
+<li><strong>YAML Hell</strong> - Hundreds of lines of configuration</li>
+<li><strong>Cost</strong> - Control plane costs (managed K8s)</li>
+<li><strong>Overkill</strong> - For small applications</li>
+</ul>
+<hr>
+<h2 id="pros-and-cons-of-the-options">Pros and Cons of the Options</h2>
+<h3 id="kubernetes-chosen">Kubernetes (Chosen)</h3>
+<p><strong>What is Kubernetes?</strong></p>
+<p>Kubernetes (K8s) is an open-source container orchestration platform that automates deployment, scaling, and management of containerized applications.</p>
+<p><strong>Core Concepts:</strong></p>
+<pre><code>Cluster
+├── Nodes (VMs running containers)
+│   ├── Pod (smallest deployable unit)
+│   │   └── Container(s)
+│   ├── Pod
+│   └── Pod
+├── Services (stable network endpoints)
+├── Deployments (declarative updates)
+├── ConfigMaps (configuration)
+├── Secrets (sensitive data)
+└── Ingress (HTTP routing)
+</code></pre>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Declarative</strong> - Describe desired state, K8s makes it happen</li>
+<li><strong>Self-healing</strong> - Restarts failed containers automatically</li>
+<li><strong>Scaling</strong> - Manual or automatic (HPA)</li>
+<li><strong>Rolling updates</strong> - Deploy without downtime</li>
+<li><strong>Service discovery</strong> - Built-in DNS</li>
+<li><strong>Load balancing</strong> - Automatic</li>
+<li><strong>Multi-cloud</strong> - Run anywhere</li>
+<li><strong>Ecosystem</strong> - Massive (Helm, Istio, monitoring, etc.)</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Complex</strong> - Steep learning curve</li>
+<li><strong>Verbose</strong> - YAML configuration hell</li>
+<li><strong>Operational overhead</strong> - Need SRE team</li>
+<li><strong>Cost</strong> - Managed K8s control plane fees</li>
+</ul>
+<p><strong>Basic Kubernetes Manifests:</strong></p>
+<p><strong>1. Deployment:</strong></p>
+<pre><code class="lang-yaml"># k8s/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp-api
+  labels:
+    app: myapp
+    component: api
+spec:
+  replicas: 3  # Run 3 instances
+  selector:
+    matchLabels:
+      app: myapp
+      component: api
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1        # Max 1 extra pod during update
+      maxUnavailable: 0  # Keep all pods running during update
+  template:
+    metadata:
+      labels:
+        app: myapp
+        component: api
+    spec:
+      containers:
+      - name: api
+        image: myregistry.azurecr.io/myapp:1.0.0
+        ports:
+        - containerPort: 8080
+          name: http
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: &quot;Production&quot;
+        - name: ConnectionStrings__PostgreSQL
+          valueFrom:
+            secretKeyRef:
+              name: database-secret
+              key: connection-string
+        - name: ConnectionStrings__Redis
+          value: &quot;redis:6379&quot;
+        resources:
+          requests:
+            memory: &quot;256Mi&quot;
+            cpu: &quot;100m&quot;
+          limits:
+            memory: &quot;512Mi&quot;
+            cpu: &quot;500m&quot;
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+</code></pre>
+<p><strong>2. Service (Load Balancer):</strong></p>
+<pre><code class="lang-yaml"># k8s/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp-api
+spec:
+  selector:
+    app: myapp
+    component: api
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8080
+  type: LoadBalancer  # Creates cloud load balancer
+</code></pre>
+<p><strong>3. Ingress (HTTP Routing):</strong></p>
+<pre><code class="lang-yaml"># k8s/ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: myapp-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: &quot;letsencrypt-prod&quot;  # Automatic TLS
+    nginx.ingress.kubernetes.io/rate-limit: &quot;100&quot;
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - api.example.com
+    secretName: myapp-tls
+  rules:
+  - host: api.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: myapp-api
+            port:
+              number: 80
+</code></pre>
+<p><strong>4. ConfigMap:</strong></p>
+<pre><code class="lang-yaml"># k8s/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: myapp-config
+data:
+  appsettings.json: |
+    {
+      &quot;Logging&quot;: {
+        &quot;LogLevel&quot;: {
+          &quot;Default&quot;: &quot;Information&quot;
+        }
+      },
+      &quot;FeatureFlags&quot;: {
+        &quot;EnableNewUI&quot;: true
+      }
+    }
+</code></pre>
+<p><strong>5. Secret:</strong></p>
+<pre><code class="lang-yaml"># k8s/secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: database-secret
+type: Opaque
+stringData:
+  connection-string: &quot;Host=postgres;Database=mydb;Username=postgres;Password=secretpassword&quot;
+  # In production, use Sealed Secrets or Azure Key Vault
+</code></pre>
+<p><strong>6. Horizontal Pod Autoscaler:</strong></p>
+<pre><code class="lang-yaml"># k8s/hpa.yaml
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: myapp-api-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: myapp-api
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70  # Scale up if CPU &gt; 70%
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80  # Scale up if memory &gt; 80%
+</code></pre>
+<p><strong>Helm Chart (Better Than Raw YAML):</strong></p>
+<pre><code class="lang-yaml"># helm/myapp/Chart.yaml
+apiVersion: v2
+name: myapp
+description: My Application Helm Chart
+version: 1.0.0
+appVersion: &quot;1.0.0&quot;
+</code></pre>
+<pre><code class="lang-yaml"># helm/myapp/values.yaml
+replicaCount: 3
+
+image:
+  repository: myregistry.azurecr.io/myapp
+  tag: &quot;1.0.0&quot;
+  pullPolicy: IfNotPresent
+
+service:
+  type: LoadBalancer
+  port: 80
+
+ingress:
+  enabled: true
+  className: nginx
+  host: api.example.com
+  tls:
+    enabled: true
+    secretName: myapp-tls
+
+resources:
+  requests:
+    memory: &quot;256Mi&quot;
+    cpu: &quot;100m&quot;
+  limits:
+    memory: &quot;512Mi&quot;
+    cpu: &quot;500m&quot;
+
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70
+
+database:
+  host: postgres
+  name: mydb
+  existingSecret: database-secret
+</code></pre>
+<pre><code class="lang-yaml"># helm/myapp/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include &quot;myapp.fullname&quot; . }}
+  labels:
+    {{- include &quot;myapp.labels&quot; . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include &quot;myapp.selectorLabels&quot; . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include &quot;myapp.selectorLabels&quot; . | nindent 8 }}
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: &quot;{{ .Values.image.repository }}:{{ .Values.image.tag }}&quot;
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        env:
+        - name: ConnectionStrings__PostgreSQL
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.database.existingSecret }}
+              key: connection-string
+        resources:
+          {{- toYaml .Values.resources | nindent 12 }}
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: http
+</code></pre>
+<p><strong>Deploy with Helm:</strong></p>
+<pre><code class="lang-bash"># Install
+helm install myapp ./helm/myapp -n production
+
+# Upgrade
+helm upgrade myapp ./helm/myapp -n production
+
+# Rollback
+helm rollback myapp 1
+
+# Uninstall
+helm uninstall myapp -n production
+</code></pre>
+<p><strong>Managed Kubernetes Options:</strong></p>
+<p><strong>Azure AKS:</strong></p>
+<pre><code class="lang-bash"># Create AKS cluster
+az aks create \
+  --resource-group myapp-rg \
+  --name myapp-aks \
+  --node-count 3 \
+  --enable-managed-identity \
+  --generate-ssh-keys
+
+# Get credentials
+az aks get-credentials --resource-group myapp-rg --name myapp-aks
+
+# Deploy
+kubectl apply -f k8s/
+</code></pre>
+<p><strong>AWS EKS:</strong></p>
+<pre><code class="lang-bash"># Create EKS cluster
+eksctl create cluster \
+  --name myapp-eks \
+  --region us-east-1 \
+  --nodegroup-name standard-workers \
+  --node-type t3.medium \
+  --nodes 3
+
+# Deploy
+kubectl apply -f k8s/
+</code></pre>
+<p><strong>GCP GKE:</strong></p>
+<pre><code class="lang-bash"># Create GKE cluster
+gcloud container clusters create myapp-gke \
+  --num-nodes=3 \
+  --machine-type=e2-medium \
+  --zone=us-central1-a
+
+# Get credentials
+gcloud container clusters get-credentials myapp-gke --zone=us-central1-a
+
+# Deploy
+kubectl apply -f k8s/
+</code></pre>
+<h3 id="docker-swarm">Docker Swarm</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Simpler than Kubernetes</li>
+<li>Built into Docker</li>
+<li>Easy learning curve</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Smaller ecosystem</strong> - Fewer tools</li>
+<li><strong>Less adoption</strong> - Industry moved to K8s</li>
+<li><strong>Limited features</strong> - Compared to K8s</li>
+<li><strong>Uncertain future</strong> - Docker focus shifted</li>
+</ul>
+<p><strong>Why Not Chosen:</strong>
+Docker Swarm is easier but Kubernetes won the orchestration war. K8s has 100x more jobs, tools, and community support.</p>
+<h3 id="azure-container-apps">Azure Container Apps</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Serverless Kubernetes (no cluster management)</li>
+<li>Easy to use</li>
+<li>Auto-scaling included</li>
+<li>Cheap for low traffic</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Azure-only</strong> - Vendor lock-in</li>
+<li><strong>Less control</strong> - Abstraction over K8s</li>
+<li><strong>Limited customization</strong> - Can't install Istio, etc.</li>
+</ul>
+<p><strong>When to Use:</strong></p>
+<ul>
+<li>Azure-only deployment</li>
+<li>Serverless workloads</li>
+<li>Teams without K8s expertise</li>
+</ul>
+<p><strong>Why Not Primary Choice:</strong>
+Container Apps is excellent for serverless, but for <strong>educational purposes</strong> and <strong>cloud portability</strong>, full Kubernetes provides more learning value and flexibility.</p>
+<h3 id="aws-ecsfargate">AWS ECS/Fargate</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>AWS-native</li>
+<li>Simpler than K8s</li>
+<li>Fargate is serverless</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>AWS-only</strong> - Vendor lock-in</li>
+<li><strong>Proprietary</strong> - Not Kubernetes</li>
+<li><strong>Limited ecosystem</strong> - No Helm, Istio, etc.</li>
+</ul>
+<p><strong>Why Not Chosen:</strong>
+ECS is AWS-specific. Kubernetes skills transfer across clouds.</p>
+<hr>
+<h2 id="kubernetes-ecosystem">Kubernetes Ecosystem</h2>
+<p><strong>Monitoring:</strong></p>
+<pre><code class="lang-yaml"># Prometheus + Grafana for monitoring
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm install prometheus prometheus-community/kube-prometheus-stack
+</code></pre>
+<p><strong>Service Mesh (Istio):</strong></p>
+<pre><code class="lang-bash"># Advanced traffic management, security, observability
+istioctl install --set profile=demo
+</code></pre>
+<p><strong>Certificate Management:</strong></p>
+<pre><code class="lang-bash"># Automatic TLS certificates (Let's Encrypt)
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.13.0/cert-manager.yaml
+</code></pre>
+<hr>
+<h2 id="cicd-with-kubernetes">CI/CD with Kubernetes</h2>
+<p><strong>GitHub Actions:</strong></p>
+<pre><code class="lang-yaml">name: Deploy to AKS
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Set K8s context
+        uses: azure/aks-set-context@v3
+        with:
+          resource-group: myapp-rg
+          cluster-name: myapp-aks
+
+      - name: Deploy
+        run: |
+          helm upgrade --install myapp ./helm/myapp \
+            --set image.tag=${{ github.sha }} \
+            --namespace production \
+            --create-namespace
+</code></pre>
+<hr>
+<h2 id="best-practices">Best Practices</h2>
+<p><strong>1. Resource Limits:</strong></p>
+<pre><code class="lang-yaml">resources:
+  requests:   # Minimum guaranteed
+    memory: &quot;256Mi&quot;
+    cpu: &quot;100m&quot;
+  limits:     # Maximum allowed
+    memory: &quot;512Mi&quot;
+    cpu: &quot;500m&quot;
+</code></pre>
+<p><strong>2. Health Checks:</strong></p>
+<pre><code class="lang-yaml">livenessProbe:   # Restart if fails
+  httpGet:
+    path: /health
+    port: 8080
+
+readinessProbe:  # Remove from load balancer if fails
+  httpGet:
+    path: /health/ready
+    port: 8080
+</code></pre>
+<p><strong>3. Use Namespaces:</strong></p>
+<pre><code class="lang-bash">kubectl create namespace production
+kubectl create namespace staging
+kubectl create namespace development
+</code></pre>
+<p><strong>4. RBAC (Least Privilege):</strong></p>
+<pre><code class="lang-yaml">apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: production
+  name: pod-reader
+rules:
+- apiGroups: [&quot;&quot;]
+  resources: [&quot;pods&quot;]
+  verbs: [&quot;get&quot;, &quot;watch&quot;, &quot;list&quot;]
+</code></pre>
+<hr>
+<h2 id="links">Links</h2>
+<ul>
+<li><a href="https://kubernetes.io/docs/">Kubernetes Documentation</a></li>
+<li><a href="https://helm.sh/">Helm</a></li>
+<li><a href="https://azure.microsoft.com/en-us/products/kubernetes-service">Azure AKS</a></li>
+<li><a href="https://aws.amazon.com/eks/">AWS EKS</a></li>
+<li><a href="https://cloud.google.com/kubernetes-engine">GCP GKE</a></li>
+<li><a href="../../k8s/">Sample Manifests</a></li>
+</ul>
+<hr>
+<h2 id="notes">Notes</h2>
+<p><strong>When to Use Kubernetes:</strong></p>
+<ul>
+<li>✅ Microservices at scale (10+ services)</li>
+<li>✅ Need high availability</li>
+<li>✅ Multi-cloud or hybrid cloud</li>
+<li>✅ Enterprise production workloads</li>
+</ul>
+<p><strong>When NOT to Use:</strong></p>
+<ul>
+<li>❌ Small applications (&lt; 3 services)</li>
+<li>❌ No DevOps/SRE team</li>
+<li>❌ Serverless works better</li>
+<li>❌ Cost-sensitive (managed K8s control plane ~$70/month)</li>
+</ul>
+<p><strong>Learning Path:</strong></p>
+<ol>
+<li>Docker basics</li>
+<li>docker-compose for local dev</li>
+<li>Kubernetes concepts (pods, deployments, services)</li>
+<li>Helm for packaging</li>
+<li>Production: Monitoring, logging, security</li>
+</ol>
+<p><strong>Review Date:</strong> 2025-12-01</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/decisions/0015-deploy-to-kubernetes.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

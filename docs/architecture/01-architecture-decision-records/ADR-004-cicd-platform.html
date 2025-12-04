@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>ADR-004: GitHub Actions as CI/CD Platform | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="ADR-004: GitHub Actions as CI/CD Platform | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/01-architecture-decision-records/ADR-004-cicd-platform.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="adr-004-github-actions-as-cicd-platform">ADR-004: GitHub Actions as CI/CD Platform</h1>
+
+<p><strong>Status:</strong> ✅ Accepted
+<strong>Date:</strong> 2025-11-30
+<strong>Deciders:</strong> Development Team
+<strong>Technical Story:</strong> Phase 6 - CI/CD &amp; Automation</p>
+<h2 id="context">Context</h2>
+<p>The project requires a robust CI/CD platform to:</p>
+<ol>
+<li>Automate build, test, and deployment processes</li>
+<li>Ensure code quality through automated gates</li>
+<li>Detect performance regressions</li>
+<li>Deploy to multiple environments</li>
+<li>Generate and publish documentation</li>
+<li>Maintain security through automated scanning</li>
+</ol>
+<p>The question was: Which CI/CD platform should we adopt?</p>
+<h2 id="decision">Decision</h2>
+<p>We will use <strong>GitHub Actions</strong> as our primary CI/CD platform with:</p>
+<ul>
+<li><strong>5 specialized workflows</strong> (CI, CD, Release, Performance, Docs)</li>
+<li><strong>Multi-platform testing</strong> (Ubuntu, Windows, macOS)</li>
+<li><strong>Quality gates</strong> and security scanning</li>
+<li><strong>Docker container builds</strong> and publishing</li>
+<li><strong>Semantic versioning</strong> with GitVersion</li>
+<li><strong>GitHub Container Registry</strong> for Docker images</li>
+<li><strong>GitHub Packages</strong> for NuGet packages</li>
+</ul>
+<h2 id="rationale">Rationale</h2>
+<h3 id="native-github-integration">Native GitHub Integration</h3>
+<ul>
+<li><strong>Seamless workflow:</strong> No external service authentication</li>
+<li><strong>Free for public repos:</strong> No cost for open source</li>
+<li><strong>Built-in secrets management:</strong> Secure credential storage</li>
+<li><strong>GitHub Container Registry:</strong> Free container hosting</li>
+<li><strong>GitHub Packages:</strong> Free NuGet package hosting</li>
+<li><strong>SARIF upload:</strong> Security results in Security tab</li>
+</ul>
+<h3 id="github-actions-strengths">GitHub Actions Strengths</h3>
+<h4 id="multi-platform-support">Multi-Platform Support</h4>
+<pre><code class="lang-yaml">strategy:
+  matrix:
+    os: [ubuntu-latest, windows-latest, macos-latest]
+</code></pre>
+<ul>
+<li>Ensures cross-platform compatibility</li>
+<li>Tests on actual target platforms</li>
+<li>Catches platform-specific issues early</li>
+</ul>
+<h4 id="marketplace-ecosystem">Marketplace Ecosystem</h4>
+<ul>
+<li><strong>1,000+ actions</strong> available</li>
+<li><strong>Official actions</strong> from major vendors (Docker, Azure, AWS)</li>
+<li><strong>Security scanning</strong> (Snyk, Trivy, CodeQL)</li>
+<li><strong>Quality tools</strong> (ReportGenerator, Stryker.NET)</li>
+</ul>
+<h4 id="workflow-modularity">Workflow Modularity</h4>
+<pre><code class="lang-yaml"># Reusable workflows
+jobs:
+  build:
+    uses: ./.github/workflows/build.yml
+  test:
+    needs: build
+    uses: ./.github/workflows/test.yml
+</code></pre>
+<h4 id="performance">Performance</h4>
+<ul>
+<li><strong>Parallel job execution:</strong> Multiple jobs run simultaneously</li>
+<li><strong>Matrix builds:</strong> Test multiple configurations</li>
+<li><strong>Caching:</strong> Dependency and build caching</li>
+<li><strong>Self-hosted runners:</strong> Option for custom hardware</li>
+</ul>
+<h3 id="comparison-with-alternatives">Comparison with Alternatives</h3>
+<h4 id="github-actions-vs-azure-devops">GitHub Actions vs Azure DevOps</h4>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>GitHub Actions</th>
+<th>Azure DevOps</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cost (public repo)</td>
+<td>Free</td>
+<td>Free</td>
+</tr>
+<tr>
+<td>GitHub Integration</td>
+<td>Native</td>
+<td>Good</td>
+</tr>
+<tr>
+<td>YAML Configuration</td>
+<td>✅ Yes</td>
+<td>✅ Yes</td>
+</tr>
+<tr>
+<td>Multi-platform</td>
+<td>✅ Excellent</td>
+<td>✅ Good</td>
+</tr>
+<tr>
+<td>Marketplace</td>
+<td>1,000+ actions</td>
+<td>Extensions</td>
+</tr>
+<tr>
+<td>Learning Curve</td>
+<td>Easy</td>
+<td>Moderate</td>
+</tr>
+<tr>
+<td>Container Registry</td>
+<td>Free</td>
+<td>ACR (paid)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Verdict:</strong> GitHub Actions wins for GitHub-hosted projects</p>
+<h4 id="github-actions-vs-jenkins">GitHub Actions vs Jenkins</h4>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>GitHub Actions</th>
+<th>Jenkins</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Setup</td>
+<td>Zero (cloud-hosted)</td>
+<td>Self-hosted required</td>
+</tr>
+<tr>
+<td>Maintenance</td>
+<td>Zero (managed)</td>
+<td>High (self-managed)</td>
+</tr>
+<tr>
+<td>Configuration</td>
+<td>YAML</td>
+<td>Groovy/UI</td>
+</tr>
+<tr>
+<td>Scalability</td>
+<td>Automatic</td>
+<td>Manual</td>
+</tr>
+<tr>
+<td>Cost</td>
+<td>Free (public)</td>
+<td>Infrastructure cost</td>
+</tr>
+<tr>
+<td>Flexibility</td>
+<td>Good</td>
+<td>Excellent</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Verdict:</strong> GitHub Actions wins for simplicity and cost</p>
+<h4 id="github-actions-vs-gitlab-ci">GitHub Actions vs GitLab CI</h4>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>GitHub Actions</th>
+<th>GitLab CI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Platform</td>
+<td>GitHub-only</td>
+<td>GitLab-only</td>
+</tr>
+<tr>
+<td>YAML Syntax</td>
+<td>GitHub-specific</td>
+<td>GitLab-specific</td>
+</tr>
+<tr>
+<td>Marketplace</td>
+<td>Larger</td>
+<td>Smaller</td>
+</tr>
+<tr>
+<td>Free Minutes</td>
+<td>2,000/month</td>
+<td>400/month</td>
+</tr>
+<tr>
+<td>Platform Lock-in</td>
+<td>GitHub</td>
+<td>GitLab</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Verdict:</strong> GitHub Actions wins for GitHub projects</p>
+<h2 id="consequences">Consequences</h2>
+<h3 id="positive">Positive</h3>
+<ul>
+<li>✅ <strong>Zero setup cost:</strong> No infrastructure to maintain</li>
+<li>✅ <strong>Native integration:</strong> Seamless GitHub experience</li>
+<li>✅ <strong>Free for public repos:</strong> No hosting fees</li>
+<li>✅ <strong>Multi-platform testing:</strong> Ubuntu, Windows, macOS</li>
+<li>✅ <strong>Rich marketplace:</strong> 1,000+ reusable actions</li>
+<li>✅ <strong>Container support:</strong> Built-in Docker support</li>
+<li>✅ <strong>Security scanning:</strong> SARIF upload to Security tab</li>
+<li>✅ <strong>Performance testing:</strong> Automated benchmark regression</li>
+<li>✅ <strong>Documentation:</strong> Auto-deploy to GitHub Pages</li>
+</ul>
+<h3 id="negative">Negative</h3>
+<ul>
+<li>⚠️ <strong>GitHub lock-in:</strong> Tied to GitHub platform</li>
+<li>⚠️ <strong>YAML complexity:</strong> Large workflows can be complex</li>
+<li>⚠️ <strong>Debugging:</strong> Harder to debug than local Jenkins</li>
+<li>⚠️ <strong>Resource limits:</strong> Limited to GitHub runner specs</li>
+<li>⚠️ <strong>Private repo cost:</strong> 2,000 free minutes/month, then paid</li>
+</ul>
+<h3 id="operational-impact">Operational Impact</h3>
+<ul>
+<li><strong>Build time:</strong> ~5 minutes for full CI pipeline</li>
+<li><strong>Monthly minutes:</strong> ~150 minutes/week for public repo (free)</li>
+<li><strong>Storage:</strong> Artifacts stored for 90 days</li>
+<li><strong>Concurrency:</strong> Multiple workflows run in parallel</li>
+</ul>
+<h2 id="implementation">Implementation</h2>
+<h3 id="workflow-structure">Workflow Structure</h3>
+<pre><code>.github/workflows/
+├── ci.yml          # Continuous Integration
+├── cd.yml          # Continuous Deployment
+├── release.yml     # Release Management
+├── performance.yml # Performance Testing
+├── docs.yml        # Documentation
+├── security.yml    # Security Scanning (Phase 7)
+└── codeql.yml      # CodeQL Analysis
+</code></pre>
+<h3 id="1-ci-workflow-ciyml">1. CI Workflow (ci.yml)</h3>
+<p><strong>Purpose:</strong> Build, test, and validate code quality</p>
+<p><strong>Triggers:</strong></p>
+<ul>
+<li>Every push</li>
+<li>Every pull request</li>
+</ul>
+<p><strong>Jobs:</strong></p>
+<ul>
+<li>Build on 3 platforms (Ubuntu, Windows, macOS)</li>
+<li>Run unit tests + integration tests</li>
+<li>Generate code coverage reports</li>
+<li>Run mutation testing</li>
+<li>Security vulnerability scanning</li>
+<li>Publish test results and artifacts</li>
+</ul>
+<p><strong>Quality Gates:</strong></p>
+<ul>
+<li>✅ Build must succeed</li>
+<li>✅ All tests must pass</li>
+<li>✅ No critical vulnerabilities</li>
+</ul>
+<h3 id="2-cd-workflow-cdyml">2. CD Workflow (cd.yml)</h3>
+<p><strong>Purpose:</strong> Deploy to staging and production</p>
+<p><strong>Triggers:</strong></p>
+<ul>
+<li>Push to main/master branch</li>
+<li>Manual dispatch</li>
+</ul>
+<p><strong>Jobs:</strong></p>
+<ul>
+<li>Build Docker image</li>
+<li>Generate SBOM</li>
+<li>Deploy to staging</li>
+<li>Health checks</li>
+<li>Deploy to production (manual approval)</li>
+<li>Rollback capability</li>
+</ul>
+<p><strong>Environments:</strong></p>
+<ul>
+<li>Staging (automatic)</li>
+<li>Production (manual approval + branch protection)</li>
+</ul>
+<h3 id="3-release-workflow-releaseyml">3. Release Workflow (release.yml)</h3>
+<p><strong>Purpose:</strong> Create releases and publish packages</p>
+<p><strong>Triggers:</strong></p>
+<ul>
+<li>Git tag push (v*.<em>.</em>)</li>
+<li>Manual dispatch</li>
+</ul>
+<p><strong>Jobs:</strong></p>
+<ul>
+<li>Calculate semantic version (GitVersion)</li>
+<li>Generate changelog</li>
+<li>Build NuGet packages</li>
+<li>Build Docker images (multi-platform)</li>
+<li>Create GitHub Release</li>
+<li>Publish to NuGet.org</li>
+<li>Publish to GitHub Packages</li>
+<li>Update documentation</li>
+</ul>
+<h3 id="4-performance-workflow-performanceyml">4. Performance Workflow (performance.yml)</h3>
+<p><strong>Purpose:</strong> Detect performance regressions</p>
+<p><strong>Triggers:</strong></p>
+<ul>
+<li>Pull requests</li>
+<li>Scheduled (weekly)</li>
+</ul>
+<p><strong>Jobs:</strong></p>
+<ul>
+<li>Run BenchmarkDotNet suite</li>
+<li>Compare against baseline</li>
+<li>Detect regressions</li>
+<li>Publish results</li>
+</ul>
+<h3 id="5-docs-workflow-docsyml">5. Docs Workflow (docs.yml)</h3>
+<p><strong>Purpose:</strong> Generate and deploy documentation</p>
+<p><strong>Triggers:</strong></p>
+<ul>
+<li>Push to main/master</li>
+<li>Manual dispatch</li>
+</ul>
+<p><strong>Jobs:</strong></p>
+<ul>
+<li>Build DocFX documentation</li>
+<li>Validate markdown links</li>
+<li>Deploy to GitHub Pages</li>
+</ul>
+<h2 id="quality-gates">Quality Gates</h2>
+<h3 id="build-quality">Build Quality</h3>
+<ul>
+<li>✅ Multi-platform build success</li>
+<li>✅ Zero build errors</li>
+<li>✅ All tests passing</li>
+<li>✅ Code coverage maintained</li>
+<li>✅ Mutation score maintained</li>
+</ul>
+<h3 id="security">Security</h3>
+<ul>
+<li>✅ No critical/high vulnerabilities</li>
+<li>✅ Dependency scanning passing</li>
+<li>✅ Container scanning passing</li>
+<li>✅ Secret scanning passing</li>
+</ul>
+<h3 id="performance-1">Performance</h3>
+<ul>
+<li>✅ No performance regressions &gt;10%</li>
+<li>✅ Memory allocations within budget</li>
+<li>✅ Benchmark suite passing</li>
+</ul>
+<h2 id="example-workflow-configuration">Example Workflow Configuration</h2>
+<pre><code class="lang-yaml">name: CI Pipeline
+
+on:
+  push:
+    branches: [ master, main, develop ]
+  pull_request:
+    branches: [ master, main ]
+
+env:
+  DOTNET_VERSION: '8.0.x'
+
+jobs:
+  build-and-test:
+    name: Build &amp; Test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        configuration: [Debug, Release]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --configuration ${{ matrix.configuration }} --no-restore
+
+    - name: Test
+      run: dotnet test --configuration ${{ matrix.configuration }} --no-build --verbosity normal
+
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results-${{ matrix.os }}-${{ matrix.configuration }}
+        path: TestResults/
+</code></pre>
+<h2 id="verification">Verification</h2>
+<ul>
+<li>✅ 5 workflows implemented and operational</li>
+<li>✅ Multi-platform testing (Ubuntu, Windows, macOS)</li>
+<li>✅ Quality gates enforced</li>
+<li>✅ Docker build and publish</li>
+<li>✅ NuGet package publishing ready</li>
+<li>✅ Documentation deployment</li>
+<li>✅ Security scanning integrated</li>
+<li>✅ Performance regression detection</li>
+</ul>
+<h2 id="monitoring--observability">Monitoring &amp; Observability</h2>
+<h3 id="workflow-metrics">Workflow Metrics</h3>
+<ul>
+<li><strong>Success rate:</strong> Track build success/failure</li>
+<li><strong>Duration:</strong> Monitor workflow execution time</li>
+<li><strong>Cost:</strong> Track GitHub Actions minutes consumed</li>
+<li><strong>Concurrency:</strong> Monitor parallel job execution</li>
+</ul>
+<h3 id="alerting">Alerting</h3>
+<ul>
+<li><strong>Failed builds:</strong> Notify team via GitHub notifications</li>
+<li><strong>Security issues:</strong> SARIF upload triggers Security alerts</li>
+<li><strong>Performance regressions:</strong> Comment on PR with results</li>
+</ul>
+<h2 id="migration-path">Migration Path</h2>
+<p>If we need to migrate away from GitHub Actions:</p>
+<ol>
+<li>YAML workflows are relatively portable</li>
+<li>Docker builds work anywhere</li>
+<li>GitVersion works on any CI platform</li>
+<li>Tests run with <code>dotnet test</code> (platform-agnostic)</li>
+<li>Security scanning tools (Snyk, Trivy) support multiple CI platforms</li>
+</ol>
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://docs.github.com/en/actions">GitHub Actions Documentation</a></li>
+<li><a href="https://github.com/marketplace?type=actions">GitHub Actions Marketplace</a></li>
+<li><a href="https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry">GitHub Container Registry</a></li>
+<li><a href="https://docs.github.com/en/packages">GitHub Packages</a></li>
+<li><a href="https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions">Workflow Syntax</a></li>
+</ul>
+<h2 id="related-adrs">Related ADRs</h2>
+<ul>
+<li>ADR-001: .NET 8 Upgrade (target platform for builds)</li>
+<li>ADR-002: Testing Strategy (integrated in CI pipeline)</li>
+<li>ADR-003: Logging Framework (used in deployment)</li>
+</ul>
+<h2 id="future-considerations">Future Considerations</h2>
+<ul>
+<li>[ ] <strong>Self-hosted runners</strong> for GPU workloads</li>
+<li>[ ] <strong>Kubernetes deployments</strong> via ArgoCD/Flux</li>
+<li>[ ] <strong>Multi-cloud deployment</strong> (Azure + AWS)</li>
+<li>[ ] <strong>Canary deployments</strong> for production</li>
+<li>[ ] <strong>A/B testing</strong> infrastructure</li>
+</ul>
+<hr>
+<p><strong>Last Updated:</strong> 2025-11-30
+<strong>Next Review:</strong> 2026-03-01</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/01-architecture-decision-records/ADR-004-cicd-platform.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Custom Roslyn Analyzers Guide | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Custom Roslyn Analyzers Guide | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/guides/ROSLYN_ANALYZERS.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="custom-roslyn-analyzers-guide">Custom Roslyn Analyzers Guide</h1>
+
+<h2 id="overview">Overview</h2>
+<p>Roslyn Analyzers enable custom compile-time code analysis and automatic code fixes. This guide covers creating custom analyzers for performance, design, and security.</p>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ul>
+<li><a href="#what-are-roslyn-analyzers">What are Roslyn Analyzers?</a></li>
+<li><a href="#setting-up-an-analyzer-project">Setting Up an Analyzer Project</a></li>
+<li><a href="#performance-analyzers">Performance Analyzers</a></li>
+<li><a href="#design-analyzers">Design Analyzers</a></li>
+<li><a href="#security-analyzers">Security Analyzers</a></li>
+<li><a href="#code-fixes">Code Fixes</a></li>
+<li><a href="#testing-analyzers">Testing Analyzers</a></li>
+</ul>
+<h2 id="what-are-roslyn-analyzers">What are Roslyn Analyzers?</h2>
+<p>Roslyn Analyzers provide:</p>
+<ul>
+<li><strong>Compile-time analysis</strong> - Catch issues during build</li>
+<li><strong>IDE integration</strong> - Real-time feedback in Visual Studio/Rider</li>
+<li><strong>Code fixes</strong> - Automatic refactoring suggestions</li>
+<li><strong>Custom rules</strong> - Project-specific guidelines enforcement</li>
+</ul>
+<h3 id="benefits">Benefits</h3>
+<ul>
+<li>✅ <strong>Early detection</strong> - Find issues before runtime</li>
+<li>✅ <strong>Consistency</strong> - Enforce coding standards</li>
+<li>✅ <strong>Education</strong> - Guide developers to best practices</li>
+<li>✅ <strong>Automation</strong> - Reduce manual code review effort</li>
+</ul>
+<h2 id="setting-up-an-analyzer-project">Setting Up an Analyzer Project</h2>
+<h3 id="1-create-analyzer-project">1. Create Analyzer Project</h3>
+<pre><code class="lang-bash"># Use the analyzer template
+dotnet new analyzer -n AdvancedConcepts.Analyzers
+
+cd AdvancedConcepts.Analyzers
+</code></pre>
+<h3 id="2-project-structure">2. Project Structure</h3>
+<pre><code>AdvancedConcepts.Analyzers/
+├── AdvancedConcepts.Analyzers/
+│   ├── Analyzers/
+│   │   ├── PerformanceAnalyzers/
+│   │   ├── DesignAnalyzers/
+│   │   └── SecurityAnalyzers/
+│   ├── CodeFixes/
+│   └── Resources.resx
+├── AdvancedConcepts.Analyzers.Test/
+└── AdvancedConcepts.Analyzers.Package/
+</code></pre>
+<h3 id="3-configure-project-file">3. Configure Project File</h3>
+<pre><code class="lang-xml">&lt;Project Sdk=&quot;Microsoft.NET.Sdk&quot;&gt;
+  &lt;PropertyGroup&gt;
+    &lt;TargetFramework&gt;netstandard2.0&lt;/TargetFramework&gt;
+    &lt;IsPackable&gt;true&lt;/IsPackable&gt;
+    &lt;DevelopmentDependency&gt;true&lt;/DevelopmentDependency&gt;
+    &lt;IncludeBuildOutput&gt;false&lt;/IncludeBuildOutput&gt;
+  &lt;/PropertyGroup&gt;
+
+  &lt;ItemGroup&gt;
+    &lt;PackageReference Include=&quot;Microsoft.CodeAnalysis.CSharp.Workspaces&quot; Version=&quot;4.5.0&quot; PrivateAssets=&quot;all&quot; /&gt;
+    &lt;PackageReference Include=&quot;Microsoft.CodeAnalysis.Analyzers&quot; Version=&quot;3.3.4&quot; PrivateAssets=&quot;all&quot; /&gt;
+  &lt;/ItemGroup&gt;
+
+  &lt;ItemGroup&gt;
+    &lt;None Include=&quot;$(OutputPath)\$(AssemblyName).dll&quot; Pack=&quot;true&quot; PackagePath=&quot;analyzers/dotnet/cs&quot; Visible=&quot;false&quot; /&gt;
+  &lt;/ItemGroup&gt;
+&lt;/Project&gt;
+</code></pre>
+<h2 id="performance-analyzers">Performance Analyzers</h2>
+<h3 id="1-allocation-detection-analyzer">1. Allocation Detection Analyzer</h3>
+<p>Detects unnecessary allocations in hot paths.</p>
+<pre><code class="lang-csharp">using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Diagnostics;
+using System.Collections.Immutable;
+
+namespace AdvancedConcepts.Analyzers
+{
+    [DiagnosticAnalyzer(LanguageNames.CSharp)]
+    public class AllocationAnalyzer : DiagnosticAnalyzer
+    {
+        public const string DiagnosticId = &quot;AC001&quot;;
+
+        private static readonly LocalizableString Title = &quot;Avoid allocation in hot path&quot;;
+        private static readonly LocalizableString MessageFormat = &quot;Consider using {0} to avoid allocation&quot;;
+        private static readonly LocalizableString Description = &quot;Allocations in hot paths can impact performance.&quot;;
+        private const string Category = &quot;Performance&quot;;
+
+        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(
+            DiagnosticId,
+            Title,
+            MessageFormat,
+            Category,
+            DiagnosticSeverity.Warning,
+            isEnabledByDefault: true,
+            description: Description);
+
+        public override ImmutableArray&lt;DiagnosticDescriptor&gt; SupportedDiagnostics =&gt; ImmutableArray.Create(Rule);
+
+        public override void Initialize(AnalysisContext context)
+        {
+            context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
+            context.EnableConcurrentExecution();
+
+            context.RegisterSyntaxNodeAction(AnalyzeArraySlicing, SyntaxKind.ElementAccessExpression);
+        }
+
+        private static void AnalyzeArraySlicing(SyntaxNodeAnalysisContext context)
+        {
+            var elementAccess = (ElementAccessExpressionSyntax)context.Node;
+
+            // Check if this is array slicing that could use Span&lt;T&gt;
+            if (IsArraySlicingCandidate(elementAccess, context))
+            {
+                var diagnostic = Diagnostic.Create(
+                    Rule,
+                    elementAccess.GetLocation(),
+                    &quot;Span&lt;T&gt; or Memory&lt;T&gt;&quot;);
+
+                context.ReportDiagnostic(diagnostic);
+            }
+        }
+
+        private static bool IsArraySlicingCandidate(ElementAccessExpressionSyntax elementAccess, SyntaxNodeAnalysisContext context)
+        {
+            // Implementation: Detect patterns like array[start..end] that could use Span
+            return false; // Simplified for example
+        }
+    }
+}
+</code></pre>
+<h3 id="2-linq-performance-analyzer">2. LINQ Performance Analyzer</h3>
+<p>Detects inefficient LINQ usage.</p>
+<pre><code class="lang-csharp">[DiagnosticAnalyzer(LanguageNames.CSharp)]
+public class LinqPerformanceAnalyzer : DiagnosticAnalyzer
+{
+    public const string DiagnosticId = &quot;AC002&quot;;
+
+    private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(
+        DiagnosticId,
+        &quot;Inefficient LINQ usage&quot;,
+        &quot;Consider using {0} instead of {1} for better performance&quot;,
+        &quot;Performance&quot;,
+        DiagnosticSeverity.Warning,
+        isEnabledByDefault: true);
+
+    public override ImmutableArray&lt;DiagnosticDescriptor&gt; SupportedDiagnostics =&gt; ImmutableArray.Create(Rule);
+
+    public override void Initialize(AnalysisContext context)
+    {
+        context.EnableConcurrentExecution();
+        context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
+
+        context.RegisterSyntaxNodeAction(AnalyzeLinqUsage, SyntaxKind.InvocationExpression);
+    }
+
+    private static void AnalyzeLinqUsage(SyntaxNodeAnalysisContext context)
+    {
+        var invocation = (InvocationExpressionSyntax)context.Node;
+
+        // Example: Detect Count() &gt; 0 instead of Any()
+        if (IsCountComparisonWithZero(invocation))
+        {
+            var diagnostic = Diagnostic.Create(
+                Rule,
+                invocation.GetLocation(),
+                &quot;Any()&quot;,
+                &quot;Count() &gt; 0&quot;);
+
+            context.ReportDiagnostic(diagnostic);
+        }
+
+        // Example: Detect Where().First() instead of First(predicate)
+        if (IsWhereFirstPattern(invocation, context))
+        {
+            var diagnostic = Diagnostic.Create(
+                Rule,
+                invocation.GetLocation(),
+                &quot;First(predicate)&quot;,
+                &quot;Where().First()&quot;);
+
+            context.ReportDiagnostic(diagnostic);
+        }
+    }
+
+    private static bool IsCountComparisonWithZero(InvocationExpressionSyntax invocation)
+    {
+        // Check if parent is BinaryExpression with Count() &gt; 0 pattern
+        if (invocation.Parent is BinaryExpressionSyntax binaryExpression)
+        {
+            if (invocation.Expression is MemberAccessExpressionSyntax memberAccess &amp;&amp;
+                memberAccess.Name.Identifier.Text == &quot;Count&quot;)
+            {
+                return binaryExpression.Right is LiteralExpressionSyntax literal &amp;&amp;
+                       literal.Token.ValueText == &quot;0&quot;;
+            }
+        }
+        return false;
+    }
+
+    private static bool IsWhereFirstPattern(InvocationExpressionSyntax invocation, SyntaxNodeAnalysisContext context)
+    {
+        // Detect Where().First() pattern
+        if (invocation.Expression is MemberAccessExpressionSyntax memberAccess &amp;&amp;
+            memberAccess.Name.Identifier.Text == &quot;First&quot;)
+        {
+            if (memberAccess.Expression is InvocationExpressionSyntax previousInvocation &amp;&amp;
+                previousInvocation.Expression is MemberAccessExpressionSyntax previousMember &amp;&amp;
+                previousMember.Name.Identifier.Text == &quot;Where&quot;)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+}
+</code></pre>
+<h3 id="3-asyncawait-pattern-analyzer">3. Async/Await Pattern Analyzer</h3>
+<p>Detects async anti-patterns.</p>
+<pre><code class="lang-csharp">[DiagnosticAnalyzer(LanguageNames.CSharp)]
+public class AsyncAwaitAnalyzer : DiagnosticAnalyzer
+{
+    public const string DiagnosticId = &quot;AC003&quot;;
+
+    private static readonly DiagnosticDescriptor AsyncVoidRule = new DiagnosticDescriptor(
+        DiagnosticId,
+        &quot;Avoid async void methods&quot;,
+        &quot;Method '{0}' should return Task instead of void&quot;,
+        &quot;Performance&quot;,
+        DiagnosticSeverity.Warning,
+        isEnabledByDefault: true);
+
+    private static readonly DiagnosticDescriptor ConfigureAwaitRule = new DiagnosticDescriptor(
+        &quot;AC004&quot;,
+        &quot;Use ConfigureAwait(false)&quot;,
+        &quot;Consider using ConfigureAwait(false) in library code&quot;,
+        &quot;Performance&quot;,
+        DiagnosticSeverity.Info,
+        isEnabledByDefault: true);
+
+    public override ImmutableArray&lt;DiagnosticDescriptor&gt; SupportedDiagnostics =&gt;
+        ImmutableArray.Create(AsyncVoidRule, ConfigureAwaitRule);
+
+    public override void Initialize(AnalysisContext context)
+    {
+        context.EnableConcurrentExecution();
+        context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
+
+        context.RegisterSyntaxNodeAction(AnalyzeMethod, SyntaxKind.MethodDeclaration);
+        context.RegisterSyntaxNodeAction(AnalyzeAwait, SyntaxKind.AwaitExpression);
+    }
+
+    private static void AnalyzeMethod(SyntaxNodeAnalysisContext context)
+    {
+        var methodDeclaration = (MethodDeclarationSyntax)context.Node;
+
+        // Detect async void (except event handlers)
+        if (methodDeclaration.Modifiers.Any(SyntaxKind.AsyncKeyword) &amp;&amp;
+            methodDeclaration.ReturnType is PredefinedTypeSyntax predefined &amp;&amp;
+            predefined.Keyword.IsKind(SyntaxKind.VoidKeyword) &amp;&amp;
+            !IsEventHandler(methodDeclaration, context))
+        {
+            var diagnostic = Diagnostic.Create(
+                AsyncVoidRule,
+                methodDeclaration.Identifier.GetLocation(),
+                methodDeclaration.Identifier.Text);
+
+            context.ReportDiagnostic(diagnostic);
+        }
+    }
+
+    private static void AnalyzeAwait(SyntaxNodeAnalysisContext context)
+    {
+        var awaitExpression = (AwaitExpressionSyntax)context.Node;
+
+        // Check if ConfigureAwait is used
+        if (awaitExpression.Expression is InvocationExpressionSyntax invocation)
+        {
+            if (invocation.Expression is MemberAccessExpressionSyntax memberAccess &amp;&amp;
+                memberAccess.Name.Identifier.Text != &quot;ConfigureAwait&quot;)
+            {
+                // Suggest ConfigureAwait(false) for library code
+                if (IsLibraryCode(context))
+                {
+                    var diagnostic = Diagnostic.Create(
+                        ConfigureAwaitRule,
+                        awaitExpression.GetLocation());
+
+                    context.ReportDiagnostic(diagnostic);
+                }
+            }
+        }
+    }
+
+    private static bool IsEventHandler(MethodDeclarationSyntax method, SyntaxNodeAnalysisContext context)
+    {
+        // Check if method is an event handler (has EventHandler signature)
+        return false; // Simplified
+    }
+
+    private static bool IsLibraryCode(SyntaxNodeAnalysisContext context)
+    {
+        // Check if this is library code (not application code)
+        return !context.Options.AnalyzerConfigOptionsProvider
+            .GetOptions(context.Node.SyntaxTree)
+            .TryGetValue(&quot;is_library_code&quot;, out _);
+    }
+}
+</code></pre>
+<h2 id="design-analyzers">Design Analyzers</h2>
+<h3 id="1-solid-violations-analyzer">1. SOLID Violations Analyzer</h3>
+<pre><code class="lang-csharp">[DiagnosticAnalyzer(LanguageNames.CSharp)]
+public class SolidViolationAnalyzer : DiagnosticAnalyzer
+{
+    public const string SrpViolationId = &quot;AC010&quot;;
+    public const string DipViolationId = &quot;AC011&quot;;
+
+    private static readonly DiagnosticDescriptor SrpRule = new DiagnosticDescriptor(
+        SrpViolationId,
+        &quot;Possible Single Responsibility Principle violation&quot;,
+        &quot;Class '{0}' may have too many responsibilities&quot;,
+        &quot;Design&quot;,
+        DiagnosticSeverity.Info,
+        isEnabledByDefault: true);
+
+    private static readonly DiagnosticDescriptor DipRule = new DiagnosticDescriptor(
+        DipViolationId,
+        &quot;Dependency Inversion Principle violation&quot;,
+        &quot;Class '{0}' depends on concrete type '{1}' instead of abstraction&quot;,
+        &quot;Design&quot;,
+        DiagnosticSeverity.Warning,
+        isEnabledByDefault: true);
+
+    public override ImmutableArray&lt;DiagnosticDescriptor&gt; SupportedDiagnostics =&gt;
+        ImmutableArray.Create(SrpRule, DipRule);
+
+    public override void Initialize(AnalysisContext context)
+    {
+        context.EnableConcurrentExecution();
+        context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
+
+        context.RegisterSymbolAction(AnalyzeClass, SymbolKind.NamedType);
+    }
+
+    private static void AnalyzeClass(SymbolAnalysisContext context)
+    {
+        var namedType = (INamedTypeSymbol)context.Symbol;
+
+        if (namedType.TypeKind != TypeKind.Class)
+            return;
+
+        // Check SRP: Too many public methods might indicate multiple responsibilities
+        var publicMethods = namedType.GetMembers()
+            .OfType&lt;IMethodSymbol&gt;()
+            .Where(m =&gt; m.DeclaredAccessibility == Accessibility.Public &amp;&amp;
+                       !m.IsImplicitlyDeclared)
+            .Count();
+
+        if (publicMethods &gt; 10) // Configurable threshold
+        {
+            var diagnostic = Diagnostic.Create(
+                SrpRule,
+                namedType.Locations[0],
+                namedType.Name);
+
+            context.ReportDiagnostic(diagnostic);
+        }
+
+        // Check DIP: Dependencies on concrete types
+        CheckDependencyInversion(namedType, context);
+    }
+
+    private static void CheckDependencyInversion(INamedTypeSymbol namedType, SymbolAnalysisContext context)
+    {
+        // Check constructor parameters for concrete type dependencies
+        foreach (var constructor in namedType.Constructors)
+        {
+            foreach (var parameter in constructor.Parameters)
+            {
+                if (parameter.Type is INamedTypeSymbol parameterType &amp;&amp;
+                    parameterType.TypeKind == TypeKind.Class &amp;&amp;
+                    !parameterType.IsAbstract &amp;&amp;
+                    !IsFrameworkType(parameterType))
+                {
+                    var diagnostic = Diagnostic.Create(
+                        DipRule,
+                        parameter.Locations[0],
+                        namedType.Name,
+                        parameterType.Name);
+
+                    context.ReportDiagnostic(diagnostic);
+                }
+            }
+        }
+    }
+
+    private static bool IsFrameworkType(INamedTypeSymbol type)
+    {
+        // Check if type is from framework (System.*, Microsoft.*)
+        return type.ContainingNamespace.ToString().StartsWith(&quot;System&quot;) ||
+               type.ContainingNamespace.ToString().StartsWith(&quot;Microsoft&quot;);
+    }
+}
+</code></pre>
+<h2 id="security-analyzers">Security Analyzers</h2>
+<h3 id="sql-injection-detection">SQL Injection Detection</h3>
+<pre><code class="lang-csharp">[DiagnosticAnalyzer(LanguageNames.CSharp)]
+public class SqlInjectionAnalyzer : DiagnosticAnalyzer
+{
+    public const string DiagnosticId = &quot;AC020&quot;;
+
+    private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(
+        DiagnosticId,
+        &quot;Possible SQL injection vulnerability&quot;,
+        &quot;SQL query uses string concatenation with user input. Use parameterized queries instead.&quot;,
+        &quot;Security&quot;,
+        DiagnosticSeverity.Error,
+        isEnabledByDefault: true);
+
+    public override ImmutableArray&lt;DiagnosticDescriptor&gt; SupportedDiagnostics =&gt; ImmutableArray.Create(Rule);
+
+    public override void Initialize(AnalysisContext context)
+    {
+        context.EnableConcurrentExecution();
+        context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
+
+        context.RegisterSyntaxNodeAction(AnalyzeStringConcatenation,
+            SyntaxKind.AddExpression,
+            SyntaxKind.InterpolatedStringExpression);
+    }
+
+    private static void AnalyzeStringConcatenation(SyntaxNodeAnalysisContext context)
+    {
+        var expression = context.Node;
+
+        // Check if this is used in SQL context
+        if (IsUsedInSqlContext(expression, context))
+        {
+            var diagnostic = Diagnostic.Create(Rule, expression.GetLocation());
+            context.ReportDiagnostic(diagnostic);
+        }
+    }
+
+    private static bool IsUsedInSqlContext(SyntaxNode node, SyntaxNodeAnalysisContext context)
+    {
+        // Check if parent invocation is ExecuteQuery, ExecuteNonQuery, etc.
+        var parent = node.Parent;
+        while (parent != null)
+        {
+            if (parent is InvocationExpressionSyntax invocation &amp;&amp;
+                invocation.Expression is MemberAccessExpressionSyntax memberAccess)
+            {
+                var methodName = memberAccess.Name.Identifier.Text;
+                if (methodName.Contains(&quot;Execute&quot;) || methodName.Contains(&quot;Query&quot;))
+                {
+                    return true;
+                }
+            }
+            parent = parent.Parent;
+        }
+        return false;
+    }
+}
+</code></pre>
+<h2 id="code-fixes">Code Fixes</h2>
+<h3 id="example-configureawait-code-fix">Example: ConfigureAwait Code Fix</h3>
+<pre><code class="lang-csharp">using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.CodeActions;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+
+[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(ConfigureAwaitCodeFixProvider)), Shared]
+public class ConfigureAwaitCodeFixProvider : CodeFixProvider
+{
+    public sealed override ImmutableArray&lt;string&gt; FixableDiagnosticIds =&gt;
+        ImmutableArray.Create(AsyncAwaitAnalyzer.ConfigureAwaitDiagnosticId);
+
+    public sealed override FixAllProvider GetFixAllProvider() =&gt; WellKnownFixAllProviders.BatchFixer;
+
+    public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
+    {
+        var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
+
+        var diagnostic = context.Diagnostics.First();
+        var diagnosticSpan = diagnostic.Location.SourceSpan;
+
+        var awaitExpression = root.FindToken(diagnosticSpan.Start)
+            .Parent.AncestorsAndSelf()
+            .OfType&lt;AwaitExpressionSyntax&gt;()
+            .First();
+
+        context.RegisterCodeFix(
+            CodeAction.Create(
+                title: &quot;Add ConfigureAwait(false)&quot;,
+                createChangedDocument: c =&gt; AddConfigureAwaitAsync(context.Document, awaitExpression, c),
+                equivalenceKey: &quot;AddConfigureAwait&quot;),
+            diagnostic);
+    }
+
+    private async Task&lt;Document&gt; AddConfigureAwaitAsync(
+        Document document,
+        AwaitExpressionSyntax awaitExpression,
+        CancellationToken cancellationToken)
+    {
+        var root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
+
+        // Create ConfigureAwait(false) invocation
+        var configureAwait = SyntaxFactory.InvocationExpression(
+            SyntaxFactory.MemberAccessExpression(
+                SyntaxKind.SimpleMemberAccessExpression,
+                awaitExpression.Expression,
+                SyntaxFactory.IdentifierName(&quot;ConfigureAwait&quot;)),
+            SyntaxFactory.ArgumentList(
+                SyntaxFactory.SingletonSeparatedList(
+                    SyntaxFactory.Argument(
+                        SyntaxFactory.LiteralExpression(
+                            SyntaxKind.FalseLiteralExpression)))));
+
+        var newAwaitExpression = awaitExpression.WithExpression(configureAwait);
+        var newRoot = root.ReplaceNode(awaitExpression, newAwaitExpression);
+
+        return document.WithSyntaxRoot(newRoot);
+    }
+}
+</code></pre>
+<h2 id="testing-analyzers">Testing Analyzers</h2>
+<h3 id="unit-test-example">Unit Test Example</h3>
+<pre><code class="lang-csharp">using Microsoft.CodeAnalysis.Testing;
+using Xunit;
+
+public class AllocationAnalyzerTests
+{
+    [Fact]
+    public async Task ArraySlicing_ReportsWarning()
+    {
+        var code = @&quot;
+class Program
+{
+    void Method()
+    {
+        var array = new int[100];
+        var slice = [|array[10..20]|]; // Should suggest Span&lt;T&gt;
+    }
+}&quot;;
+
+        var expected = VerifyCS.Diagnostic(AllocationAnalyzer.DiagnosticId)
+            .WithLocation(0)
+            .WithArguments(&quot;Span&lt;T&gt; or Memory&lt;T&gt;&quot;);
+
+        await VerifyCS.VerifyAnalyzerAsync(code, expected);
+    }
+}
+</code></pre>
+<h2 id="best-practices">Best Practices</h2>
+<h3 id="1-performance">1. Performance</h3>
+<ul>
+<li>✅ Use concurrent execution</li>
+<li>✅ Avoid allocations in analyzers</li>
+<li>✅ Cache expensive computations</li>
+<li>✅ Use symbol analysis over syntax when possible</li>
+</ul>
+<h3 id="2-user-experience">2. User Experience</h3>
+<ul>
+<li>✅ Provide clear diagnostic messages</li>
+<li>✅ Include helpful documentation</li>
+<li>✅ Offer code fixes when possible</li>
+<li>✅ Use appropriate severity levels</li>
+</ul>
+<h3 id="3-configuration">3. Configuration</h3>
+<ul>
+<li>✅ Support .editorconfig configuration</li>
+<li>✅ Allow disabling rules</li>
+<li>✅ Provide severity customization</li>
+<li>✅ Document all options</li>
+</ul>
+<h2 id="resources">Resources</h2>
+<ul>
+<li><a href="https://learn.microsoft.com/en-us/dotnet/csharp/roslyn-sdk/">Roslyn Analyzers Documentation</a></li>
+<li><a href="https://learn.microsoft.com/en-us/dotnet/api/microsoft.codeanalysis.diagnostics">Analyzer API Reference</a></li>
+<li><a href="https://github.com/dotnet/roslyn/blob/main/docs/wiki/How-To-Write-a-C%23-Analyzer-and-Code-Fix.md">Code Fix Provider Guide</a></li>
+</ul>
+<hr>
+<p><strong>Last Updated:</strong> 2025-11-30
+<strong>Version:</strong> 1.0</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/guides/ROSLYN_ANALYZERS.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>13. Use BenchmarkDotNet for Performance Testing | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="13. Use BenchmarkDotNet for Performance Testing | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/decisions/0013-use-benchmarkdotnet.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="13-use-benchmarkdotnet-for-performance-testing">13. Use BenchmarkDotNet for Performance Testing</h1>
+
+<p><strong>Status:</strong> ✅ Accepted</p>
+<p><strong>Date:</strong> 2024-12-01</p>
+<p><strong>Deciders:</strong> Architecture Team, Performance Team</p>
+<p><strong>Technical Story:</strong> Implementation in <code>src/AdvancedConcepts.Core/Advanced/PerformanceBenchmarks</code></p>
+<hr>
+<h2 id="context-and-problem-statement">Context and Problem Statement</h2>
+<p>Performance optimization requires reliable, repeatable measurements. We need to:</p>
+<ul>
+<li>Compare performance of different implementations</li>
+<li>Detect performance regressions</li>
+<li>Validate optimization claims</li>
+<li>Provide data-driven decisions</li>
+</ul>
+<p><strong>Traditional approaches (Stopwatch) problems:</strong></p>
+<ul>
+<li>Not statistically sound (single measurement)</li>
+<li>Affected by JIT compilation, GC, CPU throttling</li>
+<li>No warm-up phase</li>
+<li>Hard to compare results</li>
+<li>Can't measure memory allocations</li>
+</ul>
+<p><strong>Requirements:</strong></p>
+<ul>
+<li>Statistical reliability (multiple iterations)</li>
+<li>Warm-up to eliminate JIT compilation effects</li>
+<li>Memory allocation measurement</li>
+<li>Multiple runtimes comparison (.NET 6, 7, 8)</li>
+<li>Export results (JSON, HTML, CSV)</li>
+</ul>
+<hr>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li><strong>Scientific Rigor</strong> - Statistical soundness, not guesswork</li>
+<li><strong>Easy to Use</strong> - Simple attribute-based API</li>
+<li><strong>Comprehensive</strong> - Time, memory, GC stats</li>
+<li><strong>Industry Standard</strong> - Used by Microsoft, .NET teams</li>
+<li><strong>CI Integration</strong> - Automated performance regression testing</li>
+<li><strong>Multiple Runtimes</strong> - Compare .NET versions</li>
+</ul>
+<hr>
+<h2 id="considered-options">Considered Options</h2>
+<ul>
+<li><strong>Option 1</strong> - BenchmarkDotNet</li>
+<li><strong>Option 2</strong> - Manual Stopwatch measurements</li>
+<li><strong>Option 3</strong> - Visual Studio Profiler</li>
+<li><strong>Option 4</strong> - dotnet-trace / PerfView</li>
+</ul>
+<hr>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p><strong>Chosen option:</strong> &quot;BenchmarkDotNet&quot;, because it's the de-facto standard for .NET performance benchmarking, used by Microsoft itself, providing statistically sound measurements with minimal setup.</p>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li><strong>Reliable</strong> - Multiple iterations with statistical analysis</li>
+<li><strong>Comprehensive</strong> - Time, memory, GC, CPU cache stats</li>
+<li><strong>Easy to Use</strong> - Attribute-based, minimal code</li>
+<li><strong>Comparable</strong> - Standardized output format</li>
+<li><strong>CI-Friendly</strong> - Automated regression detection</li>
+<li><strong>Educational</strong> - Demonstrates performance concepts</li>
+<li><strong>Multi-Runtime</strong> - Test .NET 6, 7, 8 side-by-side</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li><strong>Slow</strong> - Benchmarks take minutes to hours</li>
+<li><strong>Not for Production</strong> - Benchmark code, not production monitoring</li>
+<li><strong>Learning Curve</strong> - Understanding statistics required</li>
+<li><strong>Resource Intensive</strong> - Requires dedicated machine for accurate results</li>
+</ul>
+<hr>
+<h2 id="pros-and-cons-of-the-options">Pros and Cons of the Options</h2>
+<h3 id="benchmarkdotnet-chosen">BenchmarkDotNet (Chosen)</h3>
+<p><strong>What is BenchmarkDotNet?</strong></p>
+<p>BenchmarkDotNet is a powerful .NET library for benchmarking that performs accurate and reliable performance measurements with statistical analysis.</p>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Statistical Rigor</strong> - Multiple iterations, outlier detection, mean/median/stddev</li>
+<li><strong>Warm-up</strong> - JIT compilation before measurement</li>
+<li><strong>Memory Profiling</strong> - Allocations, GC collections</li>
+<li><strong>Multi-Runtime</strong> - Compare .NET Framework, Core, 6, 7, 8</li>
+<li><strong>Exporters</strong> - HTML, JSON, CSV, Markdown</li>
+<li><strong>Attributes</strong> - Simple API ([Benchmark], [Params])</li>
+<li><strong>Used by Microsoft</strong> - .NET runtime team uses it</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Slow</strong> - Takes minutes per benchmark</li>
+<li><strong>Requires isolation</strong> - Best on dedicated machine</li>
+<li><strong>Not real-time</strong> - Not for production monitoring</li>
+<li><strong>Can be misused</strong> - Easy to write misleading benchmarks</li>
+</ul>
+<p><strong>Installation:</strong></p>
+<pre><code class="lang-bash">dotnet add package BenchmarkDotNet
+</code></pre>
+<p><strong>Basic Benchmark:</strong></p>
+<pre><code class="lang-csharp">using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Running;
+
+[MemoryDiagnoser]  // Measure memory allocations
+[SimpleJob(warmupCount: 3, iterationCount: 5)]
+public class StringConcatBenchmark
+{
+    private const int Iterations = 1000;
+
+    [Benchmark(Baseline = true)]
+    public string StringConcatenation()
+    {
+        string result = &quot;&quot;;
+        for (int i = 0; i &lt; Iterations; i++)
+        {
+            result += i.ToString();  // ❌ Creates new string each time
+        }
+        return result;
+    }
+
+    [Benchmark]
+    public string StringBuilderMethod()
+    {
+        var sb = new StringBuilder();
+        for (int i = 0; i &lt; Iterations; i++)
+        {
+            sb.Append(i.ToString());  // ✅ Modifies in-place
+        }
+        return sb.ToString();
+    }
+
+    [Benchmark]
+    public string StringCreate()
+    {
+        return string.Create(Iterations * 4, Iterations, (span, count) =&gt;
+        {
+            int pos = 0;
+            for (int i = 0; i &lt; count; i++)
+            {
+                i.ToString().AsSpan().CopyTo(span.Slice(pos));
+                pos += i.ToString().Length;
+            }
+        });
+    }
+}
+
+// Run benchmarks
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        var summary = BenchmarkRunner.Run&lt;StringConcatBenchmark&gt;();
+    }
+}
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>BenchmarkDotNet v0.13.11, Windows 11
+Intel Core i7-12700K, 1 CPU, 20 logical cores
+.NET SDK 8.0.100
+
+| Method                  | Mean         | Error      | StdDev     | Ratio | Gen0    | Allocated |
+|------------------------ |-------------:|-----------:|-----------:|------:|--------:|----------:|
+| StringConcatenation     | 510.2 μs     | 9.8 μs     | 8.7 μs     | 1.00  | 187.50  | 1,953 KB  |
+| StringBuilderMethod     |   5.8 μs     | 0.1 μs     | 0.1 μs     | 0.01  |   1.25  |    13 KB  |
+| StringCreate            |   2.1 μs     | 0.04 μs    | 0.03 μs    | 0.00  |   0.50  |     5 KB  |
+
+Conclusion: StringBuilder is 88x faster, StringCreate is 243x faster than concatenation
+</code></pre>
+<p><strong>Real-World Benchmark Examples:</strong></p>
+<p><strong>1. Covariance Array Performance:</strong></p>
+<pre><code class="lang-csharp">[MemoryDiagnoser]
+[SimpleJob(warmupCount: 5, iterationCount: 10)]
+public class CovarianceBenchmark
+{
+    private Cat[] _cats = null!;
+    private Animal[] _animals = null!;
+
+    [GlobalSetup]
+    public void Setup()
+    {
+        _cats = Enumerable.Range(0, 10000).Select(i =&gt; new Cat { Name = $&quot;Cat{i}&quot; }).ToArray();
+        _animals = _cats;  // Covariant assignment
+    }
+
+    [Benchmark(Baseline = true)]
+    public void DirectCatArray()
+    {
+        for (int i = 0; i &lt; _cats.Length; i++)
+        {
+            _cats[i].MakeSound();  // ✅ No runtime type check
+        }
+    }
+
+    [Benchmark]
+    public void CovariantAnimalArray()
+    {
+        for (int i = 0; i &lt; _animals.Length; i++)
+        {
+            _animals[i].MakeSound();  // ❌ Runtime type check on every access!
+        }
+    }
+
+    [Benchmark]
+    public void GenericList()
+    {
+        var list = new List&lt;Cat&gt;(_cats);
+        foreach (var cat in list)
+        {
+            cat.MakeSound();  // ✅ No type check (List&lt;T&gt; is invariant)
+        }
+    }
+}
+
+// Result: CovariantAnimalArray is 30% slower due to runtime checks
+</code></pre>
+<p><strong>2. Boxing/Unboxing:</strong></p>
+<pre><code class="lang-csharp">[MemoryDiagnoser]
+public class BoxingBenchmark
+{
+    private const int Iterations = 10000;
+
+    [Benchmark(Baseline = true)]
+    public void WithBoxing()
+    {
+        ArrayList list = new ArrayList();
+        for (int i = 0; i &lt; Iterations; i++)
+        {
+            list.Add(i);  // ❌ Boxing: int → object
+        }
+
+        int sum = 0;
+        for (int i = 0; i &lt; list.Count; i++)
+        {
+            sum += (int)list[i];  // ❌ Unboxing: object → int
+        }
+    }
+
+    [Benchmark]
+    public void WithoutBoxing()
+    {
+        List&lt;int&gt; list = new List&lt;int&gt;();
+        for (int i = 0; i &lt; Iterations; i++)
+        {
+            list.Add(i);  // ✅ No boxing
+        }
+
+        int sum = 0;
+        for (int i = 0; i &lt; list.Count; i++)
+        {
+            sum += list[i];  // ✅ No unboxing
+        }
+    }
+}
+
+// Result: WithoutBoxing is 10x faster and allocates 90% less memory
+</code></pre>
+<p><strong>3. LINQ vs For Loop:</strong></p>
+<pre><code class="lang-csharp">[MemoryDiagnoser]
+public class LinqBenchmark
+{
+    private int[] _data = null!;
+
+    [Params(100, 1000, 10000)]
+    public int Size { get; set; }
+
+    [GlobalSetup]
+    public void Setup()
+    {
+        _data = Enumerable.Range(0, Size).ToArray();
+    }
+
+    [Benchmark(Baseline = true)]
+    public int ForLoop()
+    {
+        int sum = 0;
+        for (int i = 0; i &lt; _data.Length; i++)
+        {
+            if (_data[i] % 2 == 0)
+                sum += _data[i];
+        }
+        return sum;
+    }
+
+    [Benchmark]
+    public int LinqQuery()
+    {
+        return _data.Where(x =&gt; x % 2 == 0).Sum();
+    }
+
+    [Benchmark]
+    public int LinqOptimized()
+    {
+        // Use struct enumerator, avoid allocations
+        return _data.AsSpan().ToArray().Where(x =&gt; x % 2 == 0).Sum();
+    }
+}
+</code></pre>
+<p><strong>4. Parameterized Benchmarks:</strong></p>
+<pre><code class="lang-csharp">[MemoryDiagnoser]
+public class SerializationBenchmark
+{
+    private Product _product = null!;
+
+    [Params(SerializerType.SystemTextJson, SerializerType.NewtonsoftJson)]
+    public SerializerType Serializer { get; set; }
+
+    [GlobalSetup]
+    public void Setup()
+    {
+        _product = new Product { Id = 1, Name = &quot;Widget&quot;, Price = 29.99m };
+    }
+
+    [Benchmark]
+    public string Serialize()
+    {
+        return Serializer switch
+        {
+            SerializerType.SystemTextJson =&gt; JsonSerializer.Serialize(_product),
+            SerializerType.NewtonsoftJson =&gt; JsonConvert.SerializeObject(_product),
+            _ =&gt; throw new NotSupportedException()
+        };
+    }
+}
+
+public enum SerializerType
+{
+    SystemTextJson,
+    NewtonsoftJson
+}
+</code></pre>
+<p><strong>5. Multi-Runtime Comparison:</strong></p>
+<pre><code class="lang-csharp">[SimpleJob(RuntimeMoniker.Net60)]
+[SimpleJob(RuntimeMoniker.Net70)]
+[SimpleJob(RuntimeMoniker.Net80)]
+[MemoryDiagnoser]
+public class RegexBenchmark
+{
+    private const string Input = &quot;Hello, my email is test@example.com and phone is 555-1234&quot;;
+
+    [Benchmark]
+    public bool IsMatch()
+    {
+        return Regex.IsMatch(Input, @&quot;\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b&quot;);
+    }
+
+    [Benchmark]
+    public bool IsMatchCompiled()
+    {
+        var regex = new Regex(@&quot;\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b&quot;, RegexOptions.Compiled);
+        return regex.IsMatch(Input);
+    }
+
+    [Benchmark]  // .NET 7+ only
+    public bool IsMatchSourceGenerated()
+    {
+        return EmailRegex().IsMatch(Input);
+    }
+
+    [GeneratedRegex(@&quot;\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b&quot;)]
+    private static partial Regex EmailRegex();
+}
+
+// Result: Source-generated regex is 2-5x faster in .NET 7+
+</code></pre>
+<h3 id="manual-stopwatch-measurements">Manual Stopwatch Measurements</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Simple</li>
+<li>No dependencies</li>
+<li>Quick</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Not reliable</strong> - Single measurement affected by noise</li>
+<li><strong>No warm-up</strong> - Includes JIT compilation time</li>
+<li><strong>No statistics</strong> - Can't detect outliers</li>
+<li><strong>No memory profiling</strong></li>
+<li><strong>Manual</strong> - Copy-paste timing code everywhere</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="lang-csharp">// ❌ Unreliable
+var sw = Stopwatch.StartNew();
+DoWork();
+sw.Stop();
+Console.WriteLine($&quot;Took {sw.ElapsedMilliseconds}ms&quot;);
+
+// What if GC ran during measurement?
+// What if CPU was throttled?
+// What about JIT compilation?
+// One measurement tells you nothing!
+</code></pre>
+<p><strong>Why Rejected:</strong>
+Stopwatch measurements are unreliable for performance comparison. BenchmarkDotNet provides scientifically sound results.</p>
+<h3 id="visual-studio-profiler">Visual Studio Profiler</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Visual UI</li>
+<li>Call tree analysis</li>
+<li>Memory snapshots</li>
+<li>CPU usage timeline</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Windows only</strong> - Not cross-platform</li>
+<li><strong>Interactive</strong> - Can't automate</li>
+<li><strong>No regression testing</strong> - Manual comparison</li>
+<li><strong>Different focus</strong> - Finding bottlenecks vs comparing implementations</li>
+</ul>
+<p><strong>When to Use:</strong></p>
+<ul>
+<li>Finding performance bottlenecks in app</li>
+<li>Analyzing CPU/memory usage patterns</li>
+<li>Investigating specific performance issues</li>
+</ul>
+<p><strong>Why Not Primary Choice:</strong>
+VS Profiler is for <strong>finding problems</strong>, BenchmarkDotNet is for <strong>comparing solutions</strong>.</p>
+<h3 id="dotnet-trace--perfview">dotnet-trace / PerfView</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Production-ready tracing</li>
+<li>Low overhead</li>
+<li>Cross-platform (dotnet-trace)</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Different purpose</strong> - Tracing, not benchmarking</li>
+<li><strong>Complex analysis</strong> - Requires expertise</li>
+<li><strong>Not for microbenchmarks</strong></li>
+</ul>
+<p><strong>Why Not Chosen:</strong>
+These tools are for production profiling, not microbenchmarking code alternatives.</p>
+<hr>
+<h2 id="best-practices">Best Practices</h2>
+<p><strong>1. Always Use [MemoryDiagnoser]:</strong></p>
+<pre><code class="lang-csharp">[MemoryDiagnoser]  // Shows allocations
+public class MyBenchmark { }
+</code></pre>
+<p><strong>2. Use [GlobalSetup] for Initialization:</strong></p>
+<pre><code class="lang-csharp">[GlobalSetup]
+public void Setup()
+{
+    _data = LoadLargeDataset();  // Don't include in measurement
+}
+</code></pre>
+<p><strong>3. Don't Benchmark Trivial Code:</strong></p>
+<pre><code class="lang-csharp">// ❌ BAD: Too fast to measure accurately
+[Benchmark]
+public int Add() =&gt; 1 + 2;
+
+// ✅ GOOD: Meaningful operation
+[Benchmark]
+public int SumArray() =&gt; _array.Sum();
+</code></pre>
+<p><strong>4. Prevent Dead Code Elimination:</strong></p>
+<pre><code class="lang-csharp">// ❌ Compiler might optimize away
+[Benchmark]
+public void Process()
+{
+    DoWork();  // Result not used - might be removed!
+}
+
+// ✅ Return the result
+[Benchmark]
+public int Process()
+{
+    return DoWork();  // Compiler can't remove
+}
+</code></pre>
+<hr>
+<h2 id="ci-integration">CI Integration</h2>
+<pre><code class="lang-yaml"># .github/workflows/benchmarks.yml
+name: Benchmarks
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Run benchmarks
+        run: dotnet run -c Release --project benchmarks/MyApp.Benchmarks
+
+      - name: Upload results
+        uses: actions/upload-artifact@v3
+        with:
+          name: benchmark-results
+          path: BenchmarkDotNet.Artifacts/results/
+</code></pre>
+<hr>
+<h2 id="links">Links</h2>
+<ul>
+<li><a href="https://benchmarkdotnet.org/">BenchmarkDotNet Documentation</a></li>
+<li><a href="https://github.com/dotnet/BenchmarkDotNet">BenchmarkDotNet GitHub</a></li>
+<li><a href="../../src/AdvancedConcepts.Core/Advanced/PerformanceBenchmarks">Sample Benchmarks</a></li>
+</ul>
+<hr>
+<h2 id="notes">Notes</h2>
+<p><strong>When to Benchmark:</strong></p>
+<ul>
+<li>✅ Comparing algorithm implementations</li>
+<li>✅ Validating optimization claims</li>
+<li>✅ Before/after performance testing</li>
+<li>✅ Detecting regressions in CI</li>
+</ul>
+<p><strong>When NOT to Benchmark:</strong></p>
+<ul>
+<li>❌ First time optimization (profile first to find bottlenecks)</li>
+<li>❌ Premature optimization</li>
+<li>❌ Production monitoring (use APM tools)</li>
+</ul>
+<p><strong>Common Mistakes:</strong></p>
+<ul>
+<li>❌ Benchmarking in Debug mode</li>
+<li>❌ Running benchmarks while other apps are active</li>
+<li>❌ Not using [GlobalSetup] for expensive initialization</li>
+<li>❌ Comparing results from different machines</li>
+</ul>
+<p><strong>Review Date:</strong> 2025-12-01</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/decisions/0013-use-benchmarkdotnet.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Month 6 Comprehensive Assessment - Capstone Preparation | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Month 6 Comprehensive Assessment - Capstone Preparation | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../../favicon.ico">
+      <link rel="stylesheet" href="../../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/assessment-tests/path1/month-06-assessment.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../../index.html">
+            <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="month-6-comprehensive-assessment---capstone-preparation">Month 6 Comprehensive Assessment - Capstone Preparation</h1>
+
+<p><strong>Month</strong>: 6 (Weeks 21-24) | <strong>Duration</strong>: 90 min | <strong>Pass</strong>: 80% (24/30) | <strong>Points</strong>: 30</p>
+<h2 id="section-1-multiple-choice-15-questions-05-pts-each--75-pts">Section 1: Multiple Choice (15 questions, 0.5 pts each = 7.5 pts)</h2>
+<ol>
+<li><p>Observer pattern relationship:</p>
+<ul>
+<li>a) One-to-one | b) One-to-many | c) Many-to-one | d) Many-to-many</li>
+</ul>
+</li>
+<li><p>IObserver<t> methods:</t></p>
+<ul>
+<li>a) Subscribe/Unsubscribe | b) OnNext/OnError/OnCompleted | c) Notify/Update | d) Publish/Subscribe</li>
+</ul>
+</li>
+<li><p>How to unsubscribe from IObservable<t>?</t></p>
+<ul>
+<li>a) Call Unsubscribe() | b) Dispose the subscription | c) Set to null | d) No way</li>
+</ul>
+</li>
+<li><p>MVC stands for:</p>
+<ul>
+<li>a) Model-View-Controller | b) Main-View-Class | c) Model-Virtual-Controller | d) Multiple-View-Control</li>
+</ul>
+</li>
+<li><p>ASP.NET Core routing order:</p>
+<ul>
+<li>a) Attribute routes, then conventional | b) Conventional, then attribute | c) Random | d) Alphabetical</li>
+</ul>
+</li>
+<li><p>What's middleware in ASP.NET Core?</p>
+<ul>
+<li>a) Database layer | b) Request/response pipeline component | c) Controller | d) View engine</li>
+</ul>
+</li>
+<li><p>Dependency injection in ASP.NET Core configured in:</p>
+<ul>
+<li>a) Controller | b) View | c) Program.cs/Startup.cs | d) Web.config</li>
+</ul>
+</li>
+<li><p>What is DbContext?</p>
+<ul>
+<li>a) Database connection string | b) Session with database (Unit of Work) | c) SQL query | d) Table</li>
+</ul>
+</li>
+<li><p>EF Core migrations purpose:</p>
+<ul>
+<li>a) Move database | b) Version control for database schema | c) Backup | d) Query optimization</li>
+</ul>
+</li>
+<li><p>Eager loading in EF Core:</p>
+<ul>
+<li>a) <code>.Load()</code> | b) <code>.Include()</code> | c) <code>.Lazy()</code> | d) <code>.Eager()</code></li>
+</ul>
+</li>
+<li><p>Lazy loading requires:</p>
+<ul>
+<li>a) Nothing | b) Virtual navigation properties | c) Static properties | d) Sealed classes</li>
+</ul>
+</li>
+<li><p>Authentication vs Authorization:</p>
+<ul>
+<li>a) Same thing | b) Authentication = who, Authorization = what | c) Authorization = who, Authentication = what | d) No difference</li>
+</ul>
+</li>
+<li><p>JWT consists of:</p>
+<ul>
+<li>a) Header.Payload | b) Header.Payload.Signature | c) Username.Password | d) Token only</li>
+</ul>
+</li>
+<li><p>Claims in ASP.NET Core represent:</p>
+<ul>
+<li>a) Errors | b) User information/assertions | c) Database records | d) Routes</li>
+</ul>
+</li>
+<li><p>[Authorize] attribute does what?</p>
+<ul>
+<li>a) Grants permission | b) Requires authentication | c) Logs user | d) Creates user</li>
+</ul>
+</li>
+</ol>
+<h2 id="section-2-short-answer-7-questions-2-pts-each--14-pts">Section 2: Short Answer (7 questions, 2 pts each = 14 pts)</h2>
+<ol start="16">
+<li><p>Explain Observer pattern. How does it differ from the Pub/Sub pattern?</p>
+</li>
+<li><p>Explain the MVC pattern in ASP.NET Core. What's the responsibility of each component?</p>
+</li>
+<li><p>What's the middleware pipeline? Explain with 3 examples of middleware.</p>
+</li>
+<li><p>Explain DbContext lifecycle. Why is it typically registered as Scoped?</p>
+</li>
+<li><p>Compare eager loading, explicit loading, and lazy loading in EF Core. When to use each?</p>
+</li>
+<li><p>Explain how JWT authentication works. What's in the token?</p>
+</li>
+<li><p>What's the difference between claims-based and role-based authorization?</p>
+</li>
+</ol>
+<h2 id="section-3-code-implementation-4-questions-2-pts-each--8-pts">Section 3: Code Implementation (4 questions, 2 pts each = 8 pts)</h2>
+<ol start="23">
+<li>Implement a complete Observer pattern with unsubscribe:</li>
+</ol>
+<pre><code class="lang-csharp">// Requirements:
+// - StockTicker class (observable)
+// - Maintains list of observers
+// - NotifyObservers when price changes
+// - Subscribe() returns IDisposable for unsubscribe
+// - StockDisplay class (observer)
+</code></pre>
+<ol start="24">
+<li>Create ASP.NET Core controller:</li>
+</ol>
+<pre><code class="lang-csharp">// Requirements:
+// - ProductsController with API endpoints
+// - GET /api/products (return all)
+// - GET /api/products/{id} (return one)
+// - POST /api/products (create)
+// - Inject IProductRepository via DI
+</code></pre>
+<ol start="25">
+<li>Define EF Core entity relationship:</li>
+</ol>
+<pre><code class="lang-csharp">// Requirements:
+// - Order entity (Id, OrderDate, CustomerId)
+// - OrderItem entity (Id, OrderId, ProductId, Quantity)
+// - One-to-many relationship: Order -&gt; OrderItems
+// - Configure using Fluent API in DbContext
+</code></pre>
+<ol start="26">
+<li>Implement JWT authentication:</li>
+</ol>
+<pre><code class="lang-csharp">// Requirements:
+// - Generate JWT token for user (username, email claims)
+// - Use HS256 algorithm
+// - Set expiration to 1 hour
+// - Include user roles in claims
+</code></pre>
+<h2 id="answer-key">Answer Key</h2>
+<p><strong>MC</strong>: 1.b | 2.b | 3.b | 4.a | 5.a | 6.b | 7.c | 8.b | 9.b | 10.b | 11.b | 12.b | 13.b | 14.b | 15.b</p>
+<h3 id="short-answer">Short Answer</h3>
+<p><strong>16. Observer Pattern</strong> (2 pts):
+<strong>Observer Pattern</strong>:</p>
+<ul>
+<li>Subject maintains list of observers</li>
+<li>Direct coupling: Subject knows about observers</li>
+<li>Synchronous by default</li>
+<li>Example: <code>subject.Attach(observer)</code></li>
+</ul>
+<p><strong>Pub/Sub Pattern</strong>:</p>
+<ul>
+<li>Publisher and subscribers don't know each other</li>
+<li>Message broker/event bus in between</li>
+<li>Asynchronous by default</li>
+<li>Example: Event-driven architecture</li>
+</ul>
+<p><strong>Key Difference</strong>:</p>
+<ul>
+<li>Observer: Direct relationship, object-to-object</li>
+<li>Pub/Sub: Decoupled, message-based communication</li>
+</ul>
+<p><strong>C# Implementation</strong>:</p>
+<pre><code class="lang-csharp">// Observer: Direct
+subject.Attach(observer);
+
+// Pub/Sub: Via broker
+eventBus.Subscribe&lt;OrderCreated&gt;(handler);
+eventBus.Publish(new OrderCreated());
+</code></pre>
+<p><strong>17. MVC Pattern</strong> (2 pts):
+<strong>Model</strong>:</p>
+<ul>
+<li>Represents data and business logic</li>
+<li>Domain entities, validation rules</li>
+<li>Independent of presentation</li>
+<li>Example: <code>User</code>, <code>Product</code> classes</li>
+</ul>
+<p><strong>View</strong>:</p>
+<ul>
+<li>Presents data to user</li>
+<li>Razor pages, HTML templates</li>
+<li>No business logic</li>
+<li>Example: <code>Index.cshtml</code></li>
+</ul>
+<p><strong>Controller</strong>:</p>
+<ul>
+<li>Handles HTTP requests</li>
+<li>Orchestrates Model and View</li>
+<li>Returns ActionResult</li>
+<li>Example:</li>
+</ul>
+<pre><code class="lang-csharp">public class HomeController : Controller
+{
+    public IActionResult Index()
+    {
+        var model = GetData(); // Model
+        return View(model);     // View
+    }
+}
+</code></pre>
+<p><strong>Flow</strong>: Request → Controller → Model (logic) → View (render) → Response</p>
+<p><strong>18. Middleware Pipeline</strong> (2 pts):
+<strong>Definition</strong>: Components that handle HTTP request/response</p>
+<p><strong>Pipeline Order</strong> (order matters!):</p>
+<pre><code>Request  → Middleware 1 → Middleware 2 → Middleware 3 → Endpoint
+Response ← Middleware 1 ← Middleware 2 ← Middleware 3 ←
+</code></pre>
+<p><strong>Examples</strong>:</p>
+<ol>
+<li><strong>Exception Handler</strong>:</li>
+</ol>
+<pre><code class="lang-csharp">app.UseExceptionHandler(&quot;/Error&quot;);
+// Catches exceptions, returns error page
+</code></pre>
+<ol start="2">
+<li><strong>Authentication</strong>:</li>
+</ol>
+<pre><code class="lang-csharp">app.UseAuthentication();
+// Reads JWT token, sets HttpContext.User
+</code></pre>
+<ol start="3">
+<li><strong>Authorization</strong>:</li>
+</ol>
+<pre><code class="lang-csharp">app.UseAuthorization();
+// Checks if user has permission
+</code></pre>
+<p><strong>Custom Middleware</strong>:</p>
+<pre><code class="lang-csharp">app.Use(async (context, next) =&gt;
+{
+    // Before
+    await next.Invoke();
+    // After
+});
+</code></pre>
+<p><strong>19. DbContext Lifecycle</strong> (2 pts):
+<strong>DbContext responsibilities</strong>:</p>
+<ul>
+<li>Tracks entity changes</li>
+<li>Manages database connection</li>
+<li>Implements Unit of Work pattern</li>
+<li>Querying and saving</li>
+</ul>
+<p><strong>Why Scoped?</strong>:</p>
+<ul>
+<li><strong>One per request</strong>: Each HTTP request gets own DbContext</li>
+<li><strong>Automatic disposal</strong>: Disposed at end of request</li>
+<li><strong>Change tracking</strong>: Tracks entities within single operation</li>
+<li><strong>Thread safety</strong>: Not thread-safe, scoped prevents sharing</li>
+</ul>
+<p><strong>Lifetimes comparison</strong>:</p>
+<pre><code class="lang-csharp">// ❌ Singleton - WRONG! (not thread-safe)
+services.AddSingleton&lt;AppDbContext&gt;();
+
+// ✅ Scoped - CORRECT!
+services.AddScoped&lt;AppDbContext&gt;();
+
+// ❌ Transient - WASTEFUL (too many instances)
+services.AddTransient&lt;AppDbContext&gt;();
+</code></pre>
+<p><strong>20. EF Core Loading Strategies</strong> (2 pts):</p>
+<p><strong>Eager Loading</strong> (<code>.Include()</code>):</p>
+<ul>
+<li>Loads related data in single query</li>
+<li>Use: Always need related data</li>
+<li>Pro: One query, no N+1 problem</li>
+<li>Con: May load unnecessary data</li>
+</ul>
+<pre><code class="lang-csharp">var orders = context.Orders
+    .Include(o =&gt; o.Customer)
+    .Include(o =&gt; o.OrderItems)
+    .ToList();
+</code></pre>
+<p><strong>Explicit Loading</strong> (<code>.Load()</code>):</p>
+<ul>
+<li>Load related data on demand</li>
+<li>Use: Sometimes need related data</li>
+<li>Pro: Control when to load</li>
+<li>Con: Multiple queries</li>
+</ul>
+<pre><code class="lang-csharp">var order = context.Orders.Find(1);
+context.Entry(order).Collection(o =&gt; o.OrderItems).Load();
+</code></pre>
+<p><strong>Lazy Loading</strong> (<code>virtual</code> properties):</p>
+<ul>
+<li>Loads related data when accessed</li>
+<li>Use: Rarely need related data</li>
+<li>Pro: Automatic, simple</li>
+<li>Con: N+1 queries, requires proxies</li>
+</ul>
+<pre><code class="lang-csharp">public class Order
+{
+    public virtual Customer Customer { get; set; } // Lazy loaded
+}
+</code></pre>
+<p><strong>21. JWT Authentication</strong> (2 pts):
+<strong>How JWT Works</strong>:</p>
+<ol>
+<li>User logs in with credentials</li>
+<li>Server validates, generates JWT</li>
+<li>Client stores JWT (localStorage, cookie)</li>
+<li>Client sends JWT in Authorization header</li>
+<li>Server validates JWT signature</li>
+<li>Server extracts claims, authorizes user</li>
+</ol>
+<p><strong>JWT Structure</strong> (Header.Payload.Signature):</p>
+<pre><code>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
+eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4iLCJpYXQiOjE1MTYyMzkwMjJ9.
+SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+</code></pre>
+<p><strong>Decoded</strong>:</p>
+<pre><code class="lang-json">// Header
+{&quot;alg&quot;: &quot;HS256&quot;, &quot;typ&quot;: &quot;JWT&quot;}
+
+// Payload (claims)
+{
+  &quot;sub&quot;: &quot;1234567890&quot;,
+  &quot;name&quot;: &quot;John Doe&quot;,
+  &quot;email&quot;: &quot;john@example.com&quot;,
+  &quot;role&quot;: &quot;Admin&quot;,
+  &quot;exp&quot;: 1516239022
+}
+
+// Signature (ensures integrity)
+HMACSHA256(base64(header) + &quot;.&quot; + base64(payload), secret)
+</code></pre>
+<p><strong>22. Claims vs Roles</strong> (2 pts):</p>
+<p><strong>Role-Based</strong>:</p>
+<ul>
+<li>User has roles: Admin, User, Manager</li>
+<li>Check role: <code>[Authorize(Roles = &quot;Admin&quot;)]</code></li>
+<li>Simple, traditional</li>
+<li>Limited flexibility</li>
+</ul>
+<p><strong>Claims-Based</strong>:</p>
+<ul>
+<li>User has claims (key-value pairs)</li>
+<li>Examples: <code>{&quot;role&quot;: &quot;Admin&quot;}</code>, <code>{&quot;department&quot;: &quot;IT&quot;}</code>, <code>{&quot;clearance&quot;: &quot;Secret&quot;}</code></li>
+<li>Check claim: <code>[Authorize(Policy = &quot;RequireAdmin&quot;)]</code></li>
+<li>Flexible, extensible</li>
+<li>Modern approach</li>
+</ul>
+<p><strong>Comparison</strong>:</p>
+<pre><code class="lang-csharp">// Role-based
+[Authorize(Roles = &quot;Admin,Manager&quot;)]
+public IActionResult Delete() { }
+
+// Claims-based
+[Authorize(Policy = &quot;CanDeleteUsers&quot;)]
+public IActionResult Delete() { }
+
+// Policy definition
+services.AddAuthorization(options =&gt;
+{
+    options.AddPolicy(&quot;CanDeleteUsers&quot;, policy =&gt;
+        policy.RequireClaim(&quot;permission&quot;, &quot;delete:users&quot;));
+});
+</code></pre>
+<p>Claims are more granular and flexible!</p>
+<h3 id="code-implementation">Code Implementation</h3>
+<p><strong>23. Observer with Unsubscribe</strong> (2 pts):</p>
+<pre><code class="lang-csharp">public interface IObserver&lt;T&gt;
+{
+    void OnNext(T value);
+}
+
+public class Subscription : IDisposable
+{
+    private readonly Action _unsubscribe;
+
+    public Subscription(Action unsubscribe)
+    {
+        _unsubscribe = unsubscribe;
+    }
+
+    public void Dispose()
+    {
+        _unsubscribe();
+    }
+}
+
+public class StockTicker
+{
+    private readonly List&lt;IObserver&lt;decimal&gt;&gt; _observers = new();
+    private decimal _price;
+
+    public decimal Price
+    {
+        get =&gt; _price;
+        set
+        {
+            _price = value;
+            NotifyObservers();
+        }
+    }
+
+    public IDisposable Subscribe(IObserver&lt;decimal&gt; observer)
+    {
+        _observers.Add(observer);
+        return new Subscription(() =&gt; _observers.Remove(observer));
+    }
+
+    private void NotifyObservers()
+    {
+        foreach (var observer in _observers)
+        {
+            observer.OnNext(_price);
+        }
+    }
+}
+
+public class StockDisplay : IObserver&lt;decimal&gt;
+{
+    private readonly string _name;
+
+    public StockDisplay(string name)
+    {
+        _name = name;
+    }
+
+    public void OnNext(decimal price)
+    {
+        Console.WriteLine($&quot;{_name}: Stock price is ${price}&quot;);
+    }
+}
+
+// Usage
+var ticker = new StockTicker();
+var display1 = new StockDisplay(&quot;Display 1&quot;);
+var display2 = new StockDisplay(&quot;Display 2&quot;);
+
+var subscription1 = ticker.Subscribe(display1);
+var subscription2 = ticker.Subscribe(display2);
+
+ticker.Price = 100.50m; // Both notified
+
+subscription1.Dispose(); // Unsubscribe display1
+
+ticker.Price = 105.75m; // Only display2 notified
+</code></pre>
+<p><strong>24. ASP.NET Core Controller</strong> (2 pts):</p>
+<pre><code class="lang-csharp">public interface IProductRepository
+{
+    IEnumerable&lt;Product&gt; GetAll();
+    Product GetById(int id);
+    void Add(Product product);
+}
+
+public class Product
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public decimal Price { get; set; }
+}
+
+[ApiController]
+[Route(&quot;api/[controller]&quot;)]
+public class ProductsController : ControllerBase
+{
+    private readonly IProductRepository _repository;
+
+    public ProductsController(IProductRepository repository)
+    {
+        _repository = repository;
+    }
+
+    // GET: api/products
+    [HttpGet]
+    public ActionResult&lt;IEnumerable&lt;Product&gt;&gt; GetAll()
+    {
+        var products = _repository.GetAll();
+        return Ok(products);
+    }
+
+    // GET: api/products/5
+    [HttpGet(&quot;{id}&quot;)]
+    public ActionResult&lt;Product&gt; GetById(int id)
+    {
+        var product = _repository.GetById(id);
+        if (product == null)
+            return NotFound();
+
+        return Ok(product);
+    }
+
+    // POST: api/products
+    [HttpPost]
+    public ActionResult&lt;Product&gt; Create([FromBody] Product product)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        _repository.Add(product);
+        return CreatedAtAction(nameof(GetById), new { id = product.Id }, product);
+    }
+}
+
+// DI registration in Program.cs
+builder.Services.AddScoped&lt;IProductRepository, ProductRepository&gt;();
+</code></pre>
+<p><strong>25. EF Core Relationship</strong> (2 pts):</p>
+<pre><code class="lang-csharp">public class Order
+{
+    public int Id { get; set; }
+    public DateTime OrderDate { get; set; }
+    public int CustomerId { get; set; }
+
+    // Navigation property
+    public ICollection&lt;OrderItem&gt; OrderItems { get; set; }
+}
+
+public class OrderItem
+{
+    public int Id { get; set; }
+    public int OrderId { get; set; }
+    public int ProductId { get; set; }
+    public int Quantity { get; set; }
+
+    // Navigation property
+    public Order Order { get; set; }
+}
+
+public class AppDbContext : DbContext
+{
+    public DbSet&lt;Order&gt; Orders { get; set; }
+    public DbSet&lt;OrderItem&gt; OrderItems { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        // Configure one-to-many relationship using Fluent API
+        modelBuilder.Entity&lt;Order&gt;()
+            .HasMany(o =&gt; o.OrderItems)
+            .WithOne(oi =&gt; oi.Order)
+            .HasForeignKey(oi =&gt; oi.OrderId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // Alternative: using attributes
+        // [ForeignKey(&quot;OrderId&quot;)]
+        // public Order Order { get; set; }
+    }
+}
+
+// Usage
+var order = new Order
+{
+    OrderDate = DateTime.Now,
+    CustomerId = 1,
+    OrderItems = new List&lt;OrderItem&gt;
+    {
+        new OrderItem { ProductId = 1, Quantity = 2 },
+        new OrderItem { ProductId = 2, Quantity = 1 }
+    }
+};
+
+context.Orders.Add(order);
+context.SaveChanges();
+</code></pre>
+<p><strong>26. JWT Generation</strong> (2 pts):</p>
+<pre><code class="lang-csharp">using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
+
+public class JwtService
+{
+    private readonly string _secretKey = &quot;YourSuperSecretKeyThatIsAtLeast32Characters&quot;;
+    private readonly string _issuer = &quot;YourApp&quot;;
+    private readonly string _audience = &quot;YourAppUsers&quot;;
+
+    public string GenerateToken(string username, string email, string[] roles)
+    {
+        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey));
+        var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+        // Create claims
+        var claims = new List&lt;Claim&gt;
+        {
+            new Claim(JwtRegisteredClaimNames.Sub, username),
+            new Claim(JwtRegisteredClaimNames.Email, email),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+        };
+
+        // Add role claims
+        foreach (var role in roles)
+        {
+            claims.Add(new Claim(ClaimTypes.Role, role));
+        }
+
+        // Create token
+        var token = new JwtSecurityToken(
+            issuer: _issuer,
+            audience: _audience,
+            claims: claims,
+            expires: DateTime.UtcNow.AddHours(1),
+            signingCredentials: credentials
+        );
+
+        return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+}
+
+// Usage
+var jwtService = new JwtService();
+var token = jwtService.GenerateToken(
+    username: &quot;john.doe&quot;,
+    email: &quot;john@example.com&quot;,
+    roles: new[] { &quot;Admin&quot;, &quot;User&quot; }
+);
+
+Console.WriteLine(token);
+// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJqb2huLm...
+
+// In ASP.NET Core Program.cs
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =&gt;
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = &quot;YourApp&quot;,
+            ValidAudience = &quot;YourAppUsers&quot;,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(&quot;YourSuperSecretKeyThatIsAtLeast32Characters&quot;))
+        };
+    });
+</code></pre>
+<h2 id="grading-rubric">Grading Rubric</h2>
+<table>
+<thead>
+<tr>
+<th>Section</th>
+<th>Max Points</th>
+<th>Criteria</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Multiple Choice</td>
+<td>7.5</td>
+<td>0.5 per correct answer</td>
+</tr>
+<tr>
+<td>Short Answer (each)</td>
+<td>2 × 7 = 14</td>
+<td>Full: Complete + examples. Partial: 1.0-1.5. Wrong: 0</td>
+</tr>
+<tr>
+<td>Code Implementation (each)</td>
+<td>2 × 4 = 8</td>
+<td>Full: Working implementation. Partial: 1.0-1.5. Wrong: 0</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>30</strong></td>
+<td><strong>Pass: 24 points (80%)</strong></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="study-resources">Study Resources</h2>
+<p><strong>Week 21 - Observer Pattern</strong>:</p>
+<ul>
+<li><code>samples/99-Exercises/DesignPatterns/02-Observer/</code></li>
+<li>IObservable<t>/IObserver<t> implementation</t></t></li>
+</ul>
+<p><strong>Week 22 - ASP.NET Core</strong>:</p>
+<ul>
+<li>MVC pattern, routing, middleware</li>
+<li>Dependency injection in ASP.NET Core</li>
+</ul>
+<p><strong>Week 23 - Entity Framework Core</strong>:</p>
+<ul>
+<li>DbContext, migrations</li>
+<li>Relationships: one-to-many, many-to-many</li>
+<li>Loading strategies</li>
+</ul>
+<p><strong>Week 24 - Authentication</strong>:</p>
+<ul>
+<li>JWT structure and validation</li>
+<li>Claims-based authorization</li>
+<li>ASP.NET Core Identity</li>
+</ul>
+<hr>
+<h2 id="next-steps">Next Steps</h2>
+<p><strong>If you passed (≥24 pts)</strong>: Ready for Path 1 Final Exam!</p>
+<p><strong>If you didn't pass (&lt;24 pts)</strong>: Review weak areas:</p>
+<ul>
+<li>Score 0-10: Review all Month 6 materials</li>
+<li>Score 11-18: Focus on ASP.NET Core and EF Core</li>
+<li>Score 19-23: Practice authentication implementation</li>
+</ul>
+<hr>
+<h2 id="capstone-project-readiness">Capstone Project Readiness</h2>
+<p>After passing Month 6, you're ready to build:</p>
+<ul>
+<li>✅ Full-stack web application</li>
+<li>✅ RESTful API with proper architecture</li>
+<li>✅ Database with EF Core migrations</li>
+<li>✅ Authentication and authorization</li>
+<li>✅ SOLID principles applied</li>
+<li>✅ Design patterns implemented</li>
+</ul>
+<p><strong>Suggested Capstone Projects</strong>:</p>
+<ol>
+<li>Task Management System (Trello clone)</li>
+<li>E-commerce Platform</li>
+<li>Blog Platform with comments</li>
+<li>Social Media Dashboard</li>
+<li>Inventory Management System</li>
+</ol>
+<hr>
+<p><em>Assessment Version: 1.0</em>
+<em>Last Updated: 2025-12-02</em></p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/assessment-tests/path1/month-06-assessment.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

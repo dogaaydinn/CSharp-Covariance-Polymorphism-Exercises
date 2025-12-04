@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>ADR-0007: OpenTelemetry for Observability | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="ADR-0007: OpenTelemetry for Observability | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/01-architecture-decision-records/0007-opentelemetry-for-observability.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="adr-0007-opentelemetry-for-observability">ADR-0007: OpenTelemetry for Observability</h1>
+
+<p><strong>Status:</strong> Accepted
+<strong>Date:</strong> 2025-12-02
+<strong>Deciders:</strong> Architecture Team
+<strong>Technical Story:</strong> Distributed tracing, metrics, and logging for microservices</p>
+<h2 id="context">Context</h2>
+<p>Cloud-native microservices require comprehensive observability to:</p>
+<ul>
+<li>Debug issues across service boundaries</li>
+<li>Monitor performance and latency</li>
+<li>Track error rates and failures</li>
+<li>Understand system behavior in production</li>
+<li>Identify performance bottlenecks</li>
+<li>Correlate logs across services</li>
+</ul>
+<p>Traditional logging is insufficient for distributed systems because:</p>
+<ul>
+<li>Logs are scattered across services</li>
+<li>No visibility into cross-service requests</li>
+<li>Cannot trace request flow through system</li>
+<li>Missing context for debugging</li>
+<li>No performance metrics</li>
+</ul>
+<p>We need vendor-neutral, standards-based observability that works with any backend (Jaeger, Prometheus, Azure Monitor, AWS X-Ray, etc.).</p>
+<h2 id="decision">Decision</h2>
+<p>We will use <strong>OpenTelemetry</strong> for all observability needs (tracing, metrics, and logging).</p>
+<p>Implementation:</p>
+<ul>
+<li>Automatic instrumentation via Aspire ServiceDefaults</li>
+<li>OpenTelemetry SDK 1.14.0</li>
+<li>Exporters: OTLP (OpenTelemetry Protocol)</li>
+<li>Dashboard: Aspire Dashboard (development), vendor-specific (production)</li>
+<li>Instrumentation: ASP.NET Core, HttpClient, EF Core, Runtime</li>
+</ul>
+<h2 id="consequences">Consequences</h2>
+<h3 id="positive">Positive</h3>
+<ul>
+<li><strong>Vendor-Neutral</strong>: Works with any observability backend</li>
+<li><strong>Standard</strong>: OpenTelemetry is CNCF standard (like Kubernetes)</li>
+<li><strong>Automatic</strong>: Aspire configures OpenTelemetry automatically</li>
+<li><strong>Distributed Tracing</strong>: Track requests across all services</li>
+<li><strong>Correlation</strong>: All logs/traces/metrics correlated by TraceId</li>
+<li><strong>Performance Metrics</strong>: Built-in HTTP, runtime, and custom metrics</li>
+<li><strong>Production-Ready</strong>: Used by Google, Microsoft, Uber, etc.</li>
+<li><strong>Aspire Dashboard</strong>: Beautiful real-time dashboard in development</li>
+<li><strong>Future-Proof</strong>: Industry is converging on OpenTelemetry</li>
+<li><strong>No Vendor Lock-in</strong>: Switch backends (Jaeger → Prometheus) without code changes</li>
+</ul>
+<h3 id="negative">Negative</h3>
+<ul>
+<li><strong>Overhead</strong>: 5-10% CPU/memory overhead for telemetry collection</li>
+<li><strong>Complexity</strong>: Understanding traces/spans requires learning curve</li>
+<li><strong>Storage</strong>: Telemetry data can be massive (GB/day for busy services)</li>
+<li><strong>Cost</strong>: Backend storage (Jaeger, Tempo) has infrastructure costs</li>
+<li><strong>Configuration</strong>: Many knobs to tune (sampling, batching, exporters)</li>
+</ul>
+<h3 id="neutral">Neutral</h3>
+<ul>
+<li><strong>Sampling</strong>: Production requires sampling (not all traces) to reduce cost</li>
+<li><strong>Cardinality</strong>: High-cardinality metrics (user IDs, etc.) can overwhelm systems</li>
+<li><strong>Privacy</strong>: Telemetry may contain PII (must sanitize)</li>
+</ul>
+<h2 id="alternatives-considered">Alternatives Considered</h2>
+<h3 id="alternative-1-application-insights-azure">Alternative 1: Application Insights (Azure)</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Integrated</strong>: Deep Azure integration</li>
+<li><strong>Powerful</strong>: Advanced analytics and AI-powered insights</li>
+<li><strong>Automatic</strong>: Auto-instrumentation for Azure services</li>
+<li><strong>Dashboards</strong>: Rich out-of-box dashboards</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Azure Lock-in</strong>: Only works with Azure</li>
+<li><strong>Cost</strong>: Expensive at scale ($2-3/GB ingested)</li>
+<li><strong>Proprietary</strong>: Not standards-based</li>
+<li><strong>Migration</strong>: Hard to migrate to other clouds</li>
+</ul>
+<p><strong>Why rejected:</strong> Vendor lock-in unacceptable. OpenTelemetry works with Application Insights via OTLP.</p>
+<h3 id="alternative-2-serilog--seq">Alternative 2: Serilog + Seq</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Simple</strong>: Structured logging with minimal setup</li>
+<li><strong>Seq</strong>: Beautiful log exploration UI</li>
+<li><strong>Mature</strong>: 10+ years of production use</li>
+<li><strong>.NET Native</strong>: Built for .NET ecosystem</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Logging Only</strong>: No distributed tracing or metrics</li>
+<li><strong>Not Standard</strong>: Proprietary format</li>
+<li><strong>Correlation</strong>: Manual correlation across services</li>
+<li><strong>Limited Metrics</strong>: Cannot track performance metrics</li>
+</ul>
+<p><strong>Why rejected:</strong> Logging alone insufficient for microservices. OpenTelemetry provides tracing + metrics + logging.</p>
+<h3 id="alternative-3-jaeger--prometheus--grafana-manual-setup">Alternative 3: Jaeger + Prometheus + Grafana (Manual Setup)</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Open Source</strong>: No licensing costs</li>
+<li><strong>Powerful</strong>: Industry-standard tools</li>
+<li><strong>Flexible</strong>: Complete control</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Complex Setup</strong>: Must configure everything manually</li>
+<li><strong>Fragmented</strong>: Separate tools for traces, metrics, logs</li>
+<li><strong>No Standards</strong>: Each tool uses different formats</li>
+<li><strong>High Maintenance</strong>: Must manage 3+ separate systems</li>
+</ul>
+<p><strong>Why rejected:</strong> OpenTelemetry provides unified API. Can still export to Jaeger/Prometheus but with standard protocol.</p>
+<h3 id="alternative-4-aws-x-ray">Alternative 4: AWS X-Ray</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>AWS Integration</strong>: Deep AWS service integration</li>
+<li><strong>Automatic</strong>: Auto-instruments Lambda, ECS, etc.</li>
+<li><strong>Cost-Effective</strong>: $5/million traces</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>AWS Lock-in</strong>: Only works on AWS</li>
+<li><strong>Limited Metrics</strong>: Focused on tracing, weak metrics</li>
+<li><strong>.NET Support</strong>: Weaker .NET support than OpenTelemetry</li>
+</ul>
+<p><strong>Why rejected:</strong> Same reasons as Application Insights - vendor lock-in.</p>
+<h3 id="alternative-5-custom-logging--manual-correlation">Alternative 5: Custom Logging + Manual Correlation</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Control</strong>: Complete control over implementation</li>
+<li><strong>No Dependencies</strong>: No external libraries</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Massive Effort</strong>: 1000s of lines of boilerplate code</li>
+<li><strong>Reinventing Wheel</strong>: Solving solved problems</li>
+<li><strong>Maintenance</strong>: Must maintain forever</li>
+<li><strong>Not Standard</strong>: Cannot use existing tools</li>
+</ul>
+<p><strong>Why rejected:</strong> Unacceptable engineering cost. OpenTelemetry is free and standardized.</p>
+<h2 id="related-decisions">Related Decisions</h2>
+<ul>
+<li><a href="0002-using-dotnet-aspire.html">ADR-0002</a>: Aspire configures OpenTelemetry automatically</li>
+<li><a href="0013-servicedefaults-pattern.html">ADR-0013</a>: ServiceDefaults includes OpenTelemetry setup</li>
+<li><a href="0011-service-discovery-pattern.html">ADR-0011</a>: Tracing critical for debugging service-to-service calls</li>
+</ul>
+<h2 id="related-links">Related Links</h2>
+<ul>
+<li><a href="https://opentelemetry.io/docs/">OpenTelemetry Documentation</a></li>
+<li><a href="https://github.com/open-telemetry/opentelemetry-dotnet">OpenTelemetry .NET</a></li>
+<li><a href="https://learn.microsoft.com/dotnet/aspire/fundamentals/telemetry">Aspire Observability</a></li>
+<li><a href="https://learn.microsoft.com/dotnet/aspire/fundamentals/dashboard">Aspire Dashboard</a></li>
+<li><a href="https://www.cncf.io/projects/opentelemetry/">CNCF OpenTelemetry</a></li>
+</ul>
+<h2 id="notes">Notes</h2>
+<ul>
+<li><p><strong>Trace Context Propagation</strong>: W3C Trace Context standard ensures traces cross service boundaries</p>
+</li>
+<li><p><strong>Sampling Strategy</strong>:</p>
+<ul>
+<li>Development: 100% sampling (all traces)</li>
+<li>Production: 1-10% sampling (or adaptive sampling)</li>
+</ul>
+</li>
+<li><p><strong>Custom Metrics</strong>: Add custom metrics for business KPIs</p>
+<pre><code class="lang-csharp">var videoViewCounter = meterProvider.GetMeter(&quot;VideoService&quot;)
+    .CreateCounter&lt;int&gt;(&quot;video.views&quot;);
+videoViewCounter.Add(1, new KeyValuePair&lt;string, object&gt;(&quot;video.id&quot;, videoId));
+</code></pre>
+</li>
+<li><p><strong>Structured Logging</strong>: Use structured logging for better searchability</p>
+<pre><code class="lang-csharp">logger.LogInformation(&quot;Video {VideoId} viewed by {UserId}&quot;, videoId, userId);
+</code></pre>
+</li>
+<li><p><strong>Aspire Dashboard Features</strong>:</p>
+<ul>
+<li>Real-time trace visualization</li>
+<li>Metrics graphs</li>
+<li>Structured logs with filtering</li>
+<li>Service dependencies graph</li>
+<li>Resource monitoring</li>
+</ul>
+</li>
+<li><p><strong>Production Backends</strong>:</p>
+<ul>
+<li>Tracing: Jaeger, Tempo, Azure Monitor, AWS X-Ray</li>
+<li>Metrics: Prometheus, Azure Monitor, AWS CloudWatch</li>
+<li>Logs: Loki, Azure Monitor, AWS CloudWatch Logs</li>
+</ul>
+</li>
+<li><p><strong>Performance</strong>:</p>
+<ul>
+<li>Use <code>ActivitySource</code> for custom spans</li>
+<li>Batch exports (reduce network calls)</li>
+<li>Sample in production (reduce overhead and cost)</li>
+</ul>
+</li>
+<li><p><strong>Future</strong>: OpenTelemetry Logs (currently experimental) will unify logging with traces/metrics</p>
+</li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/01-architecture-decision-records/0007-opentelemetry-for-observability.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

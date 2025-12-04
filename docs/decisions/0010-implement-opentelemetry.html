@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>10. Implement OpenTelemetry for Observability | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="10. Implement OpenTelemetry for Observability | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/decisions/0010-implement-opentelemetry.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="10-implement-opentelemetry-for-observability">10. Implement OpenTelemetry for Observability</h1>
+
+<p><strong>Status:</strong> ✅ Accepted</p>
+<p><strong>Date:</strong> 2024-12-01</p>
+<p><strong>Deciders:</strong> Architecture Team, SRE Team</p>
+<p><strong>Technical Story:</strong> Implementation in <code>src/AdvancedConcepts.Core/Advanced/Observability/OpenTelemetryExamples.cs</code></p>
+<hr>
+<h2 id="context-and-problem-statement">Context and Problem Statement</h2>
+<p>Modern distributed systems require comprehensive observability across the <strong>three pillars</strong>:</p>
+<ol>
+<li><strong>Traces</strong> - Request flow across services</li>
+<li><strong>Metrics</strong> - Performance counters, business metrics</li>
+<li><strong>Logs</strong> - Event records</li>
+</ol>
+<p><strong>Problems with traditional monitoring:</strong></p>
+<ul>
+<li>No correlation between logs, traces, and metrics</li>
+<li>Vendor lock-in (Application Insights, Datadog formats)</li>
+<li>Manual instrumentation required</li>
+<li>Different libraries for each observability type</li>
+</ul>
+<p><strong>We need:</strong></p>
+<ul>
+<li>Unified observability (traces + metrics + logs)</li>
+<li>Distributed tracing across microservices</li>
+<li>Vendor-neutral format (switch from Jaeger to Zipkin easily)</li>
+<li>Automatic instrumentation</li>
+<li>Cloud-native integration (Azure, AWS, GCP)</li>
+</ul>
+<hr>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li><strong>Vendor Neutrality</strong> - Not locked into specific APM tool</li>
+<li><strong>Three Pillars</strong> - Unified traces, metrics, logs</li>
+<li><strong>Automatic Instrumentation</strong> - Capture HTTP, database, messaging automatically</li>
+<li><strong>Standards-Based</strong> - OpenTelemetry is CNCF standard</li>
+<li><strong>Cloud Integration</strong> - Works with all major clouds</li>
+<li><strong>Performance</strong> - Minimal overhead (&lt; 5% CPU)</li>
+</ul>
+<hr>
+<h2 id="considered-options">Considered Options</h2>
+<ul>
+<li><strong>Option 1</strong> - OpenTelemetry (.NET)</li>
+<li><strong>Option 2</strong> - Application Insights SDK (Azure-specific)</li>
+<li><strong>Option 3</strong> - Datadog APM (vendor-specific)</li>
+<li><strong>Option 4</strong> - Manual instrumentation</li>
+</ul>
+<hr>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p><strong>Chosen option:</strong> &quot;OpenTelemetry&quot;, because it's the vendor-neutral, CNCF-backed standard that provides automatic instrumentation for traces, metrics, and logs with support for all major backends (Jaeger, Zipkin, Prometheus, Application Insights, Datadog).</p>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li><strong>Vendor Neutral</strong> - Export to any backend (Jaeger, Zipkin, Application Insights)</li>
+<li><strong>Automatic Instrumentation</strong> - HTTP, gRPC, database, messaging tracked automatically</li>
+<li><strong>Unified Observability</strong> - Traces, metrics, logs in one library</li>
+<li><strong>Standards-Based</strong> - OpenTelemetry is CNCF graduated project</li>
+<li><strong>W3C Trace Context</strong> - Distributed tracing across any technology (.NET, Java, Python)</li>
+<li><strong>.NET Aspire Integration</strong> - Automatic setup in Aspire apps</li>
+<li><strong>Performance</strong> - Sampling, batching, async export</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li><strong>Complexity</strong> - More configuration than simple logging</li>
+<li><strong>Collector Required</strong> - Need OpenTelemetry Collector in production</li>
+<li><strong>Learning Curve</strong> - Team needs to understand distributed tracing concepts</li>
+<li><strong>Overhead</strong> - Small performance impact (2-5% CPU typically)</li>
+</ul>
+<hr>
+<h2 id="pros-and-cons-of-the-options">Pros and Cons of the Options</h2>
+<h3 id="opentelemetry-chosen">OpenTelemetry (Chosen)</h3>
+<p><strong>What is OpenTelemetry?</strong></p>
+<p>OpenTelemetry (OTel) is an open-source observability framework that provides APIs, SDKs, and tools to instrument, generate, collect, and export telemetry data (traces, metrics, logs).</p>
+<p><strong>Architecture:</strong></p>
+<pre><code>Your Application
+    ↓ (automatic instrumentation)
+OpenTelemetry SDK
+    ↓ (exports)
+OpenTelemetry Collector (optional)
+    ↓ (sends to backends)
+Jaeger / Zipkin / Prometheus / Application Insights / Datadog
+</code></pre>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Vendor neutral</strong> - Switch backends without code changes</li>
+<li><strong>Auto-instrumentation</strong> - HTTP, database, messaging captured automatically</li>
+<li><strong>W3C standard</strong> - traceparent header works across languages</li>
+<li><strong>Unified</strong> - Traces, metrics, logs in one framework</li>
+<li><strong>CNCF graduated</strong> - Industry standard backed by major vendors</li>
+<li><strong>Sampling</strong> - Control overhead with sampling strategies</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Setup complexity</strong> - More configuration than vendor SDKs</li>
+<li><strong>Collector management</strong> - Production needs OTel Collector</li>
+<li><strong>Incomplete</strong> - Some features still in beta (logs especially)</li>
+</ul>
+<p><strong>Installation:</strong></p>
+<pre><code class="lang-bash">dotnet add package OpenTelemetry.Extensions.Hosting
+dotnet add package OpenTelemetry.Instrumentation.AspNetCore
+dotnet add package OpenTelemetry.Instrumentation.Http
+dotnet add package OpenTelemetry.Instrumentation.SqlClient
+dotnet add package OpenTelemetry.Exporter.Console
+dotnet add package OpenTelemetry.Exporter.OpenTelemetryProtocol  # OTLP exporter
+</code></pre>
+<p><strong>Basic Setup:</strong></p>
+<pre><code class="lang-csharp">// Program.cs
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
+using OpenTelemetry.Metrics;
+
+var builder = WebApplication.CreateBuilder(args);
+
+var serviceName = &quot;MyApiService&quot;;
+var serviceVersion = &quot;1.0.0&quot;;
+
+// Add OpenTelemetry
+builder.Services.AddOpenTelemetry()
+    .ConfigureResource(resource =&gt; resource
+        .AddService(serviceName, serviceVersion: serviceVersion)
+        .AddAttributes(new Dictionary&lt;string, object&gt;
+        {
+            [&quot;deployment.environment&quot;] = builder.Environment.EnvironmentName,
+            [&quot;host.name&quot;] = Environment.MachineName
+        }))
+    .WithTracing(tracing =&gt; tracing
+        // Automatic instrumentation
+        .AddAspNetCoreInstrumentation(options =&gt;
+        {
+            options.RecordException = true;
+            options.Filter = httpContext =&gt;
+            {
+                // Don't trace health checks
+                return !httpContext.Request.Path.StartsWithSegments(&quot;/health&quot;);
+            };
+        })
+        .AddHttpClientInstrumentation()
+        .AddSqlClientInstrumentation(options =&gt;
+        {
+            options.SetDbStatementForText = true;  // Capture SQL queries
+            options.RecordException = true;
+        })
+        // Exporters
+        .AddConsoleExporter()  // Development
+        .AddOtlpExporter(otlpOptions =&gt;
+        {
+            // Production - send to OpenTelemetry Collector
+            otlpOptions.Endpoint = new Uri(&quot;http://otel-collector:4317&quot;);
+        }))
+    .WithMetrics(metrics =&gt; metrics
+        .AddAspNetCoreInstrumentation()
+        .AddHttpClientInstrumentation()
+        .AddRuntimeInstrumentation()  // GC, thread pool, etc.
+        .AddMeter(&quot;MyApiService&quot;)     // Custom metrics
+        .AddConsoleExporter()
+        .AddOtlpExporter());
+
+var app = builder.Build();
+app.Run();
+</code></pre>
+<p><strong>.NET Aspire (Even Simpler):</strong></p>
+<pre><code class="lang-csharp">// Aspire automatically adds OpenTelemetry!
+// In ServiceDefaults/Extensions.cs (auto-generated)
+
+public static IHostApplicationBuilder AddServiceDefaults(this IHostApplicationBuilder builder)
+{
+    builder.Services.AddOpenTelemetry()
+        .WithMetrics(metrics =&gt; metrics
+            .AddAspNetCoreInstrumentation()
+            .AddHttpClientInstrumentation()
+            .AddRuntimeInstrumentation())
+        .WithTracing(tracing =&gt; tracing
+            .AddAspNetCoreInstrumentation()
+            .AddHttpClientInstrumentation()
+            .AddSqlClientInstrumentation());
+
+    // Aspire Dashboard automatically receives telemetry
+    // Navigate to: http://localhost:18888/traces
+    return builder;
+}
+
+// That's it! No manual configuration needed!
+</code></pre>
+<p><strong>Custom Tracing:</strong></p>
+<pre><code class="lang-csharp">using System.Diagnostics;
+
+public class ProductService
+{
+    private static readonly ActivitySource ActivitySource = new(&quot;MyApiService&quot;);
+
+    public async Task&lt;Product&gt; GetProductAsync(int productId)
+    {
+        // Create custom span
+        using var activity = ActivitySource.StartActivity(&quot;GetProduct&quot;);
+        activity?.SetTag(&quot;product.id&quot;, productId);
+
+        try
+        {
+            var product = await _repository.GetByIdAsync(productId);
+
+            if (product == null)
+            {
+                activity?.SetStatus(ActivityStatusCode.Error, &quot;Product not found&quot;);
+                activity?.SetTag(&quot;product.found&quot;, false);
+                return null;
+            }
+
+            activity?.SetTag(&quot;product.name&quot;, product.Name);
+            activity?.SetTag(&quot;product.price&quot;, product.Price);
+            activity?.SetTag(&quot;product.found&quot;, true);
+
+            return product;
+        }
+        catch (Exception ex)
+        {
+            activity?.SetStatus(ActivityStatusCode.Error, ex.Message);
+            activity?.RecordException(ex);
+            throw;
+        }
+    }
+}
+
+// Trace example:
+// TraceId: 4bf92f3577b34da6a3ce929d0e0e4736
+// SpanId: 00f067aa0ba902b7
+// ParentSpanId: null
+// Name: GetProduct
+// Tags:
+//   - product.id: 123
+//   - product.name: &quot;Widget&quot;
+//   - product.price: 29.99
+//   - product.found: true
+// Duration: 45ms
+</code></pre>
+<p><strong>Custom Metrics:</strong></p>
+<pre><code class="lang-csharp">using System.Diagnostics.Metrics;
+
+public class OrderService
+{
+    private static readonly Meter Meter = new(&quot;MyApiService&quot;);
+    private static readonly Counter&lt;long&gt; OrdersProcessed = Meter.CreateCounter&lt;long&gt;(&quot;orders.processed&quot;);
+    private static readonly Histogram&lt;double&gt; OrderValue = Meter.CreateHistogram&lt;double&gt;(&quot;orders.value&quot;);
+
+    public async Task ProcessOrderAsync(Order order)
+    {
+        await ProcessAsync(order);
+
+        // Increment counter
+        OrdersProcessed.Add(1, new KeyValuePair&lt;string, object&gt;(&quot;status&quot;, &quot;success&quot;));
+
+        // Record histogram
+        OrderValue.Record(order.TotalAmount, new KeyValuePair&lt;string, object&gt;(&quot;currency&quot;, &quot;USD&quot;));
+    }
+}
+
+// Metrics exported:
+// orders.processed{status=&quot;success&quot;} = 1234
+// orders.value.bucket{le=&quot;10&quot;} = 45
+// orders.value.bucket{le=&quot;100&quot;} = 156
+// orders.value.sum = 45678.90
+// orders.value.count = 1234
+</code></pre>
+<p><strong>Distributed Tracing (Cross-Service):</strong></p>
+<pre><code class="lang-csharp">// Service A calls Service B
+// OpenTelemetry automatically propagates trace context via HTTP headers
+
+// Service A (calling service)
+var httpClient = _httpClientFactory.CreateClient();
+var response = await httpClient.GetAsync(&quot;http://service-b/api/products/123&quot;);
+// OpenTelemetry automatically adds traceparent header:
+// traceparent: 00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01
+
+// Service B (receiving service)
+// OpenTelemetry automatically reads traceparent header
+// Creates child span with same TraceId but different SpanId
+
+// Result: Single distributed trace across both services!
+// TraceId: 4bf92f3577b34da6a3ce929d0e0e4736
+//   ├─ Service A: GET /api/orders/456 (200ms)
+//   │   └─ HTTP GET http://service-b/api/products/123 (150ms)
+//   │       └─ Service B: GET /api/products/123 (145ms)
+//   │           └─ SQL SELECT * FROM products WHERE id = 123 (5ms)
+</code></pre>
+<h3 id="application-insights-sdk-azure-specific">Application Insights SDK (Azure-Specific)</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Deep Azure integration</li>
+<li>Automatic dependency tracking</li>
+<li>Live metrics stream</li>
+<li>Application Map (visual topology)</li>
+<li>Excellent portal experience</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Vendor lock-in</strong> - Azure only</li>
+<li><strong>Proprietary format</strong> - Can't export to Jaeger, Zipkin</li>
+<li><strong>Cost</strong> - Pay per GB ingested (~$2.30/GB)</li>
+<li><strong>Migration complexity</strong> - Hard to switch to other APM</li>
+</ul>
+<p><strong>When to Use:</strong></p>
+<ul>
+<li>Azure-only deployment</li>
+<li>No multi-cloud requirements</li>
+<li>Team heavily invested in Azure</li>
+</ul>
+<p><strong>Why Not Primary Choice:</strong>
+Application Insights is excellent for Azure, but we want <strong>vendor neutrality</strong>. OpenTelemetry can export to Application Insights while keeping options open.</p>
+<h3 id="datadog-apm--new-relic--dynatrace">Datadog APM / New Relic / Dynatrace</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Full-featured APM platforms</li>
+<li>Great UX</li>
+<li>AI-powered insights</li>
+<li>Alerting and dashboards</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Expensive</strong> - $15-31/host/month</li>
+<li><strong>Vendor lock-in</strong> - Proprietary agents</li>
+<li><strong>Can't self-host</strong> - SaaS only</li>
+</ul>
+<p><strong>Why Not Chosen:</strong>
+Commercial APM tools are excellent but expensive and lock you in. OpenTelemetry + open-source backends (Jaeger, Prometheus, Grafana) provide 80% of functionality at 10% of cost.</p>
+<h3 id="manual-instrumentation">Manual Instrumentation</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Full control</li>
+<li>No dependencies</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Time-consuming</strong> - Hundreds of hours to instrument app</li>
+<li><strong>Error-prone</strong> - Easy to miss critical paths</li>
+<li><strong>Maintenance burden</strong> - Must update when code changes</li>
+<li><strong>No standards</strong> - Incompatible with other tools</li>
+</ul>
+<p><strong>Why Rejected:</strong>
+Manual instrumentation would require 100+ hours for basic tracing. OpenTelemetry provides automatic instrumentation that captures 90% of important operations.</p>
+<hr>
+<h2 id="opentelemetry-backends">OpenTelemetry Backends</h2>
+<p><strong>Jaeger (Distributed Tracing):</strong></p>
+<pre><code class="lang-bash"># Docker
+docker run -d --name jaeger \
+  -p 16686:16686 \
+  -p 4317:4317 \
+  jaegertracing/all-in-one:latest
+
+# Navigate to: http://localhost:16686
+</code></pre>
+<p><strong>Prometheus + Grafana (Metrics):</strong></p>
+<pre><code class="lang-yaml"># docker-compose.yml
+version: '3.8'
+services:
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - &quot;9090:9090&quot;
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - &quot;3000:3000&quot;
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+</code></pre>
+<p><strong>OpenTelemetry Collector:</strong></p>
+<pre><code class="lang-yaml"># otel-collector-config.yaml
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  batch:
+    timeout: 10s
+    send_batch_size: 1024
+
+exporters:
+  jaeger:
+    endpoint: jaeger:14250
+    tls:
+      insecure: true
+  prometheus:
+    endpoint: 0.0.0.0:8889
+  logging:
+    loglevel: debug
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [jaeger, logging]
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [prometheus, logging]
+</code></pre>
+<hr>
+<h2 id="sampling-strategies">Sampling Strategies</h2>
+<p><strong>1. Always On (Development):</strong></p>
+<pre><code class="lang-csharp">.AddOtlpExporter(options =&gt;
+{
+    options.SamplingProbability = 1.0;  // 100% of traces
+});
+</code></pre>
+<p><strong>2. Probabilistic (Production):</strong></p>
+<pre><code class="lang-csharp">// Sample 10% of requests
+builder.Services.Configure&lt;AspNetCoreInstrumentationOptions&gt;(options =&gt;
+{
+    options.RecordException = true;
+});
+
+// Custom sampler
+builder.Services.AddOpenTelemetry()
+    .WithTracing(tracing =&gt; tracing
+        .SetSampler(new TraceIdRatioBasedSampler(0.1)));  // 10% sampling
+</code></pre>
+<p><strong>3. Parent-Based (Respect upstream decisions):</strong></p>
+<pre><code class="lang-csharp">.SetSampler(new ParentBasedSampler(new TraceIdRatioBasedSampler(0.1)));
+</code></pre>
+<hr>
+<h2 id="best-practices">Best Practices</h2>
+<p><strong>1. Add Meaningful Tags:</strong></p>
+<pre><code class="lang-csharp">activity?.SetTag(&quot;user.id&quot;, userId);
+activity?.SetTag(&quot;product.category&quot;, &quot;electronics&quot;);
+activity?.SetTag(&quot;order.total&quot;, 99.99);
+</code></pre>
+<p><strong>2. Record Exceptions:</strong></p>
+<pre><code class="lang-csharp">try
+{
+    // ...
+}
+catch (Exception ex)
+{
+    activity?.RecordException(ex);
+    activity?.SetStatus(ActivityStatusCode.Error, ex.Message);
+    throw;
+}
+</code></pre>
+<p><strong>3. Don't Trace Everything:</strong></p>
+<pre><code class="lang-csharp">// ❌ Don't trace health checks
+options.Filter = httpContext =&gt;
+    !httpContext.Request.Path.StartsWithSegments(&quot;/health&quot;);
+</code></pre>
+<hr>
+<h2 id="links">Links</h2>
+<ul>
+<li><a href="https://github.com/open-telemetry/opentelemetry-dotnet">OpenTelemetry .NET</a></li>
+<li><a href="https://opentelemetry.io/docs/">OpenTelemetry Documentation</a></li>
+<li><a href="https://www.jaegertracing.io/">Jaeger</a></li>
+<li><a href="../../src/AdvancedConcepts.Core/Advanced/Observability/OpenTelemetryExamples.cs">Sample Implementation</a></li>
+</ul>
+<hr>
+<h2 id="notes">Notes</h2>
+<p><strong>Three Pillars of Observability:</strong></p>
+<ol>
+<li><strong>Traces</strong> - Where time went (distributed request flow)</li>
+<li><strong>Metrics</strong> - How many and how much (counters, gauges, histograms)</li>
+<li><strong>Logs</strong> - What happened (event records)</li>
+</ol>
+<p><strong>Correlation:</strong></p>
+<ul>
+<li>Trace ID links all spans in a request</li>
+<li>Span ID identifies individual operation</li>
+<li>Logs can include trace ID for correlation</li>
+</ul>
+<p><strong>Review Date:</strong> 2025-12-01</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/decisions/0010-implement-opentelemetry.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

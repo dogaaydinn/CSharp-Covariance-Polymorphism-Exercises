@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>1. Use MediatR for CQRS Implementation | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="1. Use MediatR for CQRS Implementation | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/decisions/0001-use-mediatr-for-cqrs.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="1-use-mediatr-for-cqrs-implementation">1. Use MediatR for CQRS Implementation</h1>
+
+<p><strong>Status:</strong> ✅ Accepted</p>
+<p><strong>Date:</strong> 2024-12-01</p>
+<p><strong>Deciders:</strong> Architecture Team, Senior Engineers</p>
+<p><strong>Technical Story:</strong> Implementation in <code>samples/05-RealWorld/MicroserviceTemplate</code></p>
+<hr>
+<h2 id="context-and-problem-statement">Context and Problem Statement</h2>
+<p>The MicroserviceTemplate project requires a clean separation between command operations (writes) and query operations (reads) following the CQRS (Command Query Responsibility Segregation) pattern. We need a mechanism to handle commands and queries without creating tight coupling between request handlers and the controllers.</p>
+<p><strong>Key Requirements:</strong></p>
+<ul>
+<li>Clear separation of concerns</li>
+<li>Testable request handlers</li>
+<li>Minimal boilerplate code</li>
+<li>Industry-standard pattern</li>
+<li>Support for cross-cutting concerns (validation, logging, transactions)</li>
+</ul>
+<hr>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li><strong>Maintainability</strong> - Code should be easy to understand and modify</li>
+<li><strong>Testability</strong> - Handlers should be independently testable</li>
+<li><strong>Industry Standards</strong> - Pattern should be widely recognized</li>
+<li><strong>Developer Experience</strong> - Should reduce boilerplate code</li>
+<li><strong>Extensibility</strong> - Should support behaviors (pipeline pattern)</li>
+</ul>
+<hr>
+<h2 id="considered-options">Considered Options</h2>
+<ul>
+<li><strong>Option 1</strong> - MediatR library</li>
+<li><strong>Option 2</strong> - Manual CQRS implementation (custom mediator)</li>
+<li><strong>Option 3</strong> - Direct controller-to-service pattern (no mediator)</li>
+</ul>
+<hr>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p><strong>Chosen option:</strong> &quot;MediatR library&quot;, because it provides a battle-tested implementation of the mediator pattern with excellent support for CQRS, minimal boilerplate, and extensive community adoption.</p>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li><strong>Clean Code</strong> - Controllers become thin, handlers are focused on single responsibility</li>
+<li><strong>Testability</strong> - Each handler can be unit tested in isolation</li>
+<li><strong>Pipeline Behaviors</strong> - Built-in support for cross-cutting concerns (validation, logging, etc.)</li>
+<li><strong>Industry Recognition</strong> - Widely used pattern that any .NET developer can understand</li>
+<li><strong>Documentation</strong> - Extensive official and community documentation available</li>
+<li><strong>Integration</strong> - Works seamlessly with dependency injection</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li><strong>External Dependency</strong> - Adds NuGet package dependency to the project</li>
+<li><strong>Learning Curve</strong> - Team members unfamiliar with CQRS need to learn the pattern</li>
+<li><strong>Over-Engineering Risk</strong> - Can be overkill for simple CRUD operations</li>
+<li><strong>Reflection Overhead</strong> - Minimal performance cost due to handler resolution via reflection</li>
+</ul>
+<hr>
+<h2 id="pros-and-cons-of-the-options">Pros and Cons of the Options</h2>
+<h3 id="mediatr-library">MediatR Library</h3>
+<p>[Chosen Option]</p>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Battle-tested with millions of downloads</li>
+<li>Excellent documentation and community support</li>
+<li>Built-in pipeline behaviors for cross-cutting concerns</li>
+<li>Reduces boilerplate code significantly</li>
+<li>Supports both synchronous and asynchronous handlers</li>
+<li>Works with ASP.NET Core dependency injection out-of-the-box</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li>External dependency (NuGet package)</li>
+<li>Adds small runtime overhead due to reflection</li>
+<li>Requires understanding of the mediator pattern</li>
+<li>Can be seen as over-engineering for very simple apps</li>
+</ul>
+<p><strong>Example Usage:</strong></p>
+<pre><code class="lang-csharp">// Command
+public record CreateProductCommand(string Name, decimal Price) : IRequest&lt;ProductDto&gt;;
+
+// Handler
+public class CreateProductCommandHandler : IRequestHandler&lt;CreateProductCommand, ProductDto&gt;
+{
+    public async Task&lt;ProductDto&gt; Handle(CreateProductCommand request, CancellationToken ct)
+    {
+        // Business logic here
+    }
+}
+
+// Controller (thin)
+[HttpPost]
+public async Task&lt;ActionResult&lt;ProductDto&gt;&gt; Create([FromBody] CreateProductCommand command)
+{
+    var result = await _mediator.Send(command);
+    return Ok(result);
+}
+</code></pre>
+<h3 id="manual-cqrs-implementation">Manual CQRS Implementation</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>No external dependencies</li>
+<li>Full control over implementation</li>
+<li>Can be optimized for specific use cases</li>
+<li>No reflection overhead</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li>Requires significant boilerplate code</li>
+<li>Need to implement handler registration manually</li>
+<li>Need to implement pipeline behaviors from scratch</li>
+<li>Requires ongoing maintenance</li>
+<li>Not industry-standard (harder for new developers)</li>
+<li>Estimated 500+ lines of infrastructure code</li>
+</ul>
+<p><strong>Why Rejected:</strong>
+While this gives full control, it requires implementing everything that MediatR provides out-of-the-box. The maintenance burden and lack of standardization outweigh the benefits.</p>
+<h3 id="direct-controller-to-service-pattern">Direct Controller-to-Service Pattern</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Simple and straightforward</li>
+<li>No additional abstractions</li>
+<li>Easy for beginners to understand</li>
+<li>No external dependencies</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li>Controllers become fat and handle multiple responsibilities</li>
+<li>Difficult to test (need to mock services in controllers)</li>
+<li>No clear separation between commands and queries</li>
+<li>Hard to add cross-cutting concerns</li>
+<li>Violates Single Responsibility Principle</li>
+<li>Difficult to scale as complexity grows</li>
+</ul>
+<p><strong>Example (problematic):</strong></p>
+<pre><code class="lang-csharp">public class ProductsController
+{
+    private readonly IProductService _productService;
+    private readonly IValidator&lt;Product&gt; _validator;
+    private readonly ILogger _logger;
+    private readonly IDbContext _context;
+
+    [HttpPost]
+    public async Task&lt;ActionResult&gt; Create([FromBody] Product product)
+    {
+        // Validation logic
+        var validationResult = await _validator.ValidateAsync(product);
+        if (!validationResult.IsValid) return BadRequest();
+
+        // Logging
+        _logger.LogInformation(&quot;Creating product {Name}&quot;, product.Name);
+
+        // Transaction handling
+        using var transaction = await _context.Database.BeginTransactionAsync();
+        try
+        {
+            // Business logic
+            var created = await _productService.CreateAsync(product);
+            await transaction.CommitAsync();
+            return Ok(created);
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
+    }
+}
+</code></pre>
+<p><strong>Why Rejected:</strong>
+This approach doesn't scale. Controllers become cluttered with validation, logging, transaction handling, and business logic. Testing requires mocking multiple services. Adding new features requires modifying controllers.</p>
+<hr>
+<h2 id="implementation-details">Implementation Details</h2>
+<h3 id="registration">Registration</h3>
+<pre><code class="lang-csharp">// Program.cs
+services.AddMediatR(cfg =&gt;
+{
+    cfg.RegisterServicesFromAssemblyContaining&lt;Program&gt;();
+});
+
+// Optional: Add behaviors
+services.AddTransient(typeof(IPipelineBehavior&lt;,&gt;), typeof(ValidationBehavior&lt;,&gt;));
+services.AddTransient(typeof(IPipelineBehavior&lt;,&gt;), typeof(LoggingBehavior&lt;,&gt;));
+</code></pre>
+<h3 id="usage-pattern">Usage Pattern</h3>
+<pre><code class="lang-csharp">// Commands modify state
+public record CreateProductCommand : IRequest&lt;ProductDto&gt; { }
+public record UpdateProductCommand : IRequest&lt;ProductDto&gt; { }
+public record DeleteProductCommand : IRequest&lt;Unit&gt; { }
+
+// Queries return data (no side effects)
+public record GetProductQuery : IRequest&lt;ProductDto&gt; { }
+public record GetAllProductsQuery : IRequest&lt;List&lt;ProductDto&gt;&gt; { }
+</code></pre>
+<hr>
+<h2 id="links">Links</h2>
+<ul>
+<li><a href="https://github.com/jbogard/MediatR">MediatR GitHub Repository</a></li>
+<li><a href="https://martinfowler.com/bliki/CQRS.html">CQRS Pattern by Martin Fowler</a></li>
+<li><a href="https://github.com/jbogard/MediatR/wiki">MediatR Wiki</a></li>
+<li><a href="../../samples/05-RealWorld/MicroserviceTemplate">Sample Implementation</a></li>
+</ul>
+<hr>
+<h2 id="notes">Notes</h2>
+<p><strong>Performance Consideration:</strong>
+The reflection overhead of MediatR is negligible in most applications (&lt; 1ms per request). If you're building a ultra-high-performance API where every microsecond matters, consider manual implementation. For 99% of applications, the benefits far outweigh the minimal performance cost.</p>
+<p><strong>When NOT to Use MediatR:</strong></p>
+<ul>
+<li>Very simple CRUD applications with no business logic</li>
+<li>Prototypes or proof-of-concepts</li>
+<li>Applications with fewer than 5 endpoints</li>
+<li>Teams unfamiliar with CQRS and unwilling to learn</li>
+</ul>
+<p><strong>Future Considerations:</strong></p>
+<ul>
+<li>Consider adding validation behaviors using FluentValidation</li>
+<li>Consider adding logging behaviors for audit trails</li>
+<li>Consider adding transaction behaviors for multi-entity operations</li>
+<li>Monitor performance in production; optimize if MediatR becomes a bottleneck (unlikely)</li>
+</ul>
+<p><strong>Review Date:</strong> 2025-12-01 (annual review)</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/decisions/0001-use-mediatr-for-cqrs.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

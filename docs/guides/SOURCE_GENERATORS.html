@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Source Generators Guide | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Source Generators Guide | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/guides/SOURCE_GENERATORS.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="source-generators-guide">Source Generators Guide</h1>
+
+<h2 id="overview">Overview</h2>
+<p>Source Generators are a powerful C# compiler feature that allows you to generate code at compile-time. This guide covers creating custom source generators for common patterns.</p>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ul>
+<li><a href="#what-are-source-generators">What are Source Generators?</a></li>
+<li><a href="#setting-up-a-source-generator-project">Setting Up a Source Generator Project</a></li>
+<li><a href="#common-use-cases">Common Use Cases</a></li>
+<li><a href="#example-automapper-generator">Example: AutoMapper Generator</a></li>
+<li><a href="#example-logger-generator">Example: Logger Generator</a></li>
+<li><a href="#best-practices">Best Practices</a></li>
+<li><a href="#testing-source-generators">Testing Source Generators</a></li>
+</ul>
+<h2 id="what-are-source-generators">What are Source Generators?</h2>
+<p>Source generators run during compilation and can:</p>
+<ul>
+<li>Generate additional source files</li>
+<li>Analyze code and emit diagnostics</li>
+<li>Reduce runtime reflection</li>
+<li>Improve startup performance</li>
+<li>Enable compile-time validation</li>
+</ul>
+<h3 id="benefits">Benefits</h3>
+<ul>
+<li>✅ <strong>Zero runtime overhead</strong> - Code generated at compile-time</li>
+<li>✅ <strong>Type safety</strong> - Errors caught during compilation</li>
+<li>✅ <strong>Better IDE support</strong> - IntelliSense for generated code</li>
+<li>✅ <strong>Performance</strong> - No reflection needed at runtime</li>
+</ul>
+<h2 id="setting-up-a-source-generator-project">Setting Up a Source Generator Project</h2>
+<h3 id="1-create-source-generator-project">1. Create Source Generator Project</h3>
+<pre><code class="lang-bash"># Create a .NET Standard 2.0 library
+dotnet new classlib -n AdvancedConcepts.SourceGenerators -f netstandard2.0
+
+# Add required packages
+cd AdvancedConcepts.SourceGenerators
+dotnet add package Microsoft.CodeAnalysis.CSharp --version 4.5.0
+dotnet add package Microsoft.CodeAnalysis.Analyzers --version 3.3.4
+</code></pre>
+<h3 id="2-configure-project-file">2. Configure Project File</h3>
+<pre><code class="lang-xml">&lt;Project Sdk=&quot;Microsoft.NET.Sdk&quot;&gt;
+  &lt;PropertyGroup&gt;
+    &lt;TargetFramework&gt;netstandard2.0&lt;/TargetFramework&gt;
+    &lt;LangVersion&gt;latest&lt;/LangVersion&gt;
+    &lt;IsRoslynComponent&gt;true&lt;/IsRoslynComponent&gt;
+    &lt;EnforceExtendedAnalyzerRules&gt;true&lt;/EnforceExtendedAnalyzerRules&gt;
+  &lt;/PropertyGroup&gt;
+
+  &lt;ItemGroup&gt;
+    &lt;PackageReference Include=&quot;Microsoft.CodeAnalysis.CSharp&quot; Version=&quot;4.5.0&quot; PrivateAssets=&quot;all&quot; /&gt;
+    &lt;PackageReference Include=&quot;Microsoft.CodeAnalysis.Analyzers&quot; Version=&quot;3.3.4&quot; PrivateAssets=&quot;all&quot; /&gt;
+  &lt;/ItemGroup&gt;
+&lt;/Project&gt;
+</code></pre>
+<h3 id="3-reference-in-consumer-project">3. Reference in Consumer Project</h3>
+<pre><code class="lang-xml">&lt;ItemGroup&gt;
+  &lt;ProjectReference Include=&quot;..\AdvancedConcepts.SourceGenerators\AdvancedConcepts.SourceGenerators.csproj&quot;
+                    OutputItemType=&quot;Analyzer&quot;
+                    ReferenceOutputAssembly=&quot;false&quot; /&gt;
+&lt;/ItemGroup&gt;
+</code></pre>
+<h2 id="common-use-cases">Common Use Cases</h2>
+<h3 id="1-dto-mapping-automapper-like">1. DTO Mapping (AutoMapper-like)</h3>
+<p>Automatically generate mapping code between DTOs:</p>
+<pre><code class="lang-csharp">[AutoMap(typeof(UserDto))]
+public partial class User
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string Email { get; set; }
+}
+
+// Generated code:
+public partial class User
+{
+    public static User FromDto(UserDto dto)
+    {
+        return new User
+        {
+            Id = dto.Id,
+            Name = dto.Name,
+            Email = dto.Email
+        };
+    }
+
+    public UserDto ToDto()
+    {
+        return new UserDto
+        {
+            Id = this.Id,
+            Name = this.Name,
+            Email = this.Email
+        };
+    }
+}
+</code></pre>
+<h3 id="2-compile-time-logging">2. Compile-Time Logging</h3>
+<p>Generate optimized logging code:</p>
+<pre><code class="lang-csharp">public partial class UserService
+{
+    [LoggerMessage(EventId = 1, Level = LogLevel.Information, Message = &quot;User {UserId} logged in&quot;)]
+    public static partial void LogUserLogin(ILogger logger, int userId);
+}
+
+// Generated code includes optimized logging without string interpolation overhead
+</code></pre>
+<h3 id="3-builder-pattern-generation">3. Builder Pattern Generation</h3>
+<p>Automatically create fluent builder APIs:</p>
+<pre><code class="lang-csharp">[GenerateBuilder]
+public partial class Product
+{
+    public string Name { get; set; }
+    public decimal Price { get; set; }
+    public string Category { get; set; }
+}
+
+// Usage:
+var product = new ProductBuilder()
+    .WithName(&quot;Laptop&quot;)
+    .WithPrice(999.99m)
+    .WithCategory(&quot;Electronics&quot;)
+    .Build();
+</code></pre>
+<h3 id="4-validation-generation">4. Validation Generation</h3>
+<p>Generate validation code from attributes:</p>
+<pre><code class="lang-csharp">public class User
+{
+    [Required]
+    [StringLength(100)]
+    public string Name { get; set; }
+
+    [Required]
+    [EmailAddress]
+    public string Email { get; set; }
+
+    [Range(18, 120)]
+    public int Age { get; set; }
+}
+
+// Generated validator class
+</code></pre>
+<h3 id="5-serialization-optimization">5. Serialization Optimization</h3>
+<p>Generate optimized JSON serialization code:</p>
+<pre><code class="lang-csharp">[JsonSerializable(typeof(User))]
+public partial class UserContext : JsonSerializerContext
+{
+    // Generated code for optimized serialization
+}
+</code></pre>
+<h2 id="example-automapper-generator">Example: AutoMapper Generator</h2>
+<h3 id="attribute-definition">Attribute Definition</h3>
+<pre><code class="lang-csharp">namespace AdvancedConcepts.SourceGenerators
+{
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+    public class AutoMapAttribute : Attribute
+    {
+        public Type TargetType { get; }
+
+        public AutoMapAttribute(Type targetType)
+        {
+            TargetType = targetType;
+        }
+    }
+}
+</code></pre>
+<h3 id="source-generator-implementation">Source Generator Implementation</h3>
+<pre><code class="lang-csharp">using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Text;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace AdvancedConcepts.SourceGenerators
+{
+    [Generator]
+    public class AutoMapGenerator : ISourceGenerator
+    {
+        public void Initialize(GeneratorInitializationContext context)
+        {
+            // Register a syntax receiver to find candidates
+            context.RegisterForSyntaxNotifications(() =&gt; new AutoMapSyntaxReceiver());
+        }
+
+        public void Execute(GeneratorExecutionContext context)
+        {
+            if (context.SyntaxReceiver is not AutoMapSyntaxReceiver receiver)
+                return;
+
+            foreach (var classDeclaration in receiver.CandidateClasses)
+            {
+                var model = context.Compilation.GetSemanticModel(classDeclaration.SyntaxTree);
+                var classSymbol = model.GetDeclaredSymbol(classDeclaration);
+
+                if (classSymbol == null)
+                    continue;
+
+                var attributes = classSymbol.GetAttributes()
+                    .Where(a =&gt; a.AttributeClass?.Name == &quot;AutoMapAttribute&quot;);
+
+                foreach (var attribute in attributes)
+                {
+                    if (attribute.ConstructorArguments.Length &gt; 0)
+                    {
+                        var targetType = attribute.ConstructorArguments[0].Value as INamedTypeSymbol;
+                        if (targetType != null)
+                        {
+                            var source = GenerateMappingCode(classSymbol, targetType);
+                            context.AddSource($&quot;{classSymbol.Name}_AutoMap.g.cs&quot;, SourceText.From(source, Encoding.UTF8));
+                        }
+                    }
+                }
+            }
+        }
+
+        private string GenerateMappingCode(INamedTypeSymbol sourceType, INamedTypeSymbol targetType)
+        {
+            var sourceProperties = sourceType.GetMembers()
+                .OfType&lt;IPropertySymbol&gt;()
+                .Where(p =&gt; p.DeclaredAccessibility == Accessibility.Public);
+
+            var targetProperties = targetType.GetMembers()
+                .OfType&lt;IPropertySymbol&gt;()
+                .Where(p =&gt; p.DeclaredAccessibility == Accessibility.Public)
+                .ToDictionary(p =&gt; p.Name);
+
+            var sb = new StringBuilder();
+            sb.AppendLine(&quot;// &lt;auto-generated /&gt;&quot;);
+            sb.AppendLine($&quot;namespace {sourceType.ContainingNamespace}&quot;);
+            sb.AppendLine(&quot;{&quot;);
+            sb.AppendLine($&quot;    public partial class {sourceType.Name}&quot;);
+            sb.AppendLine(&quot;    {&quot;);
+
+            // Generate FromDto method
+            sb.AppendLine($&quot;        public static {sourceType.Name} From{targetType.Name}({targetType} dto)&quot;);
+            sb.AppendLine(&quot;        {&quot;);
+            sb.AppendLine($&quot;            return new {sourceType.Name}&quot;);
+            sb.AppendLine(&quot;            {&quot;);
+
+            foreach (var prop in sourceProperties)
+            {
+                if (targetProperties.TryGetValue(prop.Name, out var targetProp))
+                {
+                    sb.AppendLine($&quot;                {prop.Name} = dto.{targetProp.Name},&quot;);
+                }
+            }
+
+            sb.AppendLine(&quot;            };&quot;);
+            sb.AppendLine(&quot;        }&quot;);
+
+            // Generate ToDto method
+            sb.AppendLine();
+            sb.AppendLine($&quot;        public {targetType} To{targetType.Name}()&quot;);
+            sb.AppendLine(&quot;        {&quot;);
+            sb.AppendLine($&quot;            return new {targetType}&quot;);
+            sb.AppendLine(&quot;            {&quot;);
+
+            foreach (var prop in sourceProperties)
+            {
+                if (targetProperties.TryGetValue(prop.Name, out var targetProp))
+                {
+                    sb.AppendLine($&quot;                {targetProp.Name} = this.{prop.Name},&quot;);
+                }
+            }
+
+            sb.AppendLine(&quot;            };&quot;);
+            sb.AppendLine(&quot;        }&quot;);
+
+            sb.AppendLine(&quot;    }&quot;);
+            sb.AppendLine(&quot;}&quot;);
+
+            return sb.ToString();
+        }
+    }
+
+    class AutoMapSyntaxReceiver : ISyntaxReceiver
+    {
+        public List&lt;ClassDeclarationSyntax&gt; CandidateClasses { get; } = new List&lt;ClassDeclarationSyntax&gt;();
+
+        public void OnVisitSyntaxNode(SyntaxNode syntaxNode)
+        {
+            if (syntaxNode is ClassDeclarationSyntax classDeclaration &amp;&amp;
+                classDeclaration.AttributeLists.Count &gt; 0)
+            {
+                CandidateClasses.Add(classDeclaration);
+            }
+        }
+    }
+}
+</code></pre>
+<h2 id="example-logger-generator">Example: Logger Generator</h2>
+<h3 id="implementation">Implementation</h3>
+<pre><code class="lang-csharp">[Generator]
+public class LoggerMessageGenerator : ISourceGenerator
+{
+    public void Initialize(GeneratorInitializationContext context)
+    {
+        // Register syntax receiver
+    }
+
+    public void Execute(GeneratorExecutionContext context)
+    {
+        // Find methods with [LoggerMessage] attribute
+        // Generate optimized logging code
+        // Avoid string interpolation overhead
+        // Use LoggerMessage.Define for performance
+    }
+}
+</code></pre>
+<h3 id="generated-code-example">Generated Code Example</h3>
+<pre><code class="lang-csharp">// Input:
+[LoggerMessage(EventId = 1, Level = LogLevel.Information, Message = &quot;Processing order {OrderId} for user {UserId}&quot;)]
+public static partial void LogOrderProcessing(ILogger logger, int orderId, int userId);
+
+// Generated:
+private static readonly Action&lt;ILogger, int, int, Exception?&gt; _logOrderProcessing =
+    LoggerMessage.Define&lt;int, int&gt;(
+        LogLevel.Information,
+        new EventId(1),
+        &quot;Processing order {OrderId} for user {UserId}&quot;);
+
+public static partial void LogOrderProcessing(ILogger logger, int orderId, int userId)
+{
+    _logOrderProcessing(logger, orderId, userId, null);
+}
+</code></pre>
+<h2 id="best-practices">Best Practices</h2>
+<h3 id="1-performance">1. Performance</h3>
+<ul>
+<li>✅ Use <code>StringBuilder</code> for code generation</li>
+<li>✅ Cache compilation objects</li>
+<li>✅ Minimize allocations</li>
+<li>✅ Use incremental generators when possible</li>
+</ul>
+<h3 id="2-diagnostics">2. Diagnostics</h3>
+<ul>
+<li>✅ Report clear error messages</li>
+<li>✅ Include source location information</li>
+<li>✅ Provide fix suggestions</li>
+<li>✅ Use diagnostic severity appropriately</li>
+</ul>
+<h3 id="3-generated-code-quality">3. Generated Code Quality</h3>
+<ul>
+<li>✅ Add <code>&lt;auto-generated&gt;</code> header</li>
+<li>✅ Use <code>#nullable</code> directives appropriately</li>
+<li>✅ Follow coding conventions</li>
+<li>✅ Add XML documentation comments</li>
+</ul>
+<h3 id="4-debugging">4. Debugging</h3>
+<ul>
+<li>✅ Use <code>Debugger.Launch()</code> for debugging</li>
+<li>✅ Write generated code to disk during development</li>
+<li>✅ Add comprehensive unit tests</li>
+<li>✅ Test with various input scenarios</li>
+</ul>
+<h2 id="testing-source-generators">Testing Source Generators</h2>
+<h3 id="unit-test-example">Unit Test Example</h3>
+<pre><code class="lang-csharp">[Fact]
+public void AutoMapGenerator_GeneratesMappingMethods()
+{
+    // Arrange
+    var source = @&quot;
+        using AdvancedConcepts.SourceGenerators;
+
+        [AutoMap(typeof(UserDto))]
+        public partial class User
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+        }
+
+        public class UserDto
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+        }
+    &quot;;
+
+    // Act
+    var (diagnostics, output) = TestHelper.GetGeneratedOutput&lt;AutoMapGenerator&gt;(source);
+
+    // Assert
+    Assert.Empty(diagnostics);
+    Assert.Contains(&quot;public static User FromUserDto(UserDto dto)&quot;, output);
+    Assert.Contains(&quot;public UserDto ToUserDto()&quot;, output);
+}
+</code></pre>
+<h2 id="advanced-topics">Advanced Topics</h2>
+<h3 id="incremental-generators-recommended">Incremental Generators (Recommended)</h3>
+<pre><code class="lang-csharp">[Generator]
+public class IncrementalAutoMapGenerator : IIncrementalGenerator
+{
+    public void Initialize(IncrementalGeneratorInitializationContext context)
+    {
+        // More efficient than ISourceGenerator
+        var classDeclarations = context.SyntaxProvider
+            .CreateSyntaxProvider(
+                predicate: static (s, _) =&gt; IsSyntaxTargetForGeneration(s),
+                transform: static (ctx, _) =&gt; GetSemanticTargetForGeneration(ctx))
+            .Where(static m =&gt; m is not null);
+
+        context.RegisterSourceOutput(classDeclarations, static (spc, source) =&gt; Execute(source, spc));
+    }
+
+    private static bool IsSyntaxTargetForGeneration(SyntaxNode node)
+    {
+        return node is ClassDeclarationSyntax { AttributeLists.Count: &gt; 0 };
+    }
+
+    private static ClassDeclarationSyntax? GetSemanticTargetForGeneration(GeneratorSyntaxContext context)
+    {
+        var classDeclaration = (ClassDeclarationSyntax)context.Node;
+
+        foreach (var attributeList in classDeclaration.AttributeLists)
+        {
+            foreach (var attribute in attributeList.Attributes)
+            {
+                if (context.SemanticModel.GetSymbolInfo(attribute).Symbol is IMethodSymbol attributeSymbol)
+                {
+                    var attributeContainingType = attributeSymbol.ContainingType;
+                    var fullName = attributeContainingType.ToDisplayString();
+
+                    if (fullName == &quot;AdvancedConcepts.SourceGenerators.AutoMapAttribute&quot;)
+                    {
+                        return classDeclaration;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private static void Execute(ClassDeclarationSyntax classDeclaration, SourceProductionContext context)
+    {
+        // Generate code
+    }
+}
+</code></pre>
+<h2 id="resources">Resources</h2>
+<ul>
+<li><a href="https://github.com/dotnet/roslyn/blob/main/docs/features/source-generators.cookbook.md">Source Generators Cookbook</a></li>
+<li><a href="https://github.com/dotnet/roslyn/blob/main/docs/features/source-generators.md">Source Generators Design</a></li>
+<li><a href="https://github.com/dotnet/roslyn/blob/main/docs/features/incremental-generators.md">Incremental Generators</a></li>
+</ul>
+<hr>
+<p><strong>Last Updated:</strong> 2025-11-30
+<strong>Version:</strong> 1.0</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/guides/SOURCE_GENERATORS.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

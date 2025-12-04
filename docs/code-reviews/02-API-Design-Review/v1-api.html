@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>API Design Review - V1 (Bad Design) | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="API Design Review - V1 (Bad Design) | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/code-reviews/02-API-Design-Review/v1-api.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="api-design-review---v1-bad-design">API Design Review - V1 (Bad Design)</h1>
+
+<p><strong>Pull Request:</strong> #2345 - Add User Management API<br>
+<strong>Author:</strong> Jordan Lee (Junior Backend Developer)<br>
+<strong>Reviewer:</strong> Marcus Rodriguez (Staff Engineer)</p>
+<hr>
+<h2 id="proposed-api-endpoints">Proposed API Endpoints</h2>
+<h3 id="1-create-user">1. Create User</h3>
+<pre><code class="lang-http">POST /api/users/create
+Content-Type: application/json
+
+{
+  &quot;firstname&quot;: &quot;John&quot;,
+  &quot;lastname&quot;: &quot;Doe&quot;,
+  &quot;email&quot;: &quot;john@example.com&quot;,
+  &quot;password&quot;: &quot;password123&quot;,
+  &quot;phone&quot;: &quot;555-1234&quot;,
+  &quot;address&quot;: &quot;123 Main St&quot;,
+  &quot;city&quot;: &quot;NYC&quot;,
+  &quot;state&quot;: &quot;NY&quot;,
+  &quot;zip&quot;: &quot;10001&quot;,
+  &quot;country&quot;: &quot;USA&quot;,
+  &quot;dob&quot;: &quot;1990-01-15&quot;,
+  &quot;role&quot;: &quot;user&quot;,
+  &quot;status&quot;: &quot;active&quot;,
+  &quot;newsletter&quot;: true
+}
+</code></pre>
+<p><strong>Response (Success):</strong></p>
+<pre><code class="lang-json">{
+  &quot;success&quot;: true,
+  &quot;user&quot;: {
+    &quot;id&quot;: 123,
+    &quot;firstname&quot;: &quot;John&quot;,
+    &quot;lastname&quot;: &quot;Doe&quot;,
+    &quot;email&quot;: &quot;john@example.com&quot;,
+    &quot;phone&quot;: &quot;555-1234&quot;,
+    &quot;address&quot;: &quot;123 Main St&quot;,
+    &quot;city&quot;: &quot;NYC&quot;,
+    &quot;state&quot;: &quot;NY&quot;,
+    &quot;zip&quot;: &quot;10001&quot;,
+    &quot;country&quot;: &quot;USA&quot;,
+    &quot;dob&quot;: &quot;1990-01-15&quot;,
+    &quot;role&quot;: &quot;user&quot;,
+    &quot;status&quot;: &quot;active&quot;,
+    &quot;newsletter&quot;: true,
+    &quot;created_at&quot;: &quot;2025-12-03T10:30:00Z&quot;
+  }
+}
+</code></pre>
+<p><strong>Response (Error):</strong></p>
+<pre><code class="lang-json">{
+  &quot;success&quot;: false,
+  &quot;error&quot;: &quot;Email already exists&quot;
+}
+</code></pre>
+<hr>
+<h3 id="2-get-user">2. Get User</h3>
+<pre><code class="lang-http">GET /api/users/get?id=123
+</code></pre>
+<p><strong>Response:</strong></p>
+<pre><code class="lang-json">{
+  &quot;success&quot;: true,
+  &quot;user&quot;: {
+    &quot;id&quot;: 123,
+    &quot;firstname&quot;: &quot;John&quot;,
+    &quot;lastname&quot;: &quot;Doe&quot;,
+    &quot;email&quot;: &quot;john@example.com&quot;,
+    &quot;password&quot;: &quot;$2b$10$abcdefg...&quot;, // ❌ SECURITY ISSUE!
+    &quot;phone&quot;: &quot;555-1234&quot;,
+    &quot;address&quot;: &quot;123 Main St&quot;,
+    &quot;city&quot;: &quot;NYC&quot;,
+    &quot;state&quot;: &quot;NY&quot;,
+    &quot;zip&quot;: &quot;10001&quot;,
+    &quot;country&quot;: &quot;USA&quot;,
+    &quot;dob&quot;: &quot;1990-01-15&quot;,
+    &quot;role&quot;: &quot;user&quot;,
+    &quot;status&quot;: &quot;active&quot;,
+    &quot;newsletter&quot;: true,
+    &quot;created_at&quot;: &quot;2025-12-03T10:30:00Z&quot;,
+    &quot;updated_at&quot;: &quot;2025-12-03T10:30:00Z&quot;,
+    &quot;last_login&quot;: &quot;2025-12-03T14:20:00Z&quot;,
+    &quot;login_count&quot;: 47,
+    &quot;failed_login_attempts&quot;: 0,
+    &quot;ip_address&quot;: &quot;192.168.1.100&quot;
+  }
+}
+</code></pre>
+<hr>
+<h3 id="3-update-user">3. Update User</h3>
+<pre><code class="lang-http">PUT /api/users/update
+Content-Type: application/json
+
+{
+  &quot;id&quot;: 123,
+  &quot;firstname&quot;: &quot;John&quot;,
+  &quot;lastname&quot;: &quot;Smith&quot;,
+  &quot;email&quot;: &quot;john.smith@example.com&quot;,
+  &quot;phone&quot;: &quot;555-5678&quot;,
+  &quot;address&quot;: &quot;456 Oak Ave&quot;,
+  &quot;city&quot;: &quot;LA&quot;,
+  &quot;state&quot;: &quot;CA&quot;,
+  &quot;zip&quot;: &quot;90001&quot;,
+  &quot;country&quot;: &quot;USA&quot;,
+  &quot;dob&quot;: &quot;1990-01-15&quot;,
+  &quot;role&quot;: &quot;user&quot;,
+  &quot;status&quot;: &quot;active&quot;,
+  &quot;newsletter&quot;: false
+}
+</code></pre>
+<p><strong>Note:</strong> ALL fields are required in the request, even if only updating one field!</p>
+<hr>
+<h3 id="4-delete-user">4. Delete User</h3>
+<pre><code class="lang-http">DELETE /api/users/delete?id=123
+</code></pre>
+<p><strong>Response:</strong></p>
+<pre><code class="lang-json">{
+  &quot;success&quot;: true,
+  &quot;message&quot;: &quot;User deleted&quot;
+}
+</code></pre>
+<p><strong>Note:</strong> Hard delete - user data is permanently removed from database!</p>
+<hr>
+<h3 id="5-list-users">5. List Users</h3>
+<pre><code class="lang-http">GET /api/users/list?page=1&amp;size=10
+</code></pre>
+<p><strong>Response:</strong></p>
+<pre><code class="lang-json">{
+  &quot;success&quot;: true,
+  &quot;users&quot;: [
+    {
+      &quot;id&quot;: 1,
+      &quot;firstname&quot;: &quot;Alice&quot;,
+      &quot;lastname&quot;: &quot;Smith&quot;,
+      &quot;email&quot;: &quot;alice@example.com&quot;,
+      &quot;password&quot;: &quot;$2b$10$xyz...&quot;, // ❌ Exposed in list too!
+      // ... all user fields ...
+    },
+    {
+      &quot;id&quot;: 2,
+      &quot;firstname&quot;: &quot;Bob&quot;,
+      &quot;lastname&quot;: &quot;Jones&quot;,
+      // ... all user fields ...
+    }
+    // ... 10 users total
+  ],
+  &quot;total&quot;: 247
+}
+</code></pre>
+<hr>
+<h3 id="6-search-users">6. Search Users</h3>
+<pre><code class="lang-http">GET /api/users/search?query=John&amp;field=firstname
+</code></pre>
+<p><strong>Response:</strong> Same as List Users</p>
+<hr>
+<h3 id="7-update-user-status">7. Update User Status</h3>
+<pre><code class="lang-http">POST /api/users/updateStatus
+Content-Type: application/json
+
+{
+  &quot;id&quot;: 123,
+  &quot;status&quot;: &quot;inactive&quot;
+}
+</code></pre>
+<hr>
+<h3 id="8-update-user-role">8. Update User Role</h3>
+<pre><code class="lang-http">POST /api/users/updateRole
+Content-Type: application/json
+
+{
+  &quot;id&quot;: 123,
+  &quot;role&quot;: &quot;admin&quot;
+}
+</code></pre>
+<hr>
+<h2 id="controller-implementation">Controller Implementation</h2>
+<pre><code class="lang-csharp">[ApiController]
+[Route(&quot;api/users&quot;)]
+public class UsersController : ControllerBase
+{
+    private readonly UserService _userService;
+
+    [HttpPost(&quot;create&quot;)]
+    public IActionResult CreateUser([FromBody] UserRequest request)
+    {
+        try
+        {
+            var user = _userService.Create(request);
+            return Ok(new { success = true, user });
+        }
+        catch (Exception ex)
+        {
+            return Ok(new { success = false, error = ex.Message });
+        }
+    }
+
+    [HttpGet(&quot;get&quot;)]
+    public IActionResult GetUser([FromQuery] int id)
+    {
+        var user = _userService.GetById(id);
+        if (user == null)
+            return Ok(new { success = false, error = &quot;User not found&quot; });
+        
+        return Ok(new { success = true, user });
+    }
+
+    [HttpPut(&quot;update&quot;)]
+    public IActionResult UpdateUser([FromBody] UserRequest request)
+    {
+        if (request.Id == 0)
+            return Ok(new { success = false, error = &quot;ID is required&quot; });
+
+        try
+        {
+            var user = _userService.Update(request);
+            return Ok(new { success = true, user });
+        }
+        catch (Exception ex)
+        {
+            return Ok(new { success = false, error = ex.Message });
+        }
+    }
+
+    [HttpDelete(&quot;delete&quot;)]
+    public IActionResult DeleteUser([FromQuery] int id)
+    {
+        try
+        {
+            _userService.Delete(id);
+            return Ok(new { success = true, message = &quot;User deleted&quot; });
+        }
+        catch (Exception ex)
+        {
+            return Ok(new { success = false, error = ex.Message });
+        }
+    }
+
+    [HttpGet(&quot;list&quot;)]
+    public IActionResult ListUsers([FromQuery] int page = 1, [FromQuery] int size = 10)
+    {
+        var users = _userService.GetAll(page, size);
+        var total = _userService.Count();
+        return Ok(new { success = true, users, total });
+    }
+
+    [HttpGet(&quot;search&quot;)]
+    public IActionResult SearchUsers([FromQuery] string query, [FromQuery] string field)
+    {
+        var users = _userService.Search(query, field);
+        return Ok(new { success = true, users });
+    }
+
+    [HttpPost(&quot;updateStatus&quot;)]
+    public IActionResult UpdateStatus([FromBody] UpdateStatusRequest request)
+    {
+        try
+        {
+            _userService.UpdateStatus(request.Id, request.Status);
+            return Ok(new { success = true });
+        }
+        catch (Exception ex)
+        {
+            return Ok(new { success = false, error = ex.Message });
+        }
+    }
+
+    [HttpPost(&quot;updateRole&quot;)]
+    public IActionResult UpdateRole([FromBody] UpdateRoleRequest request)
+    {
+        try
+        {
+            _userService.UpdateRole(request.Id, request.Role);
+            return Ok(new { success = true });
+        }
+        catch (Exception ex)
+        {
+            return Ok(new { success = false, error = ex.Message });
+        }
+    }
+}
+</code></pre>
+<hr>
+<h2 id="what-could-go-wrong">What Could Go Wrong?</h2>
+<p><strong>Author's Note:</strong></p>
+<blockquote>
+<p>&quot;I tested all endpoints with Postman and they work! Users can be created, updated, and deleted successfully. Ready to deploy to production!&quot;</p>
+</blockquote>
+<p><strong>Read <code>review-feedback.md</code> to see what the Staff Engineer caught... 😱</strong></p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/code-reviews/02-API-Design-Review/v1-api.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

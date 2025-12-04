@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Week 2 Assessment Test - Inheritance and Assignment Compatibility | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Week 2 Assessment Test - Inheritance and Assignment Compatibility | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../../favicon.ico">
+      <link rel="stylesheet" href="../../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/assessment-tests/path1/week-02-test.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../../index.html">
+            <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="week-2-assessment-test---inheritance-and-assignment-compatibility">Week 2 Assessment Test - Inheritance and Assignment Compatibility</h1>
+
+<p><strong>Path</strong>: 1 - Junior Developer
+<strong>Week</strong>: 2
+<strong>Topics</strong>: Inheritance, Assignment compatibility, Upcasting/Downcasting, Liskov Substitution
+<strong>Duration</strong>: 35 minutes
+<strong>Passing Score</strong>: 70% (7/10 correct)
+<strong>Total Points</strong>: 10</p>
+<hr>
+<h2 id="section-1-multiple-choice-5-questions-1-point-each">Section 1: Multiple Choice (5 questions, 1 point each)</h2>
+<h3 id="question-1">Question 1</h3>
+<p>What is upcasting?
+a) Converting a derived class reference to a base class reference
+b) Converting a base class reference to a derived class reference
+c) Converting between two unrelated classes
+d) Casting to a higher numeric type</p>
+<h3 id="question-2">Question 2</h3>
+<p>Which operator safely checks if a cast is possible before performing it?
+a) <code>as</code>
+b) <code>is</code>
+c) <code>typeof</code>
+d) <code>cast</code></p>
+<h3 id="question-3">Question 3</h3>
+<p>What does the Liskov Substitution Principle state?
+a) Derived classes must have more features than base classes
+b) Objects of a derived class should be replaceable with objects of the base class
+c) Base classes should inherit from derived classes
+d) All classes must implement interfaces</p>
+<h3 id="question-4">Question 4</h3>
+<p>When does downcasting require an explicit cast?
+a) Always
+b) Never
+c) Only when casting to interfaces
+d) Only in debug mode</p>
+<h3 id="question-5">Question 5</h3>
+<p>What happens when you downcast incorrectly without checking?
+a) Compile error
+b) Runtime exception (InvalidCastException)
+c) Returns null
+d) Nothing happens</p>
+<hr>
+<h2 id="section-2-short-answer-3-questions-15-points-each">Section 2: Short Answer (3 questions, 1.5 points each)</h2>
+<h3 id="question-6">Question 6</h3>
+<p>Explain the difference between <code>is</code> and <code>as</code> operators for casting. Give an example of when to use each.</p>
+<h3 id="question-7">Question 7</h3>
+<p>Why is assignment compatibility important in collections? Give an example with <code>List&lt;Animal&gt;</code>.</p>
+<h3 id="question-8">Question 8</h3>
+<p>What is method hiding and how does it differ from method overriding?</p>
+<hr>
+<h2 id="section-3-code-analysis-15-points">Section 3: Code Analysis (1.5 points)</h2>
+<h3 id="question-9">Question 9</h3>
+<p>Analyze this code and identify potential issues:</p>
+<pre><code class="lang-csharp">Animal animal = new Dog();
+Dog dog = animal; // Line A
+dog.Fetch(); // Line B
+
+Cat cat = (Cat)animal; // Line C
+cat.Meow(); // Line D
+</code></pre>
+<p>Identify which lines will cause errors and explain why.</p>
+<hr>
+<h2 id="answer-key">Answer Key</h2>
+<h3 id="section-1">Section 1</h3>
+<ol>
+<li><strong>a</strong> - Upcasting is implicit, derived → base</li>
+<li><strong>b</strong> - <code>is</code> operator checks type before casting</li>
+<li><strong>b</strong> - LSP: Subtypes must be substitutable for base types</li>
+<li><strong>a</strong> - Downcasting always requires explicit cast</li>
+<li><strong>b</strong> - InvalidCastException at runtime if cast fails</li>
+</ol>
+<h3 id="section-2">Section 2</h3>
+<ol start="6">
+<li><code>is</code> returns bool (type check), <code>as</code> returns null if cast fails. Use <code>is</code> for conditional logic, <code>as</code> when null is acceptable.</li>
+<li>Assignment compatibility allows storing different types in one collection: <code>List&lt;Animal&gt;</code> can hold Dogs, Cats, Birds, enabling polymorphic behavior.</li>
+<li>Method hiding (with <code>new</code>) creates a separate method; overriding (with <code>override</code>) replaces the base implementation. Hiding breaks polymorphism.</li>
+</ol>
+<h3 id="section-3">Section 3</h3>
+<ol start="9">
+<li></li>
+</ol>
+<ul>
+<li><strong>Line A</strong>: Compile error - implicit downcast not allowed</li>
+<li><strong>Line B</strong>: Won't execute due to Line A</li>
+<li><strong>Line C</strong>: Runtime error - InvalidCastException (Dog cannot be cast to Cat)</li>
+<li><strong>Line D</strong>: Won't execute due to Line C</li>
+</ul>
+<p><strong>Fix</strong>: Use <code>as</code> or <code>is</code> for safe casting:</p>
+<pre><code class="lang-csharp">if (animal is Dog dog) {
+    dog.Fetch();
+}
+</code></pre>
+<hr>
+<p><strong>Study Resources</strong>: <code>samples/01-Beginner/AssignmentCompatibility/</code>, <code>samples/01-Beginner/Upcasting-Downcasting/</code></p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/assessment-tests/path1/week-02-test.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

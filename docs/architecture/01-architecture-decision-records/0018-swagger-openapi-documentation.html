@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>ADR-0018: Swagger/OpenAPI for API Documentation | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="ADR-0018: Swagger/OpenAPI for API Documentation | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/01-architecture-decision-records/0018-swagger-openapi-documentation.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="adr-0018-swaggeropenapi-for-api-documentation">ADR-0018: Swagger/OpenAPI for API Documentation</h1>
+
+<p><strong>Status:</strong> Accepted
+<strong>Date:</strong> 2025-12-02
+<strong>Deciders:</strong> Architecture Team
+<strong>Technical Story:</strong> API documentation and testing</p>
+<h2 id="context">Context</h2>
+<p>RESTful APIs need documentation for developers to understand endpoints, request/response models, and authentication. Manual documentation becomes outdated quickly.</p>
+<h2 id="decision">Decision</h2>
+<p>Use <strong>Swagger UI</strong> with OpenAPI specification for interactive API documentation.</p>
+<p>Configuration:</p>
+<ul>
+<li>Swashbuckle.AspNetCore 6.5.0+</li>
+<li>Swagger UI at <code>/swagger</code></li>
+<li>OpenAPI JSON at <code>/swagger/v1/swagger.json</code></li>
+<li>Enabled in development only</li>
+</ul>
+<h2 id="consequences">Consequences</h2>
+<h3 id="positive">Positive</h3>
+<ul>
+<li><strong>Interactive</strong>: Test endpoints directly from browser</li>
+<li><strong>Up-to-Date</strong>: Generated from code (never outdated)</li>
+<li><strong>Discoverable</strong>: Easy for developers to explore API</li>
+<li><strong>Code-First</strong>: No separate documentation file</li>
+<li><strong>Client Generation</strong>: Can generate client SDKs</li>
+</ul>
+<h3 id="negative">Negative</h3>
+<ul>
+<li><strong>Development Only</strong>: Should disable in production</li>
+<li><strong>Performance</strong>: Small overhead (negligible in dev)</li>
+</ul>
+<h2 id="implementation">Implementation</h2>
+<pre><code class="lang-csharp">builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.MapGet(&quot;/api/videos&quot;, async (VideoDbContext db) =&gt; { })
+   .WithName(&quot;GetVideos&quot;)
+   .WithOpenApi()
+   .Produces&lt;List&lt;Video&gt;&gt;(200)
+   .ProducesProblem(500);
+</code></pre>
+<h2 id="notes">Notes</h2>
+<ul>
+<li>Access Swagger at: <code>http://localhost:{port}/swagger</code></li>
+<li>Customize with XML comments: <code>builder.Services.AddSwaggerGen(c =&gt; c.IncludeXmlComments(&quot;...&quot;))</code></li>
+<li>Production: Use Scalar or Redoc for documentation</li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/01-architecture-decision-records/0018-swagger-openapi-documentation.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

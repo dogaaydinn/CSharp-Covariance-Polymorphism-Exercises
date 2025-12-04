@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Week 5 Assessment Test - LINQ Fundamentals | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Week 5 Assessment Test - LINQ Fundamentals | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../../favicon.ico">
+      <link rel="stylesheet" href="../../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/assessment-tests/path1/week-05-test.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../../index.html">
+            <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="week-5-assessment-test---linq-fundamentals">Week 5 Assessment Test - LINQ Fundamentals</h1>
+
+<p><strong>Week</strong>: 5 | <strong>Duration</strong>: 35 min | <strong>Pass</strong>: 70% | <strong>Points</strong>: 10</p>
+<h2 id="multiple-choice-5-pts">Multiple Choice (5 pts)</h2>
+<ol>
+<li><p>What does LINQ stand for?</p>
+<ul>
+<li>a) Language Integrated Query</li>
+<li>b) Linear Query</li>
+<li>c) List Query</li>
+<li>d) Linked Query</li>
+</ul>
+</li>
+<li><p>What is deferred execution in LINQ?</p>
+<ul>
+<li>a) Query executes immediately</li>
+<li>b) Query executes when results are enumerated</li>
+<li>c) Query never executes</li>
+<li>d) Query executes in background</li>
+</ul>
+</li>
+<li><p>Which forces immediate execution?</p>
+<ul>
+<li>a) Where()</li>
+<li>b) Select()</li>
+<li>c) ToList()</li>
+<li>d) OrderBy()</li>
+</ul>
+</li>
+<li><p>What does <code>Select()</code> do?</p>
+<ul>
+<li>a) Filters elements</li>
+<li>b) Sorts elements</li>
+<li>c) Projects/transforms elements</li>
+<li>d) Groups elements</li>
+</ul>
+</li>
+<li><p>Query vs Method syntax: which is true?</p>
+<ul>
+<li>a) Query syntax is more powerful</li>
+<li>b) Method syntax is more powerful</li>
+<li>c) They're equivalent, method syntax more flexible</li>
+<li>d) They use different execution models</li>
+</ul>
+</li>
+</ol>
+<h2 id="short-answer-45-pts">Short Answer (4.5 pts)</h2>
+<ol start="6">
+<li><p>(1.5 pts) Write LINQ to get products where price &gt; 50, ordered by name, select only names.</p>
+</li>
+<li><p>(1.5 pts) Explain the difference between <code>First()</code> and <code>FirstOrDefault()</code>. When would each throw an exception?</p>
+</li>
+<li><p>(1.5 pts) What are anonymous types in LINQ? Give an example.</p>
+</li>
+</ol>
+<h2 id="code-analysis-15-pts">Code Analysis (1.5 pts)</h2>
+<ol start="9">
+<li>What's the output and why?</li>
+</ol>
+<pre><code class="lang-csharp">var numbers = new List&lt;int&gt; { 1, 2, 3 };
+var query = numbers.Where(n =&gt; n &gt; 1);
+numbers.Add(4);
+numbers.Add(5);
+foreach (var n in query) Console.Write(n + &quot; &quot;);
+</code></pre>
+<h2 id="answer-key">Answer Key</h2>
+<ol>
+<li><p><strong>a</strong> | 2. <strong>b</strong> | 3. <strong>c</strong> | 4. <strong>c</strong> | 5. <strong>c</strong></p>
+</li>
+<li><p><code>products.Where(p =&gt; p.Price &gt; 50).OrderBy(p =&gt; p.Name).Select(p =&gt; p.Name)</code></p>
+</li>
+<li><p><code>First()</code> throws if empty, <code>FirstOrDefault()</code> returns default (null/0). Use First when data must exist, FirstOrDefault when it might not.</p>
+</li>
+<li><p>Anonymous types are compiler-generated types for projections: <code>select new { p.Name, p.Price }</code> creates type with Name and Price properties.</p>
+</li>
+<li><p><strong>Output</strong>: <code>2 3 4 5</code> - Deferred execution means query sees all numbers including newly added 4 and 5 when enumerated.</p>
+</li>
+</ol>
+<p><strong>Resources</strong>: <code>samples/99-Exercises/LINQ/01-BasicQueries/</code>, LEARNING_PATHS.md Month 2 Week 1</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/assessment-tests/path1/week-05-test.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

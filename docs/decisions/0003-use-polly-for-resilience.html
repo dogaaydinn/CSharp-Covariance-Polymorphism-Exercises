@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>3. Use Polly for Resilience Patterns | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="3. Use Polly for Resilience Patterns | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/decisions/0003-use-polly-for-resilience.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="3-use-polly-for-resilience-patterns">3. Use Polly for Resilience Patterns</h1>
+
+<p><strong>Status:</strong> ✅ Accepted</p>
+<p><strong>Date:</strong> 2024-12-01</p>
+<p><strong>Deciders:</strong> Architecture Team, DevOps Team</p>
+<p><strong>Technical Story:</strong> Implementation in <code>samples/03-Advanced/ResiliencePatterns</code></p>
+<hr>
+<h2 id="context-and-problem-statement">Context and Problem Statement</h2>
+<p>Distributed systems face transient failures: network timeouts, temporary service unavailability, rate limiting, etc. Without resilience patterns, cascading failures can bring down the entire system. We need to implement retry logic, circuit breakers, timeouts, and fallbacks.</p>
+<p><strong>Requirements:</strong></p>
+<ul>
+<li>Retry transient failures with exponential backoff</li>
+<li>Prevent cascading failures with circuit breakers</li>
+<li>Enforce request timeouts</li>
+<li>Provide fallback mechanisms</li>
+<li>Monitor and log resilience events</li>
+</ul>
+<hr>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li><strong>Industry Standard</strong> - Use battle-tested library, not custom implementation</li>
+<li><strong>Flexibility</strong> - Support multiple patterns (retry, circuit breaker, timeout, fallback)</li>
+<li><strong>Observability</strong> - Log when policies execute</li>
+<li><strong>Performance</strong> - Minimal overhead</li>
+<li><strong>Maintainability</strong> - Clear, readable policy definitions</li>
+</ul>
+<hr>
+<h2 id="considered-options">Considered Options</h2>
+<ul>
+<li><strong>Option 1</strong> - Polly library</li>
+<li><strong>Option 2</strong> - Custom resilience implementation</li>
+<li><strong>Option 3</strong> - Cloud-provider specific solutions (AWS App Mesh, Azure Service Fabric)</li>
+</ul>
+<hr>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p><strong>Chosen option:</strong> &quot;Polly&quot;, because it's the de-facto standard for resilience in .NET, used by Microsoft itself in HTTP client factory, and provides comprehensive patterns out-of-the-box.</p>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li><strong>Proven</strong> - Used in production by Microsoft, Stack Overflow, and thousands of companies</li>
+<li><strong>Comprehensive</strong> - All resilience patterns in one library</li>
+<li><strong>Integrated</strong> - Works seamlessly with HttpClientFactory</li>
+<li><strong>Observable</strong> - Built-in hooks for logging and monitoring</li>
+<li><strong>Well-Documented</strong> - Extensive documentation and community support</li>
+<li><strong>Polly v8</strong> - New resilience pipelines API is cleaner and more performant</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li><strong>External Dependency</strong> - Adds NuGet package</li>
+<li><strong>Learning Curve</strong> - Team needs to understand resilience patterns</li>
+<li><strong>Configuration Complexity</strong> - Policies need careful tuning</li>
+</ul>
+<hr>
+<h2 id="pros-and-cons-of-the-options">Pros and Cons of the Options</h2>
+<h3 id="polly-library-chosen">Polly Library (Chosen)</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Battle-tested (10+ years in production)</li>
+<li>Used by Microsoft in .NET Core HttpClientFactory</li>
+<li>Supports all major resilience patterns</li>
+<li>Excellent async/await support</li>
+<li>Policy composition (retry + circuit breaker + timeout)</li>
+<li>Extensive telemetry hooks</li>
+<li>v8 redesign with improved API</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li>External dependency</li>
+<li>Policies need tuning for specific use cases</li>
+<li>Can add latency if misconfigured</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="lang-csharp">// Polly v8 - Resilience Pipeline
+var pipeline = new ResiliencePipelineBuilder()
+    .AddRetry(new RetryStrategyOptions
+    {
+        MaxRetryAttempts = 3,
+        Delay = TimeSpan.FromSeconds(1),
+        BackoffType = DelayBackoffType.Exponential
+    })
+    .AddCircuitBreaker(new CircuitBreakerStrategyOptions
+    {
+        FailureRatio = 0.5,
+        MinimumThroughput = 10,
+        BreakDuration = TimeSpan.FromSeconds(30)
+    })
+    .AddTimeout(TimeSpan.FromSeconds(10))
+    .Build();
+
+// Execute with resilience
+var result = await pipeline.ExecuteAsync(async ct =&gt;
+{
+    return await httpClient.GetStringAsync(url, ct);
+});
+</code></pre>
+<h3 id="custom-resilience-implementation">Custom Resilience Implementation</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>No external dependencies</li>
+<li>Full control over implementation</li>
+<li>Can optimize for specific scenarios</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Requires 1000+ lines of code</strong> for retry + circuit breaker + timeout</li>
+<li>Difficult to test edge cases</li>
+<li>Need to handle concurrent access to circuit breaker state</li>
+<li>No telemetry hooks</li>
+<li>Maintenance burden</li>
+</ul>
+<p><strong>Why Rejected:</strong></p>
+<pre><code class="lang-csharp">// Custom retry (simplified - doesn't handle edge cases)
+public async Task&lt;T&gt; RetryAsync&lt;T&gt;(Func&lt;Task&lt;T&gt;&gt; operation, int maxRetries)
+{
+    for (int i = 0; i &lt; maxRetries; i++)
+    {
+        try
+        {
+            return await operation();
+        }
+        catch (Exception ex)
+        {
+            if (i == maxRetries - 1) throw;
+            await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, i))); // Exponential backoff
+        }
+    }
+    throw new InvalidOperationException(&quot;Should never reach here&quot;);
+}
+</code></pre>
+<p>This is <strong>200+ lines just for basic retry</strong>. Circuit breaker adds <strong>500+ lines</strong>. Polly provides all of this in a well-tested package.</p>
+<h3 id="cloud-provider-solutions">Cloud-Provider Solutions</h3>
+<p><strong>Examples:</strong></p>
+<ul>
+<li>AWS App Mesh (service mesh)</li>
+<li>Azure Service Fabric (runtime)</li>
+<li>Istio (Kubernetes service mesh)</li>
+</ul>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Infrastructure-level resilience</li>
+<li>Language-agnostic</li>
+<li>Centralized configuration</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Vendor lock-in</strong> - ties you to specific cloud provider</li>
+<li>Infrastructure dependency - can't test locally without complex setup</li>
+<li>Operational complexity - need to manage service mesh</li>
+<li>Overkill for many applications</li>
+</ul>
+<p><strong>Why Rejected:</strong>
+Service meshes are excellent for large-scale microservice deployments, but they add significant operational complexity. <strong>Polly provides application-level resilience</strong> that works anywhere (local, any cloud, any container orchestrator) without infrastructure changes.</p>
+<hr>
+<h2 id="implementation-examples">Implementation Examples</h2>
+<h3 id="retry-policy">Retry Policy</h3>
+<pre><code class="lang-csharp">var retryPipeline = new ResiliencePipelineBuilder()
+    .AddRetry(new RetryStrategyOptions
+    {
+        MaxRetryAttempts = 3,
+        Delay = TimeSpan.FromSeconds(1),
+        BackoffType = DelayBackoffType.Exponential,
+        OnRetry = args =&gt;
+        {
+            _logger.LogWarning(&quot;Retry {Attempt} after {Delay}&quot;,
+                args.AttemptNumber, args.RetryDelay);
+            return ValueTask.CompletedTask;
+        }
+    })
+    .Build();
+</code></pre>
+<h3 id="circuit-breaker">Circuit Breaker</h3>
+<pre><code class="lang-csharp">var circuitBreakerPipeline = new ResiliencePipelineBuilder()
+    .AddCircuitBreaker(new CircuitBreakerStrategyOptions
+    {
+        FailureRatio = 0.5,              // Open if 50% of calls fail
+        SamplingDuration = TimeSpan.FromSeconds(10),
+        MinimumThroughput = 10,          // Need 10 calls before evaluating
+        BreakDuration = TimeSpan.FromSeconds(30),
+        OnOpened = args =&gt;
+        {
+            _logger.LogError(&quot;Circuit breaker OPENED&quot;);
+            return ValueTask.CompletedTask;
+        },
+        OnHalfOpened = args =&gt;
+        {
+            _logger.LogInformation(&quot;Circuit breaker HALF-OPEN (testing)&quot;);
+            return ValueTask.CompletedTask;
+        },
+        OnClosed = args =&gt;
+        {
+            _logger.LogInformation(&quot;Circuit breaker CLOSED (healthy)&quot;);
+            return ValueTask.CompletedTask;
+        }
+    })
+    .Build();
+</code></pre>
+<h3 id="combined-policies">Combined Policies</h3>
+<pre><code class="lang-csharp">var pipeline = new ResiliencePipelineBuilder()
+    .AddCircuitBreaker(circuitBreakerOptions)  // First line of defense
+    .AddRetry(retryOptions)                    // Retry if circuit is closed
+    .AddTimeout(TimeSpan.FromSeconds(30))      // Overall timeout
+    .Build();
+</code></pre>
+<hr>
+<h2 id="integration-with-net-aspire">Integration with .NET Aspire</h2>
+<p><strong>.NET Aspire automatically adds resilience</strong> to all HttpClient instances:</p>
+<pre><code class="lang-csharp">// In Aspire apps, this is automatic:
+builder.Services.ConfigureHttpClientDefaults(http =&gt;
+{
+    http.AddStandardResilienceHandler(); // Polly retry + circuit breaker + timeout
+    http.AddServiceDiscovery();
+});
+</code></pre>
+<hr>
+<h2 id="links">Links</h2>
+<ul>
+<li><a href="https://www.thepollyproject.org/">Polly Official Website</a></li>
+<li><a href="https://github.com/App-vNext/Polly">Polly GitHub</a></li>
+<li><a href="https://www.pollydocs.org/v8/migration.html">Polly v8 Migration Guide</a></li>
+<li><a href="../../samples/03-Advanced/ResiliencePatterns">Sample Implementation</a></li>
+</ul>
+<hr>
+<h2 id="notes">Notes</h2>
+<p><strong>Policy Configuration Guidelines:</strong></p>
+<ul>
+<li><strong>Retry</strong>: 3 attempts with exponential backoff (1s, 2s, 4s)</li>
+<li><strong>Circuit Breaker</strong>: 50% failure ratio, 30s break duration, 10 minimum throughput</li>
+<li><strong>Timeout</strong>: 10-30s depending on operation (database: 10s, external API: 30s)</li>
+<li><strong>Fallback</strong>: Always have a fallback strategy (cached data, default value, error page)</li>
+</ul>
+<p><strong>Anti-Patterns to Avoid:</strong></p>
+<ul>
+<li>❌ Retrying non-transient errors (404, 401, validation errors)</li>
+<li>❌ Infinite retries</li>
+<li>❌ Same timeout and retry delay (causes thundering herd)</li>
+<li>❌ No circuit breaker on external dependencies</li>
+</ul>
+<p><strong>Monitoring:</strong></p>
+<ul>
+<li>Log every circuit breaker state change</li>
+<li>Track retry counts in metrics</li>
+<li>Alert on high retry rates</li>
+<li>Monitor circuit breaker open/close events</li>
+</ul>
+<p><strong>Review Date:</strong> 2025-12-01</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/decisions/0003-use-polly-for-resilience.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

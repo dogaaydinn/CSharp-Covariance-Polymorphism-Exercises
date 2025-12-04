@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Week 4 Assessment Test - Boxing, Unboxing, and Performance | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Week 4 Assessment Test - Boxing, Unboxing, and Performance | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../../favicon.ico">
+      <link rel="stylesheet" href="../../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/assessment-tests/path1/week-04-test.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../../index.html">
+            <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="week-4-assessment-test---boxing-unboxing-and-performance">Week 4 Assessment Test - Boxing, Unboxing, and Performance</h1>
+
+<p><strong>Week</strong>: 4 | <strong>Duration</strong>: 30 min | <strong>Pass</strong>: 70% | <strong>Points</strong>: 10</p>
+<h2 id="multiple-choice-5-pts">Multiple Choice (5 pts)</h2>
+<ol>
+<li><p>What is boxing?</p>
+<ul>
+<li>a) Converting reference type to value type</li>
+<li>b) Converting value type to reference type</li>
+<li>c) Wrapping objects in containers</li>
+<li>d) Type checking</li>
+</ul>
+</li>
+<li><p>Where are boxed values stored?</p>
+<ul>
+<li>a) Stack</li>
+<li>b) Heap</li>
+<li>c) Registers</li>
+<li>d) Cache</li>
+</ul>
+</li>
+<li><p>Which operation causes boxing?</p>
+<ul>
+<li>a) <code>int x = 5;</code></li>
+<li>b) <code>object obj = 5;</code></li>
+<li>c) <code>int y = x;</code></li>
+<li>d) <code>int z = x + 1;</code></li>
+</ul>
+</li>
+<li><p>What's the performance cost of boxing?</p>
+<ul>
+<li>a) None</li>
+<li>b) Heap allocation + GC pressure</li>
+<li>c) Only CPU time</li>
+<li>d) Only memory</li>
+</ul>
+</li>
+<li><p>How do you avoid boxing in collections?</p>
+<ul>
+<li>a) Use ArrayList</li>
+<li>b) Use List<t></t></li>
+<li>c) Use object[]</li>
+<li>d) Boxing is unavoidable</li>
+</ul>
+</li>
+</ol>
+<h2 id="short-answer-45-pts">Short Answer (4.5 pts)</h2>
+<ol start="6">
+<li><p>(1.5 pts) Explain the difference between <code>ArrayList</code> and <code>List&lt;T&gt;</code> in terms of boxing. Why is <code>List&lt;T&gt;</code> preferred?</p>
+</li>
+<li><p>(1.5 pts) How does boxing affect performance in a loop that runs 1 million times?</p>
+</li>
+<li><p>(1.5 pts) What is BenchmarkDotNet and why would you use it?</p>
+</li>
+</ol>
+<h2 id="code-analysis-15-pts">Code Analysis (1.5 pts)</h2>
+<ol start="9">
+<li>Identify all boxing operations:</li>
+</ol>
+<pre><code class="lang-csharp">int x = 100;
+object obj1 = x;          // Line 1
+int y = (int)obj1;        // Line 2
+Console.WriteLine(x);     // Line 3
+ArrayList list = new();
+list.Add(x);              // Line 4
+List&lt;int&gt; generic = new();
+generic.Add(x);           // Line 5
+</code></pre>
+<h2 id="answer-key">Answer Key</h2>
+<ol>
+<li><p><strong>b</strong> | 2. <strong>b</strong> | 3. <strong>b</strong> | 4. <strong>b</strong> | 5. <strong>b</strong></p>
+</li>
+<li><p><code>ArrayList</code> stores <code>object</code>, boxing value types. <code>List&lt;T&gt;</code> uses generics, no boxing for value types. <code>List&lt;int&gt;</code> stores ints directly, faster and less memory.</p>
+</li>
+<li><p>1M boxing operations = 1M heap allocations = high GC pressure = pauses = poor performance. Can slow by 10-100x.</p>
+</li>
+<li><p>BenchmarkDotNet is a performance testing library that provides accurate measurements of code execution time, memory allocations, and GC collections.</p>
+</li>
+<li><p>Boxing occurs at: Line 1 (int → object), Line 3 (int → object for WriteLine), Line 4 (int → object for ArrayList). No boxing at Line 2 (unboxing) or Line 5 (generic).</p>
+</li>
+</ol>
+<p><strong>Resources</strong>: <code>samples/02-Intermediate/BoxingUnboxing/</code>, <code>samples/03-Advanced/PerformanceBenchmarks/</code></p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/assessment-tests/path1/week-04-test.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

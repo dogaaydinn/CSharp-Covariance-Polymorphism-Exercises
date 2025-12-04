@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>ADR-0020: Zero-Configuration Infrastructure | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="ADR-0020: Zero-Configuration Infrastructure | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/01-architecture-decision-records/0020-zero-configuration-infrastructure.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="adr-0020-zero-configuration-infrastructure">ADR-0020: Zero-Configuration Infrastructure</h1>
+
+<p><strong>Status:</strong> Accepted
+<strong>Date:</strong> 2025-12-02
+<strong>Deciders:</strong> Architecture Team
+<strong>Technical Story:</strong> Developer productivity and onboarding</p>
+<h2 id="context">Context</h2>
+<p>Traditional development requires:</p>
+<ol>
+<li>Install PostgreSQL locally</li>
+<li>Create database manually</li>
+<li>Configure connection strings</li>
+<li>Install Redis</li>
+<li>Start services manually</li>
+</ol>
+<p>This creates:</p>
+<ul>
+<li>30+ minute onboarding time</li>
+<li>Environment inconsistencies</li>
+<li>Configuration errors</li>
+<li>Maintenance burden</li>
+</ul>
+<h2 id="decision">Decision</h2>
+<p>Adopt <strong>zero-configuration infrastructure</strong> via .NET Aspire.</p>
+<p>Approach:</p>
+<ul>
+<li>No local installation of databases/caches</li>
+<li>No connection string configuration</li>
+<li>No manual database creation</li>
+<li>Single command startup</li>
+</ul>
+<h2 id="consequences">Consequences</h2>
+<h3 id="positive">Positive</h3>
+<ul>
+<li><strong>5-Minute Onboarding</strong>: New developers productive immediately</li>
+<li><strong>No Configuration</strong>: Connection strings injected automatically</li>
+<li><strong>Consistent</strong>: Everyone has identical environment</li>
+<li><strong>Clean</strong>: No local installations</li>
+<li><strong>Maintenance-Free</strong>: Containers managed automatically</li>
+</ul>
+<h3 id="negative">Negative</h3>
+<ul>
+<li><strong>Docker Required</strong>: Must have Docker Desktop</li>
+<li><strong>Black Box</strong>: Less visibility into configuration (mitigated by Aspire Dashboard)</li>
+</ul>
+<h2 id="example">Example</h2>
+<p>Before (traditional):</p>
+<pre><code class="lang-bash"># Install PostgreSQL
+brew install postgresql
+# Start PostgreSQL
+brew services start postgresql
+# Create database
+createdb videodb
+# Configure connection string
+export ConnectionStrings__Default=&quot;Host=localhost;Database=videodb;...&quot;
+# Install Redis
+brew install redis
+# Start Redis
+brew services start redis
+# Run app
+dotnet run
+</code></pre>
+<p>After (Aspire):</p>
+<pre><code class="lang-bash"># Run app (that's it!)
+dotnet run --project VideoService.AppHost
+</code></pre>
+<h2 id="related-decisions">Related Decisions</h2>
+<ul>
+<li><a href="0002-using-dotnet-aspire.html">ADR-0002</a>: Aspire framework</li>
+<li><a href="0012-container-first-development.html">ADR-0012</a>: Container-based infrastructure</li>
+</ul>
+<h2 id="notes">Notes</h2>
+<p>How it works:</p>
+<ol>
+<li>AppHost defines: <code>builder.AddPostgres(&quot;postgres&quot;).AddDatabase(&quot;videodb&quot;)</code></li>
+<li>Aspire starts PostgreSQL container automatically</li>
+<li>Aspire generates connection string</li>
+<li>Aspire injects connection string to API: <code>builder.AddNpgsqlDbContext&lt;VideoDbContext&gt;(&quot;videodb&quot;)</code></li>
+<li>DbContext automatically configured</li>
+</ol>
+<p>No configuration files, no connection strings, just code!</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/01-architecture-decision-records/0020-zero-configuration-infrastructure.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

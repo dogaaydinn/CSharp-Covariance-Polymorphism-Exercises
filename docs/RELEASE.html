@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Release Process Documentation | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Release Process Documentation | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/RELEASE.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="release-process-documentation">Release Process Documentation</h1>
+
+<h2 id="overview">Overview</h2>
+<p>This document describes the complete release process for the Advanced C# Concepts project, from planning to post-release activities.</p>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ul>
+<li><a href="#release-types">Release Types</a></li>
+<li><a href="#pre-release-checklist">Pre-Release Checklist</a></li>
+<li><a href="#release-process">Release Process</a></li>
+<li><a href="#post-release-activities">Post-Release Activities</a></li>
+<li><a href="#hotfix-process">Hotfix Process</a></li>
+<li><a href="#version-numbers">Version Numbers</a></li>
+<li><a href="#release-channels">Release Channels</a></li>
+<li><a href="#troubleshooting">Troubleshooting</a></li>
+</ul>
+<h2 id="release-types">Release Types</h2>
+<h3 id="major-release-x00">Major Release (X.0.0)</h3>
+<p><strong>When to release:</strong></p>
+<ul>
+<li>Breaking API changes</li>
+<li>Major architectural changes</li>
+<li>Significant feature additions</li>
+</ul>
+<p><strong>Example:</strong> 1.0.0 → 2.0.0</p>
+<p><strong>Process:</strong></p>
+<ol>
+<li>Plan breaking changes</li>
+<li>Write migration guide</li>
+<li>Update major version</li>
+<li>Extended testing period</li>
+<li>Communicate widely</li>
+</ol>
+<h3 id="minor-release-0x0">Minor Release (0.X.0)</h3>
+<p><strong>When to release:</strong></p>
+<ul>
+<li>New features (backwards-compatible)</li>
+<li>Significant enhancements</li>
+<li>New APIs</li>
+</ul>
+<p><strong>Example:</strong> 1.0.0 → 1.1.0</p>
+<p><strong>Process:</strong></p>
+<ol>
+<li>Feature complete</li>
+<li>Update documentation</li>
+<li>Update minor version</li>
+<li>Standard testing</li>
+<li>Regular communication</li>
+</ol>
+<h3 id="patch-release-00x">Patch Release (0.0.X)</h3>
+<p><strong>When to release:</strong></p>
+<ul>
+<li>Bug fixes</li>
+<li>Security patches</li>
+<li>Documentation updates</li>
+<li>Minor improvements</li>
+</ul>
+<p><strong>Example:</strong> 1.0.0 → 1.0.1</p>
+<p><strong>Process:</strong></p>
+<ol>
+<li>Fix verified</li>
+<li>Quick testing</li>
+<li>Update patch version</li>
+<li>Fast-track release</li>
+</ol>
+<h3 id="pre-release">Pre-Release</h3>
+<p><strong>Types:</strong></p>
+<ul>
+<li><strong>Alpha</strong> (1.0.0-alpha.1) - Early development</li>
+<li><strong>Beta</strong> (1.0.0-beta.1) - Feature complete, testing</li>
+<li><strong>RC</strong> (1.0.0-rc.1) - Release candidate</li>
+</ul>
+<p><strong>Process:</strong></p>
+<ol>
+<li>Tag with pre-release identifier</li>
+<li>Publish to test channels</li>
+<li>Gather feedback</li>
+<li>Iterate</li>
+</ol>
+<h2 id="pre-release-checklist">Pre-Release Checklist</h2>
+<h3 id="code-quality">Code Quality</h3>
+<ul>
+<li>[ ] All tests passing (unit + integration)</li>
+<li>[ ] Code coverage &gt;90%</li>
+<li>[ ] Mutation testing score &gt;80%</li>
+<li>[ ] Static analysis passing</li>
+<li>[ ] No high/critical security vulnerabilities</li>
+<li>[ ] Performance benchmarks meet targets</li>
+<li>[ ] Memory leaks checked</li>
+</ul>
+<h3 id="documentation">Documentation</h3>
+<ul>
+<li>[ ] API documentation updated</li>
+<li>[ ] README.md updated</li>
+<li>[ ] CHANGELOG.md updated</li>
+<li>[ ] Migration guide written (if breaking changes)</li>
+<li>[ ] Code examples updated</li>
+<li>[ ] Architecture diagrams current</li>
+</ul>
+<h3 id="configuration">Configuration</h3>
+<ul>
+<li>[ ] Version bumped in all necessary files</li>
+<li>[ ] Package metadata updated</li>
+<li>[ ] Dependencies reviewed and updated</li>
+<li>[ ] License file current</li>
+<li>[ ] Copyright years updated</li>
+</ul>
+<h3 id="testing">Testing</h3>
+<ul>
+<li>[ ] Smoke tests passed</li>
+<li>[ ] Integration tests passed</li>
+<li>[ ] Performance tests passed</li>
+<li>[ ] Security scan passed</li>
+<li>[ ] Cross-platform testing (if applicable)</li>
+</ul>
+<h3 id="legal--compliance">Legal &amp; Compliance</h3>
+<ul>
+<li>[ ] License compliance checked</li>
+<li>[ ] Third-party licenses reviewed</li>
+<li>[ ] GDPR compliance verified (if applicable)</li>
+<li>[ ] Export control reviewed (if applicable)</li>
+</ul>
+<h2 id="release-process">Release Process</h2>
+<h3 id="step-1-prepare-release-branch">Step 1: Prepare Release Branch</h3>
+<pre><code class="lang-bash"># Ensure develop is up to date
+git checkout develop
+git pull origin develop
+
+# Create release branch
+git checkout -b release/1.1.0
+
+# Push release branch
+git push -u origin release/1.1.0
+</code></pre>
+<h3 id="step-2-update-version">Step 2: Update Version</h3>
+<p>GitVersion will automatically calculate the version based on branch name and commits.</p>
+<p>Verify the version:</p>
+<pre><code class="lang-bash">dotnet gitversion
+</code></pre>
+<h3 id="step-3-update-changelog">Step 3: Update CHANGELOG</h3>
+<h4 id="automated-recommended">Automated (Recommended)</h4>
+<pre><code class="lang-bash"># Install git-cliff if not already installed
+# See docs/guides/CHANGELOG_AUTOMATION.md
+
+# Generate changelog
+git cliff --tag v1.1.0 --prepend CHANGELOG.md
+
+# Review and commit
+git add CHANGELOG.md
+git commit -m &quot;docs: update CHANGELOG for v1.1.0&quot;
+git push
+</code></pre>
+<h4 id="manual">Manual</h4>
+<p>Edit CHANGELOG.md:</p>
+<pre><code class="lang-markdown">## [1.1.0] - 2025-12-01
+
+### Added
+- New authentication system with OAuth2 support
+- Real-time notifications using SignalR
+
+### Changed
+- Improved performance by 50%
+- Updated UI design
+
+### Fixed
+- Fixed memory leak in background service (#123)
+- Corrected validation logic (#456)
+
+### Security
+- Updated dependencies to patch vulnerabilities
+
+[1.1.0]: https://github.com/dogaaydinn/repo/compare/v1.0.0...v1.1.0
+</code></pre>
+<h3 id="step-4-final-testing">Step 4: Final Testing</h3>
+<pre><code class="lang-bash"># Run all tests
+dotnet test --configuration Release
+
+# Run benchmarks
+dotnet run --project tests/AdvancedConcepts.Benchmarks --configuration Release
+
+# Run security scan
+dotnet list package --vulnerable
+
+# Build for production
+dotnet build --configuration Release
+</code></pre>
+<h3 id="step-5-create-pull-request">Step 5: Create Pull Request</h3>
+<ol>
+<li>Create PR from <code>release/1.1.0</code> to <code>main</code></li>
+<li>Ensure all CI checks pass</li>
+<li>Get required approvals</li>
+<li><strong>Do NOT merge yet</strong></li>
+</ol>
+<h3 id="step-6-merge-to-main">Step 6: Merge to Main</h3>
+<pre><code class="lang-bash"># Switch to main
+git checkout main
+git pull origin main
+
+# Merge release branch (no fast-forward)
+git merge --no-ff release/1.1.0
+
+# Create annotated tag
+git tag -a v1.1.0 -m &quot;Release version 1.1.0
+
+Major Features:
+- OAuth2 authentication
+- Real-time notifications
+
+Bug Fixes:
+- Memory leak fix
+- Validation corrections
+
+See CHANGELOG.md for full details.
+&quot;
+
+# Push main with tags
+git push origin main
+git push origin v1.1.0
+</code></pre>
+<h3 id="step-7-automated-release-github-actions">Step 7: Automated Release (GitHub Actions)</h3>
+<p>The <code>release.yml</code> workflow will automatically:</p>
+<ol>
+<li><strong>Trigger</strong> on tag push</li>
+<li><strong>Build</strong> the project</li>
+<li><strong>Run tests</strong></li>
+<li><strong>Generate</strong> release notes</li>
+<li><strong>Create</strong> GitHub release</li>
+<li><strong>Publish</strong> Docker images (if configured)</li>
+<li><strong>Deploy</strong> documentation</li>
+</ol>
+<p>Monitor the workflow at:</p>
+<pre><code>https://github.com/dogaaydinn/repo/actions
+</code></pre>
+<h3 id="step-8-verify-release">Step 8: Verify Release</h3>
+<pre><code class="lang-bash"># Check GitHub release
+# https://github.com/dogaaydinn/repo/releases/tag/v1.1.0
+
+# Verify Docker image (if applicable)
+# docker pull ghcr.io/dogaaydinn/advancedconcepts:1.1.0
+
+# Check documentation deployment
+# https://dogaaydinn.github.io/repo
+</code></pre>
+<h3 id="step-9-merge-back-to-develop">Step 9: Merge Back to Develop</h3>
+<pre><code class="lang-bash"># Switch to develop
+git checkout develop
+git pull origin develop
+
+# Merge release branch
+git merge --no-ff release/1.1.0
+
+# Push develop
+git push origin develop
+</code></pre>
+<h3 id="step-10-clean-up">Step 10: Clean Up</h3>
+<pre><code class="lang-bash"># Delete release branch (optional)
+git branch -d release/1.1.0
+git push origin --delete release/1.1.0
+
+# Update project boards
+# Close milestone
+# Archive completed issues
+</code></pre>
+<h2 id="post-release-activities">Post-Release Activities</h2>
+<h3 id="communication">Communication</h3>
+<p><strong>Announce Release:</strong></p>
+<ol>
+<li><p><strong>GitHub Release</strong> - Automatically created</p>
+</li>
+<li><p><strong>Social Media</strong> (if applicable)</p>
+<pre><code>🎉 Advanced C# Concepts v1.1.0 is now available!
+
+✨ New: OAuth2 authentication
+⚡ 50% performance improvement
+🐛 Critical bug fixes
+
+https://github.com/dogaaydinn/repo/releases/tag/v1.1.0
+</code></pre>
+</li>
+<li><p><strong>Documentation Site</strong> - Update homepage</p>
+</li>
+<li><p><strong>Email Newsletter</strong> (if applicable)</p>
+</li>
+</ol>
+<h3 id="monitoring">Monitoring</h3>
+<p><strong>Monitor for Issues:</strong></p>
+<pre><code class="lang-bash"># Check error rates
+# Monitor performance metrics
+# Review user feedback
+# Track download stats
+</code></pre>
+<p><strong>Set up alerts:</strong></p>
+<ul>
+<li>GitHub issue notifications</li>
+<li>Error tracking (if integrated)</li>
+<li>Performance monitoring</li>
+</ul>
+<h3 id="documentation-1">Documentation</h3>
+<ul>
+<li>[ ] Update API documentation site</li>
+<li>[ ] Update getting started guide</li>
+<li>[ ] Add release to version history</li>
+<li>[ ] Update samples/examples if needed</li>
+</ul>
+<h3 id="support">Support</h3>
+<ul>
+<li>[ ] Monitor GitHub issues</li>
+<li>[ ] Respond to questions</li>
+<li>[ ] Fix critical bugs immediately</li>
+<li>[ ] Plan next release</li>
+</ul>
+<h2 id="hotfix-process">Hotfix Process</h2>
+<h3 id="when-to-create-a-hotfix">When to Create a Hotfix</h3>
+<ul>
+<li>Critical bugs in production</li>
+<li>Security vulnerabilities</li>
+<li>Data loss risks</li>
+<li>Service outages</li>
+</ul>
+<h3 id="hotfix-steps">Hotfix Steps</h3>
+<pre><code class="lang-bash"># 1. Create hotfix branch from main
+git checkout main
+git pull origin main
+git checkout -b hotfix/1.1.1
+
+# 2. Fix the issue
+# ... make changes ...
+git add .
+git commit -m &quot;fix: critical bug in authentication&quot;
+
+# 3. Test thoroughly
+dotnet test --configuration Release
+
+# 4. Update version and CHANGELOG
+# (GitVersion handles version automatically)
+git cliff --tag v1.1.1 --prepend CHANGELOG.md
+git add CHANGELOG.md
+git commit -m &quot;docs: update CHANGELOG for v1.1.1&quot;
+
+# 5. Merge to main
+git checkout main
+git merge --no-ff hotfix/1.1.1
+git tag -a v1.1.1 -m &quot;Hotfix: Critical authentication bug&quot;
+git push origin main --tags
+
+# 6. Merge back to develop
+git checkout develop
+git merge --no-ff hotfix/1.1.1
+git push origin develop
+
+# 7. Delete hotfix branch
+git branch -d hotfix/1.1.1
+git push origin --delete hotfix/1.1.1
+</code></pre>
+<h3 id="hotfix-communication">Hotfix Communication</h3>
+<p><strong>Immediate:</strong></p>
+<ul>
+<li>GitHub release with &quot;HOTFIX&quot; label</li>
+<li>Update security advisory (if security-related)</li>
+<li>Notify affected users</li>
+</ul>
+<p><strong>Template:</strong></p>
+<pre><code class="lang-markdown"># Hotfix Release: v1.1.1
+
+## Critical Fix
+
+This hotfix addresses a critical bug in the authentication system
+that could lead to unauthorized access.
+
+### What Changed
+- Fixed authentication bypass vulnerability
+- Added additional validation checks
+
+### Who Should Upgrade
+**All users running v1.1.0 should upgrade immediately.**
+
+### How to Upgrade
+```bash
+# Update to latest version
+dotnet add package AdvancedConcepts.Core --version 1.1.1
+</code></pre>
+<h3 id="more-information">More Information</h3>
+<ul>
+<li>CVE-XXXX-XXXX (if applicable)</li>
+<li>Security advisory: [link]</li>
+</ul>
+<pre><code>
+## Version Numbers
+
+### Semantic Versioning
+
+</code></pre>
+<p>MAJOR.MINOR.PATCH[-PRERELEASE][+BUILD]</p>
+<p>Examples:
+1.0.0         - Stable release
+1.1.0-alpha.1 - Alpha pre-release
+1.1.0-beta.2  - Beta pre-release
+1.1.0-rc.1    - Release candidate
+1.1.0+build.1 - Build metadata</p>
+<pre><code>
+### Version Bumping Rules
+
+| Change Type | Version Bump | Example |
+|-------------|--------------|---------|
+| Breaking change | MAJOR | 1.0.0 → 2.0.0 |
+| New feature | MINOR | 1.0.0 → 1.1.0 |
+| Bug fix | PATCH | 1.0.0 → 1.0.1 |
+| Pre-release | Identifier | 1.0.0 → 1.0.0-alpha.1 |
+
+### GitVersion Calculation
+
+GitVersion automatically calculates versions based on:
+- Branch name
+- Commit history
+- Tags
+- Conventional commit messages
+
+```bash
+# View calculated version
+dotnet gitversion
+
+# Get specific component
+dotnet gitversion /showvariable SemVer
+</code></pre>
+<h2 id="release-channels">Release Channels</h2>
+<h3 id="production">Production</h3>
+<ul>
+<li><strong>Branch:</strong> <code>main</code></li>
+<li><strong>Versions:</strong> Stable (e.g., 1.0.0)</li>
+<li><strong>Audience:</strong> All users</li>
+<li><strong>Quality:</strong> Highest</li>
+<li><strong>Frequency:</strong> Monthly (typically)</li>
+</ul>
+<h3 id="beta">Beta</h3>
+<ul>
+<li><strong>Branch:</strong> <code>release/*</code></li>
+<li><strong>Versions:</strong> RC (e.g., 1.1.0-rc.1)</li>
+<li><strong>Audience:</strong> Early adopters</li>
+<li><strong>Quality:</strong> High</li>
+<li><strong>Frequency:</strong> Weekly (during release cycle)</li>
+</ul>
+<h3 id="development">Development</h3>
+<ul>
+<li><strong>Branch:</strong> <code>develop</code></li>
+<li><strong>Versions:</strong> Alpha (e.g., 1.1.0-alpha.5)</li>
+<li><strong>Audience:</strong> Developers, testers</li>
+<li><strong>Quality:</strong> Experimental</li>
+<li><strong>Frequency:</strong> Continuous</li>
+</ul>
+<h3 id="feature">Feature</h3>
+<ul>
+<li><strong>Branch:</strong> <code>feature/*</code></li>
+<li><strong>Versions:</strong> Feature builds (e.g., 1.1.0-feature.3)</li>
+<li><strong>Audience:</strong> Feature developers</li>
+<li><strong>Quality:</strong> Unstable</li>
+<li><strong>Frequency:</strong> Per commit</li>
+</ul>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<h3 id="issue-tag-already-exists">Issue: Tag Already Exists</h3>
+<pre><code class="lang-bash"># Error: tag 'v1.1.0' already exists
+
+# Solution 1: Delete and recreate (if not pushed)
+git tag -d v1.1.0
+git tag -a v1.1.0 -m &quot;Release 1.1.0&quot;
+
+# Solution 2: Use force push (DANGEROUS - only if tag wasn't pulled by others)
+git push -f origin v1.1.0
+</code></pre>
+<h3 id="issue-release-build-failed">Issue: Release Build Failed</h3>
+<pre><code class="lang-bash"># Check GitHub Actions logs
+# Fix issues
+# Re-push tag to trigger workflow
+
+git tag -d v1.1.0
+git tag -a v1.1.0 -m &quot;Release 1.1.0&quot;
+git push origin v1.1.0 --force
+</code></pre>
+<h3 id="issue-tests-fail-after-merge">Issue: Tests Fail After Merge</h3>
+<pre><code class="lang-bash"># Investigate failure
+dotnet test --logger &quot;console;verbosity=detailed&quot;
+
+# Fix issues
+# Commit fix
+git add .
+git commit -m &quot;fix: resolve test failures&quot;
+
+# Create patch release
+git tag -a v1.1.1 -m &quot;Patch: Fix test failures&quot;
+git push origin main --tags
+</code></pre>
+<h3 id="issue-version-number-incorrect">Issue: Version Number Incorrect</h3>
+<pre><code class="lang-bash"># Check GitVersion configuration
+cat GitVersion.yml
+
+# Verify branch name
+git branch --show-current
+
+# Recalculate version
+dotnet gitversion /updateassemblyinfo
+</code></pre>
+<h2 id="release-schedule">Release Schedule</h2>
+<h3 id="regular-releases">Regular Releases</h3>
+<ul>
+<li><strong>Major:</strong> Annually (or as needed for breaking changes)</li>
+<li><strong>Minor:</strong> Quarterly</li>
+<li><strong>Patch:</strong> As needed (typically monthly)</li>
+</ul>
+<h3 id="release-timeline">Release Timeline</h3>
+<pre><code>Week 1-2: Feature development
+Week 3:   Code freeze, create release branch
+Week 4:   Testing and bug fixes
+Week 5:   Release candidate (RC)
+Week 6:   Final release
+</code></pre>
+<h3 id="recommended-calendar">Recommended Calendar</h3>
+<ul>
+<li><strong>Q1 (Jan-Mar):</strong> Minor release (X.1.0)</li>
+<li><strong>Q2 (Apr-Jun):</strong> Minor release (X.2.0)</li>
+<li><strong>Q3 (Jul-Sep):</strong> Minor release (X.3.0)</li>
+<li><strong>Q4 (Oct-Dec):</strong> Major release planning / Minor release (X.4.0)</li>
+</ul>
+<h2 id="best-practices">Best Practices</h2>
+<h3 id="before-release">Before Release</h3>
+<ul>
+<li>✅ Plan releases in advance</li>
+<li>✅ Communicate timeline</li>
+<li>✅ Feature freeze 2 weeks before release</li>
+<li>✅ Thorough testing period</li>
+<li>✅ Documentation review</li>
+</ul>
+<h3 id="during-release">During Release</h3>
+<ul>
+<li>✅ Follow checklist strictly</li>
+<li>✅ Automate where possible</li>
+<li>✅ Test release artifacts</li>
+<li>✅ Coordinate with team</li>
+<li>✅ Monitor CI/CD closely</li>
+</ul>
+<h3 id="after-release">After Release</h3>
+<ul>
+<li>✅ Monitor for issues</li>
+<li>✅ Respond quickly to problems</li>
+<li>✅ Gather feedback</li>
+<li>✅ Plan next release</li>
+<li>✅ Update roadmap</li>
+</ul>
+<h3 id="emergency-releases">Emergency Releases</h3>
+<ul>
+<li>✅ Keep calm</li>
+<li>✅ Assess severity</li>
+<li>✅ Fix and test quickly</li>
+<li>✅ Communicate clearly</li>
+<li>✅ Post-mortem analysis</li>
+</ul>
+<h2 id="resources">Resources</h2>
+<h3 id="documentation-2">Documentation</h3>
+<ul>
+<li><a href="guides/VERSIONING_STRATEGY.html">Versioning Strategy</a></li>
+<li><a href="guides/NUGET_PACKAGING.html">NuGet Packaging</a></li>
+<li><a href="guides/CHANGELOG_AUTOMATION.html">Changelog Automation</a></li>
+</ul>
+<h3 id="tools">Tools</h3>
+<ul>
+<li><a href="https://gitversion.net/">GitVersion</a></li>
+<li><a href="https://git-cliff.org/">git-cliff</a></li>
+<li><a href="https://semver.org/">Semantic Versioning</a></li>
+<li><a href="https://keepachangelog.com/">Keep a Changelog</a></li>
+</ul>
+<h3 id="workflows">Workflows</h3>
+<ul>
+<li><a href=".github/workflows/release.yml">Release Workflow</a></li>
+<li><a href=".github/workflows/ci.yml">CI Workflow</a></li>
+<li><a href=".github/workflows/cd.yml">CD Workflow</a></li>
+</ul>
+<hr>
+<p><strong>Last Updated:</strong> 2025-12-01
+<strong>Version:</strong> 1.0</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/RELEASE.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

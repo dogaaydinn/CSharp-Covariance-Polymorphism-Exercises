@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>C4 Model: Component Diagram | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="C4 Model: Component Diagram | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/02-c4-diagrams/component-diagram.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="c4-model-component-diagram">C4 Model: Component Diagram</h1>
+
+<h2 id="overview">Overview</h2>
+<p>The Component diagram zooms into an individual container to show the components inside it. These components map to real abstractions (classes, interfaces) in the codebase.</p>
+<h2 id="core-application-components">Core Application Components</h2>
+<pre><code class="lang-mermaid">graph TB
+    subgraph &quot;Core Application Container&quot;
+        subgraph &quot;Entry Point&quot;
+            Main[Program.cs&lt;br/&gt;Main Entry Point]
+        end
+
+        subgraph &quot;Beginner Examples&quot;
+            Basic[Basic Polymorphism]
+            Inheritance[Inheritance Examples]
+            Interfaces[Interface Basics]
+        end
+
+        subgraph &quot;Intermediate Examples&quot;
+            Boxing[Boxing/Unboxing]
+            Covariance[Covariance Examples]
+            Contravariance[Contravariance Examples]
+            GenericVariance[Generic Variance]
+        end
+
+        subgraph &quot;Advanced Examples&quot;
+            PatternMatching[Pattern Matching]
+            LINQ[LINQ Advanced]
+            Async[Async/Await]
+            Performance[Performance Patterns]
+            DI[Dependency Injection]
+        end
+
+        subgraph &quot;Enterprise Patterns&quot;
+            SOLID[SOLID Principles]
+            Resilience[Polly Resilience]
+            Validation[FluentValidation]
+            Result[Result Pattern]
+        end
+
+        subgraph &quot;Observability&quot;
+            Logging[Serilog Logging]
+            Tracing[OpenTelemetry Tracing]
+            Metrics[OpenTelemetry Metrics]
+            Health[Health Checks]
+        end
+
+        Main --&gt; Basic
+        Main --&gt; Intermediate
+        Main --&gt; Advanced
+        Main --&gt; SOLID
+
+        Basic --&gt; Logging
+        Intermediate --&gt; Logging
+        Advanced --&gt; Logging
+        Advanced --&gt; DI
+
+        DI --&gt; Resilience
+        DI --&gt; Validation
+        Resilience --&gt; Result
+        Validation --&gt; Result
+
+        SOLID --&gt; Logging
+        SOLID --&gt; Tracing
+        Performance --&gt; Metrics
+        Health --&gt; Metrics
+    end
+
+    style Main fill:#f9f,stroke:#333,stroke-width:2px
+    style SOLID fill:#bbf,stroke:#333,stroke-width:2px
+    style Logging fill:#bfb,stroke:#333,stroke-width:2px
+    style Tracing fill:#bfb,stroke:#333,stroke-width:2px
+    style Metrics fill:#bfb,stroke:#333,stroke-width:2px
+</code></pre>
+<h2 id="component-catalog">Component Catalog</h2>
+<h3 id="entry-point-components">Entry Point Components</h3>
+<h4 id="programcs">Program.cs</h4>
+<ul>
+<li><strong>Type:</strong> Main entry point</li>
+<li><strong>Responsibilities:</strong>
+<ul>
+<li>Application bootstrapping</li>
+<li>Dependency injection setup</li>
+<li>Configuration loading</li>
+<li>Logging initialization</li>
+<li>Example orchestration</li>
+</ul>
+</li>
+<li><strong>Dependencies:</strong>
+<ul>
+<li>Microsoft.Extensions.DependencyInjection</li>
+<li>Serilog</li>
+<li>All example modules</li>
+</ul>
+</li>
+</ul>
+<h3 id="beginner-examples-components">Beginner Examples Components</h3>
+<h4 id="basic-polymorphism-polymorphismbasicscs">Basic Polymorphism (PolymorphismBasics.cs)</h4>
+<p><strong>Purpose:</strong> Demonstrate fundamental polymorphism concepts</p>
+<p><strong>Classes:</strong></p>
+<ul>
+<li><code>Animal</code> (base class)</li>
+<li><code>Dog</code>, <code>Cat</code>, <code>Bird</code> (derived classes)</li>
+<li><code>PolymorphismDemo</code> (demonstration class)</li>
+</ul>
+<p><strong>Concepts:</strong></p>
+<ul>
+<li>Virtual methods</li>
+<li>Method overriding</li>
+<li>Base class references</li>
+<li>Runtime polymorphism</li>
+</ul>
+<h4 id="inheritance-examples">Inheritance Examples</h4>
+<p><strong>Classes:</strong></p>
+<ul>
+<li><code>Vehicle</code> (base)</li>
+<li><code>Car</code>, <code>Motorcycle</code> (derived)</li>
+<li>Abstract classes and methods</li>
+</ul>
+<p><strong>Concepts:</strong></p>
+<ul>
+<li>Inheritance hierarchies</li>
+<li>Abstract classes</li>
+<li>Sealed classes</li>
+<li>Protected members</li>
+</ul>
+<h4 id="interface-basics">Interface Basics</h4>
+<p><strong>Interfaces:</strong></p>
+<ul>
+<li><code>IShape</code></li>
+<li><code>IComparable&lt;T&gt;</code></li>
+<li><code>IDisposable</code></li>
+</ul>
+<p><strong>Concepts:</strong></p>
+<ul>
+<li>Interface implementation</li>
+<li>Multiple interfaces</li>
+<li>Interface segregation</li>
+<li>Explicit implementation</li>
+</ul>
+<h3 id="intermediate-examples-components">Intermediate Examples Components</h3>
+<h4 id="boxingunboxing-boxingunboxingexamplescs">Boxing/Unboxing (BoxingUnboxingExamples.cs)</h4>
+<p><strong>Purpose:</strong> Demonstrate value/reference type conversion</p>
+<p><strong>Examples:</strong></p>
+<ul>
+<li>Value type to object (boxing)</li>
+<li>Object to value type (unboxing)</li>
+<li>Performance implications</li>
+<li>Generic alternatives</li>
+</ul>
+<p><strong>Performance Impact:</strong></p>
+<ul>
+<li>Heap allocation on boxing</li>
+<li>Type checking on unboxing</li>
+<li>Generic solution (no boxing)</li>
+</ul>
+<h4 id="covariance-examples-covarianceexamplescs">Covariance Examples (CovarianceExamples.cs)</h4>
+<p><strong>Purpose:</strong> Demonstrate covariant generic interfaces</p>
+<p><strong>Interfaces:</strong></p>
+<ul>
+<li><code>IEnumerable&lt;out T&gt;</code> (covariant)</li>
+<li><code>IRepository&lt;out T&gt;</code></li>
+</ul>
+<p><strong>Examples:</strong></p>
+<pre><code class="lang-csharp">IEnumerable&lt;Dog&gt; dogs = GetDogs();
+IEnumerable&lt;Animal&gt; animals = dogs; // Covariance
+</code></pre>
+<h4 id="contravariance-examples-contravarianceexamplescs">Contravariance Examples (ContravarianceExamples.cs)</h4>
+<p><strong>Purpose:</strong> Demonstrate contravariant generic interfaces</p>
+<p><strong>Interfaces:</strong></p>
+<ul>
+<li><code>IComparer&lt;in T&gt;</code> (contravariant)</li>
+<li><code>Action&lt;in T&gt;</code></li>
+</ul>
+<p><strong>Examples:</strong></p>
+<pre><code class="lang-csharp">IComparer&lt;Animal&gt; animalComparer = new AnimalComparer();
+IComparer&lt;Dog&gt; dogComparer = animalComparer; // Contravariance
+</code></pre>
+<h3 id="advanced-examples-components">Advanced Examples Components</h3>
+<h4 id="pattern-matching-patternmatchingexamplescs">Pattern Matching (PatternMatchingExamples.cs)</h4>
+<p><strong>Purpose:</strong> Modern C# pattern matching techniques</p>
+<p><strong>Patterns:</strong></p>
+<ul>
+<li>Type patterns</li>
+<li>Property patterns</li>
+<li>Positional patterns</li>
+<li>Relational patterns</li>
+<li>Logical patterns (and, or, not)</li>
+<li>List patterns</li>
+</ul>
+<h4 id="linq-advanced-linqadvancedexamplescs">LINQ Advanced (LinqAdvancedExamples.cs)</h4>
+<p><strong>Purpose:</strong> Advanced LINQ operations and optimization</p>
+<p><strong>Topics:</strong></p>
+<ul>
+<li>Deferred execution</li>
+<li>Query syntax vs method syntax</li>
+<li>Custom LINQ operators</li>
+<li>Performance optimization</li>
+<li>PLINQ (Parallel LINQ)</li>
+</ul>
+<h4 id="dependency-injection-diexamplescs">Dependency Injection (DIExamples.cs)</h4>
+<p><strong>Purpose:</strong> Microsoft.Extensions.DependencyInjection usage</p>
+<p><strong>Lifetimes:</strong></p>
+<ul>
+<li>Singleton</li>
+<li>Scoped</li>
+<li>Transient</li>
+</ul>
+<p><strong>Patterns:</strong></p>
+<ul>
+<li>Constructor injection</li>
+<li>Factory pattern</li>
+<li>Service locator (anti-pattern)</li>
+</ul>
+<h3 id="enterprise-pattern-components">Enterprise Pattern Components</h3>
+<h4 id="solid-principles">SOLID Principles</h4>
+<p><strong>Purpose:</strong> Demonstrate all 5 SOLID principles</p>
+<p><strong>Components:</strong></p>
+<ol>
+<li><p><strong>Single Responsibility (SRP)</strong></p>
+<ul>
+<li><code>UserRepository</code> (data access only)</li>
+<li><code>UserValidator</code> (validation only)</li>
+<li><code>UserService</code> (orchestration)</li>
+</ul>
+</li>
+<li><p><strong>Open/Closed (OCP)</strong></p>
+<ul>
+<li><code>IPaymentProcessor</code> interface</li>
+<li><code>CreditCardProcessor</code>, <code>PayPalProcessor</code> implementations</li>
+<li>Extensible without modification</li>
+</ul>
+</li>
+<li><p><strong>Liskov Substitution (LSP)</strong></p>
+<ul>
+<li><code>Rectangle</code> and <code>Square</code> proper hierarchy</li>
+<li>Behavioral compatibility</li>
+</ul>
+</li>
+<li><p><strong>Interface Segregation (ISP)</strong></p>
+<ul>
+<li><code>IReader</code>, <code>IWriter</code> (segregated)</li>
+<li>Clients depend only on what they use</li>
+</ul>
+</li>
+<li><p><strong>Dependency Inversion (DIP)</strong></p>
+<ul>
+<li>High-level modules depend on abstractions</li>
+<li><code>IRepository&lt;T&gt;</code> abstraction</li>
+<li>Concrete <code>SqlRepository&lt;T&gt;</code> implementation</li>
+</ul>
+</li>
+</ol>
+<h4 id="polly-resilience-pollyexamplescs">Polly Resilience (PollyExamples.cs)</h4>
+<p><strong>Purpose:</strong> Resilience and transient fault handling</p>
+<p><strong>Patterns:</strong></p>
+<ul>
+<li><strong>Retry:</strong> Exponential backoff</li>
+<li><strong>Circuit Breaker:</strong> Fail fast when downstream unhealthy</li>
+<li><strong>Timeout:</strong> Cancel long-running operations</li>
+<li><strong>Fallback:</strong> Provide alternative response</li>
+<li><strong>Bulkhead:</strong> Limit concurrent operations</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="lang-csharp">var retryPolicy = Policy
+    .Handle&lt;HttpRequestException&gt;()
+    .WaitAndRetryAsync(3, attempt =&gt; TimeSpan.FromSeconds(Math.Pow(2, attempt)));
+
+await retryPolicy.ExecuteAsync(() =&gt; httpClient.GetAsync(url));
+</code></pre>
+<h4 id="fluentvalidation-validationexamplescs">FluentValidation (ValidationExamples.cs)</h4>
+<p><strong>Purpose:</strong> Complex validation scenarios</p>
+<p><strong>Validators:</strong></p>
+<ul>
+<li><code>CustomerValidator</code></li>
+<li><code>OrderValidator</code></li>
+<li><code>AddressValidator</code></li>
+</ul>
+<p><strong>Features:</strong></p>
+<ul>
+<li>Property validation</li>
+<li>Complex rules</li>
+<li>Nested validators</li>
+<li>Collection validation</li>
+<li>Custom validators</li>
+</ul>
+<h4 id="result-pattern-resultpatterncs">Result Pattern (ResultPattern.cs)</h4>
+<p><strong>Purpose:</strong> Railway-oriented programming</p>
+<p><strong>Classes:</strong></p>
+<ul>
+<li><code>Result&lt;TValue, TError&gt;</code></li>
+<li><code>Success&lt;TValue&gt;</code></li>
+<li><code>Failure&lt;TError&gt;</code></li>
+</ul>
+<p><strong>Operations:</strong></p>
+<ul>
+<li><code>Then</code> - Railway chaining</li>
+<li><code>Map</code> - Transform success</li>
+<li><code>Match</code> - Pattern match result</li>
+<li><code>Tap</code> - Side effects</li>
+</ul>
+<h3 id="observability-components">Observability Components</h3>
+<h4 id="serilog-logging-enhancedserilogexamplescs">Serilog Logging (EnhancedSerilogExamples.cs)</h4>
+<p><strong>Purpose:</strong> Structured logging with rich context</p>
+<p><strong>Features:</strong></p>
+<ul>
+<li><strong>Enrichers:</strong>
+<ul>
+<li>Machine name</li>
+<li>Environment name</li>
+<li>Process ID</li>
+<li>Thread ID</li>
+</ul>
+</li>
+<li><strong>Log Context:</strong>
+<ul>
+<li>Correlation IDs</li>
+<li>User context</li>
+<li>Request scope</li>
+</ul>
+</li>
+<li><strong>Sinks:</strong>
+<ul>
+<li>Console (development)</li>
+<li>File (persistent)</li>
+<li>Seq (aggregation)</li>
+</ul>
+</li>
+</ul>
+<p><strong>Usage:</strong></p>
+<pre><code class="lang-csharp">using (LogContext.PushProperty(&quot;CorrelationId&quot;, correlationId))
+{
+    _logger.Information(&quot;Processing order {OrderId}&quot;, orderId);
+}
+</code></pre>
+<h4 id="opentelemetry-tracing-opentelemetryexamplescs">OpenTelemetry Tracing (OpenTelemetryExamples.cs)</h4>
+<p><strong>Purpose:</strong> Distributed tracing</p>
+<p><strong>Concepts:</strong></p>
+<ul>
+<li><strong>Activity/Span:</strong> Unit of work</li>
+<li><strong>Trace:</strong> Collection of spans</li>
+<li><strong>Parent-Child:</strong> Span relationships</li>
+<li><strong>Attributes:</strong> Semantic conventions</li>
+<li><strong>Events:</strong> Structured events within span</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="lang-csharp">using var activity = activitySource.StartActivity(&quot;ProcessOrder&quot;);
+activity?.SetTag(&quot;order.id&quot;, orderId);
+activity?.AddEvent(new ActivityEvent(&quot;OrderValidated&quot;));
+</code></pre>
+<h4 id="opentelemetry-metrics">OpenTelemetry Metrics</h4>
+<p><strong>Purpose:</strong> Application metrics</p>
+<p><strong>Metric Types:</strong></p>
+<ul>
+<li><strong>Counter:</strong> Monotonically increasing (request count)</li>
+<li><strong>Histogram:</strong> Value distribution (request duration)</li>
+<li><strong>Observable Gauge:</strong> Current value (active connections)</li>
+</ul>
+<h4 id="health-checks-healthcheckexamplescs">Health Checks (HealthCheckExamples.cs)</h4>
+<p><strong>Purpose:</strong> Application and dependency health</p>
+<p><strong>Checks:</strong></p>
+<ul>
+<li>Database connectivity</li>
+<li>Cache availability</li>
+<li>External API health</li>
+<li>Memory usage</li>
+<li>Disk space</li>
+</ul>
+<p><strong>Tags:</strong></p>
+<ul>
+<li><code>ready</code> - Readiness probe</li>
+<li><code>live</code> - Liveness probe</li>
+</ul>
+<h2 id="component-dependencies">Component Dependencies</h2>
+<h3 id="dependency-graph">Dependency Graph</h3>
+<pre><code>Program.cs
+  ├── Beginner Examples
+  │     ├── Serilog (logging)
+  │     └── No external dependencies
+  ├── Intermediate Examples
+  │     ├── Serilog (logging)
+  │     └── System.Collections.Generic
+  ├── Advanced Examples
+  │     ├── Microsoft.Extensions.DependencyInjection
+  │     ├── Serilog
+  │     └── System.Linq
+  └── Enterprise Patterns
+        ├── Polly (resilience)
+        ├── FluentValidation
+        ├── Serilog
+        ├── OpenTelemetry
+        └── Microsoft.Extensions.Diagnostics.HealthChecks
+</code></pre>
+<h3 id="cross-cutting-concerns">Cross-Cutting Concerns</h3>
+<h4 id="logging">Logging</h4>
+<ul>
+<li><strong>Used by:</strong> All components</li>
+<li><strong>Implementation:</strong> Serilog with enrichers</li>
+<li><strong>Output:</strong> Console, File, Seq</li>
+</ul>
+<h4 id="error-handling">Error Handling</h4>
+<ul>
+<li><strong>Pattern:</strong> Result&lt;T, TError&gt;</li>
+<li><strong>Resilience:</strong> Polly policies</li>
+<li><strong>Validation:</strong> FluentValidation</li>
+</ul>
+<h4 id="performance">Performance</h4>
+<ul>
+<li><strong>Measurement:</strong> BenchmarkDotNet</li>
+<li><strong>Optimization:</strong> Span<t>, ArrayPool<t></t></t></li>
+<li><strong>Monitoring:</strong> OpenTelemetry metrics</li>
+</ul>
+<h2 id="component-interactions">Component Interactions</h2>
+<h3 id="example-flow-processing-order">Example Flow: Processing Order</h3>
+<pre><code>User Request
+   ↓
+Program.cs (Main)
+   ↓
+DI Container Resolution
+   ↓
+OrderService (SOLID - SRP)
+   ├→ OrderValidator (FluentValidation)
+   │    └→ Result&lt;Order, ValidationError&gt;
+   ├→ OrderRepository (DIP)
+   │    ├→ Polly Retry Policy
+   │    └→ Result&lt;Order, DbError&gt;
+   └→ Logger (Serilog)
+        ├→ LogContext (CorrelationId)
+        ├→ Activity (Tracing)
+        └→ Counter (Metrics)
+</code></pre>
+<h3 id="example-flow-benchmark-execution">Example Flow: Benchmark Execution</h3>
+<pre><code>BenchmarkSwitcher
+   ↓
+Category Selection
+   ↓
+Benchmark Runner
+   ├→ Boxing Benchmarks
+   ├→ Polymorphism Benchmarks
+   ├→ LINQ Benchmarks
+   ├→ Span Benchmarks
+   └→ Type Conversion Benchmarks
+        ↓
+Statistical Analysis
+        ↓
+Report Generation (HTML, Markdown, CSV)
+</code></pre>
+<h2 id="component-testing-strategy">Component Testing Strategy</h2>
+<h3 id="unit-testing">Unit Testing</h3>
+<ul>
+<li><strong>Each component tested in isolation</strong></li>
+<li><strong>Mocking:</strong> Moq/NSubstitute for dependencies</li>
+<li><strong>Data:</strong> AutoFixture + Bogus</li>
+</ul>
+<h3 id="integration-testing">Integration Testing</h3>
+<ul>
+<li><strong>Cross-component scenarios</strong></li>
+<li><strong>Real dependencies</strong> (where appropriate)</li>
+<li><strong>Performance integration tests</strong></li>
+</ul>
+<h3 id="property-based-testing">Property-Based Testing</h3>
+<ul>
+<li><strong>FsCheck for components with invariants</strong></li>
+<li><strong>Example:</strong> Covariance/Contravariance rules</li>
+</ul>
+<h2 id="performance-considerations">Performance Considerations</h2>
+<h3 id="hot-path-optimization">Hot Path Optimization</h3>
+<ul>
+<li><strong>LINQ:</strong> Avoid in performance-critical paths</li>
+<li><strong>Span<t>:</t></strong> Use for array slicing</li>
+<li><strong>ValueTask<t>:</t></strong> For frequently synchronous async methods</li>
+<li><strong>ArrayPool<t>:</t></strong> Reuse arrays</li>
+</ul>
+<h3 id="memory-management">Memory Management</h3>
+<ul>
+<li><strong>Minimize allocations:</strong> Use structs where appropriate</li>
+<li><strong>Avoid boxing:</strong> Use generics instead</li>
+<li><strong>Dispose pattern:</strong> Proper resource cleanup</li>
+</ul>
+<h2 id="security">Security</h2>
+<h3 id="input-validation">Input Validation</h3>
+<ul>
+<li><strong>All public APIs:</strong> FluentValidation</li>
+<li><strong>Boundary validation:</strong> Never trust input</li>
+</ul>
+<h3 id="exception-handling">Exception Handling</h3>
+<ul>
+<li><strong>Don't expose internals:</strong> Use Result pattern</li>
+<li><strong>Log security events:</strong> Failed validations, unauthorized access</li>
+</ul>
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://c4model.com/#ComponentDiagram">C4 Component Diagram</a></li>
+<li><a href="https://learn.microsoft.com/en-us/dotnet/core/extensions/dependency-injection">.NET Dependency Injection</a></li>
+<li><a href="https://learn.microsoft.com/en-us/dotnet/architecture/modern-web-apps-azure/architectural-principles">SOLID Principles</a></li>
+</ul>
+<hr>
+<p><strong>Abstraction Level:</strong> Level 3 - Component
+<strong>Target Audience:</strong> Developers
+<strong>Last Updated:</strong> 2025-11-30</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/02-c4-diagrams/component-diagram.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

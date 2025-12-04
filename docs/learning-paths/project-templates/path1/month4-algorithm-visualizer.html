@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Month 4 Capstone: Algorithm Visualization &amp; Education Tool | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Month 4 Capstone: Algorithm Visualization &amp; Education Tool | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../../favicon.ico">
+      <link rel="stylesheet" href="../../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/project-templates/path1/month4-algorithm-visualizer.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../../index.html">
+            <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="month-4-capstone-algorithm-visualization--education-tool">Month 4 Capstone: Algorithm Visualization &amp; Education Tool</h1>
+
+<p><strong>Difficulty</strong>: ⭐⭐⭐⭐☆ (Advanced)
+<strong>Estimated Time</strong>: 30-35 hours
+<strong>Prerequisites</strong>: Completed Week 13-16 of Path 1 (Algorithms &amp; Data Structures)</p>
+<hr>
+<h2 id="-project-overview">🎯 Project Overview</h2>
+<p>Build a comprehensive algorithm visualization and benchmarking tool that demonstrates sorting/searching algorithms with step-by-step execution, performance comparisons, and educational content.</p>
+<h3 id="learning-objectives">Learning Objectives</h3>
+<ul>
+<li>✅ Implement 10+ algorithms from scratch</li>
+<li>✅ Analyze time/space complexity</li>
+<li>✅ Use BenchmarkDotNet for performance testing</li>
+<li>✅ Create step-by-step visualizations</li>
+<li>✅ Implement custom data structures</li>
+</ul>
+<hr>
+<h2 id="-requirements">📋 Requirements</h2>
+<h3 id="1-algorithms-to-implement">1. Algorithms to Implement</h3>
+<p><strong>Searching</strong> (3):</p>
+<ul>
+<li>Binary Search (iterative &amp; recursive)</li>
+<li>Modified Binary Search (first/last occurrence)</li>
+<li>Interpolation Search</li>
+</ul>
+<p><strong>Sorting</strong> (7):</p>
+<ul>
+<li>QuickSort (Lomuto partition)</li>
+<li>QuickSort (Hoare partition)</li>
+<li>MergeSort (top-down)</li>
+<li>MergeSort (bottom-up)</li>
+<li>HeapSort</li>
+<li>InsertionSort</li>
+<li>BubbleSort (for comparison)</li>
+</ul>
+<p><strong>Data Structures</strong> (4):</p>
+<ul>
+<li>Stack<t> from scratch</t></li>
+<li>Queue<t> from scratch</t></li>
+<li>LinkedList<t> from scratch</t></li>
+<li>PriorityQueue<t></t></li>
+</ul>
+<h3 id="2-visualization-features">2. Visualization Features</h3>
+<ul>
+<li>Step-by-step execution mode</li>
+<li>Show array state after each step</li>
+<li>Highlight current elements being compared</li>
+<li>Count comparisons and swaps</li>
+<li>Execution time tracking</li>
+<li>Memory usage tracking</li>
+</ul>
+<h3 id="3-educational-content">3. Educational Content</h3>
+<ul>
+<li>Algorithm explanation for each</li>
+<li>Time complexity (best/average/worst)</li>
+<li>Space complexity</li>
+<li>When to use each algorithm</li>
+<li>Pros and cons</li>
+<li>Real-world applications</li>
+</ul>
+<h3 id="4-benchmarking">4. Benchmarking</h3>
+<ul>
+<li>Test with different input sizes (100, 1K, 10K, 100K)</li>
+<li>Test with different input types (sorted, reverse, random, nearly sorted)</li>
+<li>Generate comparison charts (console table format)</li>
+<li>Export results to CSV</li>
+</ul>
+<h3 id="5-console-interface">5. Console Interface</h3>
+<pre><code>=== ALGORITHM VISUALIZER ===
+1. Searching Algorithms
+2. Sorting Algorithms
+3. Data Structures Demo
+4. Run Benchmarks
+5. Compare Algorithms
+6. Educational Mode
+7. Exit
+
+Choose algorithm:
+1. Binary Search
+2. QuickSort
+3. MergeSort
+...
+
+Choose visualization speed:
+1. Slow (1 step/second)
+2. Medium (5 steps/second)
+3. Fast (10 steps/second)
+4. Instant (no delay)
+</code></pre>
+<hr>
+<h2 id="-project-structure">🏗️ Project Structure</h2>
+<pre><code>AlgorithmVisualizer/
+├── Algorithms/
+│   ├── Searching/
+│   │   ├── BinarySearch.cs
+│   │   ├── InterpolationSearch.cs
+│   │   └── ModifiedBinarySearch.cs
+│   ├── Sorting/
+│   │   ├── QuickSort.cs
+│   │   ├── MergeSort.cs
+│   │   ├── HeapSort.cs
+│   │   └── Others.cs
+│   └── IAlgorithm.cs
+├── DataStructures/
+│   ├── CustomStack.cs
+│   ├── CustomQueue.cs
+│   ├── CustomLinkedList.cs
+│   └── PriorityQueue.cs
+├── Visualization/
+│   ├── StepRecorder.cs
+│   ├── ConsoleVisualizer.cs
+│   └── AlgorithmStep.cs
+├── Benchmarks/
+│   ├── SortingBenchmarks.cs
+│   ├── SearchingBenchmarks.cs
+│   └── BenchmarkRunner.cs
+├── Education/
+│   ├── AlgorithmInfo.cs
+│   └── ComplexityAnalyzer.cs
+├── Utilities/
+│   ├── DataGenerator.cs
+│   └── PerformanceMetrics.cs
+└── Tests/
+    ├── AlgorithmTests.cs
+    └── DataStructureTests.cs
+</code></pre>
+<hr>
+<h2 id="-implementation-guide">🚀 Implementation Guide</h2>
+<h3 id="step-1-define-algorithm-interface">Step 1: Define Algorithm Interface</h3>
+<pre><code class="lang-csharp">public interface IAlgorithm&lt;T&gt; where T : IComparable&lt;T&gt;
+{
+    string Name { get; }
+    string Description { get; }
+    ComplexityInfo Complexity { get; }
+
+    void Execute(T[] data);
+    IEnumerable&lt;AlgorithmStep&lt;T&gt;&gt; ExecuteWithSteps(T[] data);
+}
+
+public class ComplexityInfo
+{
+    public string TimeComplexityBest { get; set; }
+    public string TimeComplexityAverage { get; set; }
+    public string TimeComplexityWorst { get; set; }
+    public string SpaceComplexity { get; set; }
+    public bool IsStable { get; set; }
+    public bool IsInPlace { get; set; }
+}
+
+public class AlgorithmStep&lt;T&gt;
+{
+    public int StepNumber { get; set; }
+    public string Description { get; set; }
+    public T[] ArrayState { get; set; }
+    public int[] HighlightedIndices { get; set; }
+    public int Comparisons { get; set; }
+    public int Swaps { get; set; }
+}
+</code></pre>
+<h3 id="step-2-implement-quicksort-with-visualization">Step 2: Implement QuickSort with Visualization</h3>
+<pre><code class="lang-csharp">public class QuickSort&lt;T&gt; : IAlgorithm&lt;T&gt; where T : IComparable&lt;T&gt;
+{
+    private List&lt;AlgorithmStep&lt;T&gt;&gt; _steps;
+    private int _comparisons;
+    private int _swaps;
+
+    public string Name =&gt; &quot;QuickSort (Lomuto Partition)&quot;;
+
+    public ComplexityInfo Complexity =&gt; new()
+    {
+        TimeComplexityBest = &quot;O(n log n)&quot;,
+        TimeComplexityAverage = &quot;O(n log n)&quot;,
+        TimeComplexityWorst = &quot;O(n²)&quot;,
+        SpaceComplexity = &quot;O(log n)&quot;,
+        IsStable = false,
+        IsInPlace = true
+    };
+
+    public void Execute(T[] data)
+    {
+        QuickSortRecursive(data, 0, data.Length - 1);
+    }
+
+    public IEnumerable&lt;AlgorithmStep&lt;T&gt;&gt; ExecuteWithSteps(T[] data)
+    {
+        _steps = new List&lt;AlgorithmStep&lt;T&gt;&gt;();
+        _comparisons = 0;
+        _swaps = 0;
+
+        RecordStep(data, &quot;Initial array&quot;, Array.Empty&lt;int&gt;());
+        QuickSortRecursive(data, 0, data.Length - 1);
+        RecordStep(data, &quot;Final sorted array&quot;, Array.Empty&lt;int&gt;());
+
+        return _steps;
+    }
+
+    private void QuickSortRecursive(T[] arr, int low, int high)
+    {
+        if (low &lt; high)
+        {
+            int pivotIndex = Partition(arr, low, high);
+            RecordStep(arr, $&quot;Partition complete, pivot at {pivotIndex}&quot;, new[] { pivotIndex });
+
+            QuickSortRecursive(arr, low, pivotIndex - 1);
+            QuickSortRecursive(arr, pivotIndex + 1, high);
+        }
+    }
+
+    private int Partition(T[] arr, int low, int high)
+    {
+        T pivot = arr[high];
+        int i = low - 1;
+
+        for (int j = low; j &lt; high; j++)
+        {
+            _comparisons++;
+            if (arr[j].CompareTo(pivot) &lt;= 0)
+            {
+                i++;
+                Swap(arr, i, j);
+                _swaps++;
+                RecordStep(arr, $&quot;Swapped {arr[i]} and {arr[j]}&quot;, new[] { i, j });
+            }
+        }
+
+        Swap(arr, i + 1, high);
+        _swaps++;
+        return i + 1;
+    }
+
+    private void Swap(T[] arr, int i, int j)
+    {
+        (arr[i], arr[j]) = (arr[j], arr[i]);
+    }
+
+    private void RecordStep(T[] arr, string description, int[] highlightedIndices)
+    {
+        _steps.Add(new AlgorithmStep&lt;T&gt;
+        {
+            StepNumber = _steps.Count + 1,
+            Description = description,
+            ArrayState = (T[])arr.Clone(),
+            HighlightedIndices = highlightedIndices,
+            Comparisons = _comparisons,
+            Swaps = _swaps
+        });
+    }
+}
+</code></pre>
+<h3 id="step-3-implement-visualization">Step 3: Implement Visualization</h3>
+<pre><code class="lang-csharp">public class ConsoleVisualizer
+{
+    public void Visualize&lt;T&gt;(IEnumerable&lt;AlgorithmStep&lt;T&gt;&gt; steps, int delayMs = 500)
+    {
+        foreach (var step in steps)
+        {
+            Console.Clear();
+            Console.WriteLine($&quot;Step {step.StepNumber}: {step.Description}&quot;);
+            Console.WriteLine($&quot;Comparisons: {step.Comparisons} | Swaps: {step.Swaps}&quot;);
+            Console.WriteLine();
+
+            DisplayArray(step.ArrayState, step.HighlightedIndices);
+
+            Thread.Sleep(delayMs);
+        }
+    }
+
+    private void DisplayArray&lt;T&gt;(T[] array, int[] highlightedIndices)
+    {
+        for (int i = 0; i &lt; array.Length; i++)
+        {
+            if (highlightedIndices.Contains(i))
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write($&quot;[{array[i]}] &quot;);
+                Console.ResetColor();
+            }
+            else
+            {
+                Console.Write($&quot;{array[i]} &quot;);
+            }
+        }
+        Console.WriteLine();
+    }
+}
+</code></pre>
+<h3 id="step-4-implement-benchmarks">Step 4: Implement Benchmarks</h3>
+<pre><code class="lang-csharp">using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Running;
+
+[MemoryDiagnoser]
+public class SortingBenchmarks
+{
+    private int[] _data;
+
+    [Params(100, 1000, 10000)]
+    public int N;
+
+    [GlobalSetup]
+    public void Setup()
+    {
+        _data = DataGenerator.GenerateRandomArray(N);
+    }
+
+    [Benchmark]
+    public void QuickSort_Lomuto()
+    {
+        var arr = (int[])_data.Clone();
+        new QuickSort&lt;int&gt;().Execute(arr);
+    }
+
+    [Benchmark]
+    public void MergeSort_TopDown()
+    {
+        var arr = (int[])_data.Clone();
+        new MergeSort&lt;int&gt;().Execute(arr);
+    }
+
+    // TODO: Add more benchmarks
+}
+</code></pre>
+<hr>
+<h2 id="-milestones">🎯 Milestones</h2>
+<ol>
+<li><strong>Day 1-5</strong>: Implement all algorithms</li>
+<li><strong>Day 6-7</strong>: Add visualization system</li>
+<li><strong>Day 8-9</strong>: Implement custom data structures</li>
+<li><strong>Day 10-11</strong>: Add benchmarking</li>
+<li><strong>Day 12-13</strong>: Educational content</li>
+<li><strong>Day 14</strong>: Testing and polish</li>
+</ol>
+<hr>
+<h2 id="-evaluation-criteria">✅ Evaluation Criteria</h2>
+<table>
+<thead>
+<tr>
+<th>Criteria</th>
+<th>Points</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Algorithms Implemented (10+)</td>
+<td>30</td>
+</tr>
+<tr>
+<td>Visualization System</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Benchmarks</td>
+<td>15</td>
+</tr>
+<tr>
+<td>Data Structures</td>
+<td>15</td>
+</tr>
+<tr>
+<td>Educational Content</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Tests</td>
+<td>10</td>
+</tr>
+<tr>
+<td><strong>TOTAL</strong></td>
+<td><strong>100</strong></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="-resources">📚 Resources</h2>
+<ul>
+<li><code>samples/99-Exercises/Algorithms/</code> (all 3 exercises)</li>
+<li>BenchmarkDotNet: <a href="https://benchmarkdotnet.org/">https://benchmarkdotnet.org/</a></li>
+<li>Algorithm visualizations: <a href="https://visualgo.net/">https://visualgo.net/</a></li>
+</ul>
+<hr>
+<p><em>Template Version: 1.0</em></p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/project-templates/path1/month4-algorithm-visualizer.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

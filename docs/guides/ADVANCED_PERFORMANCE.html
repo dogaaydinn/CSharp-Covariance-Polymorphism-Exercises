@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Advanced Performance Optimization Guide | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Advanced Performance Optimization Guide | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/guides/ADVANCED_PERFORMANCE.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="advanced-performance-optimization-guide">Advanced Performance Optimization Guide</h1>
+
+<h2 id="overview">Overview</h2>
+<p>This guide covers advanced performance optimization techniques in C#, including SIMD (Single Instruction Multiple Data) operations, parallel processing, async streams, and memory optimization.</p>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ul>
+<li><a href="#simd-operations">SIMD Operations</a></li>
+<li><a href="#parallel-processing">Parallel Processing</a></li>
+<li><a href="#async-streams">Async Streams</a></li>
+<li><a href="#memory-optimization">Memory Optimization</a></li>
+<li><a href="#gpu-acceleration">GPU Acceleration</a></li>
+<li><a href="#benchmarking">Benchmarking</a></li>
+<li><a href="#best-practices">Best Practices</a></li>
+</ul>
+<h2 id="simd-operations">SIMD Operations</h2>
+<p>SIMD allows processing multiple data points with a single CPU instruction, dramatically improving performance for data-parallel operations.</p>
+<h3 id="vector---hardware-agnostic">Vector<t> - Hardware Agnostic</t></h3>
+<pre><code class="lang-csharp">using System.Numerics;
+
+public class VectorOperations
+{
+    // Add two arrays using SIMD
+    public static void AddArrays(float[] a, float[] b, float[] result)
+    {
+        int vectorSize = Vector&lt;float&gt;.Count; // Typically 4, 8, or 16
+        int i = 0;
+
+        // Process in vector-sized chunks
+        for (; i &lt;= a.Length - vectorSize; i += vectorSize)
+        {
+            var va = new Vector&lt;float&gt;(a, i);
+            var vb = new Vector&lt;float&gt;(b, i);
+            var vr = va + vb;
+            vr.CopyTo(result, i);
+        }
+
+        // Handle remaining elements
+        for (; i &lt; a.Length; i++)
+        {
+            result[i] = a[i] + b[i];
+        }
+    }
+
+    // Multiply array by scalar
+    public static void MultiplyScalar(float[] array, float scalar, float[] result)
+    {
+        var scalarVector = new Vector&lt;float&gt;(scalar);
+        int vectorSize = Vector&lt;float&gt;.Count;
+        int i = 0;
+
+        for (; i &lt;= array.Length - vectorSize; i += vectorSize)
+        {
+            var v = new Vector&lt;float&gt;(array, i);
+            var r = v * scalarVector;
+            r.CopyTo(result, i);
+        }
+
+        for (; i &lt; array.Length; i++)
+        {
+            result[i] = array[i] * scalar;
+        }
+    }
+
+    // Dot product using SIMD
+    public static float DotProduct(float[] a, float[] b)
+    {
+        if (a.Length != b.Length)
+            throw new ArgumentException(&quot;Arrays must have same length&quot;);
+
+        var sum = Vector&lt;float&gt;.Zero;
+        int vectorSize = Vector&lt;float&gt;.Count;
+        int i = 0;
+
+        for (; i &lt;= a.Length - vectorSize; i += vectorSize)
+        {
+            var va = new Vector&lt;float&gt;(a, i);
+            var vb = new Vector&lt;float&gt;(b, i);
+            sum += va * vb;
+        }
+
+        float result = Vector.Dot(sum, Vector&lt;float&gt;.One);
+
+        // Handle remaining elements
+        for (; i &lt; a.Length; i++)
+        {
+            result += a[i] * b[i];
+        }
+
+        return result;
+    }
+
+    // Find minimum value in array
+    public static float FindMin(float[] array)
+    {
+        var min = new Vector&lt;float&gt;(float.MaxValue);
+        int vectorSize = Vector&lt;float&gt;.Count;
+        int i = 0;
+
+        for (; i &lt;= array.Length - vectorSize; i += vectorSize)
+        {
+            var v = new Vector&lt;float&gt;(array, i);
+            min = Vector.Min(min, v);
+        }
+
+        float result = float.MaxValue;
+        for (int j = 0; j &lt; vectorSize; j++)
+        {
+            result = Math.Min(result, min[j]);
+        }
+
+        for (; i &lt; array.Length; i++)
+        {
+            result = Math.Min(result, array[i]);
+        }
+
+        return result;
+    }
+}
+</code></pre>
+<h3 id="vector128256512---explicit-simd">Vector128/256/512 - Explicit SIMD</h3>
+<pre><code class="lang-csharp">using System.Runtime.Intrinsics;
+using System.Runtime.Intrinsics.X86;
+
+public class ExplicitSimd
+{
+    // SSE2 - 128-bit vectors (always available on x64)
+    public static void AddArraysSse2(float[] a, float[] b, float[] result)
+    {
+        if (!Sse.IsSupported)
+        {
+            throw new NotSupportedException(&quot;SSE not supported&quot;);
+        }
+
+        int i = 0;
+        for (; i &lt;= a.Length - 4; i += 4)
+        {
+            var va = Sse.LoadVector128(&amp;a[i]);
+            var vb = Sse.LoadVector128(&amp;b[i]);
+            var vr = Sse.Add(va, vb);
+            Sse.Store(&amp;result[i], vr);
+        }
+
+        for (; i &lt; a.Length; i++)
+        {
+            result[i] = a[i] + b[i];
+        }
+    }
+
+    // AVX2 - 256-bit vectors (8 floats at once)
+    public static unsafe void AddArraysAvx2(float[] a, float[] b, float[] result)
+    {
+        if (!Avx.IsSupported)
+        {
+            // Fallback to SSE2 or scalar
+            AddArraysSse2(a, b, result);
+            return;
+        }
+
+        int i = 0;
+        fixed (float* pA = a, pB = b, pResult = result)
+        {
+            for (; i &lt;= a.Length - 8; i += 8)
+            {
+                var va = Avx.LoadVector256(pA + i);
+                var vb = Avx.LoadVector256(pB + i);
+                var vr = Avx.Add(va, vb);
+                Avx.Store(pResult + i, vr);
+            }
+        }
+
+        for (; i &lt; a.Length; i++)
+        {
+            result[i] = a[i] + b[i];
+        }
+    }
+
+    // AVX-512 - 512-bit vectors (16 floats at once)
+    public static unsafe void AddArraysAvx512(float[] a, float[] b, float[] result)
+    {
+        if (!Avx512F.IsSupported)
+        {
+            AddArraysAvx2(a, b, result);
+            return;
+        }
+
+        int i = 0;
+        fixed (float* pA = a, pB = b, pResult = result)
+        {
+            for (; i &lt;= a.Length - 16; i += 16)
+            {
+                var va = Avx512F.LoadVector512(pA + i);
+                var vb = Avx512F.LoadVector512(pB + i);
+                var vr = Avx512F.Add(va, vb);
+                Avx512F.Store(pResult + i, vr);
+            }
+        }
+
+        for (; i &lt; a.Length; i++)
+        {
+            result[i] = a[i] + b[i];
+        }
+    }
+
+    // FMA (Fused Multiply-Add) - a * b + c in one instruction
+    public static unsafe void FusedMultiplyAdd(float[] a, float[] b, float[] c, float[] result)
+    {
+        if (!Fma.IsSupported)
+        {
+            for (int i = 0; i &lt; a.Length; i++)
+            {
+                result[i] = a[i] * b[i] + c[i];
+            }
+            return;
+        }
+
+        int i = 0;
+        fixed (float* pA = a, pB = b, pC = c, pResult = result)
+        {
+            for (; i &lt;= a.Length - 8; i += 8)
+            {
+                var va = Avx.LoadVector256(pA + i);
+                var vb = Avx.LoadVector256(pB + i);
+                var vc = Avx.LoadVector256(pC + i);
+                var vr = Fma.MultiplyAdd(va, vb, vc);
+                Avx.Store(pResult + i, vr);
+            }
+        }
+
+        for (; i &lt; a.Length; i++)
+        {
+            result[i] = a[i] * b[i] + c[i];
+        }
+    }
+}
+</code></pre>
+<h3 id="practical-simd-examples">Practical SIMD Examples</h3>
+<h4 id="image-processing---brightness-adjustment">Image Processing - Brightness Adjustment</h4>
+<pre><code class="lang-csharp">public class ImageProcessing
+{
+    // Adjust brightness of RGB image (3 bytes per pixel)
+    public static void AdjustBrightness(byte[] pixels, float factor)
+    {
+        var factorVector = new Vector&lt;float&gt;(factor);
+        int vectorSize = Vector&lt;byte&gt;.Count;
+        int i = 0;
+
+        // Process in chunks
+        for (; i &lt;= pixels.Length - vectorSize; i += vectorSize)
+        {
+            var v = new Vector&lt;byte&gt;(pixels, i);
+
+            // Convert to float for multiplication
+            Vector.Widen(v, out var v1, out var v2);
+            Vector.Widen(v1, out var v1a, out var v1b);
+            Vector.Widen(v2, out var v2a, out var v2b);
+
+            // Apply brightness
+            v1a = Vector.ConvertToInt32(Vector.Multiply(Vector.ConvertToSingle(v1a), factorVector));
+            v1b = Vector.ConvertToInt32(Vector.Multiply(Vector.ConvertToSingle(v1b), factorVector));
+            v2a = Vector.ConvertToInt32(Vector.Multiply(Vector.ConvertToSingle(v2a), factorVector));
+            v2b = Vector.ConvertToInt32(Vector.Multiply(Vector.ConvertToSingle(v2b), factorVector));
+
+            // Narrow back to bytes
+            var result = Vector.Narrow(
+                Vector.Narrow(v1a, v1b),
+                Vector.Narrow(v2a, v2b));
+
+            result.CopyTo(pixels, i);
+        }
+
+        // Handle remaining pixels
+        for (; i &lt; pixels.Length; i++)
+        {
+            pixels[i] = (byte)Math.Clamp(pixels[i] * factor, 0, 255);
+        }
+    }
+
+    // Gaussian blur (simplified)
+    public static void GaussianBlur(float[] input, float[] output, int width, int height)
+    {
+        // 3x3 Gaussian kernel
+        float[] kernel = { 0.0625f, 0.125f, 0.0625f,
+                          0.125f,  0.25f,  0.125f,
+                          0.0625f, 0.125f, 0.0625f };
+
+        for (int y = 1; y &lt; height - 1; y++)
+        {
+            int i = y * width + 1;
+            for (; i &lt; (y + 1) * width - 1 - Vector&lt;float&gt;.Count; i += Vector&lt;float&gt;.Count)
+            {
+                var sum = Vector&lt;float&gt;.Zero;
+
+                // Apply kernel using SIMD
+                for (int ky = -1; ky &lt;= 1; ky++)
+                {
+                    for (int kx = -1; kx &lt;= 1; kx++)
+                    {
+                        int idx = (y + ky) * width + (i + kx);
+                        var pixel = new Vector&lt;float&gt;(input, idx);
+                        var weight = new Vector&lt;float&gt;(kernel[(ky + 1) * 3 + (kx + 1)]);
+                        sum += pixel * weight;
+                    }
+                }
+
+                sum.CopyTo(output, i);
+            }
+        }
+    }
+}
+</code></pre>
+<h4 id="matrix-operations">Matrix Operations</h4>
+<pre><code class="lang-csharp">public class MatrixOperations
+{
+    // Matrix multiplication with SIMD
+    public static void Multiply(float[] a, float[] b, float[] result, int size)
+    {
+        // A: size x size, B: size x size, Result: size x size
+        for (int i = 0; i &lt; size; i++)
+        {
+            for (int j = 0; j &lt; size; j++)
+            {
+                var sum = Vector&lt;float&gt;.Zero;
+                int k = 0;
+
+                // Vectorized inner loop
+                for (; k &lt;= size - Vector&lt;float&gt;.Count; k += Vector&lt;float&gt;.Count)
+                {
+                    var va = new Vector&lt;float&gt;(a, i * size + k);
+                    var vb = new Vector&lt;float&gt;(b, k * size + j);
+                    sum += va * vb;
+                }
+
+                float scalar = 0;
+                for (int v = 0; v &lt; Vector&lt;float&gt;.Count; v++)
+                {
+                    scalar += sum[v];
+                }
+
+                // Remaining elements
+                for (; k &lt; size; k++)
+                {
+                    scalar += a[i * size + k] * b[k * size + j];
+                }
+
+                result[i * size + j] = scalar;
+            }
+        }
+    }
+
+    // Transpose matrix with SIMD (out-of-place)
+    public static void Transpose(float[] input, float[] output, int rows, int cols)
+    {
+        for (int i = 0; i &lt; rows; i++)
+        {
+            for (int j = 0; j &lt; cols; j++)
+            {
+                output[j * rows + i] = input[i * cols + j];
+            }
+        }
+    }
+}
+</code></pre>
+<h2 id="parallel-processing">Parallel Processing</h2>
+<h3 id="parallelfor-and-parallelforeach">Parallel.For and Parallel.ForEach</h3>
+<pre><code class="lang-csharp">using System.Threading.Tasks;
+
+public class ParallelProcessing
+{
+    // Process large array in parallel
+    public static void ProcessArrayParallel(int[] data, Func&lt;int, int&gt; process)
+    {
+        Parallel.For(0, data.Length, i =&gt;
+        {
+            data[i] = process(data[i]);
+        });
+    }
+
+    // Parallel ForEach with options
+    public static void ProcessItemsParallel&lt;T&gt;(IEnumerable&lt;T&gt; items, Action&lt;T&gt; process)
+    {
+        var options = new ParallelOptions
+        {
+            MaxDegreeOfParallelism = Environment.ProcessorCount,
+            CancellationToken = CancellationToken.None
+        };
+
+        Parallel.ForEach(items, options, item =&gt;
+        {
+            process(item);
+        });
+    }
+
+    // Parallel aggregation (sum)
+    public static long ParallelSum(int[] data)
+    {
+        long sum = 0;
+        var lockObject = new object();
+
+        Parallel.For(0, data.Length, () =&gt; 0L, // thread-local init
+            (i, state, localSum) =&gt;
+            {
+                localSum += data[i];
+                return localSum;
+            },
+            localSum =&gt;
+            {
+                lock (lockObject)
+                {
+                    sum += localSum;
+                }
+            });
+
+        return sum;
+    }
+
+    // Better: Use Partitioner for better work distribution
+    public static long ParallelSumPartitioned(int[] data)
+    {
+        return Partitioner.Create(0, data.Length)
+            .AsParallel()
+            .Sum(range =&gt;
+            {
+                long localSum = 0;
+                for (int i = range.Item1; i &lt; range.Item2; i++)
+                {
+                    localSum += data[i];
+                }
+                return localSum;
+            });
+    }
+}
+</code></pre>
+<h3 id="plinq-parallel-linq">PLINQ (Parallel LINQ)</h3>
+<pre><code class="lang-csharp">public class PlinqExamples
+{
+    // Simple parallel query
+    public static List&lt;int&gt; FilterAndTransform(int[] data)
+    {
+        return data
+            .AsParallel()
+            .Where(x =&gt; x % 2 == 0)
+            .Select(x =&gt; x * x)
+            .ToList();
+    }
+
+    // Parallel query with custom partitioning
+    public static double AverageExpensiveComputation(int[] data)
+    {
+        return data
+            .AsParallel()
+            .WithDegreeOfParallelism(Environment.ProcessorCount)
+            .Select(x =&gt; ExpensiveComputation(x))
+            .Average();
+    }
+
+    // Order preservation
+    public static List&lt;int&gt; OrderedParallelProcessing(int[] data)
+    {
+        return data
+            .AsParallel()
+            .AsOrdered() // Preserve input order
+            .Select(x =&gt; x * 2)
+            .ToList();
+    }
+
+    // Aggregation with PLINQ
+    public static Dictionary&lt;int, int&gt; ParallelGrouping(int[] data)
+    {
+        return data
+            .AsParallel()
+            .GroupBy(x =&gt; x % 10)
+            .ToDictionary(g =&gt; g.Key, g =&gt; g.Count());
+    }
+
+    private static double ExpensiveComputation(int x)
+    {
+        // Simulate expensive operation
+        Thread.Sleep(1);
+        return Math.Sqrt(x);
+    }
+}
+</code></pre>
+<h3 id="channels-for-producer-consumer">Channels for Producer-Consumer</h3>
+<pre><code class="lang-csharp">using System.Threading.Channels;
+
+public class ChannelExamples
+{
+    // Producer-consumer with channels
+    public static async Task ProcessWithChannels(IEnumerable&lt;int&gt; input)
+    {
+        var channel = Channel.CreateBounded&lt;int&gt;(new BoundedChannelOptions(100)
+        {
+            FullMode = BoundedChannelFullMode.Wait
+        });
+
+        // Producer task
+        var producer = Task.Run(async () =&gt;
+        {
+            foreach (var item in input)
+            {
+                await channel.Writer.WriteAsync(item);
+            }
+            channel.Writer.Complete();
+        });
+
+        // Multiple consumer tasks
+        var consumers = Enumerable.Range(0, 4).Select(i =&gt;
+            Task.Run(async () =&gt;
+            {
+                await foreach (var item in channel.Reader.ReadAllAsync())
+                {
+                    // Process item
+                    await ProcessItemAsync(item);
+                }
+            })).ToArray();
+
+        await Task.WhenAll(producer);
+        await Task.WhenAll(consumers);
+    }
+
+    // Pipeline pattern with channels
+    public static async Task&lt;List&lt;string&gt;&gt; ProcessPipeline(IEnumerable&lt;int&gt; input)
+    {
+        var stage1Channel = Channel.CreateUnbounded&lt;int&gt;();
+        var stage2Channel = Channel.CreateUnbounded&lt;double&gt;();
+        var stage3Channel = Channel.CreateUnbounded&lt;string&gt;();
+
+        // Stage 1: Transform to double
+        var stage1 = Task.Run(async () =&gt;
+        {
+            foreach (var item in input)
+            {
+                await stage1Channel.Writer.WriteAsync(item);
+            }
+            stage1Channel.Writer.Complete();
+        });
+
+        // Stage 2: Process doubles
+        var stage2 = Task.Run(async () =&gt;
+        {
+            await foreach (var item in stage1Channel.Reader.ReadAllAsync())
+            {
+                await stage2Channel.Writer.WriteAsync(Math.Sqrt(item));
+            }
+            stage2Channel.Writer.Complete();
+        });
+
+        // Stage 3: Format strings
+        var stage3 = Task.Run(async () =&gt;
+        {
+            await foreach (var item in stage2Channel.Reader.ReadAllAsync())
+            {
+                await stage3Channel.Writer.WriteAsync($&quot;Result: {item:F2}&quot;);
+            }
+            stage3Channel.Writer.Complete();
+        });
+
+        // Collect results
+        var results = new List&lt;string&gt;();
+        await foreach (var result in stage3Channel.Reader.ReadAllAsync())
+        {
+            results.Add(result);
+        }
+
+        await Task.WhenAll(stage1, stage2, stage3);
+        return results;
+    }
+
+    private static async Task ProcessItemAsync(int item)
+    {
+        await Task.Delay(10); // Simulate async work
+    }
+}
+</code></pre>
+<h2 id="async-streams">Async Streams</h2>
+<h3 id="iasyncenumerable">IAsyncEnumerable<t></t></h3>
+<pre><code class="lang-csharp">public class AsyncStreams
+{
+    // Async stream producer
+    public static async IAsyncEnumerable&lt;int&gt; GenerateNumbersAsync(
+        int count,
+        [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    {
+        for (int i = 0; i &lt; count; i++)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            // Simulate async data source
+            await Task.Delay(100, cancellationToken);
+
+            yield return i;
+        }
+    }
+
+    // Async stream transformation
+    public static async IAsyncEnumerable&lt;TResult&gt; SelectAsync&lt;T, TResult&gt;(
+        this IAsyncEnumerable&lt;T&gt; source,
+        Func&lt;T, Task&lt;TResult&gt;&gt; selector)
+    {
+        await foreach (var item in source)
+        {
+            yield return await selector(item);
+        }
+    }
+
+    // Async stream filtering
+    public static async IAsyncEnumerable&lt;T&gt; WhereAsync&lt;T&gt;(
+        this IAsyncEnumerable&lt;T&gt; source,
+        Func&lt;T, Task&lt;bool&gt;&gt; predicate)
+    {
+        await foreach (var item in source)
+        {
+            if (await predicate(item))
+            {
+                yield return item;
+            }
+        }
+    }
+
+    // Consume async stream
+    public static async Task ConsumeAsyncStream()
+    {
+        await foreach (var number in GenerateNumbersAsync(10))
+        {
+            Console.WriteLine($&quot;Received: {number}&quot;);
+        }
+    }
+
+    // Real-world example: Process large file
+    public static async IAsyncEnumerable&lt;string&gt; ReadLargeFileAsync(
+        string filePath,
+        [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    {
+        using var reader = new StreamReader(filePath);
+
+        while (!reader.EndOfStream)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var line = await reader.ReadLineAsync();
+            if (line != null)
+            {
+                yield return line;
+            }
+        }
+    }
+
+    // Process file with async stream
+    public static async Task ProcessLargeFileAsync(string filePath)
+    {
+        var validLines = ReadLargeFileAsync(filePath)
+            .WhereAsync(async line =&gt; await IsValidLineAsync(line))
+            .SelectAsync(async line =&gt; await ProcessLineAsync(line));
+
+        await foreach (var result in validLines)
+        {
+            Console.WriteLine(result);
+        }
+    }
+
+    private static async Task&lt;bool&gt; IsValidLineAsync(string line)
+    {
+        await Task.Delay(1); // Simulate async validation
+        return !string.IsNullOrWhiteSpace(line);
+    }
+
+    private static async Task&lt;string&gt; ProcessLineAsync(string line)
+    {
+        await Task.Delay(10); // Simulate async processing
+        return line.ToUpper();
+    }
+}
+</code></pre>
+<h2 id="memory-optimization">Memory Optimization</h2>
+<h3 id="span-and-memory">Span<t> and Memory<t></t></t></h3>
+<pre><code class="lang-csharp">public class MemoryOptimization
+{
+    // Parse integers from string without allocation
+    public static int SumNumbersFromString(string input)
+    {
+        ReadOnlySpan&lt;char&gt; span = input.AsSpan();
+        int sum = 0;
+
+        while (span.Length &gt; 0)
+        {
+            // Find next delimiter
+            int delimiterIndex = span.IndexOf(',');
+            ReadOnlySpan&lt;char&gt; numberSpan = delimiterIndex &gt;= 0
+                ? span.Slice(0, delimiterIndex)
+                : span;
+
+            // Parse without allocating substring
+            if (int.TryParse(numberSpan, out int number))
+            {
+                sum += number;
+            }
+
+            // Move to next number
+            span = delimiterIndex &gt;= 0
+                ? span.Slice(delimiterIndex + 1)
+                : ReadOnlySpan&lt;char&gt;.Empty;
+        }
+
+        return sum;
+    }
+
+    // Stack allocation for small buffers
+    public static string ProcessSmallBuffer()
+    {
+        Span&lt;char&gt; buffer = stackalloc char[256];
+
+        // Use buffer without heap allocation
+        int length = FormatData(buffer);
+
+        return new string(buffer.Slice(0, length));
+    }
+
+    private static int FormatData(Span&lt;char&gt; buffer)
+    {
+        return &quot;Hello, World!&quot;.AsSpan().TryCopyTo(buffer) ? 13 : 0;
+    }
+
+    // Memory pooling
+    public static async Task ProcessLargeDataWithPool()
+    {
+        var pool = MemoryPool&lt;byte&gt;.Shared;
+
+        using (var owner = pool.Rent(8192))
+        {
+            Memory&lt;byte&gt; memory = owner.Memory;
+
+            // Use memory
+            await ProcessDataAsync(memory);
+        } // Returns to pool automatically
+    }
+
+    private static async Task ProcessDataAsync(Memory&lt;byte&gt; memory)
+    {
+        await Task.Delay(100);
+    }
+
+    // ArrayPool for reusable arrays
+    public static void ProcessWithArrayPool()
+    {
+        var pool = ArrayPool&lt;int&gt;.Shared;
+        int[] array = pool.Rent(1024);
+
+        try
+        {
+            // Use array
+            Array.Clear(array, 0, array.Length);
+            ProcessArray(array);
+        }
+        finally
+        {
+            pool.Return(array);
+        }
+    }
+
+    private static void ProcessArray(int[] array)
+    {
+        for (int i = 0; i &lt; array.Length; i++)
+        {
+            array[i] = i * 2;
+        }
+    }
+}
+</code></pre>
+<h2 id="gpu-acceleration">GPU Acceleration</h2>
+<h3 id="cudanet-reference">CUDA.NET Reference</h3>
+<p><strong>Note:</strong> GPU acceleration requires additional libraries and is platform-specific.</p>
+<pre><code class="lang-csharp">// Reference implementation (requires CUDA.NET NuGet package)
+// This is a conceptual example - actual implementation varies by library
+
+/*
+using ILGPU;
+using ILGPU.Runtime;
+
+public class GpuAcceleration
+{
+    // GPU kernel for array addition
+    public static void AddArraysKernel(
+        Index1D index,
+        ArrayView&lt;float&gt; a,
+        ArrayView&lt;float&gt; b,
+        ArrayView&lt;float&gt; result)
+    {
+        result[index] = a[index] + b[index];
+    }
+
+    // Execute on GPU
+    public static void AddArraysOnGpu(float[] a, float[] b, float[] result)
+    {
+        using var context = Context.CreateDefault();
+        using var accelerator = context.GetPreferredDevice(false)
+            .CreateAccelerator(context);
+
+        using var aBuffer = accelerator.Allocate1D(a);
+        using var bBuffer = accelerator.Allocate1D(b);
+        using var resultBuffer = accelerator.Allocate1D&lt;float&gt;(result.Length);
+
+        var kernel = accelerator.LoadAutoGroupedStreamKernel&lt;
+            Index1D, ArrayView&lt;float&gt;, ArrayView&lt;float&gt;, ArrayView&lt;float&gt;&gt;(
+            AddArraysKernel);
+
+        kernel((int)aBuffer.Length, aBuffer.View, bBuffer.View, resultBuffer.View);
+
+        accelerator.Synchronize();
+
+        resultBuffer.CopyToCPU(result);
+    }
+}
+*/
+</code></pre>
+<h3 id="compute-shaders-directxvulkan">Compute Shaders (DirectX/Vulkan)</h3>
+<p>For more advanced scenarios, consider:</p>
+<ul>
+<li><strong>DirectX Compute Shaders</strong> (Windows)</li>
+<li><strong>Vulkan Compute</strong> (Cross-platform)</li>
+<li><strong>Metal</strong> (macOS/iOS)</li>
+<li><strong>OpenCL</strong> (Cross-platform)</li>
+</ul>
+<h2 id="benchmarking">Benchmarking</h2>
+<h3 id="benchmarkdotnet">BenchmarkDotNet</h3>
+<pre><code class="lang-csharp">using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Running;
+
+[MemoryDiagnoser]
+[SimpleJob(BenchmarkDotNet.Jobs.RuntimeMoniker.Net80)]
+public class PerformanceBenchmarks
+{
+    private float[] _arrayA;
+    private float[] _arrayB;
+    private float[] _result;
+
+    [Params(100, 1000, 10000)]
+    public int Size { get; set; }
+
+    [GlobalSetup]
+    public void Setup()
+    {
+        _arrayA = Enumerable.Range(0, Size).Select(x =&gt; (float)x).ToArray();
+        _arrayB = Enumerable.Range(0, Size).Select(x =&gt; (float)x * 2).ToArray();
+        _result = new float[Size];
+    }
+
+    [Benchmark(Baseline = true)]
+    public void Scalar()
+    {
+        for (int i = 0; i &lt; _arrayA.Length; i++)
+        {
+            _result[i] = _arrayA[i] + _arrayB[i];
+        }
+    }
+
+    [Benchmark]
+    public void Simd()
+    {
+        VectorOperations.AddArrays(_arrayA, _arrayB, _result);
+    }
+
+    [Benchmark]
+    public void Parallel()
+    {
+        System.Threading.Tasks.Parallel.For(0, _arrayA.Length, i =&gt;
+        {
+            _result[i] = _arrayA[i] + _arrayB[i];
+        });
+    }
+}
+
+// Run benchmarks
+// BenchmarkRunner.Run&lt;PerformanceBenchmarks&gt;();
+</code></pre>
+<h2 id="best-practices">Best Practices</h2>
+<h3 id="simd">SIMD</h3>
+<ol>
+<li><strong>Use Vector<t> First</t></strong>: Hardware-agnostic, easier to use</li>
+<li><strong>Handle Remainders</strong>: Always process leftover elements</li>
+<li><strong>Alignment</strong>: Consider memory alignment for best performance</li>
+<li><strong>Benchmarking</strong>: Always measure - SIMD isn't always faster for small data</li>
+<li><strong>Fallback</strong>: Provide scalar fallback for unsupported hardware</li>
+</ol>
+<h3 id="parallel-processing-1">Parallel Processing</h3>
+<ol>
+<li><strong>Measure First</strong>: Parallelization has overhead</li>
+<li><strong>Right Granularity</strong>: Too fine-grained = overhead, too coarse = poor distribution</li>
+<li><strong>Avoid Locks</strong>: Use thread-local storage and aggregate</li>
+<li><strong>Cancellation</strong>: Support CancellationToken</li>
+<li><strong>Exception Handling</strong>: Handle exceptions in parallel code</li>
+</ol>
+<h3 id="memory-optimization-1">Memory Optimization</h3>
+<ol>
+<li><strong>Use Span<t></t></strong>: Avoid substring/slice allocations</li>
+<li><strong>ArrayPool</strong>: Reuse arrays for temporary buffers</li>
+<li><strong>MemoryPool</strong>: For async scenarios</li>
+<li><strong>Stack Allocation</strong>: Small, fixed-size buffers</li>
+<li><strong>Measure Allocations</strong>: Use memory profiler or [MemoryDiagnoser]</li>
+</ol>
+<h2 id="performance-checklist">Performance Checklist</h2>
+<ul>
+<li>[ ] Profile before optimizing</li>
+<li>[ ] Use SIMD for data-parallel operations</li>
+<li>[ ] Parallelize CPU-bound work</li>
+<li>[ ] Use async streams for I/O-bound streaming</li>
+<li>[ ] Minimize allocations with Span<t></t></li>
+<li>[ ] Pool temporary buffers</li>
+<li>[ ] Benchmark with realistic data sizes</li>
+<li>[ ] Consider Native AOT for startup/memory</li>
+<li>[ ] Monitor GC pressure</li>
+<li>[ ] Use value types where appropriate</li>
+</ul>
+<h2 id="resources">Resources</h2>
+<ul>
+<li><a href="https://learn.microsoft.com/en-us/dotnet/standard/simd">SIMD in .NET</a></li>
+<li><a href="https://learn.microsoft.com/en-us/dotnet/standard/parallel-programming/">Parallel Programming</a></li>
+<li><a href="https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/tutorials/generate-consume-asynchronous-stream">Async Streams</a></li>
+<li><a href="https://learn.microsoft.com/en-us/dotnet/standard/memory-and-spans/">Memory and Span</a></li>
+<li><a href="https://benchmarkdotnet.org/">BenchmarkDotNet</a></li>
+</ul>
+<hr>
+<p><strong>Last Updated:</strong> 2025-12-01
+<strong>Version:</strong> 1.0</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/guides/ADVANCED_PERFORMANCE.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

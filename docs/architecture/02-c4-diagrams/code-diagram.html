@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>C4 Model: Code Diagram | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="C4 Model: Code Diagram | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/02-c4-diagrams/code-diagram.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="c4-model-code-diagram">C4 Model: Code Diagram</h1>
+
+<h2 id="overview">Overview</h2>
+<p>The Code diagram shows how specific components are implemented as classes and interfaces. This level of detail is optional and typically generated from the code itself.</p>
+<h2 id="key-class-hierarchies">Key Class Hierarchies</h2>
+<h3 id="polymorphism-example">Polymorphism Example</h3>
+<pre><code class="lang-mermaid">classDiagram
+    class Animal {
+        &lt;&lt;abstract&gt;&gt;
+        +string Name
+        +int Age
+        +MakeSound() void
+        +Move() void
+    }
+
+    class Dog {
+        +string Breed
+        +MakeSound() void
+        +Move() void
+        +Fetch() void
+    }
+
+    class Cat {
+        +bool IsIndoor
+        +MakeSound() void
+        +Move() void
+        +Climb() void
+    }
+
+    class Bird {
+        +double WingSpan
+        +MakeSound() void
+        +Move() void
+        +Fly() void
+    }
+
+    Animal &lt;|-- Dog
+    Animal &lt;|-- Cat
+    Animal &lt;|-- Bird
+</code></pre>
+<h3 id="covariancecontravariance">Covariance/Contravariance</h3>
+<pre><code class="lang-mermaid">classDiagram
+    class IRepository~out T~ {
+        &lt;&lt;interface&gt;&gt;
+        +GetAll() IEnumerable~T~
+        +GetById(id) T
+    }
+
+    class IComparer~in T~ {
+        &lt;&lt;interface&gt;&gt;
+        +Compare(x, y) int
+    }
+
+    class AnimalRepository {
+        +GetAll() IEnumerable~Animal~
+        +GetById(id) Animal
+    }
+
+    class AnimalComparer {
+        +Compare(x, y) int
+    }
+
+    IRepository~Animal~ &lt;|.. AnimalRepository
+    IComparer~Animal~ &lt;|.. AnimalComparer
+</code></pre>
+<h3 id="solid-principles">SOLID Principles</h3>
+<pre><code class="lang-mermaid">classDiagram
+    class IRepository~T~ {
+        &lt;&lt;interface&gt;&gt;
+        +GetById(id) T
+        +Add(entity) void
+        +Update(entity) void
+        +Delete(id) void
+    }
+
+    class IValidator~T~ {
+        &lt;&lt;interface&gt;&gt;
+        +Validate(entity) ValidationResult
+    }
+
+    class IService~T~ {
+        &lt;&lt;interface&gt;&gt;
+        +Process(entity) Result~T~
+    }
+
+    class UserRepository {
+        +GetById(id) User
+        +Add(user) void
+        +Update(user) void
+        +Delete(id) void
+    }
+
+    class UserValidator {
+        +Validate(user) ValidationResult
+    }
+
+    class UserService {
+        -IRepository~User~ repository
+        -IValidator~User~ validator
+        +Process(user) Result~User~
+    }
+
+    IRepository~User~ &lt;|.. UserRepository
+    IValidator~User~ &lt;|.. UserValidator
+    IService~User~ &lt;|.. UserService
+    UserService --&gt; IRepository~User~
+    UserService --&gt; IValidator~User~
+</code></pre>
+<h3 id="result-pattern">Result Pattern</h3>
+<pre><code class="lang-mermaid">classDiagram
+    class Result~TValue, TError~ {
+        &lt;&lt;abstract&gt;&gt;
+        +bool IsSuccess
+        +bool IsFailure
+        +Match(onSuccess, onFailure) TResult
+        +Then(next) Result
+        +Map(mapper) Result
+    }
+
+    class Success~TValue, TError~ {
+        +TValue Value
+        +Match(onSuccess, onFailure) TResult
+    }
+
+    class Failure~TValue, TError~ {
+        +TError Error
+        +Match(onSuccess, onFailure) TResult
+    }
+
+    Result~TValue, TError~ &lt;|-- Success~TValue, TError~
+    Result~TValue, TError~ &lt;|-- Failure~TValue, TError~
+</code></pre>
+<h2 id="package-structure">Package Structure</h2>
+<pre><code>src/AdvancedConcepts.Core/
+├── Beginner/
+│   ├── PolymorphismBasics.cs
+│   ├── InheritanceExamples.cs
+│   └── InterfaceBasics.cs
+├── Intermediate/
+│   ├── BoxingUnboxingExamples.cs
+│   ├── CovarianceExamples.cs
+│   ├── ContravarianceExamples.cs
+│   └── GenericVarianceExamples.cs
+├── Advanced/
+│   ├── PatternMatchingExamples.cs
+│   ├── LinqAdvancedExamples.cs
+│   ├── AsyncAwaitExamples.cs
+│   ├── PerformancePatterns.cs
+│   ├── DIExamples.cs
+│   ├── PollyExamples.cs
+│   ├── ValidationExamples.cs
+│   ├── ResultPattern.cs
+│   ├── EnhancedSerilogExamples.cs
+│   ├── OpenTelemetryExamples.cs
+│   └── HealthCheckExamples.cs
+└── Program.cs
+</code></pre>
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://c4model.com/#CodeDiagram">C4 Code Diagram</a></li>
+<li><a href="https://www.uml-diagrams.org/class-diagrams-overview.html">UML Class Diagrams</a></li>
+</ul>
+<hr>
+<p><strong>Abstraction Level:</strong> Level 4 - Code
+<strong>Target Audience:</strong> Developers (implementation details)
+<strong>Last Updated:</strong> 2025-11-30
+<strong>Note:</strong> For complete code-level documentation, see API reference generated by DocFX</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/02-c4-diagrams/code-diagram.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

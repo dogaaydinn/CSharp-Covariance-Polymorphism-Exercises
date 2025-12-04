@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Month 4 Comprehensive Assessment - Algorithms &amp; Data Structures | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Month 4 Comprehensive Assessment - Algorithms &amp; Data Structures | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../../favicon.ico">
+      <link rel="stylesheet" href="../../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/assessment-tests/path1/month-04-assessment.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../../index.html">
+            <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="month-4-comprehensive-assessment---algorithms--data-structures">Month 4 Comprehensive Assessment - Algorithms &amp; Data Structures</h1>
+
+<p><strong>Month</strong>: 4 (Weeks 13-16) | <strong>Duration</strong>: 90 min | <strong>Pass</strong>: 80% (24/30) | <strong>Points</strong>: 30</p>
+<h2 id="section-1-multiple-choice-15-questions-05-pts-each--75-pts">Section 1: Multiple Choice (15 questions, 0.5 pts each = 7.5 pts)</h2>
+<ol>
+<li><p>Binary search time complexity:</p>
+<ul>
+<li>a) O(n) | b) O(log n) | c) O(n log n) | d) O(1)</li>
+</ul>
+</li>
+<li><p>Binary search requirement:</p>
+<ul>
+<li>a) Any array | b) Sorted array | c) Linked list | d) Hash table</li>
+</ul>
+</li>
+<li><p>Binary search space complexity:</p>
+<ul>
+<li>a) O(1) iterative, O(log n) recursive | b) Always O(n) | c) O(log n) always | d) O(n²)</li>
+</ul>
+</li>
+<li><p>QuickSort average case:</p>
+<ul>
+<li>a) O(n) | b) O(n log n) | c) O(n²) | d) O(log n)</li>
+</ul>
+</li>
+<li><p>QuickSort worst case:</p>
+<ul>
+<li>a) O(n) | b) O(n log n) | c) O(n²) | d) O(log n)</li>
+</ul>
+</li>
+<li><p>What causes QuickSort worst case?</p>
+<ul>
+<li>a) Random data | b) Already sorted with bad pivot | c) Duplicates | d) Large array</li>
+</ul>
+</li>
+<li><p>MergeSort time complexity:</p>
+<ul>
+<li>a) O(n) | b) O(n log n) always | c) O(n²) | d) Varies</li>
+</ul>
+</li>
+<li><p>MergeSort space complexity:</p>
+<ul>
+<li>a) O(1) | b) O(log n) | c) O(n) | d) O(n²)</li>
+</ul>
+</li>
+<li><p>What is stable sorting?</p>
+<ul>
+<li>a) No crashes | b) Preserves relative order of equal elements | c) Always O(n log n) | d) In-place</li>
+</ul>
+</li>
+<li><p>Which is stable?</p>
+<ul>
+<li>a) QuickSort | b) HeapSort | c) MergeSort | d) None</li>
+</ul>
+</li>
+<li><p>Stack follows:</p>
+<ul>
+<li>a) FIFO | b) LIFO | c) Random access | d) Priority</li>
+</ul>
+</li>
+<li><p>Queue follows:</p>
+<ul>
+<li>a) FIFO | b) LIFO | c) Random access | d) Priority</li>
+</ul>
+</li>
+<li><p>Array access time:</p>
+<ul>
+<li>a) O(1) | b) O(n) | c) O(log n) | d) O(n²)</li>
+</ul>
+</li>
+<li><p>Linked List insertion at head:</p>
+<ul>
+<li>a) O(1) | b) O(n) | c) O(log n) | d) O(n²)</li>
+</ul>
+</li>
+<li><p>Array vs Linked List for random access:</p>
+<ul>
+<li>a) Both O(1) | b) Array O(1), List O(n) | c) Array O(n), List O(1) | d) Both O(n)</li>
+</ul>
+</li>
+</ol>
+<h2 id="section-2-short-answer-7-questions-2-pts-each--14-pts">Section 2: Short Answer (7 questions, 2 pts each = 14 pts)</h2>
+<ol start="16">
+<li><p>Explain how binary search works. Why must the array be sorted?</p>
+</li>
+<li><p>Explain the partition step in QuickSort. What does it accomplish?</p>
+</li>
+<li><p>Compare QuickSort vs MergeSort:</p>
+<ul>
+<li>Time complexity (best, average, worst)</li>
+<li>Space complexity</li>
+<li>Stability</li>
+<li>When to use each</li>
+</ul>
+</li>
+<li><p>Explain what &quot;divide and conquer&quot; means. How do QuickSort and MergeSort use it differently?</p>
+</li>
+<li><p>Design a Stack<t> implementation using an array. What are the key operations and their time complexities?</t></p>
+</li>
+<li><p>Explain Big O notation. What's the difference between O(n), O(log n), and O(n²) with real examples?</p>
+</li>
+<li><p>When would you choose a Linked List over an Array? Give specific scenarios.</p>
+</li>
+</ol>
+<h2 id="section-3-code-implementation-4-questions-2-pts-each--8-pts">Section 3: Code Implementation (4 questions, 2 pts each = 8 pts)</h2>
+<ol start="23">
+<li>Implement iterative binary search:</li>
+</ol>
+<pre><code class="lang-csharp">public static int BinarySearch(int[] arr, int target)
+{
+    // Return index of target, or -1 if not found
+    // arr is sorted in ascending order
+}
+</code></pre>
+<ol start="24">
+<li>Implement the partition function for QuickSort (Lomuto partition):</li>
+</ol>
+<pre><code class="lang-csharp">public static int Partition(int[] arr, int low, int high)
+{
+    // Choose last element as pivot
+    // Rearrange so elements &lt; pivot are on left
+    // Return pivot's final position
+}
+</code></pre>
+<ol start="25">
+<li>Implement Stack<t> using array:</t></li>
+</ol>
+<pre><code class="lang-csharp">public class Stack&lt;T&gt;
+{
+    // Requirements:
+    // - Push(T item)
+    // - T Pop()
+    // - T Peek()
+    // - bool IsEmpty
+    // - Dynamic resize when full
+}
+</code></pre>
+<ol start="26">
+<li>Implement Queue<t> using linked list:</t></li>
+</ol>
+<pre><code class="lang-csharp">public class Queue&lt;T&gt;
+{
+    // Requirements:
+    // - Enqueue(T item) - add to rear
+    // - T Dequeue() - remove from front
+    // - T Peek()
+    // - bool IsEmpty
+}
+</code></pre>
+<h2 id="answer-key">Answer Key</h2>
+<p><strong>MC</strong>: 1.b | 2.b | 3.a | 4.b | 5.c | 6.b | 7.b | 8.c | 9.b | 10.c | 11.b | 12.a | 13.a | 14.a | 15.b</p>
+<h3 id="short-answer">Short Answer</h3>
+<p><strong>16. Binary Search</strong> (2 pts):</p>
+<ul>
+<li><strong>How it works</strong>:
+<ol>
+<li>Compare target with middle element</li>
+<li>If target = middle, found!</li>
+<li>If target &lt; middle, search left half</li>
+<li>If target &gt; middle, search right half</li>
+<li>Repeat until found or range empty</li>
+</ol>
+</li>
+<li><strong>Why sorted?</strong>: Algorithm assumes ordering to eliminate half of remaining elements each step</li>
+<li>Without sorting, can't determine which half to search (would need to check both)</li>
+<li>Example: Finding 7 in [1,3,5,7,9,11,13]
+<ul>
+<li>Middle = 7 ✓ Found in 1 step!</li>
+<li>If searching for 3: 3 &lt; 7, search [1,3,5], middle = 3 ✓ Found</li>
+</ul>
+</li>
+</ul>
+<p><strong>17. Partition in QuickSort</strong> (2 pts):</p>
+<ul>
+<li><strong>Purpose</strong>: Rearrange array so pivot is in its final sorted position</li>
+<li><strong>Process</strong> (Lomuto scheme):
+<ol>
+<li>Choose pivot (usually last element)</li>
+<li>Maintain index <code>i</code> for smaller elements</li>
+<li>Scan left to right</li>
+<li>If element ≤ pivot, swap with position <code>i</code> and increment <code>i</code></li>
+<li>Finally, swap pivot with position <code>i</code></li>
+</ol>
+</li>
+<li><strong>Result</strong>: Elements before pivot are ≤ pivot, elements after are &gt; pivot</li>
+<li><strong>Example</strong>: <code>[3, 7, 1, 5, 9]</code> with pivot=9
+<ul>
+<li>After partition: <code>[3, 7, 1, 5, 9]</code> → <code>[3, 1, 5, 7, 9]</code> (pivot at index 4)</li>
+</ul>
+</li>
+</ul>
+<p><strong>18. QuickSort vs MergeSort</strong> (2 pts):</p>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>QuickSort</th>
+<th>MergeSort</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Best case</strong></td>
+<td>O(n log n)</td>
+<td>O(n log n)</td>
+</tr>
+<tr>
+<td><strong>Average</strong></td>
+<td>O(n log n)</td>
+<td>O(n log n)</td>
+</tr>
+<tr>
+<td><strong>Worst case</strong></td>
+<td>O(n²)</td>
+<td>O(n log n)</td>
+</tr>
+<tr>
+<td><strong>Space</strong></td>
+<td>O(log n) stack</td>
+<td>O(n) auxiliary</td>
+</tr>
+<tr>
+<td><strong>Stability</strong></td>
+<td>Unstable</td>
+<td>Stable</td>
+</tr>
+<tr>
+<td><strong>In-place</strong></td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<p><strong>When to use</strong>:</p>
+<ul>
+<li><strong>QuickSort</strong>: General purpose, memory constrained, average case performance critical</li>
+<li><strong>MergeSort</strong>: Stability required, worst-case guarantee needed, linked lists</li>
+</ul>
+<p><strong>19. Divide and Conquer</strong> (2 pts):</p>
+<ul>
+<li><strong>Definition</strong>: Break problem into smaller subproblems, solve recursively, combine results</li>
+<li><strong>QuickSort approach</strong>:
+<ul>
+<li>Divide: Partition around pivot (O(n) work)</li>
+<li>Conquer: Recursively sort left and right</li>
+<li>Combine: Nothing! (already in place)</li>
+<li>Work done BEFORE recursion</li>
+</ul>
+</li>
+<li><strong>MergeSort approach</strong>:
+<ul>
+<li>Divide: Split in half (O(1) work)</li>
+<li>Conquer: Recursively sort both halves</li>
+<li>Combine: Merge sorted halves (O(n) work)</li>
+<li>Work done AFTER recursion</li>
+</ul>
+</li>
+<li>Key difference: QuickSort does work in divide step, MergeSort in combine step</li>
+</ul>
+<p><strong>20. Stack<t> Design</t></strong> (2 pts):</p>
+<pre><code class="lang-csharp">public class Stack&lt;T&gt;
+{
+    private T[] _items;
+    private int _count;
+
+    public Stack() { _items = new T[4]; }
+
+    // Push: O(1) amortized (O(n) when resize)
+    public void Push(T item)
+    {
+        if (_count == _items.Length)
+            Array.Resize(ref _items, _items.Length * 2);
+        _items[_count++] = item;
+    }
+
+    // Pop: O(1)
+    public T Pop()
+    {
+        if (IsEmpty) throw new InvalidOperationException();
+        return _items[--_count];
+    }
+
+    // Peek: O(1)
+    public T Peek()
+    {
+        if (IsEmpty) throw new InvalidOperationException();
+        return _items[_count - 1];
+    }
+
+    public bool IsEmpty =&gt; _count == 0;
+}
+</code></pre>
+<p><strong>21. Big O Notation</strong> (2 pts):</p>
+<ul>
+<li><strong>Definition</strong>: Describes how runtime/space grows as input size increases</li>
+<li><strong>O(1) - Constant</strong>: Same time regardless of input
+<ul>
+<li>Example: Array access <code>arr[5]</code>, hash table lookup</li>
+</ul>
+</li>
+<li><strong>O(log n) - Logarithmic</strong>: Halves problem size each step
+<ul>
+<li>Example: Binary search in sorted array of 1M items = ~20 comparisons</li>
+</ul>
+</li>
+<li><strong>O(n) - Linear</strong>: Proportional to input
+<ul>
+<li>Example: Finding max in unsorted array, must check all n elements</li>
+</ul>
+</li>
+<li><strong>O(n log n) - Linearithmic</strong>: Efficient sorting
+<ul>
+<li>Example: MergeSort, QuickSort average case</li>
+</ul>
+</li>
+<li><strong>O(n²) - Quadratic</strong>: Nested loops
+<ul>
+<li>Example: Bubble sort, checking all pairs</li>
+</ul>
+</li>
+<li><strong>Growth</strong>: O(1) &lt; O(log n) &lt; O(n) &lt; O(n log n) &lt; O(n²) &lt; O(2ⁿ)</li>
+</ul>
+<p><strong>22. Linked List vs Array</strong> (2 pts):
+<strong>Choose Linked List when</strong>:</p>
+<ul>
+<li>Frequent insertions/deletions at beginning or middle: O(1) vs O(n)</li>
+<li>Unknown/variable size: No resize overhead</li>
+<li>Don't need random access: Sequential access is fine</li>
+<li>Memory fragmentation OK: Allocates per node</li>
+</ul>
+<p><strong>Scenarios</strong>:</p>
+<ol>
+<li><strong>Undo/Redo system</strong>: Constant insertion/deletion at current position</li>
+<li><strong>Music playlist</strong>: Insert/remove songs anywhere without shifting</li>
+<li><strong>Browser history</strong>: Navigate forward/back, insert at current position</li>
+</ol>
+<p><strong>Array advantages</strong>:</p>
+<ul>
+<li>Random access O(1) vs O(n)</li>
+<li>Better cache locality (contiguous memory)</li>
+<li>Less memory overhead (no next pointers)</li>
+</ul>
+<h3 id="code-implementation">Code Implementation</h3>
+<p><strong>23. Binary Search</strong> (2 pts):</p>
+<pre><code class="lang-csharp">public static int BinarySearch(int[] arr, int target)
+{
+    int left = 0;
+    int right = arr.Length - 1;
+
+    while (left &lt;= right)
+    {
+        int mid = left + (right - left) / 2; // Avoid overflow
+
+        if (arr[mid] == target)
+            return mid; // Found!
+
+        if (arr[mid] &lt; target)
+            left = mid + 1; // Search right half
+        else
+            right = mid - 1; // Search left half
+    }
+
+    return -1; // Not found
+}
+
+// Example usage
+int[] arr = { 1, 3, 5, 7, 9, 11, 13 };
+int index = BinarySearch(arr, 7); // Returns 3
+int notFound = BinarySearch(arr, 4); // Returns -1
+</code></pre>
+<p><strong>24. Partition Function</strong> (2 pts):</p>
+<pre><code class="lang-csharp">public static int Partition(int[] arr, int low, int high)
+{
+    int pivot = arr[high]; // Choose last element as pivot
+    int i = low - 1; // Index of smaller element
+
+    for (int j = low; j &lt; high; j++)
+    {
+        // If current element &lt;= pivot
+        if (arr[j] &lt;= pivot)
+        {
+            i++;
+            // Swap arr[i] and arr[j]
+            int temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+        }
+    }
+
+    // Swap arr[i+1] and arr[high] (pivot)
+    int temp2 = arr[i + 1];
+    arr[i + 1] = arr[high];
+    arr[high] = temp2;
+
+    return i + 1; // Return pivot's final position
+}
+
+// Example
+int[] arr = { 10, 7, 8, 9, 1, 5 };
+int pivotIndex = Partition(arr, 0, arr.Length - 1);
+// arr is now: [1, 5, 7, 9, 10, 8] with pivot (5) at index 1
+</code></pre>
+<p><strong>25. Stack<t> Implementation</t></strong> (2 pts):</p>
+<pre><code class="lang-csharp">public class Stack&lt;T&gt;
+{
+    private T[] _items;
+    private int _count;
+    private const int DefaultCapacity = 4;
+
+    public Stack()
+    {
+        _items = new T[DefaultCapacity];
+        _count = 0;
+    }
+
+    public void Push(T item)
+    {
+        if (_count == _items.Length)
+        {
+            // Double capacity when full
+            T[] newArray = new T[_items.Length * 2];
+            Array.Copy(_items, newArray, _items.Length);
+            _items = newArray;
+        }
+
+        _items[_count++] = item;
+    }
+
+    public T Pop()
+    {
+        if (IsEmpty)
+            throw new InvalidOperationException(&quot;Stack is empty&quot;);
+
+        T item = _items[--_count];
+        _items[_count] = default(T); // Clear reference for GC
+        return item;
+    }
+
+    public T Peek()
+    {
+        if (IsEmpty)
+            throw new InvalidOperationException(&quot;Stack is empty&quot;);
+
+        return _items[_count - 1];
+    }
+
+    public bool IsEmpty =&gt; _count == 0;
+
+    public int Count =&gt; _count;
+}
+
+// Usage
+var stack = new Stack&lt;int&gt;();
+stack.Push(10);
+stack.Push(20);
+stack.Push(30);
+Console.WriteLine(stack.Pop()); // 30
+Console.WriteLine(stack.Peek()); // 20
+</code></pre>
+<p><strong>26. Queue<t> with Linked List</t></strong> (2 pts):</p>
+<pre><code class="lang-csharp">public class Queue&lt;T&gt;
+{
+    private class Node
+    {
+        public T Data { get; set; }
+        public Node Next { get; set; }
+
+        public Node(T data)
+        {
+            Data = data;
+            Next = null;
+        }
+    }
+
+    private Node _front; // First node (dequeue from here)
+    private Node _rear;  // Last node (enqueue here)
+    private int _count;
+
+    public Queue()
+    {
+        _front = null;
+        _rear = null;
+        _count = 0;
+    }
+
+    public void Enqueue(T item)
+    {
+        Node newNode = new Node(item);
+
+        if (_rear == null) // Queue was empty
+        {
+            _front = newNode;
+            _rear = newNode;
+        }
+        else
+        {
+            _rear.Next = newNode;
+            _rear = newNode;
+        }
+
+        _count++;
+    }
+
+    public T Dequeue()
+    {
+        if (IsEmpty)
+            throw new InvalidOperationException(&quot;Queue is empty&quot;);
+
+        T data = _front.Data;
+        _front = _front.Next;
+
+        if (_front == null) // Queue became empty
+            _rear = null;
+
+        _count--;
+        return data;
+    }
+
+    public T Peek()
+    {
+        if (IsEmpty)
+            throw new InvalidOperationException(&quot;Queue is empty&quot;);
+
+        return _front.Data;
+    }
+
+    public bool IsEmpty =&gt; _count == 0;
+
+    public int Count =&gt; _count;
+}
+
+// Usage
+var queue = new Queue&lt;string&gt;();
+queue.Enqueue(&quot;First&quot;);
+queue.Enqueue(&quot;Second&quot;);
+queue.Enqueue(&quot;Third&quot;);
+Console.WriteLine(queue.Dequeue()); // &quot;First&quot;
+Console.WriteLine(queue.Peek());    // &quot;Second&quot;
+</code></pre>
+<h2 id="grading-rubric">Grading Rubric</h2>
+<table>
+<thead>
+<tr>
+<th>Section</th>
+<th>Max Points</th>
+<th>Criteria</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Multiple Choice</td>
+<td>7.5</td>
+<td>0.5 per correct answer</td>
+</tr>
+<tr>
+<td>Short Answer (each)</td>
+<td>2 × 7 = 14</td>
+<td>Full: Complete + examples. Partial: 1.0-1.5. Wrong: 0</td>
+</tr>
+<tr>
+<td>Code Implementation (each)</td>
+<td>2 × 4 = 8</td>
+<td>Full: Working + efficient. Partial: 1.0-1.5. Wrong: 0</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>30</strong></td>
+<td><strong>Pass: 24 points (80%)</strong></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="study-resources">Study Resources</h2>
+<p><strong>Week 13 - Binary Search</strong>:</p>
+<ul>
+<li><code>samples/99-Exercises/Algorithms/01-BinarySearch/</code></li>
+<li>Theory: Divide-and-conquer, O(log n) complexity</li>
+</ul>
+<p><strong>Week 14 - QuickSort</strong>:</p>
+<ul>
+<li><code>samples/99-Exercises/Algorithms/02-QuickSort/</code></li>
+<li>Partition schemes: Lomuto vs Hoare</li>
+</ul>
+<p><strong>Week 15 - MergeSort</strong>:</p>
+<ul>
+<li><code>samples/99-Exercises/Algorithms/03-MergeSort/</code></li>
+<li>Stable sorting, O(n) space</li>
+</ul>
+<p><strong>Week 16 - Data Structures</strong>:</p>
+<ul>
+<li>Stack: LIFO, O(1) push/pop</li>
+<li>Queue: FIFO, O(1) enqueue/dequeue</li>
+<li>Linked List: Dynamic size, O(1) insert at head</li>
+</ul>
+<hr>
+<h2 id="performance-comparison-table">Performance Comparison Table</h2>
+<table>
+<thead>
+<tr>
+<th>Algorithm</th>
+<th>Best</th>
+<th>Average</th>
+<th>Worst</th>
+<th>Space</th>
+<th>Stable</th>
+<th>In-Place</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Binary Search</td>
+<td>O(1)</td>
+<td>O(log n)</td>
+<td>O(log n)</td>
+<td>O(1)</td>
+<td>N/A</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>QuickSort</td>
+<td>O(n log n)</td>
+<td>O(n log n)</td>
+<td>O(n²)</td>
+<td>O(log n)</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>MergeSort</td>
+<td>O(n log n)</td>
+<td>O(n log n)</td>
+<td>O(n log n)</td>
+<td>O(n)</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>BubbleSort</td>
+<td>O(n)</td>
+<td>O(n²)</td>
+<td>O(n²)</td>
+<td>O(1)</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="next-steps">Next Steps</h2>
+<p><strong>If you passed (≥24 pts)</strong>: Proceed to Month 5 (Advanced Design Patterns &amp; SOLID)</p>
+<p><strong>If you didn't pass (&lt;24 pts)</strong>: Review weak areas:</p>
+<ul>
+<li>Score 0-10: Review all algorithms from scratch</li>
+<li>Score 11-18: Practice implementations</li>
+<li>Score 19-23: Focus on complexity analysis</li>
+</ul>
+<hr>
+<p><em>Assessment Version: 1.0</em>
+<em>Last Updated: 2025-12-02</em></p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/assessment-tests/path1/month-04-assessment.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

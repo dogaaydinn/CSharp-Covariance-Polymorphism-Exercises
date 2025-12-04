@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>ADR-0019: AppHost for Service Orchestration | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="ADR-0019: AppHost for Service Orchestration | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/01-architecture-decision-records/0019-apphost-orchestration.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="adr-0019-apphost-for-service-orchestration">ADR-0019: AppHost for Service Orchestration</h1>
+
+<p><strong>Status:</strong> Accepted
+<strong>Date:</strong> 2025-12-02
+<strong>Deciders:</strong> Architecture Team
+<strong>Technical Story:</strong> Development environment orchestration</p>
+<h2 id="context">Context</h2>
+<p>Microservices require orchestration in development:</p>
+<ul>
+<li>Start multiple services in correct order</li>
+<li>Manage dependencies (Redis, PostgreSQL)</li>
+<li>Configure service discovery</li>
+<li>Setup observability</li>
+</ul>
+<p>Traditional: Docker Compose, manual process management
+Modern: .NET Aspire AppHost</p>
+<h2 id="decision">Decision</h2>
+<p>Use <strong>Aspire AppHost</strong> project for service orchestration in development.</p>
+<p>Structure:</p>
+<pre><code>VideoService.AppHost/
+└── Program.cs          # Orchestration definition
+</code></pre>
+<h2 id="consequences">Consequences</h2>
+<h3 id="positive">Positive</h3>
+<ul>
+<li><strong>Declarative</strong>: Services and dependencies defined in code</li>
+<li><strong>Type-Safe</strong>: Compile-time checks for service references</li>
+<li><strong>Integrated</strong>: OpenTelemetry, service discovery, health checks automatic</li>
+<li><strong>Dashboard</strong>: Aspire Dashboard included</li>
+<li><strong>Single Command</strong>: <code>dotnet run</code> starts everything</li>
+</ul>
+<h3 id="negative">Negative</h3>
+<ul>
+<li><strong>Development Only</strong>: Not used in production</li>
+<li><strong>Aspire Dependency</strong>: Requires Aspire SDK</li>
+<li><strong>Learning Curve</strong>: New concept for developers</li>
+</ul>
+<h2 id="implementation">Implementation</h2>
+<pre><code class="lang-csharp">var builder = DistributedApplication.CreateBuilder(args);
+
+// Infrastructure
+var redis = builder.AddRedis(&quot;cache&quot;)
+    .WithRedisCommander();
+
+var postgres = builder.AddPostgres(&quot;postgres&quot;)
+    .WithPgAdmin()
+    .AddDatabase(&quot;videodb&quot;);
+
+// Services
+var api = builder.AddProject(&quot;api&quot;, &quot;../VideoService.API/VideoService.API.csproj&quot;)
+    .WithReference(redis)
+    .WithReference(postgres)
+    .WithExternalHttpEndpoints();
+
+builder.AddProject(&quot;web&quot;, &quot;../VideoService.Web/VideoService.Web.csproj&quot;)
+    .WithReference(api)
+    .WithExternalHttpEndpoints();
+
+builder.Build().Run();
+</code></pre>
+<h2 id="related-decisions">Related Decisions</h2>
+<ul>
+<li><a href="0002-using-dotnet-aspire.html">ADR-0002</a>: Aspire framework choice</li>
+<li><a href="0011-service-discovery-pattern.html">ADR-0011</a>: Service references</li>
+</ul>
+<h2 id="notes">Notes</h2>
+<ul>
+<li>AppHost automatically generates Aspire Dashboard at <code>http://localhost:18888</code></li>
+<li>Production deployment: Use <code>azd</code> or generate Kubernetes manifests</li>
+<li>Service references create service discovery bindings</li>
+<li>Infrastructure resources (Redis, PostgreSQL) automatically started as containers</li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/01-architecture-decision-records/0019-apphost-orchestration.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

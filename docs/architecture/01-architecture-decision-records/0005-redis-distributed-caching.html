@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>ADR-0005: Redis for Distributed Caching | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="ADR-0005: Redis for Distributed Caching | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/01-architecture-decision-records/0005-redis-distributed-caching.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="adr-0005-redis-for-distributed-caching">ADR-0005: Redis for Distributed Caching</h1>
+
+<p><strong>Status:</strong> Accepted
+<strong>Date:</strong> 2025-12-02
+<strong>Deciders:</strong> Architecture Team
+<strong>Technical Story:</strong> Caching layer for video metadata and query optimization</p>
+<h2 id="context">Context</h2>
+<p>The VideoService API faces several performance challenges:</p>
+<ul>
+<li>Database queries for frequently accessed videos (popular content)</li>
+<li>Repeated reads of video lists (pagination, filtering)</li>
+<li>High read-to-write ratio (100:1 typical for video platforms)</li>
+<li>Need to reduce database load</li>
+<li>Horizontal scaling requires shared cache across instances</li>
+</ul>
+<p>Requirements:</p>
+<ul>
+<li>Sub-millisecond read latency</li>
+<li>Support for data structures (strings, lists, sets)</li>
+<li>TTL (time-to-live) expiration</li>
+<li>Atomic operations</li>
+<li>Horizontal scaling support</li>
+<li>Cloud-native deployment</li>
+<li>.NET client library quality</li>
+</ul>
+<h2 id="decision">Decision</h2>
+<p>We will use <strong>Redis 7</strong> as the distributed caching layer for AspireVideoService.</p>
+<p>Implementation:</p>
+<ul>
+<li>Development: Docker container via Aspire (<code>builder.AddRedis()</code>)</li>
+<li>Production: Managed Redis (Azure Cache for Redis, AWS ElastiCache)</li>
+<li>Client: StackExchange.Redis</li>
+<li>Management: Redis Commander (included via Aspire)</li>
+<li>Caching Strategy: Cache-aside pattern</li>
+</ul>
+<h2 id="consequences">Consequences</h2>
+<h3 id="positive">Positive</h3>
+<ul>
+<li><strong>Performance</strong>: 100x faster than database queries (0.1ms vs 10ms)</li>
+<li><strong>Scalability</strong>: Reduces database load by 80-90%</li>
+<li><strong>Simple API</strong>: Key-value operations with minimal learning curve</li>
+<li><strong>Data Structures</strong>: Support for lists, sets, sorted sets, hashes</li>
+<li><strong>TTL Support</strong>: Automatic cache expiration</li>
+<li><strong>Atomic Operations</strong>: INCR, DECR for view counts</li>
+<li><strong>Pub/Sub</strong>: Built-in messaging (future feature enabler)</li>
+<li><strong>Persistence</strong>: Optional data durability (RDB, AOF)</li>
+<li><strong>Aspire Integration</strong>: Zero-config setup via <code>AddRedisClient()</code></li>
+<li><strong>Cloud-Native</strong>: Available in all major clouds</li>
+<li><strong>Open Source</strong>: No licensing costs</li>
+<li><strong>Community</strong>: Massive ecosystem and documentation</li>
+</ul>
+<h3 id="negative">Negative</h3>
+<ul>
+<li><strong>Memory Cost</strong>: Caching adds infrastructure cost (memory is expensive)</li>
+<li><strong>Cache Invalidation</strong>: &quot;Two hard problems in CS&quot; - requires careful strategy</li>
+<li><strong>Data Staleness</strong>: Cached data may be out-of-date</li>
+<li><strong>Single Point of Failure</strong>: Without replication, Redis outage affects availability</li>
+<li><strong>Complexity</strong>: Additional moving part to monitor and maintain</li>
+<li><strong>Serialization Overhead</strong>: Must serialize .NET objects to/from Redis</li>
+</ul>
+<h3 id="neutral">Neutral</h3>
+<ul>
+<li><strong>Eviction Policies</strong>: Must configure appropriate eviction strategy (LRU, LFU)</li>
+<li><strong>Monitoring Required</strong>: Need to track cache hit rates and memory usage</li>
+<li><strong>Network Latency</strong>: Redis adds network hop (mitigated by co-location)</li>
+</ul>
+<h2 id="alternatives-considered">Alternatives Considered</h2>
+<h3 id="alternative-1-in-memory-cache-imemorycache">Alternative 1: In-Memory Cache (IMemoryCache)</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Zero Infrastructure</strong>: Built into .NET runtime</li>
+<li><strong>Zero Latency</strong>: No network round-trip</li>
+<li><strong>Zero Cost</strong>: No additional infrastructure</li>
+<li><strong>Simple</strong>: Just use <code>IMemoryCache</code> interface</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Not Distributed</strong>: Each instance has separate cache (cache duplication)</li>
+<li><strong>No Horizontal Scaling</strong>: Cache not shared across pods/instances</li>
+<li><strong>Memory Limits</strong>: Limited to single server's RAM</li>
+<li><strong>No Persistence</strong>: Lost on app restart</li>
+<li><strong>No Atomic Operations</strong>: Cannot implement distributed counters</li>
+</ul>
+<p><strong>Why rejected:</strong> Cannot scale horizontally. In Kubernetes with 3+ replicas, each replica caches independently, wasting 3x memory and missing 66% of cache hits.</p>
+<h3 id="alternative-2-memcached">Alternative 2: Memcached</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Simple</strong>: Pure key-value cache, simpler than Redis</li>
+<li><strong>Multi-threaded</strong>: Better CPU utilization than Redis</li>
+<li><strong>Memory Efficient</strong>: Slightly lower memory overhead</li>
+<li><strong>Mature</strong>: 20+ years of production use</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>No Data Structures</strong>: Only strings (no lists, sets)</li>
+<li><strong>No Persistence</strong>: Cache lost on restart</li>
+<li><strong>No Atomic Operations</strong>: Cannot implement INCR/DECR reliably</li>
+<li><strong>No Pub/Sub</strong>: Cannot implement real-time features</li>
+<li><strong>Weaker .NET Support</strong>: Limited client libraries</li>
+<li><strong>No Aspire Integration</strong>: No built-in Aspire support</li>
+</ul>
+<p><strong>Why rejected:</strong> Redis offers significantly more features at similar performance. No reason to choose Memcached in 2024.</p>
+<h3 id="alternative-3-azure-cache-for-redis-managed">Alternative 3: Azure Cache for Redis (Managed)</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Fully Managed</strong>: No infrastructure management</li>
+<li><strong>High Availability</strong>: Built-in replication and failover</li>
+<li><strong>Security</strong>: VNet integration, private endpoints</li>
+<li><strong>Scaling</strong>: Easy vertical and horizontal scaling</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Cost</strong>: Expensive ($0.20+/hour minimum)</li>
+<li><strong>Azure Lock-in</strong>: Only available on Azure</li>
+<li><strong>Development</strong>: Still need local Redis for dev (Aspire provides this)</li>
+</ul>
+<p><strong>Why rejected:</strong> This IS the production choice. For development, we use containerized Redis via Aspire. ADR focuses on the technology (Redis), not hosting model.</p>
+<h3 id="alternative-4-sql-server-in-memory-tables">Alternative 4: SQL Server In-Memory Tables</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Integrated</strong>: No separate infrastructure</li>
+<li><strong>ACID</strong>: Full transactional guarantees</li>
+<li><strong>Familiar</strong>: SQL syntax</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Expensive</strong>: Requires SQL Server Enterprise ($14,000/core)</li>
+<li><strong>Slower</strong>: 10x slower than Redis</li>
+<li><strong>Complex</strong>: Complex configuration and management</li>
+<li><strong>Not Cloud-Native</strong>: Poor fit for containers</li>
+</ul>
+<p><strong>Why rejected:</strong> Not true caching. In-memory tables are for OLTP performance, not distributed caching.</p>
+<h3 id="alternative-5-database-query-cache">Alternative 5: Database Query Cache</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>No Code Changes</strong>: Transparent caching</li>
+<li><strong>Simple</strong>: Just enable feature flag</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Limited Control</strong>: Cannot control invalidation strategy</li>
+<li><strong>Not Distributed</strong>: Per-database-server cache</li>
+<li><strong>PostgreSQL Limitation</strong>: PostgreSQL's query cache is minimal</li>
+<li><strong>Coarse-Grained</strong>: Cannot cache application-level entities</li>
+</ul>
+<p><strong>Why rejected:</strong> Insufficient control over caching strategy. Application-level caching (Redis) provides fine-grained control.</p>
+<h2 id="related-decisions">Related Decisions</h2>
+<ul>
+<li><a href="0006-stackexchange-redis-client.html">ADR-0006</a>: StackExchange.Redis client library</li>
+<li><a href="0016-cache-aside-pattern.html">ADR-0016</a>: Cache-aside pattern implementation</li>
+<li><a href="0002-using-dotnet-aspire.html">ADR-0002</a>: Aspire provides Redis hosting</li>
+</ul>
+<h2 id="related-links">Related Links</h2>
+<ul>
+<li><a href="https://redis.io/docs/">Redis Documentation</a></li>
+<li><a href="https://redis.io/docs/manual/patterns/">Redis Best Practices</a></li>
+<li><a href="https://learn.microsoft.com/dotnet/aspire/caching/stackexchange-redis-component">Aspire Redis Component</a></li>
+<li><a href="https://learn.microsoft.com/azure/architecture/patterns/cache-aside">Cache-Aside Pattern</a></li>
+<li><a href="https://redis.io/glossary/redis-vs-memcached/">Redis vs Memcached</a></li>
+</ul>
+<h2 id="notes">Notes</h2>
+<ul>
+<li><strong>TTL Strategy</strong>:
+<ul>
+<li>Video lists: 5 minutes (high change frequency)</li>
+<li>Individual videos: 10 minutes (lower change frequency)</li>
+<li>Popular videos: Consider longer TTL with active refresh</li>
+</ul>
+</li>
+<li><strong>Key Naming Convention</strong>: <code>{entity}:{id}</code> (e.g., <code>video:123</code>, <code>videos:all</code>)</li>
+<li><strong>Invalidation Strategy</strong>: Write-through invalidation on updates</li>
+<li><strong>Memory Limits</strong>: Set <code>maxmemory-policy</code> to <code>allkeys-lru</code> (Least Recently Used)</li>
+<li><strong>Monitoring</strong>: Track hit rate (target: &gt;80%), memory usage, evictions</li>
+<li><strong>Connection Pooling</strong>: StackExchange.Redis handles automatically</li>
+<li><strong>Production</strong>: Use Redis Cluster for &gt;50GB data or Sentinel for HA</li>
+<li><strong>Serialization</strong>: Use <code>System.Text.Json</code> for .NET objects</li>
+<li><strong>Future</strong>: Consider Redis Streams for real-time video processing events</li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/01-architecture-decision-records/0005-redis-distributed-caching.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

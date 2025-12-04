@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Month 5 Comprehensive Assessment - Design Patterns &amp; SOLID Principles | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Month 5 Comprehensive Assessment - Design Patterns &amp; SOLID Principles | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../../favicon.ico">
+      <link rel="stylesheet" href="../../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/assessment-tests/path1/month-05-assessment.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../../index.html">
+            <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="month-5-comprehensive-assessment---design-patterns--solid-principles">Month 5 Comprehensive Assessment - Design Patterns &amp; SOLID Principles</h1>
+
+<p><strong>Month</strong>: 5 (Weeks 17-20) | <strong>Duration</strong>: 90 min | <strong>Pass</strong>: 80% (24/30) | <strong>Points</strong>: 30</p>
+<h2 id="section-1-multiple-choice-15-questions-05-pts-each--75-pts">Section 1: Multiple Choice (15 questions, 0.5 pts each = 7.5 pts)</h2>
+<ol>
+<li><p>Decorator pattern primary purpose:</p>
+<ul>
+<li>a) Create objects | b) Add behavior dynamically | c) Notify observers | d) Build complex objects</li>
+</ul>
+</li>
+<li><p>Decorator vs Inheritance difference:</p>
+<ul>
+<li>a) Same thing | b) Decorator is runtime, inheritance is compile-time | c) Decorator is faster | d) No difference</li>
+</ul>
+</li>
+<li><p>Can you chain multiple decorators?</p>
+<ul>
+<li>a) No | b) Yes, unlimited | c) Max 2 | d) Only if same type</li>
+</ul>
+</li>
+<li><p>SRP (Single Responsibility Principle) means:</p>
+<ul>
+<li>a) One method per class | b) One reason to change | c) One property | d) One interface</li>
+</ul>
+</li>
+<li><p>What violates SRP?</p>
+<ul>
+<li>a) Class doing logging and business logic | b) Class with multiple methods | c) Class with properties | d) Abstract class</li>
+</ul>
+</li>
+<li><p>OCP (Open/Closed Principle) means:</p>
+<ul>
+<li>a) Public methods only | b) Open for extension, closed for modification | c) All properties public | d) No inheritance</li>
+</ul>
+</li>
+<li><p>Which enables OCP?</p>
+<ul>
+<li>a) Sealed classes | b) Static methods | c) Polymorphism and abstractions | d) Private fields</li>
+</ul>
+</li>
+<li><p>LSP (Liskov Substitution Principle) means:</p>
+<ul>
+<li>a) Prefer interfaces | b) Derived class substitutable for base | c) Use abstract classes | d) Avoid inheritance</li>
+</ul>
+</li>
+<li><p>Classic LSP violation:</p>
+<ul>
+<li>a) Square inheriting Rectangle | b) Dog inheriting Animal | c) List<t> inheriting IEnumerable<t> | d) All inheritance</t></t></li>
+</ul>
+</li>
+<li><p>ISP (Interface Segregation Principle) means:</p>
+<ul>
+<li>a) One interface only | b) No fat interfaces, many small specific ones | c) Interfaces must be public | d) Avoid interfaces</li>
+</ul>
+</li>
+<li><p>DIP (Dependency Inversion Principle) means:</p>
+<ul>
+<li>a) Avoid dependencies | b) Depend on abstractions, not concretions | c) Use static classes | d) Private dependencies</li>
+</ul>
+</li>
+<li><p>What is Dependency Injection?</p>
+<ul>
+<li>a) Design pattern | b) Technique to implement DIP | c) Language feature | d) Anti-pattern</li>
+</ul>
+</li>
+<li><p>Constructor injection vs property injection:</p>
+<ul>
+<li>a) Same | b) Constructor for required, property for optional | c) Property is better | d) Constructor is obsolete</li>
+</ul>
+</li>
+<li><p>Decorator pattern implements which SOLID principle?</p>
+<ul>
+<li>a) SRP and OCP | b) Only DIP | c) Only LSP | d) None</li>
+</ul>
+</li>
+<li><p>Service locator vs DI:</p>
+<ul>
+<li>a) Same | b) DI preferred (explicit dependencies) | c) Service locator better | d) Use both</li>
+</ul>
+</li>
+</ol>
+<h2 id="section-2-short-answer-7-questions-2-pts-each--14-pts">Section 2: Short Answer (7 questions, 2 pts each = 14 pts)</h2>
+<ol start="16">
+<li><p>Explain Decorator pattern. How does it differ from simply using inheritance to add behavior?</p>
+</li>
+<li><p>Give a real-world example of SRP violation and show how to fix it.</p>
+</li>
+<li><p>Explain OCP with code example. How do you extend without modifying?</p>
+</li>
+<li><p>Explain the Square/Rectangle problem as LSP violation. Why does Square break LSP?</p>
+</li>
+<li><p>What's a &quot;fat interface&quot;? Give example and show how to apply ISP.</p>
+</li>
+<li><p>Explain high-level vs low-level modules in DIP. Show violation and fix.</p>
+</li>
+<li><p>Compare these DI lifetimes: Transient, Scoped, Singleton. When to use each?</p>
+</li>
+</ol>
+<h2 id="section-3-code-implementation-4-questions-2-pts-each--8-pts">Section 3: Code Implementation (4 questions, 2 pts each = 8 pts)</h2>
+<ol start="23">
+<li>Implement Decorator pattern for a coffee shop:</li>
+</ol>
+<pre><code class="lang-csharp">// Requirements:
+// - ICoffee interface with Cost() and Description()
+// - SimpleCoffee base implementation
+// - MilkDecorator adds $0.50
+// - SugarDecorator adds $0.25
+// - Chain: new SugarDecorator(new MilkDecorator(new SimpleCoffee()))
+</code></pre>
+<ol start="24">
+<li>Refactor this SRP violation:</li>
+</ol>
+<pre><code class="lang-csharp">public class User
+{
+    public string Name { get; set; }
+    public string Email { get; set; }
+
+    public void SaveToDatabase()
+    {
+        // Database logic here
+        Console.WriteLine($&quot;Saving {Name} to database&quot;);
+    }
+
+    public void SendEmail(string message)
+    {
+        // Email logic here
+        Console.WriteLine($&quot;Sending email to {Email}: {message}&quot;);
+    }
+}
+</code></pre>
+<ol start="25">
+<li>Implement OCP with payment processing:</li>
+</ol>
+<pre><code class="lang-csharp">// Bad code violating OCP
+public class PaymentProcessor
+{
+    public void ProcessPayment(string type, decimal amount)
+    {
+        if (type == &quot;CreditCard&quot;)
+            Console.WriteLine($&quot;Processing credit card: ${amount}&quot;);
+        else if (type == &quot;PayPal&quot;)
+            Console.WriteLine($&quot;Processing PayPal: ${amount}&quot;);
+        // Adding new payment type requires modifying this class!
+    }
+}
+
+// Refactor to follow OCP
+</code></pre>
+<ol start="26">
+<li>Apply DIP to this code:</li>
+</ol>
+<pre><code class="lang-csharp">// Violates DIP - high-level depends on low-level
+public class EmailService
+{
+    public void SendEmail(string to, string message)
+    {
+        Console.WriteLine($&quot;Email to {to}: {message}&quot;);
+    }
+}
+
+public class UserController
+{
+    private EmailService _emailService = new EmailService(); // Direct dependency!
+
+    public void RegisterUser(string email)
+    {
+        Console.WriteLine($&quot;Registering {email}&quot;);
+        _emailService.SendEmail(email, &quot;Welcome!&quot;);
+    }
+}
+
+// Refactor to follow DIP with dependency injection
+</code></pre>
+<h2 id="answer-key">Answer Key</h2>
+<p><strong>MC</strong>: 1.b | 2.b | 3.b | 4.b | 5.a | 6.b | 7.c | 8.b | 9.a | 10.b | 11.b | 12.b | 13.b | 14.a | 15.b</p>
+<h3 id="short-answer">Short Answer</h3>
+<p><strong>16. Decorator Pattern</strong> (2 pts):</p>
+<ul>
+<li><strong>Purpose</strong>: Add responsibilities to objects dynamically without affecting other objects</li>
+<li><strong>How it works</strong>: Wrap object in decorator that implements same interface</li>
+<li><strong>vs Inheritance</strong>:
+<ul>
+<li>Inheritance: Static, compile-time, all instances affected</li>
+<li>Decorator: Dynamic, runtime, individual objects affected</li>
+<li>Inheritance: Limited (can't inherit multiple behaviors)</li>
+<li>Decorator: Flexible (chain multiple decorators)</li>
+</ul>
+</li>
+<li><strong>Example</strong>:</li>
+</ul>
+<pre><code class="lang-csharp">// Inheritance: Must create class for every combination
+class CoffeeWithMilk, CoffeeWithSugar, CoffeeWithMilkAndSugar
+
+// Decorator: Compose at runtime
+new SugarDecorator(new MilkDecorator(new Coffee()))
+</code></pre>
+<p><strong>17. SRP Violation Example</strong> (2 pts):
+<strong>Violation</strong>:</p>
+<pre><code class="lang-csharp">public class Invoice
+{
+    public decimal Amount { get; set; }
+
+    public decimal CalculateTax() { } // Reason 1: Business logic
+    public void SaveToDatabase() { }  // Reason 2: Persistence
+    public void PrintInvoice() { }    // Reason 3: Presentation
+    public void SendEmail() { }       // Reason 4: Notification
+}
+// Has 4 reasons to change!
+</code></pre>
+<p><strong>Fixed</strong>:</p>
+<pre><code class="lang-csharp">public class Invoice
+{
+    public decimal Amount { get; set; }
+    public decimal CalculateTax() { } // Only business logic
+}
+
+public class InvoiceRepository
+{
+    public void Save(Invoice invoice) { } // Only persistence
+}
+
+public class InvoicePrinter
+{
+    public void Print(Invoice invoice) { } // Only presentation
+}
+
+public class InvoiceEmailer
+{
+    public void Send(Invoice invoice) { } // Only notification
+}
+</code></pre>
+<p>Each class has single responsibility!</p>
+<p><strong>18. OCP Example</strong> (2 pts):
+<strong>Closed for modification</strong>: Don't change existing code
+<strong>Open for extension</strong>: Add new functionality via inheritance/composition</p>
+<p><strong>Example</strong>:</p>
+<pre><code class="lang-csharp">// ❌ Violates OCP
+public class AreaCalculator
+{
+    public double Calculate(object shape)
+    {
+        if (shape is Circle c)
+            return Math.PI * c.Radius * c.Radius;
+        else if (shape is Rectangle r)
+            return r.Width * r.Height;
+        // Adding triangle requires modifying this method!
+    }
+}
+
+// ✅ Follows OCP
+public abstract class Shape
+{
+    public abstract double CalculateArea();
+}
+
+public class Circle : Shape
+{
+    public double Radius { get; set; }
+    public override double CalculateArea()
+        =&gt; Math.PI * Radius * Radius;
+}
+
+public class Rectangle : Shape
+{
+    public double Width { get; set; }
+    public double Height { get; set; }
+    public override double CalculateArea()
+        =&gt; Width * Height;
+}
+
+// Add triangle WITHOUT modifying existing code
+public class Triangle : Shape
+{
+    public double Base { get; set; }
+    public double Height { get; set; }
+    public override double CalculateArea()
+        =&gt; 0.5 * Base * Height;
+}
+</code></pre>
+<p><strong>19. Square/Rectangle LSP Violation</strong> (2 pts):
+<strong>The Problem</strong>:</p>
+<pre><code class="lang-csharp">public class Rectangle
+{
+    public virtual int Width { get; set; }
+    public virtual int Height { get; set; }
+}
+
+public class Square : Rectangle
+{
+    public override int Width
+    {
+        set { base.Width = base.Height = value; }
+    }
+    public override int Height
+    {
+        set { base.Width = base.Height = value; }
+    }
+}
+
+// LSP violation demonstration
+Rectangle rect = new Square();
+rect.Width = 5;
+rect.Height = 10;
+// Expected: Area = 50 (5 * 10)
+// Actual: Area = 100 (10 * 10) - Square overrode behavior!
+</code></pre>
+<p><strong>Why it breaks LSP</strong>:</p>
+<ul>
+<li>Rectangle promises independent width/height</li>
+<li>Square violates this (width = height always)</li>
+<li>Code using Rectangle breaks when given Square</li>
+<li>Substitution fails!</li>
+</ul>
+<p><strong>Solution</strong>: Don't make Square inherit Rectangle. Use composition or separate hierarchy.</p>
+<p><strong>20. Fat Interface &amp; ISP</strong> (2 pts):
+<strong>Fat Interface</strong> (too many unrelated methods):</p>
+<pre><code class="lang-csharp">// ❌ Fat interface - forces implementation of unused methods
+public interface IWorker
+{
+    void Work();
+    void Eat();
+    void Sleep();
+    void GetPaid();
+}
+
+public class Robot : IWorker
+{
+    public void Work() { /* OK */ }
+    public void Eat() { throw new NotImplementedException(); } // Robot doesn't eat!
+    public void Sleep() { throw new NotImplementedException(); } // Robot doesn't sleep!
+    public void GetPaid() { throw new NotImplementedException(); } // Robot doesn't get paid!
+}
+</code></pre>
+<p><strong>Apply ISP</strong> (segregate into specific interfaces):</p>
+<pre><code class="lang-csharp">// ✅ Segregated interfaces
+public interface IWorkable
+{
+    void Work();
+}
+
+public interface IFeedable
+{
+    void Eat();
+}
+
+public interface ISleepable
+{
+    void Sleep();
+}
+
+public interface IPayable
+{
+    void GetPaid();
+}
+
+public class Human : IWorkable, IFeedable, ISleepable, IPayable
+{
+    public void Work() { }
+    public void Eat() { }
+    public void Sleep() { }
+    public void GetPaid() { }
+}
+
+public class Robot : IWorkable // Only implements what it needs!
+{
+    public void Work() { }
+}
+</code></pre>
+<p><strong>21. DIP High-Level vs Low-Level</strong> (2 pts):
+<strong>High-level modules</strong>: Business logic, use cases (what to do)
+<strong>Low-level modules</strong>: Infrastructure, details (how to do)</p>
+<p><strong>Violation</strong> (high-level depends on low-level):</p>
+<pre><code class="lang-csharp">// Low-level
+public class MySqlDatabase
+{
+    public void Save(string data) { }
+}
+
+// High-level depends on low-level!
+public class OrderService
+{
+    private MySqlDatabase _db = new MySqlDatabase(); // Tight coupling!
+
+    public void CreateOrder(Order order)
+    {
+        // Business logic
+        _db.Save(order.ToString());
+    }
+}
+// Problem: Can't switch to PostgreSQL without changing OrderService
+</code></pre>
+<p><strong>Fixed with DIP</strong> (both depend on abstraction):</p>
+<pre><code class="lang-csharp">// Abstraction
+public interface IDatabase
+{
+    void Save(string data);
+}
+
+// Low-level implements abstraction
+public class MySqlDatabase : IDatabase
+{
+    public void Save(string data) { /* MySQL implementation */ }
+}
+
+public class PostgresDatabase : IDatabase
+{
+    public void Save(string data) { /* Postgres implementation */ }
+}
+
+// High-level depends on abstraction
+public class OrderService
+{
+    private readonly IDatabase _db;
+
+    public OrderService(IDatabase db) // Dependency injection!
+    {
+        _db = db;
+    }
+
+    public void CreateOrder(Order order)
+    {
+        _db.Save(order.ToString());
+    }
+}
+
+// Usage - can switch database without changing OrderService
+var service1 = new OrderService(new MySqlDatabase());
+var service2 = new OrderService(new PostgresDatabase());
+</code></pre>
+<p><strong>22. DI Lifetimes</strong> (2 pts):
+<strong>Transient</strong>:</p>
+<ul>
+<li>New instance every time requested</li>
+<li>Use for: Lightweight stateless services</li>
+<li>Example: Data validators, calculators</li>
+<li><code>services.AddTransient&lt;IMyService, MyService&gt;()</code></li>
+</ul>
+<p><strong>Scoped</strong>:</p>
+<ul>
+<li>One instance per request/scope</li>
+<li>Use for: Per-request state (DB context, request context)</li>
+<li>Example: DbContext in ASP.NET (one per HTTP request)</li>
+<li><code>services.AddScoped&lt;IMyService, MyService&gt;()</code></li>
+</ul>
+<p><strong>Singleton</strong>:</p>
+<ul>
+<li>Single instance for application lifetime</li>
+<li>Use for: Expensive to create, thread-safe, stateless</li>
+<li>Example: Caches, loggers, configuration</li>
+<li><code>services.AddSingleton&lt;IMyService, MyService&gt;()</code></li>
+</ul>
+<p><strong>Comparison</strong>:</p>
+<pre><code>Request 1: [Transient1, Transient2] [Scoped1      ] [Singleton]
+Request 2: [Transient3, Transient4] [Scoped2      ] [Singleton]
+Request 3: [Transient5, Transient6] [Scoped3      ] [Singleton]
+</code></pre>
+<h3 id="code-implementation">Code Implementation</h3>
+<p><strong>23. Coffee Decorator</strong> (2 pts):</p>
+<pre><code class="lang-csharp">public interface ICoffee
+{
+    decimal Cost();
+    string Description();
+}
+
+public class SimpleCoffee : ICoffee
+{
+    public decimal Cost() =&gt; 2.00m;
+    public string Description() =&gt; &quot;Simple coffee&quot;;
+}
+
+public abstract class CoffeeDecorator : ICoffee
+{
+    protected readonly ICoffee _coffee;
+
+    protected CoffeeDecorator(ICoffee coffee)
+    {
+        _coffee = coffee;
+    }
+
+    public virtual decimal Cost() =&gt; _coffee.Cost();
+    public virtual string Description() =&gt; _coffee.Description();
+}
+
+public class MilkDecorator : CoffeeDecorator
+{
+    public MilkDecorator(ICoffee coffee) : base(coffee) { }
+
+    public override decimal Cost() =&gt; _coffee.Cost() + 0.50m;
+    public override string Description() =&gt; _coffee.Description() + &quot;, Milk&quot;;
+}
+
+public class SugarDecorator : CoffeeDecorator
+{
+    public SugarDecorator(ICoffee coffee) : base(coffee) { }
+
+    public override decimal Cost() =&gt; _coffee.Cost() + 0.25m;
+    public override string Description() =&gt; _coffee.Description() + &quot;, Sugar&quot;;
+}
+
+// Usage
+ICoffee coffee = new SimpleCoffee();
+Console.WriteLine($&quot;{coffee.Description()}: ${coffee.Cost()}&quot;);
+// Output: Simple coffee: $2.00
+
+coffee = new MilkDecorator(coffee);
+Console.WriteLine($&quot;{coffee.Description()}: ${coffee.Cost()}&quot;);
+// Output: Simple coffee, Milk: $2.50
+
+coffee = new SugarDecorator(coffee);
+Console.WriteLine($&quot;{coffee.Description()}: ${coffee.Cost()}&quot;);
+// Output: Simple coffee, Milk, Sugar: $2.75
+</code></pre>
+<p><strong>24. SRP Refactoring</strong> (2 pts):</p>
+<pre><code class="lang-csharp">// ✅ Refactored - each class has single responsibility
+
+public class User
+{
+    public string Name { get; set; }
+    public string Email { get; set; }
+    // Only properties - data representation
+}
+
+public class UserRepository
+{
+    public void Save(User user)
+    {
+        // Database logic only
+        Console.WriteLine($&quot;Saving {user.Name} to database&quot;);
+    }
+}
+
+public class EmailService
+{
+    public void SendEmail(string to, string message)
+    {
+        // Email logic only
+        Console.WriteLine($&quot;Sending email to {to}: {message}&quot;);
+    }
+}
+
+public class UserService
+{
+    private readonly UserRepository _repository;
+    private readonly EmailService _emailService;
+
+    public UserService(UserRepository repository, EmailService emailService)
+    {
+        _repository = repository;
+        _emailService = emailService;
+    }
+
+    public void RegisterUser(User user)
+    {
+        _repository.Save(user);
+        _emailService.SendEmail(user.Email, &quot;Welcome!&quot;);
+    }
+}
+
+// Usage
+var user = new User { Name = &quot;John&quot;, Email = &quot;john@example.com&quot; };
+var repository = new UserRepository();
+var emailService = new EmailService();
+var userService = new UserService(repository, emailService);
+userService.RegisterUser(user);
+</code></pre>
+<p><strong>25. OCP Payment Processing</strong> (2 pts):</p>
+<pre><code class="lang-csharp">// ✅ Follows OCP - open for extension, closed for modification
+
+public interface IPaymentMethod
+{
+    void ProcessPayment(decimal amount);
+}
+
+public class CreditCardPayment : IPaymentMethod
+{
+    public void ProcessPayment(decimal amount)
+    {
+        Console.WriteLine($&quot;Processing credit card: ${amount}&quot;);
+    }
+}
+
+public class PayPalPayment : IPaymentMethod
+{
+    public void ProcessPayment(decimal amount)
+    {
+        Console.WriteLine($&quot;Processing PayPal: ${amount}&quot;);
+    }
+}
+
+// Add new payment type WITHOUT modifying existing code
+public class CryptoPayment : IPaymentMethod
+{
+    public void ProcessPayment(decimal amount)
+    {
+        Console.WriteLine($&quot;Processing cryptocurrency: ${amount}&quot;);
+    }
+}
+
+public class PaymentProcessor
+{
+    public void ProcessPayment(IPaymentMethod paymentMethod, decimal amount)
+    {
+        paymentMethod.ProcessPayment(amount);
+    }
+}
+
+// Usage
+var processor = new PaymentProcessor();
+processor.ProcessPayment(new CreditCardPayment(), 100);
+processor.ProcessPayment(new PayPalPayment(), 200);
+processor.ProcessPayment(new CryptoPayment(), 300); // New type added!
+</code></pre>
+<p><strong>26. DIP Refactoring</strong> (2 pts):</p>
+<pre><code class="lang-csharp">// ✅ Follows DIP - depend on abstraction
+
+// Abstraction
+public interface INotificationService
+{
+    void Send(string to, string message);
+}
+
+// Low-level implementations
+public class EmailService : INotificationService
+{
+    public void Send(string to, string message)
+    {
+        Console.WriteLine($&quot;Email to {to}: {message}&quot;);
+    }
+}
+
+public class SmsService : INotificationService
+{
+    public void Send(string to, string message)
+    {
+        Console.WriteLine($&quot;SMS to {to}: {message}&quot;);
+    }
+}
+
+// High-level depends on abstraction
+public class UserController
+{
+    private readonly INotificationService _notificationService;
+
+    // Dependency injection via constructor
+    public UserController(INotificationService notificationService)
+    {
+        _notificationService = notificationService;
+    }
+
+    public void RegisterUser(string contact)
+    {
+        Console.WriteLine($&quot;Registering {contact}&quot;);
+        _notificationService.Send(contact, &quot;Welcome!&quot;);
+    }
+}
+
+// Usage - can switch implementation easily
+var emailController = new UserController(new EmailService());
+emailController.RegisterUser(&quot;user@example.com&quot;);
+
+var smsController = new UserController(new SmsService());
+smsController.RegisterUser(&quot;+1234567890&quot;);
+</code></pre>
+<h2 id="grading-rubric">Grading Rubric</h2>
+<table>
+<thead>
+<tr>
+<th>Section</th>
+<th>Max Points</th>
+<th>Criteria</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Multiple Choice</td>
+<td>7.5</td>
+<td>0.5 per correct answer</td>
+</tr>
+<tr>
+<td>Short Answer (each)</td>
+<td>2 × 7 = 14</td>
+<td>Full: Complete + code. Partial: 1.0-1.5. Wrong: 0</td>
+</tr>
+<tr>
+<td>Code Implementation (each)</td>
+<td>2 × 4 = 8</td>
+<td>Full: Correct refactoring. Partial: 1.0-1.5. Wrong: 0</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>30</strong></td>
+<td><strong>Pass: 24 points (80%)</strong></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="solid-principles-quick-reference">SOLID Principles Quick Reference</h2>
+<table>
+<thead>
+<tr>
+<th>Principle</th>
+<th>Acronym</th>
+<th>Definition</th>
+<th>Key Benefit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Single Responsibility</strong></td>
+<td>SRP</td>
+<td>One class, one reason to change</td>
+<td>Maintainability</td>
+</tr>
+<tr>
+<td><strong>Open/Closed</strong></td>
+<td>OCP</td>
+<td>Open for extension, closed for modification</td>
+<td>Extensibility</td>
+</tr>
+<tr>
+<td><strong>Liskov Substitution</strong></td>
+<td>LSP</td>
+<td>Derived types substitutable for base</td>
+<td>Correctness</td>
+</tr>
+<tr>
+<td><strong>Interface Segregation</strong></td>
+<td>ISP</td>
+<td>Many specific interfaces &gt; one fat interface</td>
+<td>Flexibility</td>
+</tr>
+<tr>
+<td><strong>Dependency Inversion</strong></td>
+<td>DIP</td>
+<td>Depend on abstractions, not concretions</td>
+<td>Testability</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="study-resources">Study Resources</h2>
+<p><strong>Week 17 - Decorator Pattern</strong>:</p>
+<ul>
+<li><code>samples/99-Exercises/DesignPatterns/03-Decorator/</code></li>
+<li>Theory: Dynamic behavior addition</li>
+</ul>
+<p><strong>Week 18 - SRP &amp; OCP</strong>:</p>
+<ul>
+<li><code>src/AdvancedConcepts.Core/Advanced/SOLIDPrinciples/</code></li>
+<li>Refactoring exercises</li>
+</ul>
+<p><strong>Week 19 - LSP &amp; ISP</strong>:</p>
+<ul>
+<li>Square/Rectangle problem analysis</li>
+<li>Interface segregation examples</li>
+</ul>
+<p><strong>Week 20 - DIP</strong>:</p>
+<ul>
+<li>Dependency injection patterns</li>
+<li>ASP.NET Core DI container</li>
+</ul>
+<hr>
+<h2 id="next-steps">Next Steps</h2>
+<p><strong>If you passed (≥24 pts)</strong>: Proceed to Month 6 (Capstone Project Preparation)</p>
+<p><strong>If you didn't pass (&lt;24 pts)</strong>: Review weak areas:</p>
+<ul>
+<li>Score 0-10: Review all SOLID principles</li>
+<li>Score 11-18: Focus on code refactoring</li>
+<li>Score 19-23: Practice design patterns</li>
+</ul>
+<hr>
+<p><em>Assessment Version: 1.0</em>
+<em>Last Updated: 2025-12-02</em></p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/assessment-tests/path1/month-05-assessment.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

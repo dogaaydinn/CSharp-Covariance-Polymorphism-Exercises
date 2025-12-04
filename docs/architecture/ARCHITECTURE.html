@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>&#127959;️ Architecture Overview | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="&#127959;️ Architecture Overview | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/ARCHITECTURE.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="-architecture-overview">🏗️ Architecture Overview</h1>
+
+<h2 id="system-architecture">System Architecture</h2>
+<p>This document describes the enterprise-level architecture of the Advanced C# Concepts project.</p>
+<hr>
+<h2 id="-high-level-architecture-c4-model">📐 High-Level Architecture (C4 Model)</h2>
+<h3 id="level-1-system-context-diagram">Level 1: System Context Diagram</h3>
+<pre><code>┌─────────────────────────────────────────────────────────────────┐
+│                                                                 │
+│                    Advanced C# Concepts                         │
+│                  Educational Framework                          │
+│                                                                 │
+│  Purpose: Demonstrate advanced C# programming patterns         │
+│  Technology: .NET 8, C# 12                                     │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+                            ▲
+                            │
+                            │
+                    ┌───────┴────────┐
+                    │                │
+               ┌────▼────┐      ┌───▼────┐
+               │         │      │        │
+               │ Developers    │  Students │
+               │         │      │        │
+               └─────────┘      └────────┘
+</code></pre>
+<h3 id="level-2-container-diagram">Level 2: Container Diagram</h3>
+<pre><code>┌──────────────────────────────────────────────────────────────────┐
+│                  Advanced C# Concepts System                     │
+│                                                                  │
+│  ┌────────────────┐  ┌────────────────┐  ┌──────────────────┐  │
+│  │                │  │                │  │                  │  │
+│  │  Core Library  │  │   Demo CLI     │  │   Benchmarks     │  │
+│  │                │  │                │  │                  │  │
+│  │ - Polymorphism │  │ - Examples     │  │ - BenchmarkDotNet│  │
+│  │ - Generics     │  │ - Tutorials    │  │ - Profiling      │  │
+│  │ - Conversions  │  │ - Interactive  │  │ - Comparisons    │  │
+│  │                │  │                │  │                  │  │
+│  └────────┬───────┘  └───────┬────────┘  └────────┬─────────┘  │
+│           │                  │                     │            │
+│           └──────────────────┼─────────────────────┘            │
+│                              │                                  │
+│                     ┌────────▼─────────┐                        │
+│                     │                  │                        │
+│                     │  Testing Layer   │                        │
+│                     │                  │                        │
+│                     │  - Unit Tests    │                        │
+│                     │  - Integration   │                        │
+│                     │  - Mutation      │                        │
+│                     │                  │                        │
+│                     └──────────────────┘                        │
+│                                                                  │
+└──────────────────────────────────────────────────────────────────┘
+</code></pre>
+<h3 id="level-3-component-diagram">Level 3: Component Diagram</h3>
+<pre><code>Core Library Components:
+
+┌─────────────────────────────────────────────────────────────┐
+│                     Core Library                            │
+│                                                             │
+│  ┌──────────────────┐    ┌──────────────────┐             │
+│  │  Polymorphism    │    │  Type Variance   │             │
+│  │  Components      │    │  Components      │             │
+│  │                  │    │                  │             │
+│  │ - Vehicle        │    │ - IProducer&lt;T&gt;   │             │
+│  │ - Car/Bike       │    │ - IConsumer&lt;T&gt;   │             │
+│  │ - Animal/Mammal  │    │ - Covariance     │             │
+│  │ - Cat/Dog        │    │ - Contravariance │             │
+│  └──────────────────┘    └──────────────────┘             │
+│                                                             │
+│  ┌──────────────────┐    ┌──────────────────┐             │
+│  │  Type Conversion │    │  Memory Mgmt     │             │
+│  │  Components      │    │  Components      │             │
+│  │                  │    │                  │             │
+│  │ - Temperature    │    │ - Boxing         │             │
+│  │ - Implicit Ops   │    │ - Unboxing       │             │
+│  │ - Explicit Ops   │    │ - Value Types    │             │
+│  │ - Pattern Match  │    │ - Ref Types      │             │
+│  └──────────────────┘    └──────────────────┘             │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+</code></pre>
+<hr>
+<h2 id="-architectural-patterns">🏛️ Architectural Patterns</h2>
+<h3 id="1-layered-architecture">1. Layered Architecture</h3>
+<pre><code>┌─────────────────────────────────────────────┐
+│         Presentation Layer                  │
+│  (Console Application / Demos)              │
+└──────────────┬──────────────────────────────┘
+               │
+┌──────────────▼──────────────────────────────┐
+│         Application Layer                   │
+│  (Use Cases / Business Logic)               │
+└──────────────┬──────────────────────────────┘
+               │
+┌──────────────▼──────────────────────────────┐
+│         Domain Layer                        │
+│  (Core Concepts / Entities)                 │
+└──────────────┬──────────────────────────────┘
+               │
+┌──────────────▼──────────────────────────────┐
+│         Infrastructure Layer                │
+│  (Logging / Metrics / I/O)                  │
+└─────────────────────────────────────────────┘
+</code></pre>
+<h3 id="2-solid-principles-implementation">2. SOLID Principles Implementation</h3>
+<h4 id="single-responsibility-principle-srp">Single Responsibility Principle (SRP)</h4>
+<p>Each class has one reason to change:</p>
+<ul>
+<li><code>Vehicle</code> - Handles vehicle behavior</li>
+<li><code>Temperature</code> - Handles temperature conversions</li>
+<li><code>BoxingUnboxing</code> - Demonstrates boxing/unboxing</li>
+</ul>
+<h4 id="openclosed-principle-ocp">Open/Closed Principle (OCP)</h4>
+<p>Open for extension, closed for modification:</p>
+<pre><code class="lang-csharp">public abstract class Vehicle  // Closed for modification
+{
+    public abstract void Drive();
+}
+
+public class ElectricCar : Vehicle  // Open for extension
+{
+    public override void Drive() =&gt; Console.WriteLine(&quot;Electric drive&quot;);
+}
+</code></pre>
+<h4 id="liskov-substitution-principle-lsp">Liskov Substitution Principle (LSP)</h4>
+<p>Subtypes must be substitutable for base types:</p>
+<pre><code class="lang-csharp">Vehicle vehicle = new Car(); // LSP - Car can substitute Vehicle
+vehicle.Drive(); // Works correctly
+</code></pre>
+<h4 id="interface-segregation-principle-isp">Interface Segregation Principle (ISP)</h4>
+<p>Many specific interfaces &gt; one general interface:</p>
+<pre><code class="lang-csharp">public interface IProducer&lt;out T&gt; { T Produce(); }
+public interface IConsumer&lt;in T&gt; { void Consume(T item); }
+// Segregated instead of: IHandler&lt;T&gt; { T Get(); void Set(T item); }
+</code></pre>
+<h4 id="dependency-inversion-principle-dip">Dependency Inversion Principle (DIP)</h4>
+<p>Depend on abstractions, not concretions:</p>
+<pre><code class="lang-csharp">// High-level depends on abstraction
+public class DemoRunner
+{
+    private readonly IProducer&lt;Animal&gt; _producer;
+    public DemoRunner(IProducer&lt;Animal&gt; producer) =&gt; _producer = producer;
+}
+</code></pre>
+<hr>
+<h2 id="-module-structure">📦 Module Structure</h2>
+<h3 id="namespace-organization">Namespace Organization</h3>
+<pre><code>AdvancedCsharpConcepts
+├── Beginner
+│   ├── Override_Upcast_Downcast
+│   │   ├── Vehicle.cs
+│   │   ├── Car.cs
+│   │   └── Bike.cs
+│   ├── Polymorphism_AssignCompatibility
+│   │   ├── Animal.cs
+│   │   ├── Mammal.cs
+│   │   ├── Cat.cs
+│   │   ├── Dog.cs
+│   │   └── AssignmentCompatibility.cs
+│   └── Upcast_Downcast
+│       ├── Employee.cs
+│       └── Manager.cs
+├── Intermediate
+│   ├── BoxingUnboxing
+│   │   └── BoxingUnboxing.cs
+│   └── CovarianceContravariance
+│       ├── Covariance.cs
+│       └── CovarianceContravariance.cs
+├── Advanced
+│   ├── ExplicitImplicitConversion
+│   │   ├── Temperature.cs
+│   │   └── ExplicitImplicitConversion.cs
+│   └── GenericCovarianceContravariance
+│       ├── IProducer.cs
+│       ├── IConsumer.cs
+│       ├── AnimalProducer.cs
+│       ├── CatProducer.cs
+│       ├── DogProducer.cs
+│       └── AnimalConsumer.cs
+└── Program.cs
+</code></pre>
+<hr>
+<h2 id="-data-flow-diagrams">🔄 Data Flow Diagrams</h2>
+<h3 id="polymorphic-dispatch-flow">Polymorphic Dispatch Flow</h3>
+<pre><code>┌────────────────┐
+│  List&lt;Vehicle&gt; │
+└────────┬───────┘
+         │ foreach
+         ▼
+    ┌────────────┐
+    │  vehicle   │
+    └────┬───────┘
+         │ .Drive()
+         ▼
+    ┌────────────┐
+    │  Virtual   │
+    │ Dispatch   │
+    └────┬───────┘
+         │
+    ┌────┴─────┐
+    │          │
+┌───▼──┐   ┌──▼───┐
+│ Car  │   │ Bike │
+│.Drive│   │.Drive│
+└──────┘   └──────┘
+</code></pre>
+<h3 id="variance-conversion-flow">Variance Conversion Flow</h3>
+<pre><code>Covariance (out T):
+  IProducer&lt;Dog&gt;
+       │
+       │ Upcast (implicit)
+       ▼
+  IProducer&lt;Animal&gt;
+
+Contravariance (in T):
+  IConsumer&lt;Animal&gt;
+       │
+       │ Downcast (implicit)
+       ▼
+  IConsumer&lt;Dog&gt;
+</code></pre>
+<hr>
+<h2 id="-design-patterns">🎯 Design Patterns</h2>
+<h3 id="1-template-method-pattern">1. Template Method Pattern</h3>
+<pre><code class="lang-csharp">public abstract class Vehicle
+{
+    public void StartJourney()
+    {
+        StartEngine();
+        Drive(); // Template method
+        StopEngine();
+    }
+
+    protected abstract void Drive();
+}
+</code></pre>
+<h3 id="2-strategy-pattern-variance">2. Strategy Pattern (Variance)</h3>
+<pre><code class="lang-csharp">public interface IProducer&lt;out T&gt;
+{
+    T Produce(); // Strategy for producing T
+}
+</code></pre>
+<h3 id="3-factory-pattern-planned">3. Factory Pattern (Planned)</h3>
+<pre><code class="lang-csharp">public interface IVehicleFactory
+{
+    Vehicle CreateVehicle();
+}
+</code></pre>
+<hr>
+<h2 id="-performance-considerations">⚡ Performance Considerations</h2>
+<h3 id="virtual-method-call-overhead">Virtual Method Call Overhead</h3>
+<pre><code>Direct Method Call:    ~0.3 ns
+Virtual Method Call:   ~0.8 ns  (2.7x slower)
+Interface Call:        ~1.2 ns  (4x slower)
+
+Trade-off: Flexibility vs Performance
+</code></pre>
+<h3 id="boxing-allocation-impact">Boxing Allocation Impact</h3>
+<pre><code>Generic (no boxing):   0 bytes allocated
+Boxing value type:     24 bytes per operation
+
+Recommendation: Use generics to avoid boxing
+</code></pre>
+<h3 id="memory-layout">Memory Layout</h3>
+<pre><code>Value Types (struct):
+  - Stack allocated (if local)
+  - Inline in containing type
+  - No GC pressure
+
+Reference Types (class):
+  - Heap allocated
+  - Pointer overhead (8/16 bytes)
+  - GC tracked
+</code></pre>
+<hr>
+<h2 id="-security-architecture">🔒 Security Architecture</h2>
+<h3 id="input-validation">Input Validation</h3>
+<p>All public APIs validate inputs to prevent:</p>
+<ul>
+<li>Null reference exceptions</li>
+<li>Type casting failures</li>
+<li>Invalid conversions</li>
+</ul>
+<h3 id="type-safety">Type Safety</h3>
+<pre><code class="lang-csharp">// Unsafe cast
+Car car = (Car)vehicle; // Can throw InvalidCastException
+
+// Safe cast with 'as'
+Car? car = vehicle as Car; // Returns null if cast fails
+
+// Safe cast with pattern matching
+if (vehicle is Car car)
+{
+    car.Honk();
+}
+</code></pre>
+<hr>
+<h2 id="-scalability-patterns">📊 Scalability Patterns</h2>
+<h3 id="future-enhancements">Future Enhancements</h3>
+<ol>
+<li><p><strong>Dependency Injection</strong></p>
+<ul>
+<li>Microsoft.Extensions.DependencyInjection</li>
+<li>Service lifetimes (Singleton, Scoped, Transient)</li>
+</ul>
+</li>
+<li><p><strong>Caching Strategy</strong></p>
+<ul>
+<li>Memory cache for frequently accessed data</li>
+<li>Distributed cache for multi-instance scenarios</li>
+</ul>
+</li>
+<li><p><strong>Async/Await Patterns</strong></p>
+<ul>
+<li>Asynchronous producers/consumers</li>
+<li>ValueTask<t> for high-performance scenarios</t></li>
+</ul>
+</li>
+<li><p><strong>Parallel Processing</strong></p>
+<ul>
+<li>Parallel.ForEach for batch processing</li>
+<li>PLINQ for data-parallel operations</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="-testing-strategy">🧪 Testing Strategy</h2>
+<h3 id="test-pyramid">Test Pyramid</h3>
+<pre><code>         ┌─────────┐
+         │   E2E   │  (10%)
+         └─────────┘
+       ┌─────────────┐
+       │ Integration │  (20%)
+       └─────────────┘
+    ┌──────────────────┐
+    │   Unit Tests     │  (70%)
+    └──────────────────┘
+</code></pre>
+<h3 id="test-coverage-targets">Test Coverage Targets</h3>
+<ul>
+<li><strong>Unit Tests</strong>: &gt;90% code coverage</li>
+<li><strong>Branch Coverage</strong>: &gt;85%</li>
+<li><strong>Mutation Score</strong>: &gt;80%</li>
+<li><strong>Performance Tests</strong>: All critical paths</li>
+</ul>
+<hr>
+<h2 id="-monitoring--observability">📈 Monitoring &amp; Observability</h2>
+<h3 id="logging-architecture-planned">Logging Architecture (Planned)</h3>
+<pre><code>┌─────────────┐
+│ Application │
+└──────┬──────┘
+       │ Serilog
+       ▼
+┌──────────────┐
+│  Log Sinks   │
+│              │
+│ - Console    │
+│ - File       │
+│ - Seq        │
+│ - Elasticsearch │
+└──────────────┘
+</code></pre>
+<h3 id="metrics-collection-planned">Metrics Collection (Planned)</h3>
+<pre><code>Application Metrics:
+  - Method execution time
+  - Boxing/unboxing frequency
+  - Virtual dispatch count
+  - Memory allocations
+  - GC collections
+</code></pre>
+<hr>
+<h2 id="-deployment-architecture">🚀 Deployment Architecture</h2>
+<h3 id="container-strategy">Container Strategy</h3>
+<pre><code>┌──────────────────────────────────────┐
+│   Multi-Stage Docker Build           │
+│                                      │
+│  Stage 1: SDK (Build &amp; Test)        │
+│  Stage 2: Publish (Optimized)       │
+│  Stage 3: Runtime (Minimal)         │
+│                                      │
+│  Final Image: ~100 MB (Alpine)      │
+└──────────────────────────────────────┘
+</code></pre>
+<h3 id="kubernetes-deployment-planned">Kubernetes Deployment (Planned)</h3>
+<pre><code>┌─────────────────────────────────────┐
+│       Kubernetes Cluster            │
+│                                     │
+│  ┌───────────────────────────────┐ │
+│  │      Deployment               │ │
+│  │  - Replicas: 3                │ │
+│  │  - Rolling Update             │ │
+│  │  - Health Checks              │ │
+│  └───────────────────────────────┘ │
+│                                     │
+│  ┌───────────────────────────────┐ │
+│  │      Service                  │ │
+│  │  - LoadBalancer               │ │
+│  │  - ClusterIP                  │ │
+│  └───────────────────────────────┘ │
+│                                     │
+└─────────────────────────────────────┘
+</code></pre>
+<hr>
+<h2 id="-architecture-decision-records-adrs">📚 Architecture Decision Records (ADRs)</h2>
+<h3 id="adr-001-net-8-upgrade">ADR-001: .NET 8 Upgrade</h3>
+<p><strong>Status</strong>: Accepted</p>
+<p><strong>Context</strong>: Need modern .NET features and long-term support</p>
+<p><strong>Decision</strong>: Upgrade from .NET 6 to .NET 8 LTS</p>
+<p><strong>Consequences</strong>:</p>
+<ul>
+<li>✅ Performance improvements (~15-25% faster)</li>
+<li>✅ C# 12 features (primary constructors, collection expressions)</li>
+<li>✅ LTS support until November 2026</li>
+<li>❌ Requires SDK 8.0.100+</li>
+</ul>
+<h3 id="adr-002-multi-stage-docker-builds">ADR-002: Multi-Stage Docker Builds</h3>
+<p><strong>Status</strong>: Accepted</p>
+<p><strong>Context</strong>: Need minimal production images</p>
+<p><strong>Decision</strong>: Use multi-stage Docker builds with Alpine base</p>
+<p><strong>Consequences</strong>:</p>
+<ul>
+<li>✅ Reduced image size (~100MB vs ~200MB)</li>
+<li>✅ Faster deployments</li>
+<li>✅ Better security (minimal attack surface)</li>
+<li>❌ Slightly longer build times</li>
+</ul>
+<h3 id="adr-003-code-quality-analyzers">ADR-003: Code Quality Analyzers</h3>
+<p><strong>Status</strong>: Accepted</p>
+<p><strong>Context</strong>: Enforce coding standards and best practices</p>
+<p><strong>Decision</strong>: Use StyleCop, Roslynator, and SonarAnalyzer</p>
+<p><strong>Consequences</strong>:</p>
+<ul>
+<li>✅ Consistent code style</li>
+<li>✅ Early detection of code smells</li>
+<li>✅ Security vulnerability detection</li>
+<li>❌ Longer build times</li>
+<li>❌ Initial configuration effort</li>
+</ul>
+<hr>
+<h2 id="-future-architecture-evolution">🔮 Future Architecture Evolution</h2>
+<h3 id="phase-2-microservices-if-needed">Phase 2: Microservices (If Needed)</h3>
+<pre><code>┌────────────────────────────────────────────────┐
+│              API Gateway                       │
+└────────────┬───────────────────────────────────┘
+             │
+    ┌────────┼────────┬────────────┐
+    │        │        │            │
+┌───▼───┐ ┌─▼──┐ ┌───▼───┐  ┌────▼────┐
+│ Demo  │ │Bench│ │ Docs  │  │ Metrics │
+│Service│ │Mark │ │Service│  │ Service │
+└───────┘ └────┘ └───────┘  └─────────┘
+</code></pre>
+<h3 id="phase-3-event-driven-architecture">Phase 3: Event-Driven Architecture</h3>
+<pre><code>┌────────────┐     ┌─────────────┐
+│  Producer  │────▶│ Event Bus   │
+└────────────┘     │  (RabbitMQ) │
+                   └──────┬──────┘
+                          │
+                   ┌──────▼──────┐
+                   │  Consumer   │
+                   └─────────────┘
+</code></pre>
+<hr>
+<p><strong>Document Version</strong>: 1.0.0
+<strong>Last Updated</strong>: 2025-01-14
+<strong>Author</strong>: Doğa Aydın
+<strong>Status</strong>: Living Document</p>
+<hr>
+<p><em>This architecture document evolves with the project. See CHANGELOG.md for version history.</em></p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/ARCHITECTURE.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

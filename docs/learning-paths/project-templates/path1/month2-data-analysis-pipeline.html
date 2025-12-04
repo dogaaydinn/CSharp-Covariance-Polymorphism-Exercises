@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Month 2 Capstone: Data Analysis Pipeline | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Month 2 Capstone: Data Analysis Pipeline | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../../favicon.ico">
+      <link rel="stylesheet" href="../../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/project-templates/path1/month2-data-analysis-pipeline.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../../index.html">
+            <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="month-2-capstone-data-analysis-pipeline">Month 2 Capstone: Data Analysis Pipeline</h1>
+
+<p><strong>Difficulty</strong>: ⭐⭐⭐☆☆ (Intermediate)
+<strong>Estimated Time</strong>: 20-25 hours
+<strong>Prerequisites</strong>: Completed Week 5-8 of Path 1 (LINQ Mastery)</p>
+<hr>
+<h2 id="-project-overview">🎯 Project Overview</h2>
+<p>Build a complete data analysis system that processes CSV data files using advanced LINQ queries, functional programming patterns, and generates comprehensive reports.</p>
+<h3 id="learning-objectives">Learning Objectives</h3>
+<p>By completing this project, you will demonstrate:</p>
+<ul>
+<li>✅ Advanced LINQ queries (filters, aggregations, joins)</li>
+<li>✅ Deferred vs immediate execution understanding</li>
+<li>✅ Functional programming with Func<t>, Action<t></t></t></li>
+<li>✅ Closures and lambda expressions</li>
+<li>✅ Performance optimization for large datasets</li>
+<li>✅ Multi-format data export (JSON, CSV, XML)</li>
+<li>✅ Complex grouping and statistical calculations</li>
+</ul>
+<hr>
+<h2 id="-requirements">📋 Requirements</h2>
+<h3 id="functional-requirements">Functional Requirements</h3>
+<ol>
+<li><p><strong>Data Sources</strong>:</p>
+<ul>
+<li>CSV file reader (1000+ rows)</li>
+<li>Support for: Sales data, Customer data, Product data</li>
+<li>Multiple file imports</li>
+<li>Data validation</li>
+</ul>
+</li>
+<li><p><strong>20+ LINQ Queries</strong> (minimum):</p>
+<ul>
+<li><strong>Filtering</strong>: By date range, amount, category, customer</li>
+<li><strong>Aggregations</strong>: Sum, Average, Count, Min, Max</li>
+<li><strong>Grouping</strong>: By category, customer, date, region</li>
+<li><strong>Joins</strong>: Inner joins between Sales, Customers, Products</li>
+<li><strong>Complex</strong>: Multi-level grouping, nested aggregations</li>
+<li><strong>Sorting</strong>: Multi-column ordering</li>
+<li><strong>Projections</strong>: Anonymous types, custom DTOs</li>
+</ul>
+</li>
+<li><p><strong>Statistical Reports</strong>:</p>
+<ul>
+<li>Total sales by product</li>
+<li>Average order value by customer</li>
+<li>Top 10 products by revenue</li>
+<li>Top 10 customers by total spent</li>
+<li>Sales by date (daily, monthly, yearly)</li>
+<li>Category performance analysis</li>
+<li>Customer segmentation (high/medium/low value)</li>
+<li>Trend analysis (growth rates)</li>
+</ul>
+</li>
+<li><p><strong>Data Export Formats</strong>:</p>
+<ul>
+<li>JSON (using System.Text.Json)</li>
+<li>CSV (custom formatter)</li>
+<li>XML (using System.Xml)</li>
+<li>Console table format</li>
+</ul>
+</li>
+<li><p><strong>Console Interface</strong>:</p>
+<pre><code>=== DATA ANALYSIS PIPELINE ===
+1. Load Data Files
+2. Run Sales Analysis
+3. Run Customer Analysis
+4. Run Product Analysis
+5. Generate Custom Report
+6. Export Results
+7. Exit
+</code></pre>
+</li>
+</ol>
+<h3 id="technical-requirements">Technical Requirements</h3>
+<ol>
+<li><strong>Performance Optimized</strong>: Handle 10,000+ rows efficiently</li>
+<li><strong>Functional Programming</strong>: Use Func<t>, Action<t>, closures</t></t></li>
+<li><strong>Deferred Execution</strong>: Demonstrate understanding with examples</li>
+<li><strong>LINQ Variety</strong>: Must use Where, Select, GroupBy, Join, OrderBy, Aggregate, etc.</li>
+<li><strong>Unit Tests</strong>: 15+ tests covering LINQ queries</li>
+<li><strong>Benchmarks</strong>: Performance tests with BenchmarkDotNet</li>
+<li><strong>Error Handling</strong>: Graceful handling of malformed CSV</li>
+</ol>
+<hr>
+<h2 id="-project-structure">🏗️ Project Structure</h2>
+<pre><code>DataAnalysisPipeline/
+├── DataAnalysisPipeline.csproj
+├── Program.cs
+├── Models/
+│   ├── Sale.cs
+│   ├── Customer.cs
+│   ├── Product.cs
+│   └── ReportResult.cs
+├── Services/
+│   ├── CsvReaderService.cs
+│   ├── DataAnalysisService.cs
+│   ├── SalesAnalyzer.cs
+│   ├── CustomerAnalyzer.cs
+│   └── ProductAnalyzer.cs
+├── Exporters/
+│   ├── IExporter.cs
+│   ├── JsonExporter.cs
+│   ├── CsvExporter.cs
+│   ├── XmlExporter.cs
+│   └── ConsoleExporter.cs
+├── Utilities/
+│   ├── FunctionalExtensions.cs  // Map, Filter, Reduce
+│   └── QueryBuilder.cs          // Fluent LINQ builder
+├── Data/
+│   ├── sales.csv
+│   ├── customers.csv
+│   └── products.csv
+└── DataAnalysisPipeline.Tests/
+    ├── DataAnalysisPipeline.Tests.csproj
+    ├── SalesAnalyzerTests.cs
+    └── LinqQueryTests.cs
+</code></pre>
+<hr>
+<h2 id="-getting-started">🚀 Getting Started</h2>
+<h3 id="step-1-create-the-project">Step 1: Create the Project</h3>
+<pre><code class="lang-bash">dotnet new console -n DataAnalysisPipeline
+cd DataAnalysisPipeline
+dotnet add package BenchmarkDotNet
+dotnet new nunit -n DataAnalysisPipeline.Tests
+dotnet add DataAnalysisPipeline.Tests reference DataAnalysisPipeline.csproj
+</code></pre>
+<h3 id="step-2-define-models">Step 2: Define Models</h3>
+<pre><code class="lang-csharp">// Models/Sale.cs
+namespace DataAnalysisPipeline.Models;
+
+public class Sale
+{
+    public int SaleId { get; set; }
+    public int ProductId { get; set; }
+    public int CustomerId { get; set; }
+    public DateTime SaleDate { get; set; }
+    public int Quantity { get; set; }
+    public decimal UnitPrice { get; set; }
+    public decimal TotalAmount =&gt; Quantity * UnitPrice;
+    public string Region { get; set; }
+}
+</code></pre>
+<pre><code class="lang-csharp">// Models/Customer.cs
+namespace DataAnalysisPipeline.Models;
+
+public class Customer
+{
+    public int CustomerId { get; set; }
+    public string Name { get; set; }
+    public string Email { get; set; }
+    public string Country { get; set; }
+    public DateTime RegisterDate { get; set; }
+}
+</code></pre>
+<pre><code class="lang-csharp">// Models/Product.cs
+namespace DataAnalysisPipeline.Models;
+
+public class Product
+{
+    public int ProductId { get; set; }
+    public string Name { get; set; }
+    public string Category { get; set; }
+    public decimal Price { get; set; }
+    public int StockQuantity { get; set; }
+}
+</code></pre>
+<h3 id="step-3-implement-csv-reader">Step 3: Implement CSV Reader</h3>
+<pre><code class="lang-csharp">// Services/CsvReaderService.cs
+using DataAnalysisPipeline.Models;
+
+namespace DataAnalysisPipeline.Services;
+
+public class CsvReaderService
+{
+    // TODO: Implement ReadSales(string filePath)
+    public List&lt;Sale&gt; ReadSales(string filePath)
+    {
+        // TODO: Read CSV file, parse to Sale objects
+        // Handle header row
+        // Validate data
+        // Return list
+        throw new NotImplementedException();
+    }
+
+    // TODO: Implement ReadCustomers(string filePath)
+    public List&lt;Customer&gt; ReadCustomers(string filePath)
+    {
+        // TODO: Similar to ReadSales
+        throw new NotImplementedException();
+    }
+
+    // TODO: Implement ReadProducts(string filePath)
+    public List&lt;Product&gt; ReadProducts(string filePath)
+    {
+        // TODO: Similar to ReadSales
+        throw new NotImplementedException();
+    }
+}
+</code></pre>
+<h3 id="step-4-implement-sales-analyzer">Step 4: Implement Sales Analyzer</h3>
+<pre><code class="lang-csharp">// Services/SalesAnalyzer.cs
+using DataAnalysisPipeline.Models;
+
+namespace DataAnalysisPipeline.Services;
+
+public class SalesAnalyzer
+{
+    private readonly List&lt;Sale&gt; _sales;
+    private readonly List&lt;Customer&gt; _customers;
+    private readonly List&lt;Product&gt; _products;
+
+    public SalesAnalyzer(List&lt;Sale&gt; sales, List&lt;Customer&gt; customers, List&lt;Product&gt; products)
+    {
+        _sales = sales;
+        _customers = customers;
+        _products = products;
+    }
+
+    // TODO: Query 1 - Total sales amount
+    public decimal GetTotalSales()
+    {
+        // TODO: Use LINQ Sum()
+        throw new NotImplementedException();
+    }
+
+    // TODO: Query 2 - Average order value
+    public decimal GetAverageOrderValue()
+    {
+        // TODO: Use LINQ Average()
+        throw new NotImplementedException();
+    }
+
+    // TODO: Query 3 - Total sales by product
+    public Dictionary&lt;string, decimal&gt; GetSalesByProduct()
+    {
+        // TODO: Join Sales with Products
+        // Group by product name
+        // Sum total amount
+        // Order by amount descending
+        throw new NotImplementedException();
+    }
+
+    // TODO: Query 4 - Top 10 products by revenue
+    public IEnumerable&lt;(string ProductName, decimal Revenue)&gt; GetTop10Products()
+    {
+        // TODO: Join, Group, Sum, OrderByDescending, Take(10)
+        throw new NotImplementedException();
+    }
+
+    // TODO: Query 5 - Sales by month
+    public Dictionary&lt;string, decimal&gt; GetSalesByMonth()
+    {
+        // TODO: Group by SaleDate.Month
+        // Format as &quot;2024-01&quot;
+        // Sum amounts
+        throw new NotImplementedException();
+    }
+
+    // TODO: Query 6 - Sales by region
+    public Dictionary&lt;string, decimal&gt; GetSalesByRegion()
+    {
+        // TODO: GroupBy Region, Sum
+        throw new NotImplementedException();
+    }
+
+    // TODO: Query 7 - Sales by category
+    public Dictionary&lt;string, decimal&gt; GetSalesByCategory()
+    {
+        // TODO: Join Sales with Products
+        // Group by Product.Category
+        // Sum amounts
+        throw new NotImplementedException();
+    }
+
+    // TODO: Query 8 - Daily sales (last 30 days)
+    public IEnumerable&lt;(DateTime Date, decimal Amount)&gt; GetDailySales(int days = 30)
+    {
+        // TODO: Filter by date range
+        // Group by date
+        // Sum amounts
+        // Order by date
+        throw new NotImplementedException();
+    }
+
+    // TODO: Query 9 - Sales with product and customer info (join 3 tables)
+    public IEnumerable&lt;dynamic&gt; GetDetailedSales()
+    {
+        // TODO: Join Sales -&gt; Products -&gt; Customers
+        // Select with all info
+        throw new NotImplementedException();
+    }
+
+    // TODO: Query 10 - Category performance statistics
+    public IEnumerable&lt;dynamic&gt; GetCategoryStats()
+    {
+        // TODO: Join Sales with Products
+        // Group by Category
+        // Calculate: Count, Sum, Average, Min, Max
+        throw new NotImplementedException();
+    }
+}
+</code></pre>
+<h3 id="step-5-implement-customer-analyzer">Step 5: Implement Customer Analyzer</h3>
+<pre><code class="lang-csharp">// Services/CustomerAnalyzer.cs
+using DataAnalysisPipeline.Models;
+
+namespace DataAnalysisPipeline.Services;
+
+public class CustomerAnalyzer
+{
+    private readonly List&lt;Sale&gt; _sales;
+    private readonly List&lt;Customer&gt; _customers;
+
+    public CustomerAnalyzer(List&lt;Sale&gt; sales, List&lt;Customer&gt; customers)
+    {
+        _sales = sales;
+        _customers = customers;
+    }
+
+    // TODO: Query 11 - Top 10 customers by total spent
+    public IEnumerable&lt;(string CustomerName, decimal TotalSpent, int OrderCount)&gt; GetTop10Customers()
+    {
+        // TODO: Join Sales with Customers
+        // Group by customer
+        // Sum amounts, count orders
+        // Order descending
+        // Take 10
+        throw new NotImplementedException();
+    }
+
+    // TODO: Query 12 - Customer segmentation
+    public Dictionary&lt;string, int&gt; GetCustomerSegmentation()
+    {
+        // TODO: Calculate total spent per customer
+        // Segment: High (&gt;$1000), Medium ($500-$1000), Low (&lt;$500)
+        // Count per segment
+        throw new NotImplementedException();
+    }
+
+    // TODO: Query 13 - Customers with no purchases
+    public IEnumerable&lt;Customer&gt; GetInactiveCustomers()
+    {
+        // TODO: Left join Customers with Sales
+        // Filter where no sales
+        throw new NotImplementedException();
+    }
+
+    // TODO: Query 14 - Average purchases per customer
+    public decimal GetAveragePurchasesPerCustomer()
+    {
+        // TODO: Group sales by customer
+        // Calculate average
+        throw new NotImplementedException();
+    }
+
+    // TODO: Query 15 - Customer retention (purchases &gt; 1)
+    public int GetRetainedCustomersCount()
+    {
+        // TODO: Group by customer
+        // Count where orders &gt; 1
+        throw new NotImplementedException();
+    }
+}
+</code></pre>
+<h3 id="step-6-implement-functional-extensions">Step 6: Implement Functional Extensions</h3>
+<pre><code class="lang-csharp">// Utilities/FunctionalExtensions.cs
+namespace DataAnalysisPipeline.Utilities;
+
+public static class FunctionalExtensions
+{
+    // TODO: Implement Map (similar to Select)
+    public static IEnumerable&lt;TResult&gt; Map&lt;T, TResult&gt;(
+        this IEnumerable&lt;T&gt; source,
+        Func&lt;T, TResult&gt; selector)
+    {
+        // TODO: Implement using yield return
+        throw new NotImplementedException();
+    }
+
+    // TODO: Implement Filter (similar to Where)
+    public static IEnumerable&lt;T&gt; Filter&lt;T&gt;(
+        this IEnumerable&lt;T&gt; source,
+        Func&lt;T, bool&gt; predicate)
+    {
+        // TODO: Implement using yield return
+        throw new NotImplementedException();
+    }
+
+    // TODO: Implement Reduce (similar to Aggregate)
+    public static TResult Reduce&lt;T, TResult&gt;(
+        this IEnumerable&lt;T&gt; source,
+        TResult seed,
+        Func&lt;TResult, T, TResult&gt; accumulator)
+    {
+        // TODO: Implement fold/reduce
+        throw new NotImplementedException();
+    }
+
+    // TODO: Implement Compose (function composition)
+    public static Func&lt;T, TResult&gt; Compose&lt;T, TIntermediate, TResult&gt;(
+        this Func&lt;T, TIntermediate&gt; first,
+        Func&lt;TIntermediate, TResult&gt; second)
+    {
+        // TODO: Return composed function
+        throw new NotImplementedException();
+    }
+}
+</code></pre>
+<h3 id="step-7-implement-exporters">Step 7: Implement Exporters</h3>
+<pre><code class="lang-csharp">// Exporters/IExporter.cs
+namespace DataAnalysisPipeline.Exporters;
+
+public interface IExporter
+{
+    void Export&lt;T&gt;(IEnumerable&lt;T&gt; data, string filePath);
+}
+</code></pre>
+<pre><code class="lang-csharp">// Exporters/JsonExporter.cs
+using System.Text.Json;
+
+namespace DataAnalysisPipeline.Exporters;
+
+public class JsonExporter : IExporter
+{
+    public void Export&lt;T&gt;(IEnumerable&lt;T&gt; data, string filePath)
+    {
+        // TODO: Serialize to JSON and write to file
+        var options = new JsonSerializerOptions { WriteIndented = true };
+        // TODO: Implement
+        throw new NotImplementedException();
+    }
+}
+</code></pre>
+<h3 id="step-8-generate-sample-data">Step 8: Generate Sample Data</h3>
+<pre><code class="lang-csharp">// Utilities/DataGenerator.cs
+public static class DataGenerator
+{
+    public static void GenerateSampleData()
+    {
+        // TODO: Generate 1000+ sales records
+        // TODO: Generate 100+ customers
+        // TODO: Generate 50+ products
+        // Save to CSV files in Data/ folder
+    }
+}
+</code></pre>
+<h3 id="sample-csv-format">Sample CSV Format:</h3>
+<p><strong>sales.csv</strong>:</p>
+<pre><code class="lang-csv">SaleId,ProductId,CustomerId,SaleDate,Quantity,UnitPrice,Region
+1,101,1001,2024-01-15,2,29.99,North
+2,102,1002,2024-01-16,1,49.99,South
+3,101,1001,2024-01-17,3,29.99,North
+...
+</code></pre>
+<hr>
+<h2 id="-milestones">🎯 Milestones</h2>
+<h3 id="milestone-1-data-loading-day-1-2">Milestone 1: Data Loading (Day 1-2)</h3>
+<ul>
+<li>✅ CSV reader implemented</li>
+<li>✅ Sample data generated (1000+ rows)</li>
+<li>✅ Models defined</li>
+<li>✅ Data validation working</li>
+</ul>
+<h3 id="milestone-2-core-linq-queries-day-3-5">Milestone 2: Core LINQ Queries (Day 3-5)</h3>
+<ul>
+<li>✅ 10 sales analysis queries implemented</li>
+<li>✅ 5 customer analysis queries implemented</li>
+<li>✅ 5 product analysis queries implemented</li>
+<li>✅ All queries tested with sample data</li>
+</ul>
+<h3 id="milestone-3-functional-programming-day-6-7">Milestone 3: Functional Programming (Day 6-7)</h3>
+<ul>
+<li>✅ Map, Filter, Reduce implemented</li>
+<li>✅ Function composition working</li>
+<li>✅ Closures demonstrated</li>
+<li>✅ Higher-order functions used</li>
+</ul>
+<h3 id="milestone-4-export--ui-day-8-9">Milestone 4: Export &amp; UI (Day 8-9)</h3>
+<ul>
+<li>✅ JSON, CSV, XML exporters working</li>
+<li>✅ Console UI complete</li>
+<li>✅ All reports can be generated</li>
+<li>✅ Performance tested</li>
+</ul>
+<h3 id="milestone-5-testing--benchmarks-day-10">Milestone 5: Testing &amp; Benchmarks (Day 10)</h3>
+<ul>
+<li>✅ 15+ unit tests passing</li>
+<li>✅ BenchmarkDotNet tests running</li>
+<li>✅ Performance optimized</li>
+<li>✅ Documentation complete</li>
+</ul>
+<hr>
+<h2 id="-evaluation-criteria">✅ Evaluation Criteria</h2>
+<table>
+<thead>
+<tr>
+<th>Criteria</th>
+<th>Points</th>
+<th>Requirements</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Functionality</strong></td>
+<td>40</td>
+<td>All 20+ LINQ queries working</td>
+</tr>
+<tr>
+<td><strong>Code Quality</strong></td>
+<td>30</td>
+<td>Functional programming, clean code</td>
+</tr>
+<tr>
+<td><strong>Tests</strong></td>
+<td>15</td>
+<td>15+ tests passing</td>
+</tr>
+<tr>
+<td><strong>Performance</strong></td>
+<td>10</td>
+<td>Handles 10k+ rows efficiently</td>
+</tr>
+<tr>
+<td><strong>Documentation</strong></td>
+<td>5</td>
+<td>README, comments</td>
+</tr>
+<tr>
+<td><strong>TOTAL</strong></td>
+<td><strong>100</strong></td>
+<td><strong>Pass: 75+</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="detailed-rubric">Detailed Rubric</h3>
+<p><strong>Functionality (40 points)</strong>:</p>
+<ul>
+<li>20+ LINQ queries: 20 pts</li>
+<li>Data import/export: 10 pts</li>
+<li>Console UI: 5 pts</li>
+<li>Statistical reports: 5 pts</li>
+</ul>
+<p><strong>Code Quality (30 points)</strong>:</p>
+<ul>
+<li>Functional programming patterns: 10 pts</li>
+<li>Clean code and organization: 10 pts</li>
+<li>Proper use of LINQ: 5 pts</li>
+<li>Error handling: 5 pts</li>
+</ul>
+<p><strong>Tests (15 points)</strong>:</p>
+<ul>
+<li>15+ tests: 10 pts</li>
+<li>Tests pass: 5 pts</li>
+</ul>
+<p><strong>Performance (10 points)</strong>:</p>
+<ul>
+<li>Handles 10k+ rows: 5 pts</li>
+<li>Benchmarks included: 5 pts</li>
+</ul>
+<hr>
+<h2 id="-tips">💡 Tips</h2>
+<ol>
+<li><strong>Start with Small Data</strong>: Test with 10 rows first, then scale up</li>
+<li><strong>Use Query Syntax</strong>: Practice both query and method syntax</li>
+<li><strong>Deferred Execution</strong>: Understand when queries execute</li>
+<li><strong>Joins</strong>: Master inner join and left join patterns</li>
+<li><strong>Grouping</strong>: Practice multi-level grouping</li>
+<li><strong>Performance</strong>: Profile with BenchmarkDotNet</li>
+<li><strong>Functional</strong>: Use Map, Filter, Reduce where appropriate</li>
+<li><strong>Export</strong>: Test all export formats</li>
+</ol>
+<hr>
+<h2 id="-extensions-optional">🚀 Extensions (Optional)</h2>
+<ol>
+<li><strong>Advanced Analytics</strong>: Trend analysis, forecasting</li>
+<li><strong>Data Visualization</strong>: Generate charts (using a library)</li>
+<li><strong>Real-time Processing</strong>: Stream processing simulation</li>
+<li><strong>More Queries</strong>: Expand to 30+ queries</li>
+<li><strong>Database</strong>: Use EF Core instead of CSV</li>
+<li><strong>Web API</strong>: Expose queries via REST API</li>
+<li><strong>Caching</strong>: Implement query result caching</li>
+</ol>
+<hr>
+<h2 id="-resources">📚 Resources</h2>
+<ul>
+<li><p><strong>Reference Material</strong>:</p>
+<ul>
+<li><code>samples/99-Exercises/LINQ/</code> (all 3 exercises)</li>
+<li>Review all LINQ solutions</li>
+</ul>
+</li>
+<li><p><strong>LINQ Documentation</strong>:</p>
+<ul>
+<li><a href="https://learn.microsoft.com/en-us/dotnet/csharp/linq/">LINQ Query Syntax</a></li>
+<li><a href="https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/grouping-data">Grouping Data</a></li>
+<li><a href="https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/join-operations">Join Operations</a></li>
+</ul>
+</li>
+<li><p><strong>BenchmarkDotNet</strong>:</p>
+<ul>
+<li><a href="https://benchmarkdotnet.org/">https://benchmarkdotnet.org/</a></li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><em>Template Version: 1.0</em>
+<em>Last Updated: 2025-12-02</em></p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/project-templates/path1/month2-data-analysis-pipeline.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

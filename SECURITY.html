@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Security Policy | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Security Policy | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="favicon.ico">
+      <link rel="stylesheet" href="public/docfx.min.css">
+      <link rel="stylesheet" href="public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/SECURITY.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="index.html">
+            <img id="logo" class="svg" src="logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="security-policy">Security Policy</h1>
+
+<h2 id="supported-versions">Supported Versions</h2>
+<p>We release patches for security vulnerabilities in the following versions:</p>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Supported</th>
+<th>.NET Version</th>
+<th>End of Support</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.0.x</td>
+<td>✅</td>
+<td>.NET 8 LTS</td>
+<td>Nov 2026</td>
+</tr>
+<tr>
+<td>&lt; 1.0</td>
+<td>❌</td>
+<td>-</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<h2 id="reporting-a-vulnerability">Reporting a Vulnerability</h2>
+<p>We take the security of Advanced C# Concepts seriously. If you believe you have found a security vulnerability, please report it to us as described below.</p>
+<h3 id="how-to-report">How to Report</h3>
+<p><strong>Please do NOT report security vulnerabilities through public GitHub issues.</strong></p>
+<p>Instead, please report them via email to:</p>
+<ul>
+<li><strong>Email</strong>: dogaaydin@example.com</li>
+<li><strong>Subject</strong>: [SECURITY] Brief description of the issue</li>
+</ul>
+<p>You should receive a response within 48 hours. If for some reason you do not, please follow up via email to ensure we received your original message.</p>
+<h3 id="what-to-include">What to Include</h3>
+<p>Please include the following information (as much as you can provide) to help us better understand the nature and scope of the possible issue:</p>
+<ul>
+<li>Type of issue (e.g., buffer overflow, SQL injection, cross-site scripting, etc.)</li>
+<li>Full paths of source file(s) related to the manifestation of the issue</li>
+<li>The location of the affected source code (tag/branch/commit or direct URL)</li>
+<li>Any special configuration required to reproduce the issue</li>
+<li>Step-by-step instructions to reproduce the issue</li>
+<li>Proof-of-concept or exploit code (if possible)</li>
+<li>Impact of the issue, including how an attacker might exploit the issue</li>
+</ul>
+<h3 id="what-to-expect">What to Expect</h3>
+<ul>
+<li><strong>Acknowledgment</strong>: We will send you an acknowledgment within 48 hours.</li>
+<li><strong>Communication</strong>: We will keep you informed of the progress towards a fix and full announcement.</li>
+<li><strong>Credit</strong>: We will credit you in the security advisory (unless you prefer to remain anonymous).</li>
+</ul>
+<h2 id="security-update-process">Security Update Process</h2>
+<ol>
+<li><strong>Triage</strong>: We will assess the vulnerability and determine its severity.</li>
+<li><strong>Fix Development</strong>: We will develop a fix in a private repository.</li>
+<li><strong>Testing</strong>: The fix will be thoroughly tested.</li>
+<li><strong>Release</strong>: We will release a security patch.</li>
+<li><strong>Disclosure</strong>: We will publicly disclose the vulnerability after the patch is released.</li>
+</ol>
+<h2 id="security-best-practices">Security Best Practices</h2>
+<p>When using this project:</p>
+<ol>
+<li><strong>Keep Dependencies Updated</strong>: Regularly update to the latest version.</li>
+<li><strong>Code Review</strong>: Review any code before running in production.</li>
+<li><strong>Input Validation</strong>: Always validate user input in your applications.</li>
+<li><strong>Principle of Least Privilege</strong>: Run applications with minimal required permissions.</li>
+</ol>
+<h2 id="known-security-considerations">Known Security Considerations</h2>
+<h3 id="performance-benchmarks">Performance Benchmarks</h3>
+<ul>
+<li>Benchmarks should only be run in trusted environments.</li>
+<li>Benchmark data may consume significant system resources.</li>
+</ul>
+<h3 id="parallel-processing">Parallel Processing</h3>
+<ul>
+<li>Ensure proper synchronization when using parallel processing examples in production.</li>
+<li>Be aware of thread safety implications.</li>
+</ul>
+<h3 id="memory-management">Memory Management</h3>
+<ul>
+<li>Span&lt;T&gt; examples use stack allocation - ensure adequate stack size.</li>
+<li>ArrayPool&lt;T&gt; buffers must be returned to avoid memory leaks.</li>
+</ul>
+<h2 id="security-tools--scanning">Security Tools &amp; Scanning</h2>
+<p>We use comprehensive security tooling to maintain code security:</p>
+<h3 id="automated-security-scanning">Automated Security Scanning</h3>
+<ul>
+<li><strong>Dependabot</strong>: Automated dependency vulnerability alerts and updates (NuGet, GitHub Actions, Docker)</li>
+<li><strong>CodeQL</strong>: Advanced semantic code analysis for security vulnerabilities</li>
+<li><strong>Snyk</strong>: Open source vulnerability scanning and license compliance</li>
+<li><strong>OWASP Dependency-Check</strong>: CVE database scanning for known vulnerabilities</li>
+<li><strong>Gitleaks</strong>: Secret and credential detection in code and git history</li>
+<li><strong>Trivy</strong>: Container image vulnerability scanning</li>
+<li><strong>OpenSSF Scorecard</strong>: Security health metrics</li>
+</ul>
+<h3 id="code-quality--analysis">Code Quality &amp; Analysis</h3>
+<ul>
+<li><strong>6 Static Analyzers</strong>: StyleCop, Roslynator, SonarAnalyzer, Meziantou, Microsoft.CodeAnalysis.NetAnalyzers, SecurityCodeScan</li>
+<li><strong>dotnet format</strong>: Code style and quality enforcement</li>
+<li><strong>Pre-commit hooks</strong>: Automated security checks before commits</li>
+<li><strong>Mutation Testing</strong>: Stryker.NET for test quality assurance</li>
+</ul>
+<h3 id="testing--coverage">Testing &amp; Coverage</h3>
+<ul>
+<li><strong>119 Unit Tests</strong>: Comprehensive test coverage</li>
+<li><strong>8 Integration Tests</strong>: System-level testing</li>
+<li><strong>Property-Based Testing</strong>: FsCheck for edge case discovery</li>
+<li><strong>Code Coverage</strong>: Coverlet with ReportGenerator</li>
+<li><strong>Performance Benchmarks</strong>: BenchmarkDotNet for regression detection</li>
+</ul>
+<h3 id="infrastructure-security">Infrastructure Security</h3>
+<ul>
+<li><strong>Docker Security</strong>: Multi-stage builds, non-root user, minimal attack surface</li>
+<li><strong>Kubernetes</strong>: Security contexts, resource limits, health checks</li>
+<li><strong>SBOM Generation</strong>: Software Bill of Materials for transparency</li>
+<li><strong>License Compliance</strong>: Automated license checking</li>
+</ul>
+<h2 id="security-workflows">Security Workflows</h2>
+<p>Our CI/CD pipeline includes automated security checks on every commit:</p>
+<h3 id="on-every-pushpr">On Every Push/PR</h3>
+<ul>
+<li>✅ Build &amp; compile with security analyzers</li>
+<li>✅ Run all tests (unit, integration, mutation)</li>
+<li>✅ Code coverage analysis</li>
+<li>✅ Static code analysis (6 analyzers)</li>
+<li>✅ Dependency vulnerability scanning</li>
+</ul>
+<h3 id="daily-automated-scans">Daily Automated Scans</h3>
+<ul>
+<li>✅ Snyk vulnerability scanning</li>
+<li>✅ OWASP Dependency-Check</li>
+<li>✅ Secret scanning with Gitleaks</li>
+<li>✅ Container image scanning with Trivy</li>
+<li>✅ License compliance checking</li>
+</ul>
+<h3 id="weekly-scheduled">Weekly Scheduled</h3>
+<ul>
+<li>✅ CodeQL semantic analysis</li>
+<li>✅ Dependabot dependency updates</li>
+<li>✅ OpenSSF Scorecard health check</li>
+</ul>
+<h2 id="secrets-management">Secrets Management</h2>
+<h3 id="development">Development</h3>
+<ul>
+<li><strong>User Secrets</strong>: Use <code>dotnet user-secrets</code> for local development</li>
+<li><strong>Environment Variables</strong>: Never commit <code>.env</code> files</li>
+<li><strong>appsettings.Development.json</strong>: Excluded from git</li>
+</ul>
+<h3 id="production">Production</h3>
+<ul>
+<li><strong>Azure Key Vault</strong>: Recommended for cloud deployments</li>
+<li><strong>AWS Secrets Manager</strong>: Alternative cloud solution</li>
+<li><strong>Kubernetes Secrets</strong>: For K8s deployments</li>
+<li><strong>GitHub Secrets</strong>: For CI/CD workflows</li>
+</ul>
+<h3 id="prevention">Prevention</h3>
+<ul>
+<li><strong>Pre-commit hooks</strong>: Gitleaks prevents secret commits</li>
+<li><strong>GitHub Secret Scanning</strong>: Automatic detection and alerts</li>
+<li><strong>Security workflow</strong>: Daily scans for exposed secrets</li>
+</ul>
+<h2 id="compliance--standards">Compliance &amp; Standards</h2>
+<p>This project adheres to industry security standards and best practices:</p>
+<h3 id="security-standards">Security Standards</h3>
+<ul>
+<li><strong>OWASP Top 10</strong>: Protection against common web vulnerabilities</li>
+<li><strong>CWE Top 25</strong>: Mitigation of most dangerous software weaknesses</li>
+<li><strong>NIST Guidelines</strong>: Following cybersecurity framework recommendations</li>
+<li><strong>OpenSSF Best Practices</strong>: Open Source Security Foundation guidelines</li>
+</ul>
+<h3 id="data-protection">Data Protection</h3>
+<ul>
+<li><strong>GDPR Compliance</strong>: No personal data collection or storage</li>
+<li><strong>Privacy by Design</strong>: Security and privacy built-in from the start</li>
+<li><strong>Transparency</strong>: Open source code for full auditability</li>
+</ul>
+<h3 id="license-compliance">License Compliance</h3>
+<ul>
+<li><strong>MIT License</strong>: Permissive open source license</li>
+<li><strong>Dependency Scanning</strong>: All dependencies checked for license compatibility</li>
+<li><strong>SBOM Available</strong>: Full Software Bill of Materials generated</li>
+</ul>
+<h3 id="audit-trail">Audit Trail</h3>
+<ul>
+<li><strong>Git History</strong>: Complete commit history preserved</li>
+<li><strong>Security Advisories</strong>: Published through GitHub Security Advisories</li>
+<li><strong>Vulnerability Disclosure</strong>: Transparent reporting of security issues</li>
+</ul>
+<h2 id="security-contacts">Security Contacts</h2>
+<p>For security-related inquiries:</p>
+<ul>
+<li><strong>Security Email</strong>: dogaaydinn@gmail.com</li>
+<li><strong>GitHub Security</strong>: Use GitHub's private vulnerability reporting</li>
+<li><strong>Response Time</strong>: 48 hours acknowledgment, 7 days for assessment</li>
+</ul>
+<h2 id="bug-bounty-program">Bug Bounty Program</h2>
+<p>Currently, we do not have a formal bug bounty program. However, we greatly appreciate responsible disclosure of security vulnerabilities and will publicly acknowledge security researchers who help improve our security (with their permission).</p>
+<h2 id="policy-updates">Policy Updates</h2>
+<p>This security policy may be updated from time to time. Please check back regularly for updates.</p>
+<hr>
+<p><strong>Last Updated</strong>: 2025-11-30
+<strong>Version</strong>: 2.0 (Phase 7 - Security &amp; Compliance)
+<strong>Next Review</strong>: 2025-12-30</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/SECURITY.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

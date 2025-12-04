@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Month 5 Capstone: Logging &amp; Monitoring Pipeline | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Month 5 Capstone: Logging &amp; Monitoring Pipeline | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../../favicon.ico">
+      <link rel="stylesheet" href="../../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/project-templates/path1/month5-decorator-pipeline.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../../index.html">
+            <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="month-5-capstone-logging--monitoring-pipeline">Month 5 Capstone: Logging &amp; Monitoring Pipeline</h1>
+
+<p><strong>Difficulty</strong>: ⭐⭐⭐☆☆ (Advanced)
+<strong>Estimated Time</strong>: 25-30 hours
+<strong>Prerequisites</strong>: Completed Week 17-20 of Path 1 (Decorator Pattern &amp; SOLID)</p>
+<hr>
+<h2 id="-project-overview">🎯 Project Overview</h2>
+<p>Build a flexible data processing pipeline using Decorator pattern with multiple decorators that can be chained dynamically, demonstrating all SOLID principles.</p>
+<h3 id="learning-objectives">Learning Objectives</h3>
+<ul>
+<li>✅ Decorator pattern implementation</li>
+<li>✅ Dynamic behavior composition</li>
+<li>✅ All SOLID principles applied</li>
+<li>✅ Decorator chaining</li>
+<li>✅ Pipeline pattern</li>
+</ul>
+<hr>
+<h2 id="-requirements">📋 Requirements</h2>
+<h3 id="1-core-component-interface">1. Core Component Interface</h3>
+<pre><code class="lang-csharp">public interface IDataSource
+{
+    string Read();
+    void Write(string data);
+}
+</code></pre>
+<h3 id="2-base-implementation">2. Base Implementation</h3>
+<pre><code class="lang-csharp">public class FileDataSource : IDataSource
+{
+    private readonly string _filePath;
+
+    public string Read()
+    {
+        // Read from file
+    }
+
+    public void Write(string data)
+    {
+        // Write to file
+    }
+}
+</code></pre>
+<h3 id="3-decorators-to-implement-5">3. Decorators to Implement (5+)</h3>
+<ol>
+<li><strong>EncryptionDecorator</strong>: Encrypts/decrypts data</li>
+<li><strong>CompressionDecorator</strong>: Compresses/decompresses data</li>
+<li><strong>LoggingDecorator</strong>: Logs all operations</li>
+<li><strong>CachingDecorator</strong>: Caches read results</li>
+<li><strong>ValidationDecorator</strong>: Validates data before write</li>
+<li><strong>RetryDecorator</strong>: Retries on failure</li>
+<li><strong>PerformanceMonitorDecorator</strong>: Tracks execution time</li>
+</ol>
+<h3 id="4-decorator-chain-examples">4. Decorator Chain Examples</h3>
+<pre><code class="lang-csharp">// Simple chain
+IDataSource source = new FileDataSource(&quot;data.txt&quot;);
+source = new EncryptionDecorator(source);
+source = new LoggingDecorator(source);
+
+// Complex chain
+IDataSource source = new FileDataSource(&quot;data.txt&quot;);
+source = new CompressionDecorator(source);
+source = new EncryptionDecorator(source);
+source = new CachingDecorator(source);
+source = new ValidationDecorator(source);
+source = new LoggingDecorator(source);
+source = new PerformanceMonitorDecorator(source);
+</code></pre>
+<h3 id="5-solid-principles-demonstration">5. SOLID Principles Demonstration</h3>
+<p><strong>SRP</strong>: Each decorator has single responsibility
+<strong>OCP</strong>: Add new decorators without modifying existing
+<strong>LSP</strong>: All decorators are substitutable for IDataSource
+<strong>ISP</strong>: Single focused interface
+<strong>DIP</strong>: Depend on IDataSource abstraction</p>
+<hr>
+<h2 id="-project-structure">🏗️ Project Structure</h2>
+<pre><code>DecoratorPipeline/
+├── Core/
+│   ├── IDataSource.cs
+│   └── FileDataSource.cs
+├── Decorators/
+│   ├── DataSourceDecorator.cs (base)
+│   ├── EncryptionDecorator.cs
+│   ├── CompressionDecorator.cs
+│   ├── LoggingDecorator.cs
+│   ├── CachingDecorator.cs
+│   ├── ValidationDecorator.cs
+│   ├── RetryDecorator.cs
+│   └── PerformanceMonitorDecorator.cs
+├── Builders/
+│   └── DataSourcePipelineBuilder.cs
+├── Configuration/
+│   └── PipelineConfig.cs
+└── Tests/
+    ├── DecoratorTests.cs
+    └── PipelineTests.cs
+</code></pre>
+<hr>
+<h2 id="-implementation">🚀 Implementation</h2>
+<h3 id="step-1-base-decorator">Step 1: Base Decorator</h3>
+<pre><code class="lang-csharp">public abstract class DataSourceDecorator : IDataSource
+{
+    protected readonly IDataSource _wrappedSource;
+
+    protected DataSourceDecorator(IDataSource source)
+    {
+        _wrappedSource = source ?? throw new ArgumentNullException(nameof(source));
+    }
+
+    public virtual string Read()
+    {
+        return _wrappedSource.Read();
+    }
+
+    public virtual void Write(string data)
+    {
+        _wrappedSource.Write(data);
+    }
+}
+</code></pre>
+<h3 id="step-2-example-decorators">Step 2: Example Decorators</h3>
+<pre><code class="lang-csharp">public class EncryptionDecorator : DataSourceDecorator
+{
+    public EncryptionDecorator(IDataSource source) : base(source) { }
+
+    public override string Read()
+    {
+        string data = base.Read();
+        return Decrypt(data);
+    }
+
+    public override void Write(string data)
+    {
+        string encrypted = Encrypt(data);
+        base.Write(encrypted);
+    }
+
+    private string Encrypt(string data)
+    {
+        // TODO: Implement encryption
+    }
+
+    private string Decrypt(string data)
+    {
+        // TODO: Implement decryption
+    }
+}
+
+public class LoggingDecorator : DataSourceDecorator
+{
+    public LoggingDecorator(IDataSource source) : base(source) { }
+
+    public override string Read()
+    {
+        Console.WriteLine($&quot;[{DateTime.Now}] Reading data...&quot;);
+        string data = base.Read();
+        Console.WriteLine($&quot;[{DateTime.Now}] Read {data.Length} characters&quot;);
+        return data;
+    }
+
+    public override void Write(string data)
+    {
+        Console.WriteLine($&quot;[{DateTime.Now}] Writing {data.Length} characters...&quot;);
+        base.Write(data);
+        Console.WriteLine($&quot;[{DateTime.Now}] Write complete&quot;);
+    }
+}
+
+// TODO: Implement remaining decorators
+</code></pre>
+<h3 id="step-3-pipeline-builder">Step 3: Pipeline Builder</h3>
+<pre><code class="lang-csharp">public class DataSourcePipelineBuilder
+{
+    private IDataSource _source;
+
+    public DataSourcePipelineBuilder WithSource(IDataSource source)
+    {
+        _source = source;
+        return this;
+    }
+
+    public DataSourcePipelineBuilder AddEncryption()
+    {
+        _source = new EncryptionDecorator(_source);
+        return this;
+    }
+
+    public DataSourcePipelineBuilder AddCompression()
+    {
+        _source = new CompressionDecorator(_source);
+        return this;
+    }
+
+    public DataSourcePipelineBuilder AddLogging()
+    {
+        _source = new LoggingDecorator(_source);
+        return this;
+    }
+
+    // TODO: Add more fluent methods
+
+    public IDataSource Build()
+    {
+        return _source;
+    }
+}
+
+// Usage
+var pipeline = new DataSourcePipelineBuilder()
+    .WithSource(new FileDataSource(&quot;data.txt&quot;))
+    .AddCompression()
+    .AddEncryption()
+    .AddLogging()
+    .Build();
+</code></pre>
+<hr>
+<h2 id="-milestones">🎯 Milestones</h2>
+<ol>
+<li><strong>Day 1-3</strong>: Implement core + 3 decorators</li>
+<li><strong>Day 4-6</strong>: Implement remaining decorators</li>
+<li><strong>Day 7-8</strong>: Add pipeline builder</li>
+<li><strong>Day 9-10</strong>: Testing and documentation</li>
+</ol>
+<hr>
+<h2 id="-evaluation-criteria">✅ Evaluation Criteria</h2>
+<table>
+<thead>
+<tr>
+<th>Criteria</th>
+<th>Points</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Decorator Pattern</td>
+<td>30</td>
+</tr>
+<tr>
+<td>SOLID Principles</td>
+<td>25</td>
+</tr>
+<tr>
+<td>Pipeline Builder</td>
+<td>15</td>
+</tr>
+<tr>
+<td>7+ Decorators</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Tests</td>
+<td>10</td>
+</tr>
+<tr>
+<td><strong>TOTAL</strong></td>
+<td><strong>100</strong></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="-resources">📚 Resources</h2>
+<ul>
+<li><code>samples/99-Exercises/DesignPatterns/03-Decorator/</code></li>
+<li><code>src/AdvancedConcepts.Core/Advanced/SOLIDPrinciples/</code></li>
+</ul>
+<hr>
+<p><em>Template Version: 1.0</em></p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/project-templates/path1/month5-decorator-pipeline.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

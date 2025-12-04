@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Path 1 Final Certification Exam - Junior Developer | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Path 1 Final Certification Exam - Junior Developer | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../../favicon.ico">
+      <link rel="stylesheet" href="../../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/assessment-tests/path1/final-exam.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../../index.html">
+            <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="path-1-final-certification-exam---junior-developer">Path 1 Final Certification Exam - Junior Developer</h1>
+
+<p><strong>Path</strong>: 1 - Zero to Junior Developer
+<strong>Duration</strong>: 120 minutes (2 hours)
+<strong>Total Points</strong>: 50
+<strong>Passing Score</strong>: 85% (43/50 points)
+<strong>Topics</strong>: All material from Months 1-6 (24 weeks)</p>
+<hr>
+<h2 id="exam-instructions">Exam Instructions</h2>
+<ul>
+<li>This is a <strong>comprehensive exam</strong> covering all topics from the 6-month learning path</li>
+<li>You have <strong>120 minutes</strong> to complete all 50 questions</li>
+<li>You must score <strong>85% or higher</strong> (43 points) to pass and earn certification</li>
+<li><strong>No resources allowed</strong> during the exam (closed book)</li>
+<li>Answer all questions - there is no penalty for wrong answers</li>
+<li>Review your answers before submitting</li>
+</ul>
+<hr>
+<h2 id="section-1-multiple-choice-30-questions-1-point-each--30-points">Section 1: Multiple Choice (30 questions, 1 point each = 30 points)</h2>
+<h3 id="month-1-c-fundamentals--oop-questions-1-7">Month 1: C# Fundamentals &amp; OOP (Questions 1-7)</h3>
+<ol>
+<li><p>What's true about abstract classes?</p>
+<ul>
+<li>a) Cannot have constructors</li>
+<li>b) Must be instantiated</li>
+<li>c) Can have both abstract and concrete members</li>
+<li>d) Cannot have properties</li>
+</ul>
+</li>
+<li><p>Which casting is always safe?</p>
+<ul>
+<li>a) Downcasting | b) Upcasting | c) Both | d) Neither</li>
+</ul>
+</li>
+<li><p>Array covariance allows:</p>
+<ul>
+<li>a) Dog[] to Animal[] | b) List<dog> to List<animal> | c) int[] to object[] | d) All</animal></dog></li>
+</ul>
+</li>
+<li><p>Boxing converts:</p>
+<ul>
+<li>a) Reference to value | b) Value to reference | c) String to int | d) None</li>
+</ul>
+</li>
+<li><p>Which avoids boxing for value types?</p>
+<ul>
+<li>a) ArrayList | b) List<t> | c) object[] | d) Hashtable</t></li>
+</ul>
+</li>
+<li><p>Virtual method allows:</p>
+<ul>
+<li>a) Hiding only | b) Overriding | c) Neither | d) Static dispatch</li>
+</ul>
+</li>
+<li><p>Liskov Substitution Principle means:</p>
+<ul>
+<li>a) Use interfaces only | b) Derived substitutable for base | c) Avoid inheritance | d) All classes abstract</li>
+</ul>
+</li>
+</ol>
+<h3 id="month-2-linq-mastery-questions-8-14">Month 2: LINQ Mastery (Questions 8-14)</h3>
+<ol start="8">
+<li><p>Deferred execution means:</p>
+<ul>
+<li>a) Never executes | b) Executes when enumerated | c) Executes immediately | d) Delayed start</li>
+</ul>
+</li>
+<li><p>Which forces immediate execution?</p>
+<ul>
+<li>a) Where() | b) Select() | c) ToList() | d) OrderBy()</li>
+</ul>
+</li>
+<li><p>IGrouping&lt;TKey, TElement&gt; represents:</p>
+<ul>
+<li>a) Dictionary | b) Group with key and elements | c) Array | d) Queue</li>
+</ul>
+</li>
+<li><p>Left outer join requires:</p>
+<ul>
+<li>a) Join() | b) GroupJoin() + SelectMany() + DefaultIfEmpty() | c) LeftJoin() | d) Outer()</li>
+</ul>
+</li>
+<li><p>Closure captures:</p>
+<ul>
+<li>a) Nothing | b) Variables from outer scope by reference | c) Only parameters | d) Global only</li>
+</ul>
+</li>
+<li><p><code>SelectMany()</code> does:</p>
+<ul>
+<li>a) Filters | b) Flattens nested collections | c) Projects single | d) Groups</li>
+</ul>
+</li>
+<li><p><code>First()</code> vs <code>Single()</code> difference:</p>
+<ul>
+<li>a) No difference | b) Single() throws if &gt;1 element | c) First() throws always | d) Same behavior</li>
+</ul>
+</li>
+</ol>
+<h3 id="month-3-generics--patterns-questions-15-20">Month 3: Generics &amp; Patterns (Questions 15-20)</h3>
+<ol start="15">
+<li><p><code>out</code> keyword in <code>IEnumerable&lt;out T&gt;</code> means:</p>
+<ul>
+<li>a) Output parameter | b) Covariance | c) Contravariance | d) Optional</li>
+</ul>
+</li>
+<li><p>Covariance allows:</p>
+<ul>
+<li>a) IEnumerable<dog> to IEnumerable<animal> | b) IEnumerable<animal> to IEnumerable<dog> | c) Both | d) Neither</dog></animal></animal></dog></li>
+</ul>
+</li>
+<li><p><code>where T : new()</code> constraint requires:</p>
+<ul>
+<li>a) Any constructor | b) Parameterless constructor | c) Static constructor | d) All constructors</li>
+</ul>
+</li>
+<li><p>Builder pattern primary benefit:</p>
+<ul>
+<li>a) Performance | b) Readability for complex construction | c) Thread safety | d) Faster</li>
+</ul>
+</li>
+<li><p>Fluent interface uses:</p>
+<ul>
+<li>a) Static methods | b) Method chaining with <code>return this</code> | c) Async methods | d) Properties only</li>
+</ul>
+</li>
+<li><p>Observer pattern relationship:</p>
+<ul>
+<li>a) One-to-one | b) One-to-many | c) Many-to-one | d) None</li>
+</ul>
+</li>
+</ol>
+<h3 id="month-4-algorithms--data-structures-questions-21-25">Month 4: Algorithms &amp; Data Structures (Questions 21-25)</h3>
+<ol start="21">
+<li><p>Binary search time complexity:</p>
+<ul>
+<li>a) O(n) | b) O(log n) | c) O(n log n) | d) O(1)</li>
+</ul>
+</li>
+<li><p>QuickSort worst case:</p>
+<ul>
+<li>a) O(n) | b) O(n log n) | c) O(n²) | d) O(log n)</li>
+</ul>
+</li>
+<li><p>MergeSort is:</p>
+<ul>
+<li>a) Unstable, O(1) space | b) Stable, O(n) space | c) Unstable, O(n) space | d) Stable, O(1) space</li>
+</ul>
+</li>
+<li><p>Stack follows:</p>
+<ul>
+<li>a) FIFO | b) LIFO | c) Random | d) Priority</li>
+</ul>
+</li>
+<li><p>Array access time:</p>
+<ul>
+<li>a) O(1) | b) O(n) | c) O(log n) | d) O(n²)</li>
+</ul>
+</li>
+</ol>
+<h3 id="month-5-solid-principles-questions-26-30">Month 5: SOLID Principles (Questions 26-30)</h3>
+<ol start="26">
+<li><p>SRP means:</p>
+<ul>
+<li>a) One method per class | b) One reason to change | c) Single inheritance | d) Static only</li>
+</ul>
+</li>
+<li><p>OCP means:</p>
+<ul>
+<li>a) All methods public | b) Open for extension, closed for modification | c) Only constructors public | d) Private classes</li>
+</ul>
+</li>
+<li><p>LSP violation example:</p>
+<ul>
+<li>a) Square inheriting Rectangle | b) Dog inheriting Animal | c) All inheritance | d) Interface implementation</li>
+</ul>
+</li>
+<li><p>ISP advocates:</p>
+<ul>
+<li>a) One interface | b) Many specific interfaces over fat ones | c) No interfaces | d) Large interfaces</li>
+</ul>
+</li>
+<li><p>DIP means:</p>
+<ul>
+<li>a) Avoid dependencies | b) Depend on abstractions, not concretions | c) Use static | d) No interfaces</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="section-2-short-answer-10-questions-1-point-each--10-points">Section 2: Short Answer (10 questions, 1 point each = 10 points)</h2>
+<ol start="31">
+<li><p><strong>Explain polymorphism</strong> with a simple code example (3-4 lines).</p>
+</li>
+<li><p><strong>What's the difference between override and new (hiding)</strong>? Give one-sentence explanation for each.</p>
+</li>
+<li><p><strong>Write LINQ query</strong>: Get products where price &gt; 50, group by category, get average price per category.</p>
+</li>
+<li><p><strong>Explain covariance</strong>: Why is <code>IEnumerable&lt;Dog&gt;</code> assignable to <code>IEnumerable&lt;Animal&gt;</code>?</p>
+</li>
+<li><p><strong>Binary search prerequisite</strong>: What must be true about the array/list?</p>
+</li>
+<li><p><strong>QuickSort partition</strong>: What does the partition step accomplish in one sentence?</p>
+</li>
+<li><p><strong>Decorator pattern purpose</strong>: What problem does it solve?</p>
+</li>
+<li><p><strong>Give one SRP violation example</strong>: Name a class and what multiple responsibilities it has.</p>
+</li>
+<li><p><strong>Eager vs Lazy loading</strong>: When would you use eager loading in EF Core?</p>
+</li>
+<li><p><strong>JWT structure</strong>: Name the 3 parts of a JWT token.</p>
+</li>
+</ol>
+<hr>
+<h2 id="section-3-code-analysis-5-questions-2-points-each--10-points">Section 3: Code Analysis (5 questions, 2 points each = 10 points)</h2>
+<h3 id="question-41-fix-polymorphism-2-points">Question 41: Fix Polymorphism (2 points)</h3>
+<p>What's wrong with this code? Provide the fix.</p>
+<pre><code class="lang-csharp">public class Animal
+{
+    public void MakeSound()
+    {
+        Console.WriteLine(&quot;Animal sound&quot;);
+    }
+}
+
+public class Dog : Animal
+{
+    public void MakeSound()
+    {
+        Console.WriteLine(&quot;Woof!&quot;);
+    }
+}
+
+Animal animal = new Dog();
+animal.MakeSound(); // What prints?
+</code></pre>
+<p><strong>What prints?</strong>: _______________</p>
+<p><strong>Problem</strong>: _______________</p>
+<p><strong>Fix</strong>: _______________</p>
+<hr>
+<h3 id="question-42-linq-deferred-execution-2-points">Question 42: LINQ Deferred Execution (2 points)</h3>
+<p>What's the bug in this code? How do you fix it?</p>
+<pre><code class="lang-csharp">var numbers = new List&lt;int&gt; { 1, 2, 3, 4, 5 };
+var threshold = 2;
+var query = numbers.Where(n =&gt; n &gt; threshold);
+
+threshold = 10; // Bug is here!
+
+foreach (var n in query)
+    Console.WriteLine(n); // What prints?
+</code></pre>
+<p><strong>What prints?</strong>: _______________</p>
+<p><strong>Why?</strong>: _______________</p>
+<p><strong>Fix</strong>: _______________</p>
+<hr>
+<h3 id="question-43-generic-constraints-2-points">Question 43: Generic Constraints (2 points)</h3>
+<p>Complete the generic method with proper constraints:</p>
+<pre><code class="lang-csharp">public class Repository&lt;T&gt; where _______________
+{
+    private List&lt;T&gt; _items = new List&lt;T&gt;();
+
+    public void Add(T item)
+    {
+        _items.Add(item);
+    }
+
+    public T CreateNew()
+    {
+        return new T(); // Requires constraint!
+    }
+}
+
+// T must:
+// 1. Be a reference type
+// 2. Have parameterless constructor
+// 3. Implement IEntity interface
+
+// Write constraints: _______________
+</code></pre>
+<hr>
+<h3 id="question-44-solid-violation-2-points">Question 44: SOLID Violation (2 points)</h3>
+<p>This class violates which SOLID principle(s)? Why?</p>
+<pre><code class="lang-csharp">public class User
+{
+    public string Name { get; set; }
+    public string Email { get; set; }
+
+    public void SaveToDatabase()
+    {
+        // SQL code
+    }
+
+    public void SendEmail(string message)
+    {
+        // Email code
+    }
+
+    public bool ValidateEmail()
+    {
+        // Validation code
+    }
+}
+</code></pre>
+<p><strong>Violates</strong>: _______________</p>
+<p><strong>Reason</strong>: _______________</p>
+<p><strong>How to fix</strong>: _______________</p>
+<hr>
+<h3 id="question-45-complexity-analysis-2-points">Question 45: Complexity Analysis (2 points)</h3>
+<p>What's the time complexity of each operation?</p>
+<pre><code class="lang-csharp">// 1. Binary search in sorted array of n elements
+Answer: _______________
+
+// 2. QuickSort average case
+Answer: _______________
+
+// 3. Nested loops: for(i=0; i&lt;n; i++) for(j=0; j&lt;n; j++)
+Answer: _______________
+
+// 4. Array access: arr[5]
+Answer: _______________
+
+// 5. Linked list search for element
+Answer: _______________
+</code></pre>
+<hr>
+<h2 id="answer-key">Answer Key</h2>
+<h3 id="section-1-multiple-choice-30-points">Section 1: Multiple Choice (30 points)</h3>
+<ol>
+<li><p><strong>c</strong> - Can have both abstract and concrete members</p>
+</li>
+<li><p><strong>b</strong> - Upcasting (derived to base)</p>
+</li>
+<li><p><strong>a</strong> - Dog[] to Animal[] (arrays only)</p>
+</li>
+<li><p><strong>b</strong> - Value to reference type</p>
+</li>
+<li><p><strong>b</strong> - List<t> uses generics</t></p>
+</li>
+<li><p><strong>b</strong> - Overriding</p>
+</li>
+<li><p><strong>b</strong> - Derived substitutable for base</p>
+</li>
+<li><p><strong>b</strong> - Executes when enumerated</p>
+</li>
+<li><p><strong>c</strong> - ToList() (materializes query)</p>
+</li>
+<li><p><strong>b</strong> - Group with key and elements</p>
+</li>
+<li><p><strong>b</strong> - GroupJoin() + SelectMany() + DefaultIfEmpty()</p>
+</li>
+<li><p><strong>b</strong> - Variables from outer scope by reference</p>
+</li>
+<li><p><strong>b</strong> - Flattens nested collections</p>
+</li>
+<li><p><strong>b</strong> - Single() throws if more than 1 element</p>
+</li>
+<li><p><strong>b</strong> - Covariance</p>
+</li>
+<li><p><strong>a</strong> - IEnumerable<dog> to IEnumerable<animal></animal></dog></p>
+</li>
+<li><p><strong>b</strong> - Parameterless constructor</p>
+</li>
+<li><p><strong>b</strong> - Readability for complex construction</p>
+</li>
+<li><p><strong>b</strong> - Method chaining with <code>return this</code></p>
+</li>
+<li><p><strong>b</strong> - One-to-many</p>
+</li>
+<li><p><strong>b</strong> - O(log n)</p>
+</li>
+<li><p><strong>c</strong> - O(n²)</p>
+</li>
+<li><p><strong>b</strong> - Stable, O(n) space</p>
+</li>
+<li><p><strong>b</strong> - LIFO (Last In First Out)</p>
+</li>
+<li><p><strong>a</strong> - O(1)</p>
+</li>
+<li><p><strong>b</strong> - One reason to change</p>
+</li>
+<li><p><strong>b</strong> - Open for extension, closed for modification</p>
+</li>
+<li><p><strong>a</strong> - Square inheriting Rectangle</p>
+</li>
+<li><p><strong>b</strong> - Many specific interfaces</p>
+</li>
+<li><p><strong>b</strong> - Depend on abstractions</p>
+</li>
+</ol>
+<h3 id="section-2-short-answer-10-points">Section 2: Short Answer (10 points)</h3>
+<p><strong>31. Polymorphism</strong>:</p>
+<pre><code class="lang-csharp">Animal animal = new Dog();
+animal.MakeSound(); // Calls Dog's implementation
+// Runtime determines which method to call
+</code></pre>
+<p><strong>32. Override vs Hiding</strong>:</p>
+<ul>
+<li><strong>Override</strong>: Replaces base method, works polymorphically with <code>virtual</code>/<code>override</code></li>
+<li><strong>Hiding</strong>: Creates separate method with <code>new</code>, breaks polymorphism</li>
+</ul>
+<p><strong>33. LINQ Query</strong>:</p>
+<pre><code class="lang-csharp">products
+    .Where(p =&gt; p.Price &gt; 50)
+    .GroupBy(p =&gt; p.Category)
+    .Select(g =&gt; new { Category = g.Key, AvgPrice = g.Average(p =&gt; p.Price) })
+</code></pre>
+<p><strong>34. Covariance</strong>:</p>
+<ul>
+<li>Safe because IEnumerable<t> only produces T (read-only)</t></li>
+<li>Can read Dogs as Animals (upcasting is safe)</li>
+<li>Would be unsafe if could write (List<t> is invariant)</t></li>
+</ul>
+<p><strong>35. Binary Search Prerequisite</strong>:</p>
+<ul>
+<li>Array must be <strong>sorted</strong> in ascending or descending order</li>
+</ul>
+<p><strong>36. Partition</strong>:</p>
+<ul>
+<li>Rearranges array so pivot is in final position with smaller elements left, larger right</li>
+</ul>
+<p><strong>37. Decorator Purpose</strong>:</p>
+<ul>
+<li>Add responsibilities/behaviors to objects dynamically at runtime without affecting other objects</li>
+</ul>
+<p><strong>38. SRP Violation</strong>:</p>
+<ul>
+<li><strong>User class</strong> handling: business logic, database persistence, email sending, validation</li>
+<li>Should separate into User (data), UserRepository (DB), EmailService (email), UserValidator (validation)</li>
+</ul>
+<p><strong>39. Eager Loading</strong>:</p>
+<ul>
+<li>Use when you <strong>always</strong> need related data to avoid N+1 query problem</li>
+<li>Example: Loading orders with customer info for display</li>
+</ul>
+<p><strong>40. JWT Structure</strong>:</p>
+<ol>
+<li>Header (algorithm, type)</li>
+<li>Payload (claims/data)</li>
+<li>Signature (verification)</li>
+</ol>
+<h3 id="section-3-code-analysis-10-points">Section 3: Code Analysis (10 points)</h3>
+<p><strong>41. Fix Polymorphism</strong> (2 pts):</p>
+<ul>
+<li><strong>What prints</strong>: &quot;Animal sound&quot;</li>
+<li><strong>Problem</strong>: Base method not <code>virtual</code>, derived not <code>override</code> → hiding instead of overriding</li>
+<li><strong>Fix</strong>:</li>
+</ul>
+<pre><code class="lang-csharp">public class Animal
+{
+    public virtual void MakeSound() // Add virtual
+    {
+        Console.WriteLine(&quot;Animal sound&quot;);
+    }
+}
+
+public class Dog : Animal
+{
+    public override void MakeSound() // Add override
+    {
+        Console.WriteLine(&quot;Woof!&quot;);
+    }
+}
+</code></pre>
+<p><strong>42. Deferred Execution</strong> (2 pts):</p>
+<ul>
+<li><strong>What prints</strong>: Nothing (no numbers &gt; 10)</li>
+<li><strong>Why</strong>: Query executes during foreach, sees threshold=10, filters all</li>
+<li><strong>Fix</strong>:</li>
+</ul>
+<pre><code class="lang-csharp">var numbers = new List&lt;int&gt; { 1, 2, 3, 4, 5 };
+var threshold = 2;
+var thresholdCopy = threshold; // Capture value
+var query = numbers.Where(n =&gt; n &gt; thresholdCopy);
+// OR: Force immediate execution
+var query = numbers.Where(n =&gt; n &gt; threshold).ToList();
+</code></pre>
+<p><strong>43. Generic Constraints</strong> (2 pts):</p>
+<pre><code class="lang-csharp">public class Repository&lt;T&gt; where T : class, IEntity, new()
+{
+    // class - reference type
+    // IEntity - implements interface
+    // new() - parameterless constructor (must be last)
+}
+</code></pre>
+<p><strong>44. SOLID Violation</strong> (2 pts):</p>
+<ul>
+<li><strong>Violates</strong>: SRP (Single Responsibility Principle)</li>
+<li><strong>Reason</strong>: Class has 4 reasons to change: data structure, database logic, email logic, validation logic</li>
+<li><strong>Fix</strong>: Separate into User (data), UserRepository (SaveToDatabase), EmailService (SendEmail), UserValidator (ValidateEmail)</li>
+</ul>
+<p><strong>45. Complexity</strong> (2 pts):</p>
+<ol>
+<li><strong>O(log n)</strong> - Binary search halves search space each step</li>
+<li><strong>O(n log n)</strong> - QuickSort average (good pivot selection)</li>
+<li><strong>O(n²)</strong> - Nested loops, n × n operations</li>
+<li><strong>O(1)</strong> - Direct array access by index</li>
+<li><strong>O(n)</strong> - Must traverse linked list linearly</li>
+</ol>
+<hr>
+<h2 id="grading-rubric">Grading Rubric</h2>
+<table>
+<thead>
+<tr>
+<th>Section</th>
+<th>Questions</th>
+<th>Points Each</th>
+<th>Max Points</th>
+<th>Pass Requirement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Multiple Choice</td>
+<td>30</td>
+<td>1</td>
+<td>30</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Short Answer</td>
+<td>10</td>
+<td>1</td>
+<td>10</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Code Analysis</td>
+<td>5</td>
+<td>2</td>
+<td>10</td>
+<td>-</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>50</strong></td>
+<td>-</td>
+<td><strong>50</strong></td>
+<td><strong>≥43 (85%)</strong></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="score-interpretation">Score Interpretation</h2>
+<table>
+<thead>
+<tr>
+<th>Score Range</th>
+<th>Result</th>
+<th>Next Steps</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>43-50 (85-100%)</strong></td>
+<td>✅ <strong>PASS</strong> - Junior Developer Certified</td>
+<td>Proceed to Path 2 or start applying for junior roles</td>
+</tr>
+<tr>
+<td><strong>38-42 (76-84%)</strong></td>
+<td>⚠️ <strong>Near Pass</strong></td>
+<td>Review weak areas, retake in 1 week</td>
+</tr>
+<tr>
+<td><strong>30-37 (60-75%)</strong></td>
+<td>❌ <strong>Not Ready</strong></td>
+<td>Significant review needed, retake in 2 weeks</td>
+</tr>
+<tr>
+<td><strong>0-29 (&lt;60%)</strong></td>
+<td>❌ <strong>Needs More Study</strong></td>
+<td>Review all materials, practice exercises, retake in 1 month</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="certification">Certification</h2>
+<p><strong>Upon passing (≥43 points), you earn</strong>:</p>
+<h3 id="junior-developer-certificate">Junior Developer Certificate</h3>
+<ul>
+<li><strong>Path 1 Completion</strong>: Zero to Junior Developer (6 months)</li>
+<li><strong>Skills Mastered</strong>:
+<ul>
+<li>✅ C# Fundamentals &amp; OOP</li>
+<li>✅ LINQ &amp; Functional Programming</li>
+<li>✅ Generics &amp; Variance</li>
+<li>✅ Algorithms &amp; Data Structures</li>
+<li>✅ Design Patterns (Builder, Observer, Decorator)</li>
+<li>✅ SOLID Principles</li>
+<li>✅ ASP.NET Core &amp; EF Core</li>
+<li>✅ Authentication &amp; Authorization</li>
+</ul>
+</li>
+</ul>
+<p><strong>Next Steps</strong>:</p>
+<ol>
+<li>Update resume with certification</li>
+<li>Build capstone project for portfolio</li>
+<li>Start Path 2 (Junior to Mid-Level) OR</li>
+<li>Begin job search for junior developer positions</li>
+</ol>
+<hr>
+<h2 id="study-resources-review-before-exam">Study Resources (Review Before Exam)</h2>
+<h3 id="month-1---c--oop">Month 1 - C# &amp; OOP:</h3>
+<ul>
+<li><code>samples/01-Beginner/PolymorphismBasics/</code></li>
+<li><code>samples/02-Intermediate/BoxingUnboxing/</code></li>
+<li><code>samples/02-Intermediate/ArrayCovariance/</code></li>
+</ul>
+<h3 id="month-2---linq">Month 2 - LINQ:</h3>
+<ul>
+<li><code>samples/99-Exercises/LINQ/</code> (all 3 exercises)</li>
+<li>Deferred execution, closures, joins</li>
+</ul>
+<h3 id="month-3---generics--patterns">Month 3 - Generics &amp; Patterns:</h3>
+<ul>
+<li><code>samples/99-Exercises/Generics/</code> (all 3 exercises)</li>
+<li><code>samples/99-Exercises/DesignPatterns/01-Builder/</code></li>
+<li><code>samples/99-Exercises/DesignPatterns/02-Observer/</code></li>
+</ul>
+<h3 id="month-4---algorithms">Month 4 - Algorithms:</h3>
+<ul>
+<li><code>samples/99-Exercises/Algorithms/</code> (all 3 exercises)</li>
+<li>Big O notation reference</li>
+</ul>
+<h3 id="month-5---solid">Month 5 - SOLID:</h3>
+<ul>
+<li><code>src/AdvancedConcepts.Core/Advanced/SOLIDPrinciples/</code></li>
+<li><code>samples/99-Exercises/DesignPatterns/03-Decorator/</code></li>
+</ul>
+<h3 id="month-6---web-development">Month 6 - Web Development:</h3>
+<ul>
+<li>ASP.NET Core documentation</li>
+<li>EF Core relationships</li>
+<li>JWT authentication examples</li>
+</ul>
+<hr>
+<h2 id="exam-tips">Exam Tips</h2>
+<ol>
+<li><strong>Read carefully</strong>: Question wording matters (&quot;always&quot;, &quot;never&quot;, &quot;can&quot;, &quot;must&quot;)</li>
+<li><strong>Eliminate wrong answers</strong>: In multiple choice, remove obviously wrong options first</li>
+<li><strong>Time management</strong>:
+<ul>
+<li>Section 1 (MC): ~60 minutes (2 min per question)</li>
+<li>Section 2 (SA): ~30 minutes (3 min per question)</li>
+<li>Section 3 (Code): ~30 minutes (6 min per question)</li>
+</ul>
+</li>
+<li><strong>Show your work</strong>: In code questions, partial credit given for correct thinking</li>
+<li><strong>Use examples</strong>: When explaining concepts, concrete examples earn more points</li>
+<li><strong>Check answers</strong>: Reserve last 10 minutes to review flagged questions</li>
+</ol>
+<hr>
+<h2 id="retake-policy">Retake Policy</h2>
+<ul>
+<li><strong>First retake</strong>: Available after 1 week</li>
+<li><strong>Second retake</strong>: Available after 2 weeks</li>
+<li><strong>Third+ retakes</strong>: Available after 1 month</li>
+<li><strong>No limit</strong> on number of retakes</li>
+<li>Study resources provided based on weak areas</li>
+</ul>
+<hr>
+<h2 id="good-luck-">Good Luck! 🎯</h2>
+<p>Remember: This exam tests 6 months of learning. Take your time, think through each question carefully, and trust your preparation. You've completed all exercises, passed all monthly assessments - you're ready!</p>
+<hr>
+<p><em>Exam Version: 1.0</em>
+<em>Last Updated: 2025-12-02</em>
+<em>Questions: 50 | Duration: 120 min | Pass: 85%</em></p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/assessment-tests/path1/final-exam.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

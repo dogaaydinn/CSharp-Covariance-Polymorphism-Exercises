@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Support | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Support | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="favicon.ico">
+      <link rel="stylesheet" href="public/docfx.min.css">
+      <link rel="stylesheet" href="public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/SUPPORT.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="index.html">
+            <img id="logo" class="svg" src="logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="support">Support</h1>
+
+<p>Thank you for using Advanced C# Concepts! This document provides information on how to get help and support.</p>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ul>
+<li><a href="#documentation">Documentation</a></li>
+<li><a href="#getting-help">Getting Help</a></li>
+<li><a href="#reporting-issues">Reporting Issues</a></li>
+<li><a href="#security-vulnerabilities">Security Vulnerabilities</a></li>
+<li><a href="#community">Community</a></li>
+<li><a href="#commercial-support">Commercial Support</a></li>
+</ul>
+<h2 id="documentation">Documentation</h2>
+<p>Before seeking support, please check our comprehensive documentation:</p>
+<h3 id="official-documentation">Official Documentation</h3>
+<ul>
+<li><strong><a href="README.html">README.md</a></strong> - Project overview, quick start, and features</li>
+<li><strong><a href="ROADMAP.html">ROADMAP.md</a></strong> - Project roadmap and development phases</li>
+<li><strong><a href="CONTRIBUTING.html">CONTRIBUTING.md</a></strong> - Contribution guidelines</li>
+<li><strong><a href="SECURITY.html">SECURITY.md</a></strong> - Security policy and vulnerability reporting</li>
+<li><strong><a href="CHANGELOG.html">CHANGELOG.md</a></strong> - Version history and changes</li>
+</ul>
+<h3 id="architecture-documentation">Architecture Documentation</h3>
+<ul>
+<li><strong><a href="docs/architecture/01-architecture-decision-records/">Architecture Decision Records</a></strong> - Design decisions (ADR-001 through ADR-004)</li>
+<li><strong><a href="docs/architecture/02-c4-diagrams/">C4 Diagrams</a></strong> - System architecture diagrams</li>
+<li><strong><a href="docs/architecture/03-design-patterns/">Design Patterns</a></strong> - Pattern documentation</li>
+<li><strong><a href="docs/architecture/04-performance/">Performance Guides</a></strong> - Optimization guides</li>
+</ul>
+<h3 id="api-documentation">API Documentation</h3>
+<ul>
+<li><strong><a href="https://dogaaydinn.github.io/CSharp-Covariance-Polymorphism-Exercises">API Reference</a></strong> - Auto-generated API documentation (DocFX)</li>
+</ul>
+<h2 id="getting-help">Getting Help</h2>
+<h3 id="self-service-resources">Self-Service Resources</h3>
+<h4 id="quick-start">Quick Start</h4>
+<p>See <a href="README.html#getting-started">README.md</a> for:</p>
+<ul>
+<li>Installation instructions</li>
+<li>Prerequisites</li>
+<li>Running your first example</li>
+<li>Common commands</li>
+</ul>
+<h4 id="examples">Examples</h4>
+<p>The project includes comprehensive examples:</p>
+<ul>
+<li><strong>Beginner:</strong> Basic polymorphism and inheritance</li>
+<li><strong>Intermediate:</strong> Boxing/unboxing, covariance/contravariance</li>
+<li><strong>Advanced:</strong> Pattern matching, LINQ, async/await, DI</li>
+<li><strong>Enterprise:</strong> SOLID, Polly, FluentValidation, Result pattern</li>
+</ul>
+<p>Run examples:</p>
+<pre><code class="lang-bash">dotnet run --project src/AdvancedConcepts.Core
+</code></pre>
+<h4 id="troubleshooting">Troubleshooting</h4>
+<h5 id="build-issues">Build Issues</h5>
+<p><strong>Problem:</strong> Build fails with &quot;SDK not found&quot;</p>
+<pre><code>Solution:
+1. Verify .NET 8 SDK is installed: dotnet --version
+2. Install from: https://dotnet.microsoft.com/download/dotnet/8.0
+3. Restart terminal/IDE after installation
+</code></pre>
+<p><strong>Problem:</strong> NuGet restore fails</p>
+<pre><code>Solution:
+1. Clear NuGet cache: dotnet nuget locals all --clear
+2. Restore packages: dotnet restore
+3. Check internet connection
+</code></pre>
+<p><strong>Problem:</strong> Analyzer warnings/errors</p>
+<pre><code>Solution:
+1. These are intentional code quality checks
+2. Review warnings to improve code quality
+3. Not all warnings need to be fixed immediately
+4. See .editorconfig for configuration
+</code></pre>
+<h5 id="test-issues">Test Issues</h5>
+<p><strong>Problem:</strong> Tests fail to run</p>
+<pre><code>Solution:
+1. Ensure all dependencies restored: dotnet restore
+2. Build solution: dotnet build
+3. Run tests: dotnet test --verbosity normal
+4. Check test output for specific failures
+</code></pre>
+<p><strong>Problem:</strong> Flaky integration tests</p>
+<pre><code>Solution:
+1. Re-run tests a few times
+2. Check for timing issues or resource contention
+3. Report persistent failures as bugs
+</code></pre>
+<h5 id="docker-issues">Docker Issues</h5>
+<p><strong>Problem:</strong> Docker Compose fails to start</p>
+<pre><code>Solution:
+1. Ensure Docker is running
+2. Check port availability (5341, 5342, 9090, 3000)
+3. Pull latest images: docker-compose pull
+4. Restart: docker-compose down &amp;&amp; docker-compose up -d
+</code></pre>
+<h3 id="github-discussions">GitHub Discussions</h3>
+<p>For questions, ideas, and general discussions:</p>
+<p><strong><a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/discussions">GitHub Discussions</a></strong></p>
+<p>Categories:</p>
+<ul>
+<li><strong>Q&amp;A</strong> - Ask questions about using the project</li>
+<li><strong>Ideas</strong> - Suggest new features or improvements</li>
+<li><strong>Show and Tell</strong> - Share your projects using Advanced C# Concepts</li>
+<li><strong>General</strong> - General discussion</li>
+</ul>
+<h3 id="stack-overflow">Stack Overflow</h3>
+<p>Tag your questions with:</p>
+<ul>
+<li><code>c#</code></li>
+<li><code>dotnet</code></li>
+<li><code>covariance</code></li>
+<li><code>contravariance</code></li>
+<li><code>advanced-csharp</code></li>
+</ul>
+<p>Search existing questions:
+<a href="https://stackoverflow.com/questions/tagged/c%23+covariance">Stack Overflow - Advanced C# Topics</a></p>
+<h2 id="reporting-issues">Reporting Issues</h2>
+<h3 id="bug-reports">Bug Reports</h3>
+<p>Found a bug? Please report it!</p>
+<ol>
+<li><strong>Search existing issues</strong> to avoid duplicates</li>
+<li><strong>Use the bug report template</strong> when creating a new issue</li>
+<li><strong>Include:</strong>
+<ul>
+<li>Clear description of the bug</li>
+<li>Steps to reproduce</li>
+<li>Expected behavior</li>
+<li>Actual behavior</li>
+<li>Environment details (.NET version, OS, IDE)</li>
+<li>Code samples or screenshots</li>
+<li>Error messages and stack traces</li>
+</ul>
+</li>
+</ol>
+<p><strong><a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/issues/new?template=bug_report.md">Report a Bug</a></strong></p>
+<h3 id="feature-requests">Feature Requests</h3>
+<p>Have an idea for improvement?</p>
+<ol>
+<li><strong>Search existing feature requests</strong> to avoid duplicates</li>
+<li><strong>Use the feature request template</strong></li>
+<li><strong>Explain:</strong>
+<ul>
+<li>The problem you're trying to solve</li>
+<li>Your proposed solution</li>
+<li>Alternative approaches considered</li>
+<li>Examples of how it would work</li>
+</ul>
+</li>
+</ol>
+<p><strong><a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/issues/new?template=feature_request.md">Request a Feature</a></strong></p>
+<h3 id="issue-response-times">Issue Response Times</h3>
+<ul>
+<li><strong>Critical bugs:</strong> 24-48 hours</li>
+<li><strong>Regular bugs:</strong> 3-7 days</li>
+<li><strong>Feature requests:</strong> 1-2 weeks</li>
+<li><strong>Questions:</strong> 1-3 days</li>
+</ul>
+<p><em>Note: This is an open-source project maintained by volunteers. Response times may vary.</em></p>
+<h2 id="security-vulnerabilities">Security Vulnerabilities</h2>
+<p><strong>DO NOT</strong> report security vulnerabilities through public GitHub issues.</p>
+<p>Instead, please report them via email to **dogaaydinn@gmail.com** with subject line <code>[SECURITY]</code>.</p>
+<p>You should receive a response within 48 hours. For more details, see our <a href="SECURITY.html">Security Policy</a>.</p>
+<h3 id="what-to-include">What to Include</h3>
+<ul>
+<li>Type of vulnerability</li>
+<li>Full paths of affected source files</li>
+<li>Location of the affected code (tag/branch/commit or URL)</li>
+<li>Steps to reproduce</li>
+<li>Proof-of-concept or exploit code (if possible)</li>
+<li>Impact assessment</li>
+</ul>
+<h2 id="community">Community</h2>
+<h3 id="github">GitHub</h3>
+<ul>
+<li><strong>Repository:</strong> <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises">dogaaydinn/CSharp-Covariance-Polymorphism-Exercises</a></li>
+<li><strong>Discussions:</strong> <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/discussions">GitHub Discussions</a></li>
+<li><strong>Issues:</strong> <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/issues">Issue Tracker</a></li>
+</ul>
+<h3 id="email">Email</h3>
+<ul>
+<li><strong>General inquiries:</strong> dogaaydinn@gmail.com</li>
+<li><strong>Security issues:</strong> dogaaydinn@gmail.com (subject: [SECURITY])</li>
+<li><strong>Partnership/collaboration:</strong> dogaaydinn@gmail.com (subject: [PARTNERSHIP])</li>
+</ul>
+<h3 id="social-media">Social Media</h3>
+<ul>
+<li><strong>GitHub:</strong> <a href="https://github.com/dogaaydinn">@dogaaydinn</a></li>
+</ul>
+<h3 id="code-of-conduct">Code of Conduct</h3>
+<p>Please note that this project is released with a <a href="CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By participating in this project you agree to abide by its terms.</p>
+<h2 id="commercial-support">Commercial Support</h2>
+<p>This is an open-source educational project maintained primarily by volunteers. Commercial support is not currently available.</p>
+<p>However, if you're interested in:</p>
+<ul>
+<li><strong>Enterprise training</strong> using this project</li>
+<li><strong>Consulting</strong> on C# advanced concepts</li>
+<li><strong>Custom development</strong> based on these patterns</li>
+</ul>
+<p>Please contact: dogaaydinn@gmail.com with subject line <code>[COMMERCIAL]</code></p>
+<h2 id="version-support">Version Support</h2>
+<h3 id="currently-supported-versions">Currently Supported Versions</h3>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>.NET Version</th>
+<th>Supported Until</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.0.x</td>
+<td>.NET 8 LTS</td>
+<td>November 2026</td>
+</tr>
+</tbody>
+</table>
+<h3 id="end-of-life">End of Life</h3>
+<p>Versions no longer supported:</p>
+<ul>
+<li><strong>&lt; 1.0:</strong> Not supported (pre-release versions)</li>
+</ul>
+<h2 id="additional-resources">Additional Resources</h2>
+<h3 id="learning-resources">Learning Resources</h3>
+<ul>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/csharp/">Microsoft C# Documentation</a></li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/core/whats-new/performance-improvements">.NET Performance Tips</a></li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/">C# Language Specification</a></li>
+</ul>
+<h3 id="related-projects">Related Projects</h3>
+<ul>
+<li><a href="https://benchmarkdotnet.org/">BenchmarkDotNet</a></li>
+<li><a href="https://xunit.net/">xUnit</a></li>
+<li><a href="https://serilog.net/">Serilog</a></li>
+<li><a href="https://github.com/App-vNext/Polly">Polly</a></li>
+<li><a href="https://fluentvalidation.net/">FluentValidation</a></li>
+</ul>
+<h3 id="tools">Tools</h3>
+<ul>
+<li><a href="https://visualstudio.microsoft.com/">Visual Studio</a></li>
+<li><a href="https://www.jetbrains.com/rider/">Rider</a></li>
+<li><a href="https://code.visualstudio.com/">VS Code</a></li>
+<li><a href="https://www.docker.com/products/docker-desktop">Docker Desktop</a></li>
+</ul>
+<h2 id="contributing">Contributing</h2>
+<p>Interested in contributing? Great! Please see our <a href="CONTRIBUTING.html">Contributing Guide</a> for:</p>
+<ul>
+<li>Development setup</li>
+<li>Coding standards</li>
+<li>Testing guidelines</li>
+<li>Pull request process</li>
+</ul>
+<h2 id="license">License</h2>
+<p>This project is licensed under the MIT License - see the <a href="LICENSE">LICENSE</a> file for details.</p>
+<hr>
+<p><strong>Need help that's not covered here?</strong></p>
+<ul>
+<li><strong>Create a discussion:</strong> <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/discussions">GitHub Discussions</a></li>
+<li><strong>Email us:</strong> dogaaydinn@gmail.com</li>
+<li><strong>Report an issue:</strong> <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/issues">Issue Tracker</a></li>
+</ul>
+<p>Thank you for using Advanced C# Concepts! 🚀</p>
+<hr>
+<p><strong>Last Updated:</strong> 2025-11-30
+<strong>Version:</strong> 1.0</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/SUPPORT.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

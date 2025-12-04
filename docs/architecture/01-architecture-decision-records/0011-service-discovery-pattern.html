@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>ADR-0011: Service Discovery Pattern | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="ADR-0011: Service Discovery Pattern | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/01-architecture-decision-records/0011-service-discovery-pattern.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="adr-0011-service-discovery-pattern">ADR-0011: Service Discovery Pattern</h1>
+
+<p><strong>Status:</strong> Accepted
+<strong>Date:</strong> 2025-12-02
+<strong>Deciders:</strong> Architecture Team
+<strong>Technical Story:</strong> Inter-service communication in microservices</p>
+<h2 id="context">Context</h2>
+<p>In microservices architecture, services need to communicate with each other. Services are deployed across multiple containers/pods with dynamic IP addresses and ports. Traditional approaches using hardcoded URLs don't work because:</p>
+<ul>
+<li>IPs/ports change on deployment</li>
+<li>Kubernetes assigns random ports</li>
+<li>Horizontal scaling adds/removes instances</li>
+<li>Load balancing requires knowing all instances</li>
+</ul>
+<p>Traditional approach (doesn't scale):</p>
+<pre><code class="lang-csharp">var client = new HttpClient();
+client.BaseAddress = new Uri(&quot;http://localhost:5001&quot;); // Breaks in production!
+</code></pre>
+<h2 id="decision">Decision</h2>
+<p>We will use <strong>.NET Aspire's built-in Service Discovery</strong> for all inter-service communication.</p>
+<p>Implementation:</p>
+<ul>
+<li>Services reference each other by <strong>name</strong> (not URL)</li>
+<li>AppHost defines service relationships via <code>WithReference()</code></li>
+<li>ServiceDefaults configures <code>AddServiceDiscovery()</code> and <code>AddStandardResilienceHandler()</code></li>
+<li>HttpClient automatically resolves service names to endpoints</li>
+</ul>
+<p>Example:</p>
+<pre><code class="lang-csharp">// AppHost
+var processingService = builder.AddProject(&quot;videoprocessing&quot;, ...);
+var apiService = builder.AddProject(&quot;api&quot;, ...)
+    .WithReference(processingService);
+
+// API Service
+builder.Services.AddHttpClient&lt;VideoProcessingClient&gt;(client =&gt;
+{
+    client.BaseAddress = new Uri(&quot;http://videoprocessing&quot;); // ← Service name!
+});
+</code></pre>
+<h2 id="consequences">Consequences</h2>
+<h3 id="positive">Positive</h3>
+<ul>
+<li><strong>Zero Configuration</strong>: No hardcoded IPs or ports</li>
+<li><strong>Environment Agnostic</strong>: Same code works in dev, staging, production</li>
+<li><strong>Dynamic Discovery</strong>: Handles service restarts, scaling, failovers</li>
+<li><strong>Type Safety</strong>: Compile-time checking with AppHost <code>WithReference()</code></li>
+<li><strong>Load Balancing</strong>: Automatic load balancing across instances</li>
+<li><strong>Resilience</strong>: Built-in retry, circuit breaker, timeout</li>
+<li><strong>Cloud-Native</strong>: Works with Kubernetes, Docker, cloud services</li>
+<li><strong>Testability</strong>: Easy to mock/stub services in tests</li>
+</ul>
+<h3 id="negative">Negative</h3>
+<ul>
+<li><strong>Aspire Dependency</strong>: Tightly coupled to Aspire (production requires alternative like Consul)</li>
+<li><strong>Learning Curve</strong>: Developers must understand service discovery concepts</li>
+<li><strong>Debugging</strong>: Harder to trace exact endpoint being called</li>
+<li><strong>Production Gap</strong>: Aspire service discovery is dev-only (prod uses Kubernetes/Consul)</li>
+</ul>
+<h3 id="neutral">Neutral</h3>
+<ul>
+<li><strong>DNS-Based</strong>: Uses DNS resolution under the hood</li>
+<li><strong>Caching</strong>: Client caches resolved endpoints (must handle updates)</li>
+</ul>
+<h2 id="alternatives-considered">Alternatives Considered</h2>
+<h3 id="alternative-1-hardcoded-urls-with-configuration">Alternative 1: Hardcoded URLs with Configuration</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Simple</strong>: Just set URL in appsettings.json</li>
+<li><strong>Explicit</strong>: Clear what endpoint is being called</li>
+<li><strong>No Dependencies</strong>: Works without service discovery</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Environment-Specific</strong>: Different URLs for dev/staging/prod</li>
+<li><strong>Manual Management</strong>: Must update configs on every change</li>
+<li><strong>No Load Balancing</strong>: Single endpoint (must add reverse proxy)</li>
+<li><strong>Not Cloud-Native</strong>: Doesn't work with Kubernetes dynamic IPs</li>
+<li><strong>Error-Prone</strong>: Easy to misconfigure</li>
+</ul>
+<p><strong>Why rejected:</strong> Doesn't scale to cloud-native deployments. Service discovery is industry standard.</p>
+<h3 id="alternative-2-consul">Alternative 2: Consul</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Production-Grade</strong>: Battle-tested by Netflix, Uber</li>
+<li><strong>Service Mesh</strong>: Advanced features (health checks, KV store)</li>
+<li><strong>Multi-Cloud</strong>: Works anywhere</li>
+<li><strong>Strong Consistency</strong>: Raft consensus for service registry</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Complex Setup</strong>: Requires Consul cluster (3-5 nodes)</li>
+<li><strong>Operational Overhead</strong>: Must manage Consul infrastructure</li>
+<li><strong>Learning Curve</strong>: Steep learning curve</li>
+<li><strong>Overkill for Dev</strong>: Too complex for local development</li>
+</ul>
+<p><strong>Why rejected:</strong> Overkill for educational sample. Aspire provides service discovery for dev; production uses Kubernetes.</p>
+<h3 id="alternative-3-kubernetes-service-dns">Alternative 3: Kubernetes Service DNS</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Native</strong>: Built into Kubernetes</li>
+<li><strong>Zero Config</strong>: Services automatically discoverable</li>
+<li><strong>Reliable</strong>: Part of Kubernetes core</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Kubernetes Only</strong>: Doesn't work in dev without Kubernetes</li>
+<li><strong>No Local Dev</strong>: Must run Minikube/Kind locally (slow)</li>
+<li><strong>Limited Features</strong>: Basic DNS-based discovery only</li>
+</ul>
+<p><strong>Why rejected:</strong> Not suitable for local development. Aspire provides similar experience without Kubernetes.</p>
+<h3 id="alternative-4-manual-dns-with-docker-compose">Alternative 4: Manual DNS with Docker Compose</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Simple</strong>: Docker Compose provides DNS</li>
+<li><strong>Standard</strong>: Works with any Docker setup</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>No Resilience</strong>: No retry/circuit breaker</li>
+<li><strong>No Load Balancing</strong>: Single instance only (or manual nginx)</li>
+<li><strong>Limited</strong>: Cannot express complex service relationships</li>
+<li><strong>No Observability</strong>: No built-in tracing</li>
+</ul>
+<p><strong>Why rejected:</strong> Aspire provides service discovery + resilience + observability in one package.</p>
+<h3 id="alternative-5-service-mesh-istio-linkerd">Alternative 5: Service Mesh (Istio, Linkerd)</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Enterprise-Grade</strong>: Advanced traffic management</li>
+<li><strong>Security</strong>: mTLS, authorization</li>
+<li><strong>Observability</strong>: Distributed tracing built-in</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Extremely Complex</strong>: Requires deep Kubernetes knowledge</li>
+<li><strong>Performance Overhead</strong>: Sidecar proxies add latency</li>
+<li><strong>Not for Dev</strong>: Impossible to run locally</li>
+<li><strong>Overkill</strong>: Too much for simple microservices</li>
+</ul>
+<p><strong>Why rejected:</strong> Service mesh is for production at scale. Aspire is for development.</p>
+<h2 id="related-decisions">Related Decisions</h2>
+<ul>
+<li><a href="0002-using-dotnet-aspire.html">ADR-0002</a>: Aspire provides service discovery</li>
+<li><a href="0019-apphost-orchestration.html">ADR-0019</a>: AppHost defines service relationships</li>
+<li><a href="0013-servicedefaults-pattern.html">ADR-0013</a>: ServiceDefaults configures discovery</li>
+</ul>
+<h2 id="related-links">Related Links</h2>
+<ul>
+<li><a href="https://microservices.io/patterns/client-side-discovery.html">Service Discovery Pattern</a></li>
+<li><a href="https://learn.microsoft.com/dotnet/aspire/service-discovery/overview">Aspire Service Discovery</a></li>
+<li><a href="https://www.nuget.org/packages/Microsoft.Extensions.ServiceDiscovery">Microsoft.Extensions.ServiceDiscovery</a></li>
+</ul>
+<h2 id="notes">Notes</h2>
+<ul>
+<li><p><strong>How It Works</strong>:</p>
+<ol>
+<li>AppHost registers services with discovery provider (dev: in-memory, prod: Kubernetes DNS)</li>
+<li>HttpClient configured with <code>AddServiceDiscovery()</code></li>
+<li>On request, HttpClient queries discovery provider</li>
+<li>Discovery provider returns endpoint (IP:port)</li>
+<li>HttpClient caches endpoint for performance</li>
+</ol>
+</li>
+<li><p><strong>Production Deployment</strong>:</p>
+<ul>
+<li><strong>Kubernetes</strong>: Use Kubernetes Service DNS</li>
+<li><strong>Azure</strong>: Azure Service Fabric / Container Apps service discovery</li>
+<li><strong>AWS</strong>: AWS Cloud Map / ECS service discovery</li>
+<li><strong>Manual</strong>: Consul, Eureka, or custom implementation</li>
+</ul>
+</li>
+<li><p><strong>Resilience Integration</strong>:</p>
+<pre><code class="lang-csharp">builder.Services.ConfigureHttpClientDefaults(http =&gt;
+{
+    http.AddServiceDiscovery(); // Resolve service names
+    http.AddStandardResilienceHandler(); // Retry + circuit breaker
+});
+</code></pre>
+</li>
+<li><p><strong>Monitoring</strong>:</p>
+<ul>
+<li>OpenTelemetry traces include resolved endpoints</li>
+<li>Aspire Dashboard shows service dependencies graph</li>
+<li>Log endpoint resolution for debugging</li>
+</ul>
+</li>
+<li><p><strong>Testing Strategy</strong>:</p>
+<ul>
+<li>Unit tests: Mock <code>IHttpClientFactory</code></li>
+<li>Integration tests: Use real service discovery (AppHost)</li>
+<li>E2E tests: Deploy to Kubernetes and test real discovery</li>
+</ul>
+</li>
+<li><p><strong>Service Naming Convention</strong>:</p>
+<ul>
+<li>Lowercase, hyphen-separated: <code>video-processing</code>, <code>api</code>, <code>web</code></li>
+<li>Avoid special characters (DNS-safe names)</li>
+<li>Consistent with project names</li>
+</ul>
+</li>
+<li><p><strong>Future</strong>: .NET 9 improves service discovery with better caching and endpoint selection strategies</p>
+</li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/01-architecture-decision-records/0011-service-discovery-pattern.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>14. Containerize with Docker | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="14. Containerize with Docker | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/decisions/0014-containerize-with-docker.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="14-containerize-with-docker">14. Containerize with Docker</h1>
+
+<p><strong>Status:</strong> ✅ Accepted</p>
+<p><strong>Date:</strong> 2024-12-01</p>
+<p><strong>Deciders:</strong> Architecture Team, DevOps Team</p>
+<p><strong>Technical Story:</strong> Implementation in <code>Dockerfile</code> and <code>docker-compose.yml</code></p>
+<hr>
+<h2 id="context-and-problem-statement">Context and Problem Statement</h2>
+<p>Modern applications need to run consistently across:</p>
+<ul>
+<li>Developer laptops (Windows, macOS, Linux)</li>
+<li>CI/CD pipelines</li>
+<li>Test environments</li>
+<li>Production (cloud or on-premises)</li>
+</ul>
+<p><strong>Traditional deployment problems:</strong></p>
+<ul>
+<li>&quot;Works on my machine&quot; syndrome</li>
+<li>Dependency conflicts</li>
+<li>Manual server setup</li>
+<li>Environment-specific configurations</li>
+<li>Difficult rollbacks</li>
+</ul>
+<p><strong>Requirements:</strong></p>
+<ul>
+<li>Consistent environments (dev = prod)</li>
+<li>Isolation from host system</li>
+<li>Easy local development</li>
+<li>CI/CD compatible</li>
+<li>Orchestration-ready (Kubernetes)</li>
+</ul>
+<hr>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li><strong>Consistency</strong> - Same environment everywhere</li>
+<li><strong>Isolation</strong> - No conflicts with host system</li>
+<li><strong>Portability</strong> - Run anywhere containers are supported</li>
+<li><strong>Industry Standard</strong> - Docker is ubiquitous</li>
+<li><strong>DevOps Integration</strong> - Works with all CI/CD tools</li>
+<li><strong>Kubernetes Ready</strong> - Path to orchestration</li>
+</ul>
+<hr>
+<h2 id="considered-options">Considered Options</h2>
+<ul>
+<li><strong>Option 1</strong> - Docker + Docker Compose</li>
+<li><strong>Option 2</strong> - Virtual Machines (VMs)</li>
+<li><strong>Option 3</strong> - Bare metal deployment</li>
+<li><strong>Option 4</strong> - .NET Self-Contained Deployment</li>
+</ul>
+<hr>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p><strong>Chosen option:</strong> &quot;Docker + Docker Compose&quot;, because containers provide lightweight, consistent environments that work identically in development and production, with industry-standard tooling and orchestration support.</p>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li><strong>Consistent Environments</strong> - &quot;Works on my machine&quot; = &quot;Works in production&quot;</li>
+<li><strong>Lightweight</strong> - Seconds to start vs minutes for VMs</li>
+<li><strong>Isolation</strong> - Each service in its own container</li>
+<li><strong>Version Control</strong> - Dockerfile is code</li>
+<li><strong>Easy Rollback</strong> - Just deploy previous image</li>
+<li><strong>Ecosystem</strong> - Docker Hub, registries, orchestrators</li>
+<li><strong>Local Development</strong> - docker-compose up for full stack</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li><strong>Learning Curve</strong> - Team needs Docker knowledge</li>
+<li><strong>Windows Containers</strong> - Less mature than Linux containers</li>
+<li><strong>Networking Complexity</strong> - Container networking can be tricky</li>
+<li><strong>Storage</strong> - Container images consume disk space</li>
+</ul>
+<hr>
+<h2 id="pros-and-cons-of-the-options">Pros and Cons of the Options</h2>
+<h3 id="docker--docker-compose-chosen">Docker + Docker Compose (Chosen)</h3>
+<p><strong>What is Docker?</strong></p>
+<p>Docker is a platform for developing, shipping, and running applications in containers—lightweight, standalone, executable packages that include everything needed to run software.</p>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Lightweight</strong> - Share OS kernel, MB not GB</li>
+<li><strong>Fast</strong> - Start in seconds</li>
+<li><strong>Portable</strong> - Run anywhere (dev, cloud, on-prem)</li>
+<li><strong>Isolation</strong> - Process, network, filesystem isolation</li>
+<li><strong>Immutable</strong> - Rebuild images, don't modify containers</li>
+<li><strong>Docker Compose</strong> - Multi-container orchestration</li>
+<li><strong>Industry standard</strong> - Universal adoption</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Linux-centric</strong> - Windows containers less common</li>
+<li><strong>Networking</strong> - Can be complex</li>
+<li><strong>Persistent data</strong> - Requires volume management</li>
+<li><strong>Security</strong> - Shared kernel has risks</li>
+</ul>
+<p><strong>Multi-Stage Dockerfile (.NET 8):</strong></p>
+<pre><code class="lang-dockerfile"># Stage 1: Build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+
+# Copy csproj and restore dependencies (cached layer)
+COPY [&quot;src/API/API.csproj&quot;, &quot;src/API/&quot;]
+COPY [&quot;src/Application/Application.csproj&quot;, &quot;src/Application/&quot;]
+COPY [&quot;src/Domain/Domain.csproj&quot;, &quot;src/Domain/&quot;]
+COPY [&quot;src/Infrastructure/Infrastructure.csproj&quot;, &quot;src/Infrastructure/&quot;]
+RUN dotnet restore &quot;src/API/API.csproj&quot;
+
+# Copy everything else and build
+COPY . .
+WORKDIR &quot;/src/src/API&quot;
+RUN dotnet build &quot;API.csproj&quot; -c Release -o /app/build
+
+# Stage 2: Publish
+FROM build AS publish
+RUN dotnet publish &quot;API.csproj&quot; -c Release -o /app/publish /p:UseAppHost=false
+
+# Stage 3: Runtime
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+WORKDIR /app
+
+# Create non-root user
+RUN adduser --disabled-password --gecos '' appuser &amp;&amp; chown -R appuser /app
+USER appuser
+
+# Copy published app
+COPY --from=publish /app/publish .
+
+# Environment variables
+ENV ASPNETCORE_URLS=http://+:8080
+EXPOSE 8080
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+    CMD curl --fail http://localhost:8080/health || exit 1
+
+ENTRYPOINT [&quot;dotnet&quot;, &quot;API.dll&quot;]
+</code></pre>
+<p><strong>Why Multi-Stage?</strong></p>
+<ul>
+<li><strong>Stage 1 (build)</strong>: Uses SDK image (large, ~1GB) for compilation</li>
+<li><strong>Stage 2 (publish)</strong>: Publishes optimized build</li>
+<li><strong>Stage 3 (final)</strong>: Uses runtime image (small, ~200MB) - only includes runtime, not SDK</li>
+<li><strong>Result</strong>: Final image is 5x smaller!</li>
+</ul>
+<p><strong>Docker Compose (Local Development):</strong></p>
+<pre><code class="lang-yaml">version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: myapp-api
+    ports:
+      - &quot;5000:8080&quot;
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__PostgreSQL=Host=postgres;Database=mydb;Username=postgres;Password=password
+      - ConnectionStrings__Redis=redis:6379
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - myapp-network
+    volumes:
+      - ./logs:/app/logs  # Persist logs
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: myapp-postgres
+    environment:
+      POSTGRES_DB: mydb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - &quot;5432:5432&quot;
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [&quot;CMD-SHELL&quot;, &quot;pg_isready -U postgres&quot;]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - myapp-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: myapp-redis
+    ports:
+      - &quot;6379:6379&quot;
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+    networks:
+      - myapp-network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: myapp-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - &quot;5050:80&quot;
+    depends_on:
+      - postgres
+    networks:
+      - myapp-network
+
+networks:
+  myapp-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+  redis-data:
+</code></pre>
+<p><strong>Usage:</strong></p>
+<pre><code class="lang-bash"># Start all services
+docker-compose up -d
+
+# View logs
+docker-compose logs -f api
+
+# Stop all services
+docker-compose down
+
+# Rebuild and restart
+docker-compose up -d --build
+
+# Remove volumes (DANGER: deletes data)
+docker-compose down -v
+</code></pre>
+<p><strong>.dockerignore:</strong></p>
+<pre><code># Ignore build artifacts
+**/bin/
+**/obj/
+**/out/
+
+# Ignore dependencies
+**/node_modules/
+
+# Ignore git
+.git/
+.gitignore
+
+# Ignore IDE files
+.vscode/
+.vs/
+.idea/
+
+# Ignore test results
+**/TestResults/
+**/coverage/
+
+# Ignore documentation
+**/*.md
+docs/
+
+# Ignore secrets
+**/*.pfx
+**/*.key
+**/*.Development.json
+</code></pre>
+<p><strong>Production Optimizations:</strong></p>
+<p><strong>1. Layer Caching:</strong></p>
+<pre><code class="lang-dockerfile"># ✅ GOOD: Restore dependencies first (cached if csproj unchanged)
+COPY [&quot;*.csproj&quot;, &quot;./&quot;]
+RUN dotnet restore
+
+# Then copy source code
+COPY . .
+RUN dotnet build
+</code></pre>
+<p><strong>2. Use Alpine Images (Smaller):</strong></p>
+<pre><code class="lang-dockerfile">FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine AS final
+# Alpine images are 50% smaller than Debian-based
+</code></pre>
+<p><strong>3. Security Scanning:</strong></p>
+<pre><code class="lang-bash"># Scan image for vulnerabilities
+docker scan myapp:latest
+
+# Or use Trivy
+trivy image myapp:latest
+</code></pre>
+<p><strong>4. Read-Only Root Filesystem:</strong></p>
+<pre><code class="lang-dockerfile"># Add to docker-compose.yml
+services:
+  api:
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /app/logs
+</code></pre>
+<h3 id="virtual-machines">Virtual Machines</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Full OS isolation</li>
+<li>Run any OS</li>
+<li>Mature technology</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Heavy</strong> - GB of disk, GB of RAM</li>
+<li><strong>Slow</strong> - Minutes to boot</li>
+<li><strong>Resource intensive</strong> - Full OS overhead</li>
+<li><strong>Less portable</strong> - Image formats vary (VHD, VMDK, OVA)</li>
+</ul>
+<p><strong>Why Rejected:</strong>
+VMs are too heavyweight for microservices. Containers provide isolation with 10x less overhead.</p>
+<h3 id="bare-metal-deployment">Bare Metal Deployment</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Maximum performance</li>
+<li>No overhead</li>
+<li>Direct hardware access</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>No isolation</strong> - Dependency conflicts</li>
+<li><strong>Environment drift</strong> - Dev ≠ Prod</li>
+<li><strong>Manual setup</strong> - No automation</li>
+<li><strong>Difficult rollback</strong> - No versioning</li>
+<li><strong>Scaling complexity</strong> - Manual provisioning</li>
+</ul>
+<p><strong>Why Rejected:</strong>
+&quot;Works on my machine&quot; problem. Containers eliminate environment inconsistencies.</p>
+<h3 id="net-self-contained-deployment">.NET Self-Contained Deployment</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Single executable</li>
+<li>No .NET runtime required on server</li>
+<li>AOT compilation available</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Large executables</strong> - 50-150MB</li>
+<li><strong>No database/Redis</strong> - Just the app</li>
+<li><strong>Still need environment</strong> - OS dependencies</li>
+<li><strong>No orchestration</strong> - Can't use Kubernetes</li>
+</ul>
+<p><strong>When to Use:</strong></p>
+<ul>
+<li>Desktop applications</li>
+<li>Serverless functions</li>
+<li>Edge devices</li>
+</ul>
+<p><strong>Why Not Primary Choice:</strong>
+Self-contained deployment solves .NET runtime dependency but doesn't solve database, caching, or environment management. Containers provide complete solution.</p>
+<hr>
+<h2 id="container-registry">Container Registry</h2>
+<p><strong>Docker Hub (Public):</strong></p>
+<pre><code class="lang-bash"># Tag image
+docker tag myapp:latest username/myapp:1.0.0
+
+# Push to Docker Hub
+docker push username/myapp:1.0.0
+</code></pre>
+<p><strong>Azure Container Registry:</strong></p>
+<pre><code class="lang-bash"># Login
+az acr login --name myregistry
+
+# Tag image
+docker tag myapp:latest myregistry.azurecr.io/myapp:1.0.0
+
+# Push
+docker push myregistry.azurecr.io/myapp:1.0.0
+</code></pre>
+<p><strong>GitHub Container Registry:</strong></p>
+<pre><code class="lang-bash"># Login
+echo $GITHUB_TOKEN | docker login ghcr.io -u USERNAME --password-stdin
+
+# Tag
+docker tag myapp:latest ghcr.io/username/myapp:1.0.0
+
+# Push
+docker push ghcr.io/username/myapp:1.0.0
+</code></pre>
+<hr>
+<h2 id="cicd-integration">CI/CD Integration</h2>
+<p><strong>GitHub Actions:</strong></p>
+<pre><code class="lang-yaml">name: Docker Build and Push
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}:latest
+            ghcr.io/${{ github.repository }}:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+</code></pre>
+<hr>
+<h2 id="monitoring-container-health">Monitoring Container Health</h2>
+<p><strong>Docker Health Check:</strong></p>
+<pre><code class="lang-dockerfile">HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+    CMD curl --fail http://localhost:8080/health || exit 1
+</code></pre>
+<p><strong>ASP.NET Health Checks:</strong></p>
+<pre><code class="lang-csharp">// Program.cs
+builder.Services.AddHealthChecks()
+    .AddNpgSql(builder.Configuration.GetConnectionString(&quot;PostgreSQL&quot;)!)
+    .AddRedis(builder.Configuration.GetConnectionString(&quot;Redis&quot;)!);
+
+var app = builder.Build();
+
+app.MapHealthChecks(&quot;/health&quot;);  // Docker will call this endpoint
+app.Run();
+</code></pre>
+<hr>
+<h2 id="best-practices">Best Practices</h2>
+<p><strong>1. Don't Run as Root:</strong></p>
+<pre><code class="lang-dockerfile">RUN adduser --disabled-password --gecos '' appuser
+USER appuser
+</code></pre>
+<p><strong>2. Use .dockerignore:</strong></p>
+<pre><code># Ignore unnecessary files for faster build
+**/bin/
+**/obj/
+.git/
+</code></pre>
+<p><strong>3. Pin Image Versions:</strong></p>
+<pre><code class="lang-dockerfile"># ❌ BAD: latest tag (unpredictable)
+FROM mcr.microsoft.com/dotnet/aspnet:latest
+
+# ✅ GOOD: Specific version
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+</code></pre>
+<p><strong>4. Scan for Vulnerabilities:</strong></p>
+<pre><code class="lang-bash">docker scan myapp:latest
+</code></pre>
+<p><strong>5. Use Multi-Stage Builds:</strong></p>
+<pre><code class="lang-dockerfile"># Keeps final image small (200MB vs 1GB)
+FROM sdk AS build
+FROM runtime AS final
+</code></pre>
+<hr>
+<h2 id="links">Links</h2>
+<ul>
+<li><a href="https://docs.docker.com/">Docker Documentation</a></li>
+<li><a href="https://docs.docker.com/compose/">Docker Compose</a></li>
+<li><a href="https://hub.docker.com/_/microsoft-dotnet">.NET Docker Images</a></li>
+<li><a href="../../Dockerfile">Sample Dockerfile</a></li>
+</ul>
+<hr>
+<h2 id="notes">Notes</h2>
+<p><strong>Container vs VM:</strong></p>
+<ul>
+<li>Container: Process isolation, shares kernel, MB of disk, seconds to start</li>
+<li>VM: Full OS, separate kernel, GB of disk, minutes to start</li>
+</ul>
+<p><strong>When to Use Docker:</strong></p>
+<ul>
+<li>✅ Microservices</li>
+<li>✅ CI/CD pipelines</li>
+<li>✅ Local development</li>
+<li>✅ Cloud deployment</li>
+</ul>
+<p><strong>When NOT to Use:</strong></p>
+<ul>
+<li>❌ GUI applications (limited support)</li>
+<li>❌ Hardware-specific apps</li>
+<li>❌ When kernel access needed</li>
+</ul>
+<p><strong>Review Date:</strong> 2025-12-01</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/decisions/0014-containerize-with-docker.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

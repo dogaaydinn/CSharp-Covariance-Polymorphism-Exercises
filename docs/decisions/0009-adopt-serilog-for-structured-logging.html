@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>9. Adopt Serilog for Structured Logging | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="9. Adopt Serilog for Structured Logging | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/decisions/0009-adopt-serilog-for-structured-logging.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="9-adopt-serilog-for-structured-logging">9. Adopt Serilog for Structured Logging</h1>
+
+<p><strong>Status:</strong> ✅ Accepted</p>
+<p><strong>Date:</strong> 2024-12-01</p>
+<p><strong>Deciders:</strong> Architecture Team, DevOps Team</p>
+<p><strong>Technical Story:</strong> Implementation in <code>src/AdvancedConcepts.Core/Advanced/Observability</code></p>
+<hr>
+<h2 id="context-and-problem-statement">Context and Problem Statement</h2>
+<p>Effective logging is critical for:</p>
+<ul>
+<li>Debugging production issues</li>
+<li>Performance monitoring</li>
+<li>Security auditing</li>
+<li>Compliance requirements</li>
+<li>Understanding user behavior</li>
+</ul>
+<p><strong>Traditional logging problems:</strong></p>
+<ul>
+<li>String interpolation loses structure (<code>$&quot;User {userId} logged in&quot;</code>)</li>
+<li>Hard to query logs</li>
+<li>No correlation IDs across microservices</li>
+<li>Console logs don't scale to production</li>
+<li>Missing context (request ID, user ID, etc.)</li>
+</ul>
+<p><strong>We need:</strong></p>
+<ul>
+<li>Structured logging (JSON format)</li>
+<li>Multiple sinks (Console, File, Elasticsearch, Application Insights)</li>
+<li>Automatic enrichment (timestamp, correlation ID, environment)</li>
+<li>Performance (minimal overhead)</li>
+<li>Easy integration with .NET logging abstraction</li>
+</ul>
+<hr>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li><strong>Structured Logging</strong> - Log as data, not text</li>
+<li><strong>Multiple Sinks</strong> - Console (dev), File (prod), Cloud (monitoring)</li>
+<li><strong>Enrichment</strong> - Automatic context injection</li>
+<li><strong>Performance</strong> - Async logging, buffering</li>
+<li><strong>Integration</strong> - Works with ILogger<t></t></li>
+<li><strong>Ecosystem</strong> - Wide adoption, many sinks available</li>
+</ul>
+<hr>
+<h2 id="considered-options">Considered Options</h2>
+<ul>
+<li><strong>Option 1</strong> - Serilog</li>
+<li><strong>Option 2</strong> - Microsoft.Extensions.Logging (default)</li>
+<li><strong>Option 3</strong> - NLog</li>
+<li><strong>Option 4</strong> - log4net</li>
+</ul>
+<hr>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p><strong>Chosen option:</strong> &quot;Serilog&quot;, because it provides true structured logging with extensive sinks, automatic enrichment, excellent performance, and seamless integration with Microsoft.Extensions.Logging.</p>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li><strong>Structured</strong> - Logs as JSON with queryable properties</li>
+<li><strong>50+ Sinks</strong> - Console, File, Elasticsearch, Seq, Application Insights, Datadog, etc.</li>
+<li><strong>Enrichment</strong> - Automatic context (timestamp, thread, machine, correlation ID)</li>
+<li><strong>Performance</strong> - Async, buffered, minimal allocations</li>
+<li><strong>ILogger Integration</strong> - Works with existing ILogger<t> code</t></li>
+<li><strong>Filtering</strong> - Fine-grained control over what gets logged</li>
+<li><strong>Configuration</strong> - appsettings.json or fluent API</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li><strong>External Dependency</strong> - NuGet package required</li>
+<li><strong>Learning Curve</strong> - Team needs to learn semantic logging</li>
+<li><strong>Configuration</strong> - More complex than Console.WriteLine</li>
+</ul>
+<hr>
+<h2 id="pros-and-cons-of-the-options">Pros and Cons of the Options</h2>
+<h3 id="serilog-chosen">Serilog (Chosen)</h3>
+<p><strong>What is Serilog?</strong></p>
+<p>Serilog is a structured logging library for .NET that treats logs as first-class data structures rather than text strings.</p>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Structured Logging</strong> - Properties, not interpolated strings</li>
+<li><strong>Extensive Sinks</strong> - 50+ available (Elasticsearch, Seq, Application Insights, etc.)</li>
+<li><strong>Enrichers</strong> - Automatic context injection</li>
+<li><strong>Filtering</strong> - Log level per namespace</li>
+<li><strong>Performance</strong> - Async, batched, low allocation</li>
+<li><strong>ILogger Bridge</strong> - Drop-in replacement for Microsoft.Extensions.Logging</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Configuration Complexity</strong> - More options than simple logging</li>
+<li><strong>Sink Dependencies</strong> - Each sink is separate NuGet package</li>
+</ul>
+<p><strong>Setup:</strong></p>
+<pre><code class="lang-csharp">// Install:
+// Serilog.AspNetCore
+// Serilog.Sinks.Console
+// Serilog.Sinks.File
+// Serilog.Enrichers.Environment
+// Serilog.Enrichers.Thread
+
+// Program.cs
+using Serilog;
+
+// Configure Serilog
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .MinimumLevel.Override(&quot;Microsoft&quot;, LogEventLevel.Warning)
+    .MinimumLevel.Override(&quot;System&quot;, LogEventLevel.Warning)
+    .Enrich.FromLogContext()
+    .Enrich.WithMachineName()
+    .Enrich.WithThreadId()
+    .Enrich.WithEnvironmentName()
+    .WriteTo.Console(
+        outputTemplate: &quot;[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}&quot;)
+    .WriteTo.File(
+        path: &quot;logs/log-.txt&quot;,
+        rollingInterval: RollingInterval.Day,
+        retainedFileCountLimit: 30,
+        outputTemplate: &quot;{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}&quot;)
+    .CreateLogger();
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Use Serilog
+builder.Host.UseSerilog();
+
+var app = builder.Build();
+
+// Log all HTTP requests
+app.UseSerilogRequestLogging();
+
+try
+{
+    Log.Information(&quot;Starting web application&quot;);
+    app.Run();
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, &quot;Application terminated unexpectedly&quot;);
+}
+finally
+{
+    Log.CloseAndFlush();
+}
+</code></pre>
+<p><strong>Configuration via appsettings.json:</strong></p>
+<pre><code class="lang-json">{
+  &quot;Serilog&quot;: {
+    &quot;Using&quot;: [&quot;Serilog.Sinks.Console&quot;, &quot;Serilog.Sinks.File&quot;],
+    &quot;MinimumLevel&quot;: {
+      &quot;Default&quot;: &quot;Information&quot;,
+      &quot;Override&quot;: {
+        &quot;Microsoft&quot;: &quot;Warning&quot;,
+        &quot;System&quot;: &quot;Warning&quot;
+      }
+    },
+    &quot;WriteTo&quot;: [
+      {
+        &quot;Name&quot;: &quot;Console&quot;,
+        &quot;Args&quot;: {
+          &quot;outputTemplate&quot;: &quot;[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}&quot;
+        }
+      },
+      {
+        &quot;Name&quot;: &quot;File&quot;,
+        &quot;Args&quot;: {
+          &quot;path&quot;: &quot;logs/log-.txt&quot;,
+          &quot;rollingInterval&quot;: &quot;Day&quot;,
+          &quot;retainedFileCountLimit&quot;: 30
+        }
+      }
+    ],
+    &quot;Enrich&quot;: [&quot;FromLogContext&quot;, &quot;WithMachineName&quot;, &quot;WithThreadId&quot;]
+  }
+}
+</code></pre>
+<p><strong>Structured Logging Example:</strong></p>
+<pre><code class="lang-csharp">public class ProductService
+{
+    private readonly ILogger&lt;ProductService&gt; _logger;
+
+    public async Task&lt;Product&gt; GetProductAsync(int productId, string userId)
+    {
+        // ❌ BAD: String interpolation loses structure
+        _logger.LogInformation($&quot;User {userId} retrieving product {productId}&quot;);
+        // Logs as: &quot;User user123 retrieving product 42&quot;
+        // Can't query by userId or productId!
+
+        // ✅ GOOD: Semantic/Structured logging
+        _logger.LogInformation(
+            &quot;User {UserId} retrieving product {ProductId}&quot;,
+            userId,
+            productId);
+        // Logs as JSON:
+        // {
+        //   &quot;Timestamp&quot;: &quot;2024-12-01T10:30:00&quot;,
+        //   &quot;Level&quot;: &quot;Information&quot;,
+        //   &quot;Message&quot;: &quot;User user123 retrieving product 42&quot;,
+        //   &quot;Properties&quot;: {
+        //     &quot;UserId&quot;: &quot;user123&quot;,
+        //     &quot;ProductId&quot;: 42
+        //   }
+        // }
+        // Can query: WHERE UserId = 'user123'
+
+        try
+        {
+            var product = await _repository.GetByIdAsync(productId);
+
+            if (product == null)
+            {
+                _logger.LogWarning(
+                    &quot;Product {ProductId} not found for user {UserId}&quot;,
+                    productId,
+                    userId);
+                return null;
+            }
+
+            _logger.LogInformation(
+                &quot;Successfully retrieved product {ProductName} (ID: {ProductId}) for user {UserId}&quot;,
+                product.Name,
+                productId,
+                userId);
+
+            return product;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(
+                ex,
+                &quot;Failed to retrieve product {ProductId} for user {UserId}&quot;,
+                productId,
+                userId);
+            throw;
+        }
+    }
+}
+</code></pre>
+<p><strong>Advanced Features:</strong></p>
+<p><strong>1. Log Context Enrichment:</strong></p>
+<pre><code class="lang-csharp">public class RequestLoggingMiddleware
+{
+    public async Task InvokeAsync(HttpContext context)
+    {
+        // Add correlation ID to all logs in this request
+        using (LogContext.PushProperty(&quot;CorrelationId&quot;, context.TraceIdentifier))
+        using (LogContext.PushProperty(&quot;UserId&quot;, context.User.FindFirst(&quot;sub&quot;)?.Value))
+        using (LogContext.PushProperty(&quot;RequestPath&quot;, context.Request.Path))
+        {
+            await _next(context);
+        }
+        // All logs within this scope automatically include these properties
+    }
+}
+
+// Any log in this request will include CorrelationId, UserId, RequestPath
+_logger.LogInformation(&quot;Processing order&quot;); // Automatically enriched!
+</code></pre>
+<p><strong>2. Multiple Sinks (Different Destinations):</strong></p>
+<pre><code class="lang-csharp">Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Debug()
+    // Console - for local development
+    .WriteTo.Console()
+    // File - for production debugging
+    .WriteTo.File(
+        path: &quot;logs/log-.txt&quot;,
+        rollingInterval: RollingInterval.Day)
+    // Elasticsearch - for centralized logging
+    .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(&quot;http://localhost:9200&quot;))
+    {
+        AutoRegisterTemplate = true,
+        IndexFormat = &quot;myapp-logs-{0:yyyy.MM}&quot;
+    })
+    // Application Insights - for Azure monitoring
+    .WriteTo.ApplicationInsights(
+        instrumentationKey,
+        TelemetryConverter.Traces)
+    // Seq - for structured log viewing
+    .WriteTo.Seq(&quot;http://localhost:5341&quot;)
+    .CreateLogger();
+</code></pre>
+<p><strong>3. Conditional Logging:</strong></p>
+<pre><code class="lang-csharp">Log.Logger = new LoggerConfiguration()
+    .WriteTo.Logger(lc =&gt; lc
+        .Filter.ByIncludingOnly(e =&gt; e.Level &gt;= LogEventLevel.Error)
+        .WriteTo.File(&quot;logs/errors-.txt&quot;, rollingInterval: RollingInterval.Day))
+    .WriteTo.Logger(lc =&gt; lc
+        .Filter.ByIncludingOnly(e =&gt; e.Properties.ContainsKey(&quot;Performance&quot;))
+        .WriteTo.File(&quot;logs/performance-.txt&quot;, rollingInterval: RollingInterval.Day))
+    .WriteTo.Console()
+    .CreateLogger();
+
+// Usage
+_logger.LogInformation(&quot;Processing {OrderId} - {Performance}&quot;, orderId, new { Duration = 123 });
+// Goes to both console and performance-.txt
+</code></pre>
+<p><strong>4. Performance Logging:</strong></p>
+<pre><code class="lang-csharp">public class PerformanceLoggingBehavior&lt;TRequest, TResponse&gt; : IPipelineBehavior&lt;TRequest, TResponse&gt;
+{
+    private readonly ILogger&lt;PerformanceLoggingBehavior&lt;TRequest, TResponse&gt;&gt; _logger;
+
+    public async Task&lt;TResponse&gt; Handle(TRequest request, RequestHandlerDelegate&lt;TResponse&gt; next, CancellationToken ct)
+    {
+        var sw = Stopwatch.StartNew();
+        var requestName = typeof(TRequest).Name;
+
+        _logger.LogInformation(&quot;Executing {RequestName}&quot;, requestName);
+
+        try
+        {
+            var response = await next();
+            sw.Stop();
+
+            if (sw.ElapsedMilliseconds &gt; 500)
+            {
+                _logger.LogWarning(
+                    &quot;Long running request: {RequestName} took {ElapsedMs}ms&quot;,
+                    requestName,
+                    sw.ElapsedMilliseconds);
+            }
+            else
+            {
+                _logger.LogInformation(
+                    &quot;Completed {RequestName} in {ElapsedMs}ms&quot;,
+                    requestName,
+                    sw.ElapsedMilliseconds);
+            }
+
+            return response;
+        }
+        catch (Exception ex)
+        {
+            sw.Stop();
+            _logger.LogError(
+                ex,
+                &quot;Request {RequestName} failed after {ElapsedMs}ms&quot;,
+                requestName,
+                sw.ElapsedMilliseconds);
+            throw;
+        }
+    }
+}
+</code></pre>
+<h3 id="microsoftextensionslogging-default">Microsoft.Extensions.Logging (Default)</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Built into .NET (no external dependencies)</li>
+<li>Simple API</li>
+<li>Abstraction (can swap providers)</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Not Truly Structured</strong> - Limited property support</li>
+<li><strong>Console Sink Only</strong> - Need providers for file, Elasticsearch, etc.</li>
+<li><strong>No Enrichment</strong> - Manual context management</li>
+<li><strong>Limited Filtering</strong> - Can't filter by namespace in appsettings.json</li>
+</ul>
+<p><strong>Why Insufficient:</strong></p>
+<pre><code class="lang-csharp">// Microsoft.Extensions.Logging
+_logger.LogInformation(&quot;User {UserId} logged in&quot;, userId);
+// Console output: &quot;User user123 logged in&quot;
+// ❌ Properties not preserved to all sinks
+
+// Serilog
+_logger.LogInformation(&quot;User {UserId} logged in&quot;, userId);
+// JSON output: { &quot;UserId&quot;: &quot;user123&quot;, &quot;Message&quot;: &quot;...&quot; }
+// ✅ Properties preserved and queryable
+</code></pre>
+<p><strong>Decision:</strong> Use Serilog as provider for Microsoft.Extensions.Logging via <code>UseSerilog()</code>.</p>
+<h3 id="nlog">NLog</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Mature (20+ years)</li>
+<li>Many targets (sinks)</li>
+<li>Good performance</li>
+<li>Configuration via XML or JSON</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>XML-heavy configuration</strong> - Not as clean as Serilog</li>
+<li><strong>Less structured</strong> - Properties support added later</li>
+<li><strong>Smaller ecosystem</strong> - Fewer community contributions</li>
+<li><strong>Heavier</strong> - More memory footprint than Serilog</li>
+</ul>
+<p><strong>Why Not Chosen:</strong>
+NLog is excellent, but Serilog's structured-first approach and cleaner configuration make it a better fit for modern cloud-native apps.</p>
+<h3 id="log4net">log4net</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Very mature</li>
+<li>Well-known (from Java)</li>
+<li>Stable</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Legacy</strong> - Minimal active development</li>
+<li><strong>XML configuration</strong> - No fluent API</li>
+<li><strong>Not structured</strong> - Designed for text logs</li>
+<li><strong>No async</strong> - Synchronous logging only</li>
+</ul>
+<p><strong>Why Rejected:</strong>
+log4net is legacy technology. Serilog and NLog are both superior modern alternatives.</p>
+<hr>
+<h2 id="production-logging-stack">Production Logging Stack</h2>
+<p><strong>Recommended Stack:</strong></p>
+<pre><code>Application (Serilog)
+    ↓
+Local: Console + File
+    ↓
+Production: Elasticsearch + Application Insights + Seq
+    ↓
+Visualization: Kibana (Elasticsearch) / Azure Portal / Seq UI
+</code></pre>
+<p><strong>Elasticsearch Setup:</strong></p>
+<pre><code class="lang-csharp">// Install: Serilog.Sinks.Elasticsearch
+
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(&quot;https://elasticsearch:9200&quot;))
+    {
+        AutoRegisterTemplate = true,
+        IndexFormat = &quot;myapp-{0:yyyy.MM}&quot;,
+        NumberOfShards = 2,
+        NumberOfReplicas = 1,
+        ModifyConnectionSettings = conn =&gt; conn.BasicAuthentication(&quot;user&quot;, &quot;pass&quot;)
+    })
+    .CreateLogger();
+</code></pre>
+<p><strong>Application Insights (Azure):</strong></p>
+<pre><code class="lang-csharp">// Install: Serilog.Sinks.ApplicationInsights
+
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.ApplicationInsights(
+        new TelemetryConfiguration { ConnectionString = &quot;InstrumentationKey=...&quot; },
+        TelemetryConverter.Traces)
+    .CreateLogger();
+</code></pre>
+<p><strong>Seq (Local Development):</strong></p>
+<pre><code class="lang-bash"># Docker
+docker run --name seq -d --restart unless-stopped -e ACCEPT_EULA=Y -p 5341:80 datalust/seq:latest
+
+# Navigate to http://localhost:5341
+</code></pre>
+<pre><code class="lang-csharp">// Install: Serilog.Sinks.Seq
+
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Seq(&quot;http://localhost:5341&quot;)
+    .CreateLogger();
+</code></pre>
+<hr>
+<h2 id="best-practices">Best Practices</h2>
+<p><strong>1. Use Semantic Logging:</strong></p>
+<pre><code class="lang-csharp">// ❌ BAD: String interpolation
+_logger.LogInformation($&quot;Processing order {orderId} for user {userId}&quot;);
+
+// ✅ GOOD: Structured properties
+_logger.LogInformation(&quot;Processing order {OrderId} for user {UserId}&quot;, orderId, userId);
+</code></pre>
+<p><strong>2. Use Log Levels Correctly:</strong></p>
+<pre><code class="lang-csharp">// Verbose/Debug - Detailed flow, development only
+_logger.LogDebug(&quot;Calculating tax for amount {Amount}&quot;, amount);
+
+// Information - General flow, important business events
+_logger.LogInformation(&quot;Order {OrderId} created&quot;, orderId);
+
+// Warning - Unexpected but handled
+_logger.LogWarning(&quot;Product {ProductId} stock low: {Stock} remaining&quot;, productId, stock);
+
+// Error - Operation failed, exception handled
+_logger.LogError(ex, &quot;Failed to process payment for order {OrderId}&quot;, orderId);
+
+// Critical/Fatal - Application crash
+_logger.LogCritical(ex, &quot;Database connection failed&quot;);
+</code></pre>
+<p><strong>3. Don't Log Sensitive Data:</strong></p>
+<pre><code class="lang-csharp">// ❌ BAD: Logging passwords, tokens, credit cards
+_logger.LogInformation(&quot;User {UserId} logged in with password {Password}&quot;, userId, password);
+
+// ✅ GOOD: Log only necessary data
+_logger.LogInformation(&quot;User {UserId} logged in successfully&quot;, userId);
+</code></pre>
+<p><strong>4. Use Scopes for Context:</strong></p>
+<pre><code class="lang-csharp">using (_logger.BeginScope(new Dictionary&lt;string, object&gt;
+{
+    [&quot;OrderId&quot;] = orderId,
+    [&quot;UserId&quot;] = userId
+}))
+{
+    _logger.LogInformation(&quot;Starting order processing&quot;);
+    // ... 20 lines of code ...
+    _logger.LogInformation(&quot;Order validation complete&quot;);
+    // All logs in this scope include OrderId and UserId automatically
+}
+</code></pre>
+<hr>
+<h2 id="links">Links</h2>
+<ul>
+<li><a href="https://serilog.net/">Serilog Official Site</a></li>
+<li><a href="https://github.com/serilog/serilog">Serilog GitHub</a></li>
+<li><a href="https://github.com/serilog/serilog/wiki/Provided-Sinks">Available Sinks</a></li>
+<li><a href="../../src/AdvancedConcepts.Core/Advanced/Observability">Sample Implementation</a></li>
+</ul>
+<hr>
+<h2 id="notes">Notes</h2>
+<p><strong>Log Levels (Order):</strong></p>
+<ul>
+<li>Verbose (5) - Noisiest</li>
+<li>Debug (4) - Development</li>
+<li>Information (3) - Production default</li>
+<li>Warning (2) - Unexpected but handled</li>
+<li>Error (1) - Operation failed</li>
+<li>Fatal (0) - Application crash</li>
+</ul>
+<p><strong>Performance:</strong></p>
+<ul>
+<li>Use async sinks for production</li>
+<li>Batch logs before sending to remote sinks</li>
+<li>Set appropriate minimum levels (Information in prod, Debug in dev)</li>
+</ul>
+<p><strong>Common Pitfalls:</strong></p>
+<ul>
+<li>❌ Logging inside loops (causes performance issues)</li>
+<li>❌ Using string interpolation instead of structured logging</li>
+<li>❌ Logging sensitive data (passwords, tokens, PII)</li>
+<li>❌ Not setting minimum levels (too much logging in production)</li>
+</ul>
+<p><strong>Review Date:</strong> 2025-12-01</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/decisions/0009-adopt-serilog-for-structured-logging.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

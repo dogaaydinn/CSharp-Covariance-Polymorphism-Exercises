@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Weeks 8-24 Assessment Tests - Quick Reference Guide | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Weeks 8-24 Assessment Tests - Quick Reference Guide | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../../favicon.ico">
+      <link rel="stylesheet" href="../../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/assessment-tests/path1/weeks-08-24-tests.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../../index.html">
+            <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="weeks-8-24-assessment-tests---quick-reference-guide">Weeks 8-24 Assessment Tests - Quick Reference Guide</h1>
+
+<blockquote>
+<p><strong>Note</strong>: This file contains condensed versions of weeks 8-24 tests. Each follows the same format as weeks 1-7.</p>
+</blockquote>
+<hr>
+<h2 id="week-8-functional-programming">Week 8: Functional Programming</h2>
+<p><strong>Topics</strong>: Lambdas, Func<t>, Action<t>, Closures
+<strong>Key Questions</strong>:</t></t></p>
+<ul>
+<li>What's the difference between Func and Action?</li>
+<li>Explain closures and captured variables</li>
+<li>Write higher-order function examples</li>
+<li>Code: Fix closure in loop problem</li>
+</ul>
+<hr>
+<h2 id="week-9-generic-covariance">Week 9: Generic Covariance</h2>
+<p><strong>Topics</strong>: IEnumerable<out t>, Covariant interfaces
+<strong>Key Questions</strong>:</out></p>
+<ul>
+<li>What does <code>out</code> keyword mean?</li>
+<li>Why is IEnumerable<cat> assignable to IEnumerable<animal>?</animal></cat></li>
+<li>When is covariance safe?</li>
+<li>Code: Design covariant interface</li>
+</ul>
+<p><strong>Resources</strong>: <code>samples/02-Intermediate/CovarianceContravariance/</code>, <code>samples/99-Exercises/Generics/01-Covariance/</code></p>
+<hr>
+<h2 id="week-10-generic-contravariance">Week 10: Generic Contravariance</h2>
+<p><strong>Topics</strong>: IComparer<in t>, Action<in t>, Contravariance
+<strong>Key Questions</strong>:</in></in></p>
+<ul>
+<li>What does <code>in</code> keyword mean?</li>
+<li>Why is IComparer<animal> assignable to IComparer<cat>?</cat></animal></li>
+<li>Difference between covariance and contravariance</li>
+<li>Code: Implement contravariant comparer</li>
+</ul>
+<p><strong>Resources</strong>: <code>samples/99-Exercises/Generics/02-Contravariance/</code></p>
+<hr>
+<h2 id="week-11-generic-constraints">Week 11: Generic Constraints</h2>
+<p><strong>Topics</strong>: where T : class, struct, new(), interface constraints
+<strong>Key Questions</strong>:</p>
+<ul>
+<li>List all generic constraint types</li>
+<li>When to use <code>where T : class</code> vs <code>where T : struct</code>?</li>
+<li>What's <code>where T : new()</code> for?</li>
+<li>Code: Design Repository<t> with constraints</t></li>
+</ul>
+<p><strong>Resources</strong>: <code>samples/99-Exercises/Generics/03-GenericConstraints/</code></p>
+<hr>
+<h2 id="week-12-builder-pattern">Week 12: Builder Pattern</h2>
+<p><strong>Topics</strong>: Fluent interface, Method chaining, Director pattern
+<strong>Key Questions</strong>:</p>
+<ul>
+<li>What problem does Builder solve?</li>
+<li>How does fluent interface work (<code>return this</code>)?</li>
+<li>Builder vs Constructor with many parameters?</li>
+<li>Code: Implement builder for complex object</li>
+</ul>
+<p><strong>Resources</strong>: <code>samples/99-Exercises/DesignPatterns/01-Builder/</code></p>
+<hr>
+<h2 id="week-13-binary-search-algorithm">Week 13: Binary Search Algorithm</h2>
+<p><strong>Topics</strong>: O(log n), Divide-and-conquer, Modified binary search
+<strong>Key Questions</strong>:</p>
+<ul>
+<li>Explain binary search algorithm</li>
+<li>Time complexity: why O(log n)?</li>
+<li>How to find first/last occurrence?</li>
+<li>Code: Implement binary search iteratively</li>
+</ul>
+<p><strong>Resources</strong>: <code>samples/99-Exercises/Algorithms/01-BinarySearch/</code></p>
+<hr>
+<h2 id="week-14-quicksort-algorithm">Week 14: QuickSort Algorithm</h2>
+<p><strong>Topics</strong>: Lomuto partition, Pivot selection, QuickSelect
+<strong>Key Questions</strong>:</p>
+<ul>
+<li>Explain QuickSort algorithm</li>
+<li>How does partition work?</li>
+<li>Best vs worst case: O(n log n) vs O(n²)?</li>
+<li>Code: Implement partition function</li>
+</ul>
+<p><strong>Resources</strong>: <code>samples/99-Exercises/Algorithms/02-QuickSort/</code></p>
+<hr>
+<h2 id="week-15-mergesort-algorithm">Week 15: MergeSort Algorithm</h2>
+<p><strong>Topics</strong>: Divide-and-conquer, Stable sorting, O(n log n)
+<strong>Key Questions</strong>:</p>
+<ul>
+<li>How does MergeSort differ from QuickSort?</li>
+<li>What's stable sorting?</li>
+<li>Space complexity: O(n) vs O(1)?</li>
+<li>Code: Implement merge function</li>
+</ul>
+<p><strong>Resources</strong>: <code>samples/99-Exercises/Algorithms/03-MergeSort/</code></p>
+<hr>
+<h2 id="week-16-data-structures">Week 16: Data Structures</h2>
+<p><strong>Topics</strong>: Stack, Queue, Linked List, Complexity
+<strong>Key Questions</strong>:</p>
+<ul>
+<li>When to use Stack vs Queue?</li>
+<li>Array vs Linked List trade-offs?</li>
+<li>What's Big O notation?</li>
+<li>Code: Implement Stack<t></t></li>
+</ul>
+<hr>
+<h2 id="week-17-decorator-pattern">Week 17: Decorator Pattern</h2>
+<p><strong>Topics</strong>: Component wrapping, Dynamic behavior, Chaining
+<strong>Key Questions</strong>:</p>
+<ul>
+<li>What problem does Decorator solve?</li>
+<li>Decorator vs Inheritance?</li>
+<li>How to chain multiple decorators?</li>
+<li>Code: Implement decorator for IDataSource</li>
+</ul>
+<p><strong>Resources</strong>: <code>samples/99-Exercises/DesignPatterns/03-Decorator/</code></p>
+<hr>
+<h2 id="week-18-solid---srp--ocp">Week 18: SOLID - SRP &amp; OCP</h2>
+<p><strong>Topics</strong>: Single Responsibility, Open/Closed Principle
+<strong>Key Questions</strong>:</p>
+<ul>
+<li>What's Single Responsibility Principle?</li>
+<li>Give example of SRP violation</li>
+<li>What's Open/Closed Principle?</li>
+<li>Code: Refactor class to follow SRP</li>
+</ul>
+<hr>
+<h2 id="week-19-solid---lsp--isp">Week 19: SOLID - LSP &amp; ISP</h2>
+<p><strong>Topics</strong>: Liskov Substitution, Interface Segregation
+<strong>Key Questions</strong>:</p>
+<ul>
+<li>Explain Liskov Substitution Principle</li>
+<li>Give example of LSP violation (Square/Rectangle)</li>
+<li>What's Interface Segregation?</li>
+<li>Code: Split fat interface</li>
+</ul>
+<hr>
+<h2 id="week-20-solid---dip">Week 20: SOLID - DIP</h2>
+<p><strong>Topics</strong>: Dependency Inversion, Dependency Injection
+<strong>Key Questions</strong>:</p>
+<ul>
+<li>What's Dependency Inversion Principle?</li>
+<li>High-level vs low-level modules?</li>
+<li>What's Dependency Injection?</li>
+<li>Code: Refactor to use DI</li>
+</ul>
+<hr>
+<h2 id="week-21-observer-pattern">Week 21: Observer Pattern</h2>
+<p><strong>Topics</strong>: IObservable<t>, IObserver<t>, Event-driven
+<strong>Key Questions</strong>:</t></t></p>
+<ul>
+<li>What problem does Observer solve?</li>
+<li>IObservable vs C# events?</li>
+<li>How to manage subscription lifecycle?</li>
+<li>Code: Implement observer for events</li>
+</ul>
+<p><strong>Resources</strong>: <code>samples/99-Exercises/DesignPatterns/02-Observer/</code></p>
+<hr>
+<h2 id="week-22-aspnet-core-basics">Week 22: ASP.NET Core Basics</h2>
+<p><strong>Topics</strong>: Controllers, Routing, Dependency Injection
+<strong>Key Questions</strong>:</p>
+<ul>
+<li>What's MVC pattern?</li>
+<li>How does routing work?</li>
+<li>What's middleware pipeline?</li>
+<li>Code: Create simple REST endpoint</li>
+</ul>
+<hr>
+<h2 id="week-23-entity-framework-core">Week 23: Entity Framework Core</h2>
+<p><strong>Topics</strong>: DbContext, Migrations, LINQ to Entities
+<strong>Key Questions</strong>:</p>
+<ul>
+<li>What's ORM?</li>
+<li>How do migrations work?</li>
+<li>Eager vs lazy loading?</li>
+<li>Code: Define entity relationship</li>
+</ul>
+<hr>
+<h2 id="week-24-authentication--authorization">Week 24: Authentication &amp; Authorization</h2>
+<p><strong>Topics</strong>: JWT, Identity, Claims, Policies
+<strong>Key Questions</strong>:</p>
+<ul>
+<li>What's difference between authentication and authorization?</li>
+<li>How does JWT work?</li>
+<li>What are claims?</li>
+<li>Code: Implement JWT authentication</li>
+</ul>
+<hr>
+<h2 id="test-format-for-each-week">Test Format for Each Week</h2>
+<p>Each week's actual test file follows this structure:</p>
+<p><strong>Duration</strong>: 30-45 minutes
+<strong>Passing</strong>: 70%
+<strong>Sections</strong>:</p>
+<ol>
+<li>Multiple Choice (5 questions, 5 points)</li>
+<li>Short Answer (3 questions, 4.5 points)</li>
+<li>Code Analysis/Implementation (1.5 points)</li>
+</ol>
+<p><strong>Total</strong>: 10 points per test</p>
+<hr>
+<h2 id="note-on-implementation">Note on Implementation</h2>
+<p>Full detailed tests for weeks 8-24 can be generated using the template from weeks 1-7. Each test should:</p>
+<ul>
+<li>Cover that week's specific topics</li>
+<li>Reference appropriate samples from repo</li>
+<li>Include code examples from exercises</li>
+<li>Provide comprehensive answer keys</li>
+<li>Link to study resources</li>
+</ul>
+<p><strong>Priority</strong>: Create full tests as needed based on student progress through curriculum.</p>
+<hr>
+<p><em>For full detailed tests, see individual week files (to be created as needed)</em></p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/assessment-tests/path1/weeks-08-24-tests.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

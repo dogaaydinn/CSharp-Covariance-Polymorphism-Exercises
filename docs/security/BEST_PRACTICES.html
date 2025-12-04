@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Security Best Practices Guide | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Security Best Practices Guide | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/security/BEST_PRACTICES.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="security-best-practices-guide">Security Best Practices Guide</h1>
+
+<h2 id="phase-7-security--compliance">Phase 7: Security &amp; Compliance</h2>
+<p>This guide outlines security best practices for developing, deploying, and maintaining this project.</p>
+<hr>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#development-security">Development Security</a></li>
+<li><a href="#code-security">Code Security</a></li>
+<li><a href="#dependency-management">Dependency Management</a></li>
+<li><a href="#secrets-management">Secrets Management</a></li>
+<li><a href="#container-security">Container Security</a></li>
+<li><a href="#cicd-security">CI/CD Security</a></li>
+<li><a href="#deployment-security">Deployment Security</a></li>
+<li><a href="#monitoring--response">Monitoring &amp; Response</a></li>
+</ol>
+<hr>
+<h2 id="development-security">Development Security</h2>
+<h3 id="local-development-environment">Local Development Environment</h3>
+<p>✅ <strong>DO:</strong></p>
+<ul>
+<li>Use <code>dotnet user-secrets</code> for local development secrets</li>
+<li>Enable pre-commit hooks: <code>pre-commit install</code></li>
+<li>Keep .NET SDK and tools updated</li>
+<li>Use IDE security extensions (SonarLint, Security IntelliSense)</li>
+<li>Review security analyzer warnings before committing</li>
+</ul>
+<p>❌ <strong>DON'T:</strong></p>
+<ul>
+<li>Never commit secrets, API keys, or credentials</li>
+<li>Don't disable security analyzers without justification</li>
+<li>Don't ignore security warnings from analyzers</li>
+<li>Don't use production credentials in development</li>
+<li>Don't commit sensitive data in test files</li>
+</ul>
+<h3 id="git-hygiene">Git Hygiene</h3>
+<pre><code class="lang-bash"># Before committing
+pre-commit run --all-files
+
+# Check for secrets
+gitleaks detect --source . --verbose
+
+# Review changes
+git diff --check
+</code></pre>
+<hr>
+<h2 id="code-security">Code Security</h2>
+<h3 id="input-validation">Input Validation</h3>
+<p><strong>Always validate input at API boundaries:</strong></p>
+<pre><code class="lang-csharp">// ✅ GOOD: Validate input
+public Result ProcessOrder(Order order)
+{
+    if (order == null)
+        throw new ArgumentNullException(nameof(order));
+    
+    // Use FluentValidation
+    var validator = new OrderValidator();
+    var result = validator.Validate(order);
+    
+    if (!result.IsValid)
+        return Result.Failure(new ValidationError(result.Errors));
+    
+    // Process order...
+}
+
+// ❌ BAD: No validation
+public void ProcessOrder(Order order)
+{
+    ProcessPayment(order.Amount); // Potential null reference
+}
+</code></pre>
+<h3 id="output-encoding">Output Encoding</h3>
+<pre><code class="lang-csharp">// ✅ GOOD: Encode output
+public string GetUserDisplay(string input)
+{
+    return HttpUtility.HtmlEncode(input);
+}
+
+// ❌ BAD: Raw output
+public string GetUserDisplay(string input)
+{
+    return input; // XSS vulnerability
+}
+</code></pre>
+<h3 id="exception-handling">Exception Handling</h3>
+<pre><code class="lang-csharp">// ✅ GOOD: Safe error messages
+try
+{
+    ProcessSensitiveData();
+}
+catch (Exception ex)
+{
+    _logger.LogError(ex, &quot;Operation failed&quot;);
+    return Result.Failure(&quot;An error occurred&quot;); // Generic message to user
+}
+
+// ❌ BAD: Exposing internals
+catch (Exception ex)
+{
+    return Result.Failure(ex.ToString()); // Exposes stack trace to user
+}
+</code></pre>
+<hr>
+<h2 id="dependency-management">Dependency Management</h2>
+<h3 id="automated-updates">Automated Updates</h3>
+<p>Our Dependabot configuration automatically:</p>
+<ul>
+<li>Scans for vulnerabilities weekly</li>
+<li>Creates PRs for security updates</li>
+<li>Groups related dependencies</li>
+</ul>
+<h3 id="manual-checks">Manual Checks</h3>
+<pre><code class="lang-bash"># Check for vulnerabilities
+dotnet list package --vulnerable --include-transitive
+
+# Check for outdated packages
+dotnet list package --outdated
+
+# Update specific package
+dotnet add package PackageName --version X.Y.Z
+</code></pre>
+<h3 id="dependency-guidelines">Dependency Guidelines</h3>
+<p>✅ <strong>DO:</strong></p>
+<ul>
+<li>Review dependency licenses before adding</li>
+<li>Prefer packages with active maintenance</li>
+<li>Use specific version ranges (avoid wildcards)</li>
+<li>Review changelogs before updating</li>
+<li>Test thoroughly after dependency updates</li>
+</ul>
+<p>❌ <strong>DON'T:</strong></p>
+<ul>
+<li>Don't use deprecated packages</li>
+<li>Don't ignore Dependabot PRs</li>
+<li>Don't use pre-release packages in production</li>
+<li>Don't add dependencies without security review</li>
+</ul>
+<hr>
+<h2 id="secrets-management">Secrets Management</h2>
+<h3 id="development">Development</h3>
+<pre><code class="lang-bash"># Initialize user secrets
+dotnet user-secrets init --project src/AdvancedConcepts.Core
+
+# Add secret
+dotnet user-secrets set &quot;ApiKey&quot; &quot;your-api-key&quot;
+
+# List secrets
+dotnet user-secrets list
+</code></pre>
+<h3 id="configuration-hierarchy">Configuration Hierarchy</h3>
+<ol>
+<li><strong>Local Development</strong>: User Secrets (<code>dotnet user-secrets</code>)</li>
+<li><strong>CI/CD</strong>: GitHub Secrets</li>
+<li><strong>Staging</strong>: Azure Key Vault / AWS Secrets Manager</li>
+<li><strong>Production</strong>: Azure Key Vault / AWS Secrets Manager</li>
+</ol>
+<h3 id="never-store-secrets-in">Never Store Secrets In</h3>
+<p>❌ appsettings.json
+❌ Code files
+❌ Environment variable files (.env)
+❌ Docker images
+❌ Git repository (even in history)</p>
+<h3 id="pre-commit-protection">Pre-commit Protection</h3>
+<p>Our pre-commit hooks scan for:</p>
+<ul>
+<li>Hardcoded passwords</li>
+<li>API keys</li>
+<li>Private keys</li>
+<li>Connection strings with passwords</li>
+<li>AWS/Azure credentials</li>
+<li>Generic secret patterns</li>
+</ul>
+<hr>
+<h2 id="container-security">Container Security</h2>
+<h3 id="dockerfile-best-practices">Dockerfile Best Practices</h3>
+<p>✅ <strong>Implemented in our Dockerfile:</strong></p>
+<pre><code class="lang-dockerfile"># ✅ Use official base images
+FROM mcr.microsoft.com/dotnet/sdk:8.0-alpine
+
+# ✅ Run as non-root user
+USER appuser
+
+# ✅ Minimal attack surface (Alpine)
+# Final image: ~100MB
+
+# ✅ Multi-stage builds
+# Separates build and runtime environments
+
+# ✅ No secrets in layers
+ARG BUILD_DATE
+# Secrets passed at runtime only
+</code></pre>
+<h3 id="container-scanning">Container Scanning</h3>
+<pre><code class="lang-bash"># Scan with Trivy
+docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
+  aquasec/trivy image advancedconcepts:latest
+
+# Scan with Snyk
+snyk container test advancedconcepts:latest
+</code></pre>
+<hr>
+<h2 id="cicd-security">CI/CD Security</h2>
+<h3 id="github-actions-security">GitHub Actions Security</h3>
+<p>✅ <strong>DO:</strong></p>
+<ul>
+<li>Use specific action versions (not @master/@latest)</li>
+<li>Limit workflow permissions (principle of least privilege)</li>
+<li>Use GitHub Secrets for credentials</li>
+<li>Enable branch protection rules</li>
+<li>Require code reviews for PRs</li>
+<li>Use CODEOWNERS file</li>
+</ul>
+<p>❌ <strong>DON'T:</strong></p>
+<ul>
+<li>Don't use secrets in workflow logs</li>
+<li>Don't checkout untrusted PR code with write permissions</li>
+<li>Don't allow workflow runs from forks without approval</li>
+<li>Don't disable required status checks</li>
+</ul>
+<h3 id="workflow-permissions">Workflow Permissions</h3>
+<pre><code class="lang-yaml"># ✅ GOOD: Minimal permissions
+permissions:
+  contents: read
+  security-events: write
+
+# ❌ BAD: Excessive permissions
+permissions: write-all
+</code></pre>
+<hr>
+<h2 id="deployment-security">Deployment Security</h2>
+<h3 id="kubernetes-security">Kubernetes Security</h3>
+<p>Our manifests include:</p>
+<pre><code class="lang-yaml">securityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+
+resources:
+  limits:
+    memory: &quot;1Gi&quot;
+    cpu: &quot;1000m&quot;
+  requests:
+    memory: &quot;512Mi&quot;
+    cpu: &quot;250m&quot;
+</code></pre>
+<h3 id="network-security">Network Security</h3>
+<ul>
+<li>✅ Use TLS/HTTPS for all external communication</li>
+<li>✅ Implement network policies in Kubernetes</li>
+<li>✅ Use service meshes for internal communication</li>
+<li>✅ Enable WAF (Web Application Firewall) for public endpoints</li>
+</ul>
+<hr>
+<h2 id="monitoring--response">Monitoring &amp; Response</h2>
+<h3 id="security-monitoring">Security Monitoring</h3>
+<p><strong>Automated Daily Scans:</strong></p>
+<ul>
+<li>Snyk vulnerability scanning</li>
+<li>OWASP Dependency-Check</li>
+<li>Secret scanning (Gitleaks)</li>
+<li>Container image scanning (Trivy)</li>
+<li>License compliance</li>
+</ul>
+<p><strong>Weekly:</strong></p>
+<ul>
+<li>CodeQL semantic analysis</li>
+<li>Dependabot dependency updates</li>
+<li>OpenSSF Scorecard</li>
+</ul>
+<h3 id="incident-response">Incident Response</h3>
+<ol>
+<li><strong>Detection</strong>: Automated alerts via GitHub Security</li>
+<li><strong>Assessment</strong>: Security team reviews within 48 hours</li>
+<li><strong>Containment</strong>: Immediate PR to fix critical issues</li>
+<li><strong>Resolution</strong>: Deploy fix and verify</li>
+<li><strong>Post-mortem</strong>: Document and improve processes</li>
+</ol>
+<h3 id="security-metrics">Security Metrics</h3>
+<p>Track and monitor:</p>
+<ul>
+<li>Number of vulnerabilities by severity</li>
+<li>Time to remediate security issues</li>
+<li>Dependency freshness</li>
+<li>Test coverage</li>
+<li>Security scan pass rate</li>
+</ul>
+<hr>
+<h2 id="security-checklist">Security Checklist</h2>
+<h3 id="before-every-commit">Before Every Commit</h3>
+<ul>
+<li>[ ] Run pre-commit hooks</li>
+<li>[ ] No hardcoded secrets</li>
+<li>[ ] Security analyzer warnings addressed</li>
+<li>[ ] Input validation implemented</li>
+<li>[ ] Exception handling secure</li>
+<li>[ ] Tests pass</li>
+</ul>
+<h3 id="before-every-release">Before Every Release</h3>
+<ul>
+<li>[ ] All security scans passing</li>
+<li>[ ] No critical/high vulnerabilities</li>
+<li>[ ] Dependencies up to date</li>
+<li>[ ] CHANGELOG updated</li>
+<li>[ ] Security advisory review</li>
+<li>[ ] SBOM generated</li>
+</ul>
+<h3 id="monthly-review">Monthly Review</h3>
+<ul>
+<li>[ ] Review security policies</li>
+<li>[ ] Update dependencies</li>
+<li>[ ] Review access permissions</li>
+<li>[ ] Check for deprecated packages</li>
+<li>[ ] Security training for team</li>
+</ul>
+<hr>
+<h2 id="resources">Resources</h2>
+<h3 id="internal">Internal</h3>
+<ul>
+<li><a href="../../SECURITY.html">SECURITY.md</a> - Security policy</li>
+<li><a href="../../ROADMAP.html">ROADMAP.md</a> - Project roadmap</li>
+</ul>
+<h3 id="external">External</h3>
+<ul>
+<li><a href="https://owasp.org/www-project-top-ten/">OWASP Top 10</a></li>
+<li><a href="https://cwe.mitre.org/top25/">CWE Top 25</a></li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/standard/security/">.NET Security Docs</a></li>
+<li><a href="https://docs.github.com/en/code-security">GitHub Security Best Practices</a></li>
+<li><a href="https://bestpractices.coreinfrastructure.org/">OpenSSF Best Practices</a></li>
+</ul>
+<hr>
+<p><strong>Last Updated</strong>: 2025-11-30
+<strong>Version</strong>: 1.0
+<strong>Maintained By</strong>: Security Team</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/security/BEST_PRACTICES.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Path 2 - Months 5-6 Capstone: Video Streaming Microservice Platform | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Path 2 - Months 5-6 Capstone: Video Streaming Microservice Platform | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../../favicon.ico">
+      <link rel="stylesheet" href="../../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/project-templates/path2/month5-6-microservice-platform.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../../index.html">
+            <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="path-2---months-5-6-capstone-video-streaming-microservice-platform">Path 2 - Months 5-6 Capstone: Video Streaming Microservice Platform</h1>
+
+<p><strong>Difficulty</strong>: ⭐⭐⭐⭐⭐ (Expert)
+<strong>Estimated Time</strong>: 60-70 hours
+<strong>Prerequisites</strong>: Months 1-4 of Path 2 completed</p>
+<hr>
+<h2 id="-project-overview">🎯 Project Overview</h2>
+<p>Build a complete microservice platform with 5+ services communicating via gRPC and message queues, deployed with Docker Compose.</p>
+<h3 id="learning-objectives">Learning Objectives</h3>
+<ul>
+<li>✅ Microservice architecture</li>
+<li>✅ gRPC service-to-service communication</li>
+<li>✅ REST API Gateway pattern</li>
+<li>✅ Message queues (RabbitMQ)</li>
+<li>✅ Docker and containerization</li>
+<li>✅ Service discovery</li>
+</ul>
+<hr>
+<h2 id="-microservices-to-implement">📋 Microservices to Implement</h2>
+<h3 id="1-api-gateway-rest">1. API Gateway (REST)</h3>
+<ul>
+<li>Single entry point for clients</li>
+<li>Routes requests to internal services</li>
+<li>Authentication/Authorization</li>
+<li>Rate limiting</li>
+<li>Response aggregation</li>
+</ul>
+<h3 id="2-user-service-grpc">2. User Service (gRPC)</h3>
+<ul>
+<li>User registration and authentication</li>
+<li>Profile management</li>
+<li>JWT token generation</li>
+<li>Stores: PostgreSQL</li>
+</ul>
+<h3 id="3-video-service-grpc">3. Video Service (gRPC)</h3>
+<ul>
+<li>Video upload (metadata)</li>
+<li>Video metadata storage</li>
+<li>Thumbnail generation</li>
+<li>Stores: MongoDB</li>
+</ul>
+<h3 id="4-analytics-service-grpc">4. Analytics Service (gRPC)</h3>
+<ul>
+<li>Track video views</li>
+<li>Generate statistics</li>
+<li>Aggregation queries</li>
+<li>Stores: InfluxDB or MongoDB</li>
+</ul>
+<h3 id="5-notification-service-message-consumer">5. Notification Service (Message Consumer)</h3>
+<ul>
+<li>Listens to events from RabbitMQ</li>
+<li>Sends emails</li>
+<li>Push notifications</li>
+<li>Stores: None (stateless)</li>
+</ul>
+<h3 id="6-search-service-optional">6. Search Service (Optional)</h3>
+<ul>
+<li>Full-text search</li>
+<li>Elasticsearch integration</li>
+<li>Video search by title, tags</li>
+</ul>
+<hr>
+<h2 id="-architecture">🏗️ Architecture</h2>
+<pre><code>┌─────────────────┐
+│   API Gateway   │ (REST)
+│   Port: 5000    │
+└────────┬────────┘
+         │ (HTTP/gRPC)
+    ┌────┴───────────────────┐
+    │                        │
+┌───▼────┐ ┌───────┐ ┌──────▼──────┐
+│  User  │ │ Video │ │  Analytics  │
+│ Service│ │Service│ │   Service   │
+│ :5001  │ │ :5002 │ │    :5003    │
+└───┬────┘ └───┬───┘ └──────┬──────┘
+    │          │             │
+    └──────────┴─────────────┘
+               │
+         ┌─────▼──────┐
+         │  RabbitMQ  │
+         │  :5672     │
+         └─────┬──────┘
+               │
+        ┌──────▼──────────┐
+        │  Notification   │
+        │    Service      │
+        │     :5004       │
+        └─────────────────┘
+</code></pre>
+<hr>
+<h2 id="-key-implementation">🚀 Key Implementation</h2>
+<h3 id="grpc-service-definition">gRPC Service Definition</h3>
+<pre><code class="lang-protobuf">// user.proto
+syntax = &quot;proto3&quot;;
+
+service UserService {
+  rpc Register (RegisterRequest) returns (RegisterResponse);
+  rpc Login (LoginRequest) returns (LoginResponse);
+  rpc GetUser (GetUserRequest) returns (UserResponse);
+}
+
+message RegisterRequest {
+  string username = 1;
+  string email = 2;
+  string password = 3;
+}
+
+message RegisterResponse {
+  string user_id = 1;
+  bool success = 2;
+  string message = 3;
+}
+</code></pre>
+<h3 id="grpc-client-in-api-gateway">gRPC Client in API Gateway</h3>
+<pre><code class="lang-csharp">public class UserGrpcClient
+{
+    private readonly UserService.UserServiceClient _client;
+
+    public UserGrpcClient(GrpcChannel channel)
+    {
+        _client = new UserService.UserServiceClient(channel);
+    }
+
+    public async Task&lt;RegisterResponse&gt; RegisterAsync(RegisterRequest request)
+    {
+        return await _client.RegisterAsync(request);
+    }
+}
+
+// In API Gateway Controller
+[ApiController]
+[Route(&quot;api/[controller]&quot;)]
+public class UsersController : ControllerBase
+{
+    private readonly UserGrpcClient _userClient;
+
+    public UsersController(UserGrpcClient userClient)
+    {
+        _userClient = userClient;
+    }
+
+    [HttpPost(&quot;register&quot;)]
+    public async Task&lt;IActionResult&gt; Register([FromBody] RegisterDto dto)
+    {
+        var response = await _userClient.RegisterAsync(new RegisterRequest
+        {
+            Username = dto.Username,
+            Email = dto.Email,
+            Password = dto.Password
+        });
+
+        return response.Success ? Ok(response) : BadRequest(response.Message);
+    }
+}
+</code></pre>
+<h3 id="message-queue-publishing">Message Queue Publishing</h3>
+<pre><code class="lang-csharp">public class VideoEventPublisher
+{
+    private readonly IConnection _connection;
+    private readonly IModel _channel;
+
+    public VideoEventPublisher(IConnectionFactory factory)
+    {
+        _connection = factory.CreateConnection();
+        _channel = _connection.CreateModel();
+
+        _channel.ExchangeDeclare(&quot;video_events&quot;, ExchangeType.Fanout);
+    }
+
+    public void PublishVideoUploaded(VideoUploadedEvent @event)
+    {
+        var message = JsonSerializer.Serialize(@event);
+        var body = Encoding.UTF8.GetBytes(message);
+
+        _channel.BasicPublish(
+            exchange: &quot;video_events&quot;,
+            routingKey: &quot;&quot;,
+            basicProperties: null,
+            body: body
+        );
+    }
+}
+</code></pre>
+<h3 id="docker-compose">Docker Compose</h3>
+<pre><code class="lang-yaml">version: '3.8'
+
+services:
+  api-gateway:
+    build: ./ApiGateway
+    ports:
+      - &quot;5000:80&quot;
+    environment:
+      - UserServiceUrl=http://user-service:80
+      - VideoServiceUrl=http://video-service:80
+    depends_on:
+      - user-service
+      - video-service
+
+  user-service:
+    build: ./UserService
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=postgres;Database=users;Username=admin;Password=admin
+    depends_on:
+      - postgres
+
+  video-service:
+    build: ./VideoService
+    environment:
+      - MongoDB__ConnectionString=mongodb://mongo:27017
+      - MongoDB__DatabaseName=videos
+    depends_on:
+      - mongo
+      - rabbitmq
+
+  notification-service:
+    build: ./NotificationService
+    environment:
+      - RabbitMQ__Host=rabbitmq
+    depends_on:
+      - rabbitmq
+
+  postgres:
+    image: postgres:15
+    environment:
+      - POSTGRES_PASSWORD=admin
+    ports:
+      - &quot;5432:5432&quot;
+
+  mongo:
+    image: mongo:6
+    ports:
+      - &quot;27017:27017&quot;
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - &quot;5672:5672&quot;
+      - &quot;15672:15672&quot;
+</code></pre>
+<hr>
+<h2 id="-milestones">🎯 Milestones</h2>
+<ol>
+<li><strong>Week 1-2</strong>: Set up 3 services (API Gateway, User, Video)</li>
+<li><strong>Week 3-4</strong>: Add gRPC communication</li>
+<li><strong>Week 5-6</strong>: Add RabbitMQ and Notification service</li>
+<li><strong>Week 7-8</strong>: Add Analytics service, Docker Compose</li>
+<li><strong>Week 9-10</strong>: Testing, monitoring, deployment</li>
+</ol>
+<hr>
+<h2 id="-evaluation">✅ Evaluation</h2>
+<table>
+<thead>
+<tr>
+<th>Criteria</th>
+<th>Weight</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Microservice Architecture</td>
+<td>25%</td>
+</tr>
+<tr>
+<td>gRPC Communication</td>
+<td>20%</td>
+</tr>
+<tr>
+<td>Message Queue Integration</td>
+<td>20%</td>
+</tr>
+<tr>
+<td>Docker &amp; Deployment</td>
+<td>20%</td>
+</tr>
+<tr>
+<td>API Gateway</td>
+<td>10%</td>
+</tr>
+<tr>
+<td>Tests &amp; Documentation</td>
+<td>5%</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Pass</strong>: 75%</p>
+<hr>
+<h2 id="-resources">📚 Resources</h2>
+<ul>
+<li><code>samples/07-CloudNative/AspireVideoService/</code></li>
+<li>gRPC: <a href="https://grpc.io/docs/languages/csharp/">https://grpc.io/docs/languages/csharp/</a></li>
+<li>RabbitMQ: <a href="https://www.rabbitmq.com/tutorials/tutorial-one-dotnet.html">https://www.rabbitmq.com/tutorials/tutorial-one-dotnet.html</a></li>
+<li>Microservices: <a href="https://microservices.io/">https://microservices.io/</a></li>
+</ul>
+<hr>
+<p><em>Template Version: 1.0</em></p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/project-templates/path2/month5-6-microservice-platform.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

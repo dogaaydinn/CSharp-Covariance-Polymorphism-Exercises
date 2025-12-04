@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>How to Teach Polymorphism to Junior Developers | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="How to Teach Polymorphism to Junior Developers | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/mentorship/teaching-polymorphism.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="how-to-teach-polymorphism-to-junior-developers">How to Teach Polymorphism to Junior Developers</h1>
+
+<p><strong>Target Audience:</strong> Senior/Mid-Level Engineers mentoring juniors<br>
+<strong>Time Investment:</strong> 2-4 hours over 1-2 weeks<br>
+<strong>Difficulty:</strong> Teaching a foundational concept that feels abstract</p>
+<hr>
+<h2 id="why-this-is-hard-to-teach">Why This Is Hard to Teach</h2>
+<p>Polymorphism is one of the hardest OOP concepts to teach because:</p>
+<ol>
+<li><strong>It's abstract</strong> - No physical metaphor captures it perfectly</li>
+<li><strong>Benefits aren't obvious</strong> - &quot;Why not just use if/else?&quot; is a fair question</li>
+<li><strong>Requires experience</strong> - You need to have maintained code to see why it matters</li>
+<li><strong>Timing matters</strong> - Teach too early = confusion, too late = bad habits formed</li>
+</ol>
+<p><strong>Your Goal:</strong> Make polymorphism &quot;click&quot; without overwhelming them.</p>
+<hr>
+<h2 id="the-wrong-way-to-teach-it">The Wrong Way to Teach It</h2>
+<h3 id="-dont-start-with-theory">❌ Don't Start with Theory</h3>
+<pre><code>&quot;Polymorphism is when a derived class overrides a base class method using 
+virtual/override keywords, enabling runtime binding through the vtable...&quot;
+</code></pre>
+<p><strong>Why This Fails:</strong><br>
+Junior hears: &quot;Blah blah technical jargon blah.&quot; Eyes glaze over. They memorize for the quiz but don't internalize it.</p>
+<h3 id="-dont-start-with-complex-examples">❌ Don't Start with Complex Examples</h3>
+<pre><code class="lang-csharp">// Showing them factory pattern + strategy pattern + polymorphism all at once
+public abstract class PaymentProcessor {
+    public abstract Task&lt;PaymentResult&gt; ProcessAsync(PaymentRequest request);
+}
+// ... 50 more lines
+</code></pre>
+<p><strong>Why This Fails:</strong><br>
+Too much at once. They're trying to understand polymorphism while also processing factories, async/await, generics, etc.</p>
+<h3 id="-dont-just-show-good-code">❌ Don't Just Show &quot;Good&quot; Code</h3>
+<pre><code class="lang-csharp">// Here's the polymorphic way (clean, elegant)
+public abstract class Animal {
+    public abstract void MakeSound();
+}
+</code></pre>
+<p><strong>Why This Fails:</strong><br>
+They don't see the problem being solved. It looks like unnecessary abstraction.</p>
+<hr>
+<h2 id="the-right-way-to-teach-it">The Right Way to Teach It</h2>
+<h3 id="step-1-show-the-pain-first-30-minutes">Step 1: Show the Pain First (30 minutes)</h3>
+<p><strong>Start with bad code that they can relate to:</strong></p>
+<pre><code class="lang-csharp">// Show them THIS first
+public void ProcessPayment(string paymentType, decimal amount)
+{
+    if (paymentType == &quot;CreditCard&quot;)
+    {
+        // 20 lines of credit card logic
+    }
+    else if (paymentType == &quot;PayPal&quot;)
+    {
+        // 20 lines of PayPal logic
+    }
+    else if (paymentType == &quot;Bitcoin&quot;)
+    {
+        // 20 lines of Bitcoin logic
+    }
+}
+</code></pre>
+<p><strong>Ask them:</strong> &quot;What happens when we add Apple Pay next week?&quot;<br>
+<strong>They'll say:</strong> &quot;Add another if?&quot;<br>
+<strong>You say:</strong> &quot;Right. And what if we have this check in 5 different places?&quot;<br>
+<strong>They'll say:</strong> &quot;...oh. That's a lot of changes.&quot;</p>
+<p><strong>Now they see the problem.</strong> They're emotionally invested in finding a better way.</p>
+<hr>
+<h3 id="step-2-show-the-specific-pain-points-15-minutes">Step 2: Show the Specific Pain Points (15 minutes)</h3>
+<p>Walk through the consequences:</p>
+<p><strong>Pain Point 1: Forgetting to Update</strong></p>
+<pre><code class="lang-csharp">// Developer adds ApplePay to ProcessPayment()
+if (paymentType == &quot;ApplePay&quot;) { ... }
+
+// But forgets to update ValidatePayment()
+public bool ValidatePayment(string paymentType)
+{
+    if (paymentType == &quot;CreditCard&quot;) return true;
+    if (paymentType == &quot;PayPal&quot;) return true;
+    if (paymentType == &quot;Bitcoin&quot;) return true;
+    // ❌ Missing ApplePay! Bug in production!
+}
+</code></pre>
+<p><strong>Pain Point 2: Typos</strong></p>
+<pre><code class="lang-csharp">if (paymentType == &quot;Paypal&quot;) // ❌ Lowercase 'p' - fails silently!
+</code></pre>
+<p><strong>Pain Point 3: Testing Nightmare</strong></p>
+<pre><code>To test 3 payment types, you need to test 3 branches in every method.
+4 methods × 3 types = 12 test cases (and growing!)
+</code></pre>
+<p><strong>Ask:</strong> &quot;Have you experienced this at work?&quot;<br>
+<strong>Most juniors have.</strong> Now they WANT the solution.</p>
+<hr>
+<h3 id="step-3-introduce-polymorphism-as-the-solution-30-minutes">Step 3: Introduce Polymorphism as the Solution (30 minutes)</h3>
+<p><strong>Now show the polymorphic version:</strong></p>
+<pre><code class="lang-csharp">// &quot;What if each payment type knew how to process itself?&quot;
+public interface IPaymentProcessor
+{
+    void Process(decimal amount);
+}
+
+public class CreditCardProcessor : IPaymentProcessor
+{
+    public void Process(decimal amount)
+    {
+        // Credit card logic here
+    }
+}
+
+public class PayPalProcessor : IPaymentProcessor
+{
+    public void Process(decimal amount)
+    {
+        // PayPal logic here
+    }
+}
+
+// Now your service code is dead simple:
+public void ProcessPayment(IPaymentProcessor processor, decimal amount)
+{
+    processor.Process(amount); // That's it!
+}
+</code></pre>
+<p><strong>Key Teaching Points:</strong></p>
+<ol>
+<li><strong>&quot;No more if/else&quot;</strong> - The runtime figures out which Process() to call</li>
+<li><strong>&quot;Adding ApplePay is easy&quot;</strong> - Create one new class, zero changes to existing code</li>
+<li><strong>&quot;Typos are impossible&quot;</strong> - Compiler enforces correct types</li>
+<li><strong>&quot;Testing is isolated&quot;</strong> - Test each processor independently</li>
+</ol>
+<p><strong>Ask:</strong> &quot;Which version would you rather maintain?&quot;<br>
+<strong>They'll say the polymorphic version.</strong> Now they GET IT.</p>
+<hr>
+<h3 id="step-4-hands-on-exercise-45-minutes">Step 4: Hands-On Exercise (45 minutes)</h3>
+<p><strong>Give them a real problem to solve:</strong></p>
+<blockquote>
+<p>&quot;Our notification system sends emails. PM wants to add SMS and push notifications. Refactor this code using polymorphism.&quot;</p>
+</blockquote>
+<p><strong>Starting Code (give them this):</strong></p>
+<pre><code class="lang-csharp">public void SendNotification(string type, string message)
+{
+    if (type == &quot;Email&quot;)
+    {
+        // Send email
+    }
+    else if (type == &quot;SMS&quot;)
+    {
+        // Send SMS
+    }
+}
+</code></pre>
+<p><strong>Expected Solution:</strong></p>
+<pre><code class="lang-csharp">public interface INotificationSender
+{
+    void Send(string message);
+}
+
+public class EmailSender : INotificationSender { ... }
+public class SmsSender : INotificationSender { ... }
+public class PushSender : INotificationSender { ... }
+</code></pre>
+<p><strong>While They Work:</strong></p>
+<ul>
+<li>Don't give them the answer immediately</li>
+<li>Let them struggle for 10-15 minutes (struggle = learning)</li>
+<li>Ask guiding questions: &quot;What interface would you create?&quot;</li>
+<li>Review their solution together</li>
+</ul>
+<p><strong>Debrief:</strong></p>
+<ul>
+<li>&quot;How easy was it to add PushSender?&quot;</li>
+<li>&quot;Could you add Slack notifications now?&quot;</li>
+<li>&quot;See how the service code doesn't need to know about specific types?&quot;</li>
+</ul>
+<hr>
+<h3 id="step-5-connect-to-their-work-15-minutes">Step 5: Connect to Their Work (15 minutes)</h3>
+<p><strong>Ask them to identify opportunities:</strong></p>
+<blockquote>
+<p>&quot;Think about your current project. Where do you see if/else type checking?&quot;</p>
+</blockquote>
+<p>Common examples they'll find:</p>
+<ul>
+<li>User role checking (Admin, User, Guest)</li>
+<li>File format handling (CSV, JSON, XML)</li>
+<li>Report generation (PDF, Excel, HTML)</li>
+<li>Logging destinations (Console, File, Database)</li>
+</ul>
+<p><strong>Have them describe ONE refactoring opportunity:</strong></p>
+<ul>
+<li>What's the current code?</li>
+<li>What interface would they create?</li>
+<li>What would the classes look like?</li>
+</ul>
+<p><strong>This makes it real.</strong> They're not just learning theory; they're seeing how to apply it tomorrow.</p>
+<hr>
+<h2 id="common-questions-junior-developers-ask">Common Questions Junior Developers Ask</h2>
+<h3 id="q-isnt-polymorphism-just-extra-code">Q: &quot;Isn't polymorphism just extra code?&quot;</h3>
+<p><strong>Your Answer:</strong><br>
+&quot;Great question! It is more code INITIALLY. But:</p>
+<ul>
+<li>Adding a 4th payment type with if/else: Modify 5 methods</li>
+<li>Adding a 4th payment type with polymorphism: Create 1 new class</li>
+</ul>
+<p>After the 3rd type, polymorphism saves time. And it's MUCH safer (compiler helps you).&quot;</p>
+<p><strong>Show the math:</strong></p>
+<pre><code>If/else approach:
+- 3 types: 3 classes × 5 methods = 15 if statements
+- Adding 4th type: Modify 5 methods = 5 changes (risk of bugs)
+
+Polymorphic approach:
+- 3 types: 3 classes
+- Adding 4th type: 1 new class = 1 change (can't break existing code)
+</code></pre>
+<h3 id="q-when-should-i-not-use-polymorphism">Q: &quot;When should I NOT use polymorphism?&quot;</h3>
+<p><strong>Your Answer:</strong><br>
+&quot;Excellent question! Don't use it when:</p>
+<ol>
+<li>You only have 2 cases that will never grow (a switch is simpler)</li>
+<li>The cases are fundamentally different (not a type hierarchy)</li>
+<li>Performance is ultra-critical (virtual calls have tiny overhead)</li>
+</ol>
+<p>Example where it's overkill:</p>
+<pre><code class="lang-csharp">// This is fine - only 2 cases, won't grow
+if (isPremium)
+    ApplyPremiumDiscount();
+else
+    ApplyStandardDiscount();
+</code></pre>
+<p>Use your judgment. If you see 3+ if/else checks OR you expect it to grow, use polymorphism.&quot;</p>
+<h3 id="q-whats-the-difference-between-abstract-class-and-interface">Q: &quot;What's the difference between abstract class and interface?&quot;</h3>
+<p><strong>Your Answer:</strong><br>
+&quot;Abstract class: When classes share common implementation
+Interface: When classes share common contract but not implementation</p>
+<p>Example:</p>
+<pre><code class="lang-csharp">// Abstract class - Animals share 'Eat' implementation
+public abstract class Animal
+{
+    public void Eat() =&gt; Console.WriteLine(&quot;Eating...&quot;); // Shared
+    public abstract void MakeSound(); // Each is different
+}
+
+// Interface - Notifiers have nothing in common except contract
+public interface INotificationSender
+{
+    void Send(string message); // Every implementation is unique
+}
+</code></pre>
+<p>Rule of thumb: Start with interface. If you find yourself duplicating code across implementations, consider abstract class.&quot;</p>
+<h3 id="q-this-seems-like-the-strategy-pattern">Q: &quot;This seems like the Strategy pattern?&quot;</h3>
+<p><strong>Your Answer:</strong><br>
+&quot;YES! You're making connections - that's great! Strategy pattern IS polymorphism applied to algorithms. Here's the progression:</p>
+<ol>
+<li>Polymorphism: The OOP concept (virtual methods, inheritance)</li>
+<li>Strategy pattern: A design pattern using polymorphism</li>
+<li>Factory pattern: Creates the right strategy</li>
+</ol>
+<p>You're learning the foundation (polymorphism). Later you'll learn patterns that USE it.&quot;</p>
+<hr>
+<h2 id="red-flags-during-teaching">Red Flags During Teaching</h2>
+<h3 id="-theyre-memorizing-not-understanding">🚩 They're memorizing, not understanding</h3>
+<p><strong>Symptom:</strong> They can recite &quot;polymorphism is...&quot; but can't identify where to use it<br>
+<strong>Fix:</strong> Give them more examples. Ask them to explain it in their own words.</p>
+<h3 id="-theyre-over-applying-it">🚩 They're over-applying it</h3>
+<p><strong>Symptom:</strong> They want to make everything polymorphic<br>
+<strong>Fix:</strong> &quot;Great enthusiasm! But remember: solve problems, don't create abstractions. If if/else works fine, leave it. Refactor when you need to add a 3rd or 4th case.&quot;</p>
+<h3 id="-theyre-frustrated-with-extra-code">🚩 They're frustrated with &quot;extra code&quot;</h3>
+<p><strong>Symptom:</strong> &quot;Why can't I just add another if?&quot;<br>
+<strong>Fix:</strong> Show them the maintainability gain with a real example: &quot;When you're oncall at 2am and need to add Apple Pay, which approach would you rather work with?&quot;</p>
+<h3 id="-theyre-not-seeing-the-connection-to-real-work">🚩 They're not seeing the connection to real work</h3>
+<p><strong>Symptom:</strong> &quot;Okay, but when would I actually use this?&quot;<br>
+<strong>Fix:</strong> Review their recent PRs together and identify 1-2 places where polymorphism would help. Make it tangible.</p>
+<hr>
+<h2 id="week-1-vs-week-2-approach">Week 1 vs Week 2 Approach</h2>
+<h3 id="week-1-concept-introduction">Week 1: Concept Introduction</h3>
+<ul>
+<li>Day 1: Show the pain (if/else hell)</li>
+<li>Day 2: Introduce polymorphism as solution</li>
+<li>Day 3: Guided exercise (notifications example)</li>
+<li>Day 4: Review their solution, discuss questions</li>
+<li>Day 5: Have them find 1 opportunity in their codebase</li>
+</ul>
+<h3 id="week-2-application--mastery">Week 2: Application &amp; Mastery</h3>
+<ul>
+<li>Day 1: Pair program refactoring their identified opportunity</li>
+<li>Day 2-3: They refactor independently (you're available for questions)</li>
+<li>Day 4: Code review their refactoring</li>
+<li>Day 5: Retrospective - what did they learn? What's still unclear?</li>
+</ul>
+<hr>
+<h2 id="measuring-success">Measuring Success</h2>
+<p><strong>After 2 weeks, they should be able to:</strong></p>
+<ol>
+<li>✅ Identify type-checking anti-patterns in code reviews</li>
+<li>✅ Explain polymorphism without jargon (&quot;It's when objects know their own behavior&quot;)</li>
+<li>✅ Refactor if/else type checks to polymorphic design</li>
+<li>✅ Articulate when NOT to use polymorphism</li>
+<li>✅ Apply polymorphism to a real work problem</li>
+</ol>
+<p><strong>If they can do 4/5, they've internalized it.</strong></p>
+<hr>
+<h2 id="follow-up-topics">Follow-Up Topics</h2>
+<p>Once they master polymorphism, introduce:</p>
+<ol>
+<li><p><strong>SOLID Principles</strong> (especially Open/Closed)</p>
+<ul>
+<li>&quot;Remember how you added PushSender without changing existing code? That's the Open/Closed Principle.&quot;</li>
+</ul>
+</li>
+<li><p><strong>Design Patterns</strong></p>
+<ul>
+<li>Strategy: Polymorphism applied to algorithms</li>
+<li>Factory: Creating polymorphic objects</li>
+<li>Template Method: Abstract class with polymorphic steps</li>
+</ul>
+</li>
+<li><p><strong>Dependency Injection</strong></p>
+<ul>
+<li>&quot;How do we provide the right INotificationSender to our service?&quot;</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="resource-to-share">Resource to Share</h2>
+<p><strong>Point them to:</strong></p>
+<ul>
+<li><code>samples/01-Beginner/PolymorphismBasics/</code> in this repo</li>
+<li><code>docs/code-reviews/01-Polymorphism-Review/</code> (shows bad → good refactoring)</li>
+<li><code>samples/01-Beginner/PolymorphismBasics/WHY_THIS_PATTERN.md</code></li>
+</ul>
+<p><strong>Tell them:</strong><br>
+&quot;Study the 'bad-code.cs' and 'fixed-code.cs' examples. Notice how adding a Hamster in the fixed version required ZERO changes to existing code. That's the power of polymorphism.&quot;</p>
+<hr>
+<h2 id="mentorship-script-first-session">Mentorship Script (First Session)</h2>
+<p><strong>Week 1, Day 1 - 1 hour session:</strong></p>
+<pre><code>You: &quot;Have you ever worked with code that had lots of if/else checks for types?&quot;
+Them: &quot;Yeah, we have this in our [X feature].&quot;
+You: &quot;Let's look at it together. What happens when you need to add a new type?&quot;
+Them: &quot;I'd add another if...&quot;
+You: &quot;And if there are 5 methods with these checks?&quot;
+Them: &quot;I'd... need to update all 5.&quot;
+You: &quot;Exactly. That's risky. Ever forgotten one?&quot;
+Them: &quot;Yes! We had a bug last month...&quot;
+You: &quot;That's the problem polymorphism solves. Let me show you.&quot;
+
+[Show bad code → polymorphic code comparison]
+
+You: &quot;See how the polymorphic version doesn't have if/else?&quot;
+Them: &quot;Yeah, but... there's more classes now?&quot;
+You: &quot;True. But when PM says 'add Apple Pay tomorrow,' which approach is safer?&quot;
+Them: &quot;...the polymorphic one. I just add one class.&quot;
+You: &quot;Exactly! Let's try an exercise...&quot;
+
+[Give them notifications exercise]
+
+You: &quot;Take 30 minutes. Try to refactor this using what we just discussed. I'll be here if you need help.&quot;
+
+[They work, you observe]
+
+You: &quot;Great effort! Let's review together...&quot;
+</code></pre>
+<hr>
+<h2 id="advanced-teaching-pair-programming">Advanced Teaching: Pair Programming</h2>
+<p><strong>Week 2, Day 1 - Refactoring Together:</strong></p>
+<pre><code>You: &quot;You identified role checking as a polymorphism opportunity. Let's refactor it together.&quot;
+
+[Open their code]
+
+You: &quot;What interface would we create?&quot;
+Them: &quot;IUserRole with... CanAccessAdmin()?&quot;
+You: &quot;Good! What other methods?&quot;
+Them: &quot;Maybe CanEditPost()?&quot;
+You: &quot;Perfect. Let's create that interface. You drive, I'll navigate.&quot;
+
+[They write code, you guide]
+
+You: &quot;Now create the Admin class. What would CanAccessAdmin return?&quot;
+Them: &quot;True?&quot;
+You: &quot;Yep! And for RegularUser?&quot;
+Them: &quot;False.&quot;
+You: &quot;Great! Now let's refactor the service...&quot;
+
+[Continue until refactoring is done]
+
+You: &quot;Run the tests. They should still pass - we didn't change behavior, just structure.&quot;
+Them: &quot;All green!&quot;
+You: &quot;Perfect. See how much cleaner this is? And if we add 'Moderator' role?&quot;
+Them: &quot;Just create a new Moderator class!&quot;
+You: &quot;Exactly. You've got this.&quot;
+</code></pre>
+<hr>
+<h2 id="celebrating-progress">Celebrating Progress</h2>
+<p><strong>When they get it right:</strong></p>
+<ul>
+<li>&quot;That's exactly right! You're thinking like a mid-level engineer now.&quot;</li>
+<li>&quot;Great insight - I didn't learn that until I was 2 years in.&quot;</li>
+<li>&quot;Your refactoring is cleaner than what I would've written. Nice work!&quot;</li>
+</ul>
+<p><strong>When they struggle:</strong></p>
+<ul>
+<li>&quot;This is hard. I struggled with this too. Let's break it down...&quot;</li>
+<li>&quot;Good try! You're close. What if we...?&quot;</li>
+<li>&quot;I see where you're going. Let me show you one more example...&quot;</li>
+</ul>
+<p><strong>After they succeed:</strong></p>
+<ul>
+<li>&quot;How do you feel about polymorphism now?&quot;</li>
+<li>&quot;What would you tell another junior about this concept?&quot;</li>
+<li>&quot;Where else in our codebase could we apply this?&quot;</li>
+</ul>
+<hr>
+<h2 id="final-advice-for-mentors">Final Advice for Mentors</h2>
+<ol>
+<li><strong>Be patient</strong> - They won't get it immediately. That's normal.</li>
+<li><strong>Show empathy</strong> - &quot;I know this feels abstract. It felt that way for me too.&quot;</li>
+<li><strong>Use real examples</strong> - From your codebase, not textbooks.</li>
+<li><strong>Let them struggle</strong> - Don't rescue too quickly. Struggle = learning.</li>
+<li><strong>Celebrate wins</strong> - &quot;You just eliminated 50 lines of if/else. That's huge!&quot;</li>
+<li><strong>Connect to career</strong> - &quot;Learning this is how you go from junior to mid-level.&quot;</li>
+</ol>
+<p><strong>Remember:</strong> You're not just teaching polymorphism. You're teaching them how to think like a senior engineer.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/mentorship/teaching-polymorphism.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

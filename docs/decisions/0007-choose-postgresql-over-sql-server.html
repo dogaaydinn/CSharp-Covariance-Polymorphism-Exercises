@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>7. Choose PostgreSQL over SQL Server | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="7. Choose PostgreSQL over SQL Server | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/decisions/0007-choose-postgresql-over-sql-server.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="7-choose-postgresql-over-sql-server">7. Choose PostgreSQL over SQL Server</h1>
+
+<p><strong>Status:</strong> ✅ Accepted</p>
+<p><strong>Date:</strong> 2024-12-01</p>
+<p><strong>Deciders:</strong> Architecture Team, Database Team, DevOps</p>
+<p><strong>Technical Story:</strong> Implementation in <code>samples/05-RealWorld/MicroserviceTemplate</code> and <code>samples/06-CuttingEdge/AspireCloudStack</code></p>
+<hr>
+<h2 id="context-and-problem-statement">Context and Problem Statement</h2>
+<p>We need a relational database for our microservices that supports:</p>
+<ul>
+<li>ACID transactions</li>
+<li>Complex queries and joins</li>
+<li>JSON/JSONB storage for flexibility</li>
+<li>Full-text search</li>
+<li>Scalability (vertical and horizontal)</li>
+<li>Cross-platform deployment (local dev, Docker, cloud)</li>
+</ul>
+<p><strong>Requirements:</strong></p>
+<ul>
+<li>Must work in local development (Docker)</li>
+<li>Must work in Azure/AWS/GCP</li>
+<li>Must support EF Core</li>
+<li>Must have good tooling and IDE support</li>
+<li>Licensing must be compatible with our business model</li>
+</ul>
+<hr>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li><strong>Open Source</strong> - No licensing costs, community-driven</li>
+<li><strong>Cross-Platform</strong> - Works on Windows, Linux, macOS, containers</li>
+<li><strong>Cloud Native</strong> - First-class support in all cloud providers</li>
+<li><strong>Advanced Features</strong> - JSON, arrays, full-text search, extensions</li>
+<li><strong>Performance</strong> - Competitive with commercial databases</li>
+<li><strong>Ecosystem</strong> - Strong .NET integration via Npgsql</li>
+</ul>
+<hr>
+<h2 id="considered-options">Considered Options</h2>
+<ul>
+<li><strong>Option 1</strong> - PostgreSQL</li>
+<li><strong>Option 2</strong> - Microsoft SQL Server</li>
+<li><strong>Option 3</strong> - MySQL/MariaDB</li>
+<li><strong>Option 4</strong> - SQLite</li>
+</ul>
+<hr>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p><strong>Chosen option:</strong> &quot;PostgreSQL&quot;, because it offers enterprise-grade features, excellent performance, full JSON support, extensibility, and zero licensing costs while working seamlessly across all environments (local, Docker, any cloud).</p>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li><strong>Open Source</strong> - No licensing fees, even in production</li>
+<li><strong>Advanced JSON Support</strong> - JSONB type with indexing and querying</li>
+<li><strong>Extensions</strong> - PostGIS (geospatial), pg_trgm (fuzzy search), TimescaleDB (time-series)</li>
+<li><strong>Standards Compliance</strong> - Most SQL-standard compliant database</li>
+<li><strong>Cloud Support</strong> - Azure PostgreSQL, AWS RDS/Aurora, GCP Cloud SQL</li>
+<li><strong>Docker-Friendly</strong> - Official images, small footprint</li>
+<li><strong>Tooling</strong> - pgAdmin, DBeaver, DataGrip, Azure Data Studio</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li><strong>Less Windows Integration</strong> - Not native to Windows like SQL Server</li>
+<li><strong>Learning Curve</strong> - Team familiar with SQL Server needs training</li>
+<li><strong>Different Tooling</strong> - Can't use SQL Server Management Studio</li>
+<li><strong>Case Sensitivity</strong> - Identifiers are case-sensitive (can be configured)</li>
+</ul>
+<hr>
+<h2 id="pros-and-cons-of-the-options">Pros and Cons of the Options</h2>
+<h3 id="postgresql-chosen">PostgreSQL (Chosen)</h3>
+<p><strong>What is PostgreSQL?</strong></p>
+<p>PostgreSQL is an open-source, object-relational database system with 35+ years of active development. Known for reliability, feature robustness, and standards compliance.</p>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Open Source</strong> - MIT-like license, no licensing costs</li>
+<li><strong>JSON/JSONB</strong> - First-class JSON support with indexing</li>
+<li><strong>Advanced Types</strong> - Arrays, ranges, UUIDs, enums, custom types</li>
+<li><strong>Full-Text Search</strong> - Built-in without needing external services</li>
+<li><strong>Extensions</strong> - PostGIS, TimescaleDB, pg_cron, pg_partman</li>
+<li><strong>ACID Compliance</strong> - Rock-solid transactions</li>
+<li><strong>Performance</strong> - Excellent query optimizer, parallel queries</li>
+<li><strong>Standards</strong> - Most SQL-standard compliant</li>
+<li><strong>Community</strong> - Huge ecosystem, frequent updates</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Windows Support</strong> - Less native than SQL Server on Windows</li>
+<li><strong>Tooling</strong> - Fewer enterprise tools than SQL Server</li>
+<li><strong>Vacuum Process</strong> - Requires VACUUM for space reclamation</li>
+<li><strong>Replication</strong> - Slightly more complex setup than SQL Server</li>
+</ul>
+<p><strong>Connection String:</strong></p>
+<pre><code class="lang-csharp">&quot;Host=localhost;Port=5432;Database=mydb;Username=postgres;Password=password&quot;
+</code></pre>
+<p><strong>EF Core Configuration:</strong></p>
+<pre><code class="lang-csharp">// Program.cs or Startup.cs
+services.AddDbContext&lt;ApplicationDbContext&gt;(options =&gt;
+    options.UseNpgsql(
+        configuration.GetConnectionString(&quot;PostgreSQL&quot;),
+        npgsqlOptions =&gt;
+        {
+            npgsqlOptions.EnableRetryOnFailure(maxRetryCount: 3);
+            npgsqlOptions.CommandTimeout(30);
+            npgsqlOptions.MigrationsAssembly(&quot;Infrastructure&quot;);
+        }));
+
+// Install: Npgsql.EntityFrameworkCore.PostgreSQL
+</code></pre>
+<p><strong>Docker Compose:</strong></p>
+<pre><code class="lang-yaml">version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: myapp-postgres
+    environment:
+      POSTGRES_DB: mydb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - &quot;5432:5432&quot;
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [&quot;CMD-SHELL&quot;, &quot;pg_isready -U postgres&quot;]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: myapp-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - &quot;5050:80&quot;
+    depends_on:
+      - postgres
+
+volumes:
+  postgres-data:
+</code></pre>
+<p><strong>.NET Aspire (Even Simpler):</strong></p>
+<pre><code class="lang-csharp">// AppHost/Program.cs
+var builder = DistributedApplication.CreateBuilder(args);
+
+var postgres = builder.AddPostgres(&quot;postgres&quot;)
+    .WithPgAdmin()          // Automatically adds pgAdmin
+    .WithDataVolume();      // Persistent storage
+
+var db = postgres.AddDatabase(&quot;mydb&quot;);
+
+var api = builder.AddProject&lt;Projects.ApiService&gt;(&quot;api&quot;)
+    .WithReference(db);     // Connection string injected automatically!
+
+await builder.Build().RunAsync();
+
+// No docker-compose needed!
+// Navigate to: http://localhost:18888 for Aspire Dashboard
+// pgAdmin available automatically
+</code></pre>
+<p><strong>Advanced PostgreSQL Features:</strong></p>
+<p><strong>1. JSONB (Binary JSON):</strong></p>
+<pre><code class="lang-csharp">// Entity
+public class Product
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+
+    // Store arbitrary JSON data
+    [Column(TypeName = &quot;jsonb&quot;)]
+    public JsonDocument Metadata { get; set; }
+}
+
+// Query JSONB
+var productsWithTag = await _context.Products
+    .Where(p =&gt; EF.Functions.JsonContains(
+        p.Metadata.RootElement,
+        JsonDocument.Parse(@&quot;{&quot;&quot;tags&quot;&quot;:[&quot;&quot;electronics&quot;&quot;]}&quot;)))
+    .ToListAsync();
+
+// PostgreSQL generates:
+// SELECT * FROM products
+// WHERE metadata @&gt; '{&quot;tags&quot;:[&quot;electronics&quot;]}'
+
+// Create index on JSONB field
+migrationBuilder.Sql(
+    &quot;CREATE INDEX idx_product_metadata_tags ON products USING GIN ((metadata-&gt;'tags'))&quot;);
+</code></pre>
+<p><strong>2. Array Types:</strong></p>
+<pre><code class="lang-csharp">public class Product
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+
+    // Native array support
+    public string[] Tags { get; set; }
+    public int[] CategoryIds { get; set; }
+}
+
+// Query arrays
+var products = await _context.Products
+    .Where(p =&gt; p.Tags.Contains(&quot;electronics&quot;))
+    .ToListAsync();
+
+// PostgreSQL:
+// SELECT * FROM products WHERE 'electronics' = ANY(tags)
+</code></pre>
+<p><strong>3. Full-Text Search:</strong></p>
+<pre><code class="lang-csharp">// Entity configuration
+modelBuilder.Entity&lt;Product&gt;()
+    .HasIndex(p =&gt; p.Name)
+    .HasMethod(&quot;GIN&quot;)
+    .IsTsVectorExpressionIndex(&quot;english&quot;);
+
+// Search query
+var results = await _context.Products
+    .Where(p =&gt; EF.Functions.ToTsVector(&quot;english&quot;, p.Name)
+        .Matches(EF.Functions.ToTsQuery(&quot;english&quot;, &quot;laptop&quot;)))
+    .ToListAsync();
+
+// PostgreSQL:
+// SELECT * FROM products
+// WHERE to_tsvector('english', name) @@ to_tsquery('english', 'laptop')
+</code></pre>
+<p><strong>4. Generated Columns:</strong></p>
+<pre><code class="lang-csharp">public class Product
+{
+    public int Id { get; set; }
+    public decimal Price { get; set; }
+    public decimal TaxRate { get; set; }
+
+    // Computed column (stored in database)
+    public decimal TotalPrice { get; set; }
+}
+
+// Migration
+migrationBuilder.Sql(@&quot;
+    ALTER TABLE products
+    ADD COLUMN total_price decimal
+    GENERATED ALWAYS AS (price * (1 + tax_rate)) STORED
+&quot;);
+</code></pre>
+<p><strong>5. Extensions - PostGIS (Geospatial):</strong></p>
+<pre><code class="lang-csharp">// Install: Npgsql.EntityFrameworkCore.PostgreSQL.NetTopologySuite
+
+public class Store
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+
+    [Column(TypeName = &quot;geometry(Point)&quot;)]
+    public Point Location { get; set; }
+}
+
+// Find stores within 5km radius
+var nearbyStores = await _context.Stores
+    .Where(s =&gt; s.Location.Distance(userLocation) &lt; 5000)
+    .OrderBy(s =&gt; s.Location.Distance(userLocation))
+    .ToListAsync();
+
+// PostgreSQL (PostGIS):
+// SELECT * FROM stores
+// WHERE ST_Distance(location, ST_SetSRID(ST_MakePoint(lon, lat), 4326)) &lt; 5000
+// ORDER BY ST_Distance(location, ST_SetSRID(ST_MakePoint(lon, lat), 4326))
+</code></pre>
+<h3 id="microsoft-sql-server">Microsoft SQL Server</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Windows Integration</strong> - Native Windows authentication, SSMS</li>
+<li><strong>Tooling</strong> - SQL Server Management Studio, Profiler</li>
+<li><strong>Team Familiarity</strong> - Many .NET devs know SQL Server</li>
+<li><strong>Azure Integration</strong> - Azure SQL Database is excellent</li>
+<li><strong>Temporal Tables</strong> - Built-in time-travel queries</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Licensing Costs</strong> - ~$14,000 per core for Enterprise, ~$1,400 for Standard</li>
+<li><strong>Windows-Centric</strong> - Linux support is newer, less mature</li>
+<li><strong>Docker Images</strong> - Larger images (~1.5GB vs 200MB for PostgreSQL)</li>
+<li><strong>Limited JSON Support</strong> - JSON functions but no native JSONB type</li>
+<li><strong>Cloud Costs</strong> - Azure SQL more expensive than PostgreSQL equivalents</li>
+</ul>
+<p><strong>Connection String:</strong></p>
+<pre><code class="lang-csharp">&quot;Server=localhost;Database=mydb;User Id=sa;Password=Password123!;TrustServerCertificate=True&quot;
+</code></pre>
+<p><strong>When SQL Server Makes Sense:</strong></p>
+<ul>
+<li>Heavily invested in Microsoft ecosystem</li>
+<li>Need SQL Server-specific features (columnstore, in-memory OLTP)</li>
+<li>Azure SQL Managed Instance required</li>
+<li>Team has deep SQL Server expertise and no time for training</li>
+</ul>
+<p><strong>Why Not Chosen:</strong>
+Licensing costs (~$14k/core for Enterprise) and Docker image size (1.5GB) make SQL Server less suitable for cloud-native microservices. For educational repository, PostgreSQL's free and open nature is preferable.</p>
+<h3 id="mysqlmariadb">MySQL/MariaDB</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Open source (MySQL has dual license, MariaDB is GPL)</li>
+<li>Very fast for read-heavy workloads</li>
+<li>Wide adoption (WordPress, Drupal)</li>
+<li>Good replication support</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Less Feature-Rich</strong> - No native JSON indexing (MySQL 5.7), limited window functions</li>
+<li><strong>Oracle Ownership</strong> - MySQL owned by Oracle (licensing concerns)</li>
+<li><strong>Less Standards-Compliant</strong> - Deviates from SQL standard in places</li>
+<li><strong>Weaker Transactions</strong> - Historically weaker ACID guarantees</li>
+<li><strong>Limited Extensions</strong> - No equivalent to PostgreSQL's extension ecosystem</li>
+</ul>
+<p><strong>Why Not Chosen:</strong>
+PostgreSQL offers superior feature set (JSONB, arrays, extensions, standards compliance) while also being open source. MySQL's advantages (speed in simple read-heavy workloads) don't outweigh PostgreSQL's flexibility for complex applications.</p>
+<h3 id="sqlite">SQLite</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Embedded - no server process needed</li>
+<li>Single file database</li>
+<li>Perfect for development/testing</li>
+<li>Extremely fast for small datasets</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Not Client-Server</strong> - Can't scale horizontally</li>
+<li><strong>Limited Concurrency</strong> - Writers block readers</li>
+<li><strong>No User Management</strong> - No built-in authentication</li>
+<li><strong>Limited ALTER TABLE</strong> - Can't modify columns easily</li>
+<li><strong>Not for Production</strong> - Not suitable for multi-user web apps</li>
+</ul>
+<p><strong>When SQLite Makes Sense:</strong></p>
+<ul>
+<li>Local development/testing</li>
+<li>Mobile apps</li>
+<li>Desktop applications</li>
+<li>Embedded devices</li>
+</ul>
+<p><strong>Why Not Chosen for Production:</strong>
+SQLite is excellent for testing and local dev, but our microservices need client-server databases with proper concurrency and scalability. We <strong>do use SQLite</strong> in unit tests via <code>UseInMemoryDatabase()</code>.</p>
+<hr>
+<h2 id="feature-comparison-table">Feature Comparison Table</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>PostgreSQL</th>
+<th>SQL Server</th>
+<th>MySQL</th>
+<th>SQLite</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>License</strong></td>
+<td>Open Source (PostgreSQL License)</td>
+<td>Proprietary (~$14k/core)</td>
+<td>Open (GPL) / Proprietary</td>
+<td>Public Domain</td>
+</tr>
+<tr>
+<td><strong>JSON Support</strong></td>
+<td>✅ JSONB (indexed)</td>
+<td>⚠️ JSON (no index)</td>
+<td>⚠️ JSON (basic)</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>Arrays</strong></td>
+<td>✅ Native</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>Full-Text Search</strong></td>
+<td>✅ Built-in</td>
+<td>✅ Built-in</td>
+<td>✅ Built-in</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>Extensions</strong></td>
+<td>✅ PostGIS, TimescaleDB, etc.</td>
+<td>⚠️ Limited</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>Window Functions</strong></td>
+<td>✅ Excellent</td>
+<td>✅ Excellent</td>
+<td>⚠️ Basic</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>CTEs (WITH)</strong></td>
+<td>✅</td>
+<td>✅</td>
+<td>✅ (8.0+)</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>Geospatial</strong></td>
+<td>✅ PostGIS</td>
+<td>✅ Built-in</td>
+<td>⚠️ Limited</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>Horizontal Scaling</strong></td>
+<td>✅ Citus, partitioning</td>
+<td>⚠️ Complex</td>
+<td>✅ Replication</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>Docker Image Size</strong></td>
+<td>200MB (Alpine)</td>
+<td>1.5GB</td>
+<td>500MB</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td><strong>Cloud Support</strong></td>
+<td>✅ All clouds</td>
+<td>✅ Azure best</td>
+<td>✅ All clouds</td>
+<td>❌</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="migration-from-sql-server-to-postgresql">Migration from SQL Server to PostgreSQL</h2>
+<p>If migrating existing SQL Server databases:</p>
+<p><strong>1. Schema Migration:</strong></p>
+<pre><code class="lang-bash"># Use pgloader for automated migration
+pgloader mssql://user:pass@sqlserver:1433/MyDB postgresql://user:pass@postgres:5432/mydb
+
+# Or manual migration
+# Export SQL Server schema → Convert to PostgreSQL DDL
+</code></pre>
+<p><strong>2. Code Changes:</strong></p>
+<pre><code class="lang-csharp">// SQL Server specific
+builder.HasDefaultValueSql(&quot;NEWID()&quot;);        // GUID generation
+builder.HasDefaultValueSql(&quot;GETUTCDATE()&quot;);  // Current timestamp
+
+// PostgreSQL equivalent
+builder.HasDefaultValueSql(&quot;gen_random_uuid()&quot;);  // GUID
+builder.HasDefaultValueSql(&quot;NOW()&quot;);              // Timestamp
+</code></pre>
+<p><strong>3. Case Sensitivity:</strong></p>
+<pre><code class="lang-sql">-- SQL Server (case-insensitive)
+SELECT * FROM Products WHERE Name = 'widget'  -- Matches 'Widget', 'WIDGET'
+
+-- PostgreSQL (case-sensitive by default)
+SELECT * FROM products WHERE name = 'widget'  -- Only matches 'widget'
+SELECT * FROM products WHERE name ILIKE 'widget'  -- Case-insensitive
+</code></pre>
+<hr>
+<h2 id="local-development-setup">Local Development Setup</h2>
+<p><strong>Option 1: Docker Compose</strong></p>
+<pre><code class="lang-bash">docker-compose up -d
+# PostgreSQL: localhost:5432
+# pgAdmin: http://localhost:5050
+</code></pre>
+<p><strong>Option 2: .NET Aspire (Recommended)</strong></p>
+<pre><code class="lang-bash">cd AppHost
+dotnet run
+
+# Aspire Dashboard: http://localhost:18888
+# PostgreSQL and pgAdmin auto-configured
+</code></pre>
+<p><strong>Option 3: Local Install</strong></p>
+<pre><code class="lang-bash"># macOS
+brew install postgresql@16
+brew services start postgresql@16
+
+# Ubuntu
+sudo apt install postgresql-16
+sudo systemctl start postgresql
+
+# Windows
+# Download installer from postgresql.org
+</code></pre>
+<hr>
+<h2 id="production-deployment-options">Production Deployment Options</h2>
+<p><strong>1. Azure Database for PostgreSQL:</strong></p>
+<pre><code class="lang-bash">az postgres flexible-server create \
+  --name myapp-postgres \
+  --resource-group myapp-rg \
+  --location eastus \
+  --admin-user myadmin \
+  --admin-password MyPassword123! \
+  --sku-name Standard_D2s_v3 \
+  --tier GeneralPurpose \
+  --storage-size 128
+</code></pre>
+<p><strong>2. AWS RDS PostgreSQL:</strong></p>
+<pre><code class="lang-bash">aws rds create-db-instance \
+  --db-instance-identifier myapp-postgres \
+  --db-instance-class db.t3.medium \
+  --engine postgres \
+  --engine-version 16.1 \
+  --master-username postgres \
+  --master-user-password MyPassword123! \
+  --allocated-storage 100
+</code></pre>
+<p><strong>3. Kubernetes with Helm:</strong></p>
+<pre><code class="lang-bash">helm install postgres bitnami/postgresql \
+  --set auth.postgresPassword=password \
+  --set primary.persistence.size=10Gi
+</code></pre>
+<hr>
+<h2 id="links">Links</h2>
+<ul>
+<li><a href="https://www.postgresql.org/docs/">PostgreSQL Official Documentation</a></li>
+<li><a href="https://www.npgsql.org/">Npgsql - .NET Data Provider</a></li>
+<li><a href="https://www.npgsql.org/efcore/">EF Core PostgreSQL Provider</a></li>
+<li><a href="https://www.pgadmin.org/">pgAdmin</a></li>
+<li><a href="https://postgis.net/">PostGIS</a></li>
+<li><a href="../../samples/05-RealWorld/MicroserviceTemplate">Sample Implementation</a></li>
+</ul>
+<hr>
+<h2 id="notes">Notes</h2>
+<p><strong>Best Practices:</strong></p>
+<ul>
+<li><strong>Connection Pooling</strong> - Always use connection pooling (enabled by default in Npgsql)</li>
+<li><strong>Indexes</strong> - Create indexes on foreign keys and frequently queried columns</li>
+<li><strong>VACUUM</strong> - Schedule regular VACUUM ANALYZE for statistics</li>
+<li><strong>Prepared Statements</strong> - EF Core uses them automatically via Npgsql</li>
+<li><strong>Partitioning</strong> - Use table partitioning for very large tables (100M+ rows)</li>
+</ul>
+<p><strong>Common Pitfalls:</strong></p>
+<ul>
+<li>❌ Not creating indexes on foreign keys (PostgreSQL doesn't auto-create them)</li>
+<li>❌ Using <code>SELECT *</code> in production (explicitly list columns)</li>
+<li>❌ Not using connection pooling</li>
+<li>❌ Forgetting to analyze tables after bulk inserts</li>
+</ul>
+<p><strong>Monitoring:</strong></p>
+<pre><code class="lang-sql">-- Check database size
+SELECT pg_size_pretty(pg_database_size('mydb'));
+
+-- Check slow queries
+SELECT query, mean_exec_time, calls
+FROM pg_stat_statements
+ORDER BY mean_exec_time DESC
+LIMIT 10;
+
+-- Check table bloat
+SELECT schemaname, tablename, pg_size_pretty(pg_total_relation_size(schemaname||'.'||tablename))
+FROM pg_tables
+ORDER BY pg_total_relation_size(schemaname||'.'||tablename) DESC;
+</code></pre>
+<p><strong>Review Date:</strong> 2025-12-01</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/decisions/0007-choose-postgresql-over-sql-server.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Week 1 Assessment Test - C# Basics and Polymorphism Fundamentals | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Week 1 Assessment Test - C# Basics and Polymorphism Fundamentals | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../../favicon.ico">
+      <link rel="stylesheet" href="../../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/assessment-tests/path1/week-01-test.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../../index.html">
+            <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="week-1-assessment-test---c-basics-and-polymorphism-fundamentals">Week 1 Assessment Test - C# Basics and Polymorphism Fundamentals</h1>
+
+<p><strong>Path</strong>: 1 - Junior Developer
+<strong>Week</strong>: 1
+<strong>Topics</strong>: C# syntax, OOP basics, Virtual methods, Abstract classes, Interfaces
+<strong>Duration</strong>: 30 minutes
+<strong>Passing Score</strong>: 70% (7/10 correct)
+<strong>Total Points</strong>: 10</p>
+<hr>
+<h2 id="instructions">Instructions</h2>
+<ul>
+<li>Read each question carefully</li>
+<li>For multiple choice, select the best answer</li>
+<li>For code analysis, explain what's wrong and how to fix it</li>
+<li>For short answer, be concise but complete</li>
+<li>No external resources allowed during the test</li>
+</ul>
+<hr>
+<h2 id="section-1-multiple-choice-5-questions-1-point-each">Section 1: Multiple Choice (5 questions, 1 point each)</h2>
+<h3 id="question-1">Question 1</h3>
+<p>What keyword is used to allow a method to be overridden in a derived class?</p>
+<p>a) <code>override</code>
+b) <code>virtual</code>
+c) <code>abstract</code>
+d) <code>sealed</code></p>
+<p><strong>Points</strong>: 1</p>
+<hr>
+<h3 id="question-2">Question 2</h3>
+<p>Which of the following is TRUE about abstract classes in C#?</p>
+<p>a) Abstract classes can be instantiated directly
+b) Abstract classes cannot have concrete (implemented) methods
+c) Abstract classes can have both abstract and concrete methods
+d) Abstract classes cannot have constructors</p>
+<p><strong>Points</strong>: 1</p>
+<hr>
+<h3 id="question-3">Question 3</h3>
+<p>What is polymorphism?</p>
+<p>a) The ability to create multiple classes with the same name
+b) The ability of different classes to respond to the same method call in different ways
+c) The process of hiding implementation details
+d) The ability to inherit from multiple base classes</p>
+<p><strong>Points</strong>: 1</p>
+<hr>
+<h3 id="question-4">Question 4</h3>
+<p>What happens if you try to call a method marked as <code>abstract</code> from the base class?</p>
+<p>a) It executes the base class implementation
+b) It throws a compile-time error if not overridden in derived class
+c) It does nothing
+d) It calls the derived class implementation automatically</p>
+<p><strong>Points</strong>: 1</p>
+<hr>
+<h3 id="question-5">Question 5</h3>
+<p>Which statement is TRUE about interfaces?</p>
+<p>a) Interfaces can contain implementation code
+b) A class can implement multiple interfaces
+c) Interfaces can have constructors
+d) Interfaces can contain fields</p>
+<p><strong>Points</strong>: 1</p>
+<hr>
+<h2 id="section-2-short-answer-3-questions-15-points-each">Section 2: Short Answer (3 questions, 1.5 points each)</h2>
+<h3 id="question-6">Question 6</h3>
+<p>Explain the difference between <code>virtual</code> and <code>abstract</code> methods. When would you use each?</p>
+<p><strong>Expected Answer Length</strong>: 3-4 sentences</p>
+<p><strong>Points</strong>: 1.5</p>
+<hr>
+<h3 id="question-7">Question 7</h3>
+<p>In the Animal/Cat/Dog hierarchy, why is it important that derived classes can be stored in base class references (e.g., <code>Animal animal = new Dog();</code>)? Give a practical example.</p>
+<p><strong>Expected Answer Length</strong>: 2-3 sentences</p>
+<p><strong>Points</strong>: 1.5</p>
+<hr>
+<h3 id="question-8">Question 8</h3>
+<p>What is the purpose of the <code>override</code> keyword? What happens if you forget to use it when overriding a virtual method?</p>
+<p><strong>Expected Answer Length</strong>: 2-3 sentences</p>
+<p><strong>Points</strong>: 1.5</p>
+<hr>
+<h2 id="section-3-code-analysis-15-points">Section 3: Code Analysis (1.5 points)</h2>
+<h3 id="question-9">Question 9</h3>
+<p>Analyze the following code and identify what's wrong. Explain the error and provide the corrected code.</p>
+<pre><code class="lang-csharp">public class Animal
+{
+    public void MakeSound()
+    {
+        Console.WriteLine(&quot;Some sound&quot;);
+    }
+}
+
+public class Dog : Animal
+{
+    public void MakeSound()
+    {
+        Console.WriteLine(&quot;Woof!&quot;);
+    }
+}
+
+// Usage
+Animal animal = new Dog();
+animal.MakeSound(); // What does this print?
+</code></pre>
+<p><strong>What's wrong?</strong> <em>(Explain the issue)</em></p>
+<p><strong>Corrected code:</strong> <em>(Provide the fix)</em></p>
+<p><strong>Points</strong>: 1.5</p>
+<hr>
+<h2 id="answer-key">Answer Key</h2>
+<h3 id="section-1-multiple-choice">Section 1: Multiple Choice</h3>
+<p><strong>Question 1</strong>: <strong>b) <code>virtual</code></strong>
+<em>Explanation</em>: The <code>virtual</code> keyword in the base class allows the method to be overridden in derived classes.</p>
+<p><strong>Question 2</strong>: <strong>c) Abstract classes can have both abstract and concrete methods</strong>
+<em>Explanation</em>: Abstract classes can contain both abstract methods (no implementation) and concrete methods (with implementation).</p>
+<p><strong>Question 3</strong>: <strong>b) The ability of different classes to respond to the same method call in different ways</strong>
+<em>Explanation</em>: Polymorphism allows objects of different types to be treated uniformly while exhibiting their specific behavior.</p>
+<p><strong>Question 4</strong>: <strong>b) It throws a compile-time error if not overridden in derived class</strong>
+<em>Explanation</em>: Abstract methods have no implementation in the base class and MUST be overridden in any non-abstract derived class.</p>
+<p><strong>Question 5</strong>: <strong>b) A class can implement multiple interfaces</strong>
+<em>Explanation</em>: C# supports multiple interface implementation but not multiple class inheritance.</p>
+<hr>
+<h3 id="section-2-short-answer">Section 2: Short Answer</h3>
+<p><strong>Question 6</strong>: Expected answer:</p>
+<ul>
+<li><code>virtual</code> methods have a default implementation in the base class that can be optionally overridden</li>
+<li><code>abstract</code> methods have NO implementation and MUST be overridden in derived classes</li>
+<li>Use <code>virtual</code> when you want to provide a default behavior that can be customized</li>
+<li>Use <code>abstract</code> when every derived class must provide its own implementation</li>
+</ul>
+<p><strong>Question 7</strong>: Expected answer:</p>
+<ul>
+<li>Storing derived classes in base class references enables polymorphism</li>
+<li>This allows you to treat different types uniformly in collections (e.g., <code>List&lt;Animal&gt;</code> containing Dogs, Cats, Birds)</li>
+<li>Example: A zoo application can process all animals in a single loop without knowing their specific types</li>
+</ul>
+<p><strong>Question 8</strong>: Expected answer:</p>
+<ul>
+<li>The <code>override</code> keyword explicitly indicates that a method is overriding a base class virtual/abstract method</li>
+<li>Without <code>override</code>, you're creating a new method that hides the base method (method hiding with <code>new</code>)</li>
+<li>This can lead to unexpected behavior where the base class method is called instead of the derived class method</li>
+</ul>
+<hr>
+<h3 id="section-3-code-analysis">Section 3: Code Analysis</h3>
+<p><strong>Question 9</strong>:</p>
+<p><strong>What's wrong?</strong></p>
+<ul>
+<li>The <code>MakeSound()</code> method in the <code>Animal</code> class is not marked as <code>virtual</code></li>
+<li>The <code>MakeSound()</code> method in the <code>Dog</code> class is not marked with <code>override</code></li>
+<li>Result: <code>animal.MakeSound()</code> will print &quot;Some sound&quot; instead of &quot;Woof!&quot; because the Dog method is hiding the Animal method, not overriding it</li>
+</ul>
+<p><strong>Corrected code:</strong></p>
+<pre><code class="lang-csharp">public class Animal
+{
+    public virtual void MakeSound() // Added 'virtual'
+    {
+        Console.WriteLine(&quot;Some sound&quot;);
+    }
+}
+
+public class Dog : Animal
+{
+    public override void MakeSound() // Added 'override'
+    {
+        Console.WriteLine(&quot;Woof!&quot;);
+    }
+}
+
+// Usage
+Animal animal = new Dog();
+animal.MakeSound(); // Now correctly prints &quot;Woof!&quot;
+</code></pre>
+<hr>
+<h2 id="grading-rubric">Grading Rubric</h2>
+<table>
+<thead>
+<tr>
+<th>Section</th>
+<th>Points Available</th>
+<th>Criteria</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Multiple Choice</td>
+<td>5</td>
+<td>1 point per correct answer</td>
+</tr>
+<tr>
+<td>Short Answer Q6</td>
+<td>1.5</td>
+<td>Full: All points covered. Partial: 0.75 for incomplete. Wrong: 0</td>
+</tr>
+<tr>
+<td>Short Answer Q7</td>
+<td>1.5</td>
+<td>Full: Practical example given. Partial: 0.75 for concept only. Wrong: 0</td>
+</tr>
+<tr>
+<td>Short Answer Q8</td>
+<td>1.5</td>
+<td>Full: Both parts explained. Partial: 1.0 for one part. Wrong: 0</td>
+</tr>
+<tr>
+<td>Code Analysis</td>
+<td>1.5</td>
+<td>Full: Correct diagnosis and fix. Partial: 1.0 for diagnosis only. Wrong: 0</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>10</strong></td>
+<td><strong>Pass: 7 points (70%)</strong></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="study-resources">Study Resources</h2>
+<p>If you didn't pass, review these materials:</p>
+<ul>
+<li>📁 <code>samples/01-Beginner/PolymorphismBasics/01_SimplePolymorphism.cs</code></li>
+<li>📁 <code>samples/01-Beginner/PolymorphismBasics/02_AbstractClasses.cs</code></li>
+<li>📁 <code>samples/01-Beginner/PolymorphismBasics/03_InterfacePolymorphism.cs</code></li>
+<li>📄 <code>samples/01-Beginner/PolymorphismBasics/WHY_THIS_PATTERN.md</code></li>
+</ul>
+<hr>
+<p><em>Test Version: 1.0</em>
+<em>Last Updated: 2025-12-02</em></p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/assessment-tests/path1/week-01-test.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

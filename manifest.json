@@ -1,0 +1,4166 @@
+{
+  "source_base_path": "/home/runner/work/CSharp-Covariance-Polymorphism-Exercises/CSharp-Covariance-Polymorphism-Exercises",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "type": "Resource",
+      "output": {
+        "resource": {
+          "relative_path": "index.json"
+        }
+      }
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "CHANGELOG.md",
+      "output": {
+        ".html": {
+          "relative_path": "CHANGELOG.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "CODE_OF_CONDUCT.md",
+      "output": {
+        ".html": {
+          "relative_path": "CODE_OF_CONDUCT.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "CODE_REVIEW_REPORT.md",
+      "output": {
+        ".html": {
+          "relative_path": "CODE_REVIEW_REPORT.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "CONTRIBUTING.md",
+      "output": {
+        ".html": {
+          "relative_path": "CONTRIBUTING.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "ENTERPRISE_TRANSFORMATION_SUMMARY.md",
+      "output": {
+        ".html": {
+          "relative_path": "ENTERPRISE_TRANSFORMATION_SUMMARY.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "FUTURE_IMPROVEMENTS.md",
+      "output": {
+        ".html": {
+          "relative_path": "FUTURE_IMPROVEMENTS.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "GAP_ANALYSIS.md",
+      "output": {
+        ".html": {
+          "relative_path": "GAP_ANALYSIS.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "PRODUCTION_READY_REPORT.md",
+      "output": {
+        ".html": {
+          "relative_path": "PRODUCTION_READY_REPORT.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "README.md",
+      "output": {
+        ".html": {
+          "relative_path": "README.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "ROADMAP.md",
+      "output": {
+        ".html": {
+          "relative_path": "ROADMAP.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "SECURITY.md",
+      "output": {
+        ".html": {
+          "relative_path": "SECURITY.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "SUPPORT.md",
+      "output": {
+        ".html": {
+          "relative_path": "SUPPORT.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.Analyzers.CodeFixes.ConfigureAwaitCodeFixProvider.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.Analyzers.CodeFixes.ConfigureAwaitCodeFixProvider.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.Analyzers.CodeFixes.ConfigureAwaitCodeFixProvider",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.Analyzers.CodeFixes.StringConcatenationCodeFixProvider.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.Analyzers.CodeFixes.StringConcatenationCodeFixProvider.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.Analyzers.CodeFixes.StringConcatenationCodeFixProvider",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.Analyzers.CodeFixes.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.Analyzers.CodeFixes.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.Analyzers.CodeFixes",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.Analyzers.Design.ClassComplexityAnalyzer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.Analyzers.Design.ClassComplexityAnalyzer.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.Analyzers.Design.ClassComplexityAnalyzer",
+      "Summary": "<p sourcefile=\"api/AdvancedConcepts.Analyzers.Design.ClassComplexityAnalyzer.yml\" sourcestartlinenumber=\"1\">Analyzer that detects classes that violate Single Responsibility Principle by having too many responsibilities.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.Analyzers.Design.ImmutabilityAnalyzer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.Analyzers.Design.ImmutabilityAnalyzer.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.Analyzers.Design.ImmutabilityAnalyzer",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.Analyzers.Design.SolidViolationAnalyzer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.Analyzers.Design.SolidViolationAnalyzer.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.Analyzers.Design.SolidViolationAnalyzer",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.Analyzers.Design.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.Analyzers.Design.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.Analyzers.Design",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.Analyzers.Performance.AllocationAnalyzer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.Analyzers.Performance.AllocationAnalyzer.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.Analyzers.Performance.AllocationAnalyzer",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.Analyzers.Performance.AsyncAwaitAnalyzer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.Analyzers.Performance.AsyncAwaitAnalyzer.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.Analyzers.Performance.AsyncAwaitAnalyzer",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.Analyzers.Performance.ConfigureAwaitAnalyzer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.Analyzers.Performance.ConfigureAwaitAnalyzer.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.Analyzers.Performance.ConfigureAwaitAnalyzer",
+      "Summary": "<p sourcefile=\"api/AdvancedConcepts.Analyzers.Performance.ConfigureAwaitAnalyzer.yml\" sourcestartlinenumber=\"1\">Analyzer that detects missing ConfigureAwait(false) calls in library code.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.Analyzers.Performance.LinqPerformanceAnalyzer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.Analyzers.Performance.LinqPerformanceAnalyzer.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.Analyzers.Performance.LinqPerformanceAnalyzer",
+      "Summary": "<p sourcefile=\"api/AdvancedConcepts.Analyzers.Performance.LinqPerformanceAnalyzer.yml\" sourcestartlinenumber=\"1\">Analyzer that detects common LINQ performance issues like Count() vs Any() and multiple enumerations.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.Analyzers.Performance.StringConcatenationAnalyzer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.Analyzers.Performance.StringConcatenationAnalyzer.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.Analyzers.Performance.StringConcatenationAnalyzer",
+      "Summary": "<p sourcefile=\"api/AdvancedConcepts.Analyzers.Performance.StringConcatenationAnalyzer.yml\" sourcestartlinenumber=\"1\">Analyzer that detects inefficient string concatenation in loops.\nSuggests using StringBuilder for better performance.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.Analyzers.Performance.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.Analyzers.Performance.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.Analyzers.Performance",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.Analyzers.Security.SqlInjectionAnalyzer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.Analyzers.Security.SqlInjectionAnalyzer.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.Analyzers.Security.SqlInjectionAnalyzer",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.Analyzers.Security.XssVulnerabilityAnalyzer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.Analyzers.Security.XssVulnerabilityAnalyzer.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.Analyzers.Security.XssVulnerabilityAnalyzer",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.Analyzers.Security.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.Analyzers.Security.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.Analyzers.Security",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.Core.Advanced.DependencyInjection.DIExample.ApplicationService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.Core.Advanced.DependencyInjection.DIExample.ApplicationService.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.Core.Advanced.DependencyInjection.DIExample.ApplicationService",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.Core.Advanced.DependencyInjection.DIExample.ConsoleNotificationService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.Core.Advanced.DependencyInjection.DIExample.ConsoleNotificationService.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.Core.Advanced.DependencyInjection.DIExample.ConsoleNotificationService",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.Core.Advanced.DependencyInjection.DIExample.CounterService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.Core.Advanced.DependencyInjection.DIExample.CounterService.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.Core.Advanced.DependencyInjection.DIExample.CounterService",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.Core.Advanced.DependencyInjection.DIExample.DataProcessor.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.Core.Advanced.DependencyInjection.DIExample.DataProcessor.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.Core.Advanced.DependencyInjection.DIExample.DataProcessor",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.Core.Advanced.DependencyInjection.DIExample.ICounterService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.Core.Advanced.DependencyInjection.DIExample.ICounterService.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.Core.Advanced.DependencyInjection.DIExample.ICounterService",
+      "Summary": "<p sourcefile=\"api/AdvancedConcepts.Core.Advanced.DependencyInjection.DIExample.ICounterService.yml\" sourcestartlinenumber=\"1\">Service lifetimes demonstration.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.Core.Advanced.DependencyInjection.DIExample.IDataProcessor.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.Core.Advanced.DependencyInjection.DIExample.IDataProcessor.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.Core.Advanced.DependencyInjection.DIExample.IDataProcessor",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.Core.Advanced.DependencyInjection.DIExample.IDataRepository.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.Core.Advanced.DependencyInjection.DIExample.IDataRepository.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.Core.Advanced.DependencyInjection.DIExample.IDataRepository",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.Core.Advanced.DependencyInjection.DIExample.INotificationService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.Core.Advanced.DependencyInjection.DIExample.INotificationService.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.Core.Advanced.DependencyInjection.DIExample.INotificationService",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.Core.Advanced.DependencyInjection.DIExample.IProcessorFactory.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.Core.Advanced.DependencyInjection.DIExample.IProcessorFactory.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.Core.Advanced.DependencyInjection.DIExample.IProcessorFactory",
+      "Summary": "<p sourcefile=\"api/AdvancedConcepts.Core.Advanced.DependencyInjection.DIExample.IProcessorFactory.yml\" sourcestartlinenumber=\"1\">Factory pattern with DI.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.Core.Advanced.DependencyInjection.DIExample.InMemoryDataRepository.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.Core.Advanced.DependencyInjection.DIExample.InMemoryDataRepository.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.Core.Advanced.DependencyInjection.DIExample.InMemoryDataRepository",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.Core.Advanced.DependencyInjection.DIExample.ProcessorFactory.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.Core.Advanced.DependencyInjection.DIExample.ProcessorFactory.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.Core.Advanced.DependencyInjection.DIExample.ProcessorFactory",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.Core.Advanced.DependencyInjection.DIExample.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.Core.Advanced.DependencyInjection.DIExample.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.Core.Advanced.DependencyInjection.DIExample",
+      "Summary": "<p sourcefile=\"api/AdvancedConcepts.Core.Advanced.DependencyInjection.DIExample.yml\" sourcestartlinenumber=\"1\">Dependency Injection - Modern .NET dependency management.\nSilicon Valley best practice: Inversion of Control (IoC) for testability.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.Core.Advanced.DependencyInjection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.Core.Advanced.DependencyInjection.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.Core.Advanced.DependencyInjection",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.Core.Advanced.DesignPatterns.FactoryPattern.Car.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.Core.Advanced.DesignPatterns.FactoryPattern.Car.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.Core.Advanced.DesignPatterns.FactoryPattern.Car",
+      "Summary": "<p sourcefile=\"api/AdvancedConcepts.Core.Advanced.DesignPatterns.FactoryPattern.Car.yml\" sourcestartlinenumber=\"1\">Concrete product: Car.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.Core.Advanced.DesignPatterns.FactoryPattern.CarCreator.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.Core.Advanced.DesignPatterns.FactoryPattern.CarCreator.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.Core.Advanced.DesignPatterns.FactoryPattern.CarCreator",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.Core.Advanced.DesignPatterns.FactoryPattern.GenericVehicleFactory.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.Core.Advanced.DesignPatterns.FactoryPattern.GenericVehicleFactory.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.Core.Advanced.DesignPatterns.FactoryPattern.GenericVehicleFactory",
+      "Summary": "<p sourcefile=\"api/AdvancedConcepts.Core.Advanced.DesignPatterns.FactoryPattern.GenericVehicleFactory.yml\" sourcestartlinenumber=\"1\">Generic Factory - Type-safe creation with generics.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.Core.Advanced.DesignPatterns.FactoryPattern.IVehicle.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.Core.Advanced.DesignPatterns.FactoryPattern.IVehicle.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.Core.Advanced.DesignPatterns.FactoryPattern.IVehicle",
+      "Summary": "<p sourcefile=\"api/AdvancedConcepts.Core.Advanced.DesignPatterns.FactoryPattern.IVehicle.yml\" sourcestartlinenumber=\"1\">Abstract product interface.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.Core.Advanced.DesignPatterns.FactoryPattern.Motorcycle.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.Core.Advanced.DesignPatterns.FactoryPattern.Motorcycle.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.Core.Advanced.DesignPatterns.FactoryPattern.Motorcycle",
+      "Summary": "<p sourcefile=\"api/AdvancedConcepts.Core.Advanced.DesignPatterns.FactoryPattern.Motorcycle.yml\" sourcestartlinenumber=\"1\">Concrete product: Motorcycle.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.Core.Advanced.DesignPatterns.FactoryPattern.MotorcycleCreator.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.Core.Advanced.DesignPatterns.FactoryPattern.MotorcycleCreator.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.Core.Advanced.DesignPatterns.FactoryPattern.MotorcycleCreator",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.Core.Advanced.DesignPatterns.FactoryPattern.Truck.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.Core.Advanced.DesignPatterns.FactoryPattern.Truck.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.Core.Advanced.DesignPatterns.FactoryPattern.Truck",
+      "Summary": "<p sourcefile=\"api/AdvancedConcepts.Core.Advanced.DesignPatterns.FactoryPattern.Truck.yml\" sourcestartlinenumber=\"1\">Concrete product: Truck.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.Core.Advanced.DesignPatterns.FactoryPattern.VehicleCreator.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.Core.Advanced.DesignPatterns.FactoryPattern.VehicleCreator.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.Core.Advanced.DesignPatterns.FactoryPattern.VehicleCreator",
+      "Summary": "<p sourcefile=\"api/AdvancedConcepts.Core.Advanced.DesignPatterns.FactoryPattern.VehicleCreator.yml\" sourcestartlinenumber=\"1\">Factory Method Pattern - Abstract creator with concrete factories.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.Core.Advanced.DesignPatterns.FactoryPattern.VehicleFactory.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.Core.Advanced.DesignPatterns.FactoryPattern.VehicleFactory.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.Core.Advanced.DesignPatterns.FactoryPattern.VehicleFactory",
+      "Summary": "<p sourcefile=\"api/AdvancedConcepts.Core.Advanced.DesignPatterns.FactoryPattern.VehicleFactory.yml\" sourcestartlinenumber=\"1\">Simple Factory - Creates vehicles based on type.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.Core.Advanced.DesignPatterns.FactoryPattern.VehicleType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.Core.Advanced.DesignPatterns.FactoryPattern.VehicleType.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.Core.Advanced.DesignPatterns.FactoryPattern.VehicleType",
+      "Summary": "<p sourcefile=\"api/AdvancedConcepts.Core.Advanced.DesignPatterns.FactoryPattern.VehicleType.yml\" sourcestartlinenumber=\"1\">Vehicle type enumeration.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.Core.Advanced.DesignPatterns.FactoryPattern.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.Core.Advanced.DesignPatterns.FactoryPattern.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.Core.Advanced.DesignPatterns.FactoryPattern",
+      "Summary": "<p sourcefile=\"api/AdvancedConcepts.Core.Advanced.DesignPatterns.FactoryPattern.yml\" sourcestartlinenumber=\"1\">Factory Pattern - Creational design pattern for object creation.\nSilicon Valley best practice: Use factories for complex object creation.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.Core.Advanced.DesignPatterns.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.Core.Advanced.DesignPatterns.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.Core.Advanced.DesignPatterns",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.SourceGenerators.AutoMapAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.SourceGenerators.AutoMapAttribute.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.SourceGenerators.AutoMapAttribute",
+      "Summary": "<p sourcefile=\"api/AdvancedConcepts.SourceGenerators.AutoMapAttribute.yml\" sourcestartlinenumber=\"1\">Generates automatic mapping code between source and target types.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.SourceGenerators.AutoMapGenerator.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.SourceGenerators.AutoMapGenerator.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.SourceGenerators.AutoMapGenerator",
+      "Summary": "<p sourcefile=\"api/AdvancedConcepts.SourceGenerators.AutoMapGenerator.yml\" sourcestartlinenumber=\"1\">Source generator that creates automatic mapping extension methods for types decorated with [AutoMap].</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.SourceGenerators.AutoMapIgnoreAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.SourceGenerators.AutoMapIgnoreAttribute.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.SourceGenerators.AutoMapIgnoreAttribute",
+      "Summary": "<p sourcefile=\"api/AdvancedConcepts.SourceGenerators.AutoMapIgnoreAttribute.yml\" sourcestartlinenumber=\"1\">Excludes a property from automatic mapping.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.SourceGenerators.AutoMapPropertyAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.SourceGenerators.AutoMapPropertyAttribute.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.SourceGenerators.AutoMapPropertyAttribute",
+      "Summary": "<p sourcefile=\"api/AdvancedConcepts.SourceGenerators.AutoMapPropertyAttribute.yml\" sourcestartlinenumber=\"1\">Maps a property to a different property name in the target type.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.SourceGenerators.EmailAddressAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.SourceGenerators.EmailAddressAttribute.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.SourceGenerators.EmailAddressAttribute",
+      "Summary": "<p sourcefile=\"api/AdvancedConcepts.SourceGenerators.EmailAddressAttribute.yml\" sourcestartlinenumber=\"1\">Validates that a string is a valid email address.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.SourceGenerators.LogLevel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.SourceGenerators.LogLevel.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.SourceGenerators.LogLevel",
+      "Summary": "<p sourcefile=\"api/AdvancedConcepts.SourceGenerators.LogLevel.yml\" sourcestartlinenumber=\"1\">Log levels matching Microsoft.Extensions.Logging.LogLevel.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.SourceGenerators.LoggerMessageAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.SourceGenerators.LoggerMessageAttribute.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.SourceGenerators.LoggerMessageAttribute",
+      "Summary": "<p sourcefile=\"api/AdvancedConcepts.SourceGenerators.LoggerMessageAttribute.yml\" sourcestartlinenumber=\"1\">Generates high-performance logging code using source generators.\nSimilar to Microsoft.Extensions.Logging.LoggerMessageAttribute but with additional features.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.SourceGenerators.LoggerMessageGenerator.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.SourceGenerators.LoggerMessageGenerator.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.SourceGenerators.LoggerMessageGenerator",
+      "Summary": "<p sourcefile=\"api/AdvancedConcepts.SourceGenerators.LoggerMessageGenerator.yml\" sourcestartlinenumber=\"1\">Source generator that creates high-performance logging methods for partial methods decorated with [LoggerMessage].</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.SourceGenerators.RangeAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.SourceGenerators.RangeAttribute.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.SourceGenerators.RangeAttribute",
+      "Summary": "<p sourcefile=\"api/AdvancedConcepts.SourceGenerators.RangeAttribute.yml\" sourcestartlinenumber=\"1\">Specifies numeric range constraints.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.SourceGenerators.RegularExpressionAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.SourceGenerators.RegularExpressionAttribute.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.SourceGenerators.RegularExpressionAttribute",
+      "Summary": "<p sourcefile=\"api/AdvancedConcepts.SourceGenerators.RegularExpressionAttribute.yml\" sourcestartlinenumber=\"1\">Validates using a regular expression pattern.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.SourceGenerators.RequiredAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.SourceGenerators.RequiredAttribute.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.SourceGenerators.RequiredAttribute",
+      "Summary": "<p sourcefile=\"api/AdvancedConcepts.SourceGenerators.RequiredAttribute.yml\" sourcestartlinenumber=\"1\">Marks a property as required.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.SourceGenerators.StringLengthAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.SourceGenerators.StringLengthAttribute.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.SourceGenerators.StringLengthAttribute",
+      "Summary": "<p sourcefile=\"api/AdvancedConcepts.SourceGenerators.StringLengthAttribute.yml\" sourcestartlinenumber=\"1\">Specifies string length constraints.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.SourceGenerators.ValidateAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.SourceGenerators.ValidateAttribute.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.SourceGenerators.ValidateAttribute",
+      "Summary": "<p sourcefile=\"api/AdvancedConcepts.SourceGenerators.ValidateAttribute.yml\" sourcestartlinenumber=\"1\">Generates compile-time validation code for classes.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.SourceGenerators.ValidationGenerator.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.SourceGenerators.ValidationGenerator.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.SourceGenerators.ValidationGenerator",
+      "Summary": "<p sourcefile=\"api/AdvancedConcepts.SourceGenerators.ValidationGenerator.yml\" sourcestartlinenumber=\"1\">Source generator that creates compile-time validation methods for classes decorated with [Validate].</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedConcepts.SourceGenerators.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedConcepts.SourceGenerators.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedConcepts.SourceGenerators",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.DesignPatterns.BuilderPattern.Computer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.DesignPatterns.BuilderPattern.Computer.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.DesignPatterns.BuilderPattern.Computer",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.DesignPatterns.BuilderPattern.Computer.yml\" sourcestartlinenumber=\"1\">Complex product: Computer with many optional components.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.DesignPatterns.BuilderPattern.ComputerBuilder.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.DesignPatterns.BuilderPattern.ComputerBuilder.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.DesignPatterns.BuilderPattern.ComputerBuilder",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.DesignPatterns.BuilderPattern.ComputerBuilder.yml\" sourcestartlinenumber=\"1\">Traditional Builder - Mutable approach.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.DesignPatterns.BuilderPattern.ServerConfig.ServerConfigBuilder.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.DesignPatterns.BuilderPattern.ServerConfig.ServerConfigBuilder.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.DesignPatterns.BuilderPattern.ServerConfig.ServerConfigBuilder",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.DesignPatterns.BuilderPattern.ServerConfig.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.DesignPatterns.BuilderPattern.ServerConfig.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.DesignPatterns.BuilderPattern.ServerConfig",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.DesignPatterns.BuilderPattern.ServerConfig.yml\" sourcestartlinenumber=\"1\">Modern C# Builder - Using init-only properties and records.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.DesignPatterns.BuilderPattern.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.DesignPatterns.BuilderPattern.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.DesignPatterns.BuilderPattern",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.DesignPatterns.BuilderPattern.yml\" sourcestartlinenumber=\"1\">Builder Pattern - Separates construction from representation.\nNVIDIA-style: Complex object creation with validation and fluent API.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.DesignPatterns.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.DesignPatterns.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.DesignPatterns",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.ExplicitImplicitConversion.ConversionExamples.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.ExplicitImplicitConversion.ConversionExamples.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.ExplicitImplicitConversion.ConversionExamples",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.ExplicitImplicitConversion.ConversionExamples.yml\" sourcestartlinenumber=\"1\">Demonstrates explicit and implicit conversion examples.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.ExplicitImplicitConversion.Temperature.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.ExplicitImplicitConversion.Temperature.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.ExplicitImplicitConversion.Temperature",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.ExplicitImplicitConversion.TemperatureCelsius.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.ExplicitImplicitConversion.TemperatureCelsius.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.ExplicitImplicitConversion.TemperatureCelsius",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.ExplicitImplicitConversion.TemperatureFahrenheit.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.ExplicitImplicitConversion.TemperatureFahrenheit.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.ExplicitImplicitConversion.TemperatureFahrenheit",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.ExplicitImplicitConversion.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.ExplicitImplicitConversion.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.ExplicitImplicitConversion",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.GenericCovarianceContravariance.AnimalConsumer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.GenericCovarianceContravariance.AnimalConsumer.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.GenericCovarianceContravariance.AnimalConsumer",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.GenericCovarianceContravariance.AnimalConsumer.yml\" sourcestartlinenumber=\"1\">Concrete implementation of IConsumer that consumes Animal instances.\nCan be assigned to IConsumer&lt;Cat&gt; or IConsumer&lt;Dog&gt; due to contravariance.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.GenericCovarianceContravariance.AnimalProducer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.GenericCovarianceContravariance.AnimalProducer.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.GenericCovarianceContravariance.AnimalProducer",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.GenericCovarianceContravariance.AnimalProducer.yml\" sourcestartlinenumber=\"1\">Concrete implementation of IProducer that produces Animal instances.\nDemonstrates the producer pattern with covariance support.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.GenericCovarianceContravariance.CatConsumer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.GenericCovarianceContravariance.CatConsumer.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.GenericCovarianceContravariance.CatConsumer",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.GenericCovarianceContravariance.CatConsumer.yml\" sourcestartlinenumber=\"1\">Concrete implementation of IConsumer that consumes Cat instances.\nDemonstrates the consumer pattern with contravariance support.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.GenericCovarianceContravariance.CatProducer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.GenericCovarianceContravariance.CatProducer.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.GenericCovarianceContravariance.CatProducer",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.GenericCovarianceContravariance.CatProducer.yml\" sourcestartlinenumber=\"1\">Concrete implementation of IProducer that produces Cat instances.\nCan be assigned to IProducer&lt;Animal&gt; due to covariance.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.GenericCovarianceContravariance.DogProducer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.GenericCovarianceContravariance.DogProducer.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.GenericCovarianceContravariance.DogProducer",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.GenericCovarianceContravariance.DogProducer.yml\" sourcestartlinenumber=\"1\">Concrete implementation of IProducer that produces Dog instances.\nCan be assigned to IProducer&lt;Animal&gt; due to covariance.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.GenericCovarianceContravariance.IConsumer-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.GenericCovarianceContravariance.IConsumer-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.GenericCovarianceContravariance.IConsumer<T>",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.GenericCovarianceContravariance.IConsumer-1.yml\" sourcestartlinenumber=\"1\">Represents a generic consumer interface that demonstrates contravariance.\nThe 'in' keyword makes the type parameter contravariant, allowing assignment from less derived types.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.GenericCovarianceContravariance.IProducer-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.GenericCovarianceContravariance.IProducer-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.GenericCovarianceContravariance.IProducer<T>",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.GenericCovarianceContravariance.IProducer-1.yml\" sourcestartlinenumber=\"1\">Represents a generic producer interface that demonstrates covariance.\nThe 'out' keyword makes the type parameter covariant, allowing assignment to less derived types.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.GenericCovarianceContravariance.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.GenericCovarianceContravariance.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.GenericCovarianceContravariance",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.HighPerformance.ParallelProcessingExamples.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.HighPerformance.ParallelProcessingExamples.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.HighPerformance.ParallelProcessingExamples",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.HighPerformance.ParallelProcessingExamples.yml\" sourcestartlinenumber=\"1\">High-Performance Parallel Processing Examples.\nNVIDIA developer mindset: leverage multi-core CPUs for maximum throughput.\nBest practices from Silicon Valley: measure, optimize, scale.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.HighPerformance.SpanMemoryExamples.SpanTokenizer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.HighPerformance.SpanMemoryExamples.SpanTokenizer.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.HighPerformance.SpanMemoryExamples.SpanTokenizer",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.HighPerformance.SpanMemoryExamples.SpanTokenizer.yml\" sourcestartlinenumber=\"1\">Advanced: Custom ref struct for zero-allocation parsing.\nMimics how high-performance parsers work.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.HighPerformance.SpanMemoryExamples.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.HighPerformance.SpanMemoryExamples.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.HighPerformance.SpanMemoryExamples",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.HighPerformance.SpanMemoryExamples.yml\" sourcestartlinenumber=\"1\">Span&lt;T&gt; and Memory&lt;T&gt; - Zero-allocation, high-performance patterns.\nNVIDIA developer mindset: minimize memory allocations for maximum throughput.\nSilicon Valley best practice: use stack allocation when possible.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.HighPerformance.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.HighPerformance.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.HighPerformance",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.ModernCSharp.AdvancedPatternMatching.Address.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.ModernCSharp.AdvancedPatternMatching.Address.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.ModernCSharp.AdvancedPatternMatching.Address",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.ModernCSharp.AdvancedPatternMatching.Circle.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.ModernCSharp.AdvancedPatternMatching.Circle.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.ModernCSharp.AdvancedPatternMatching.Circle",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.ModernCSharp.AdvancedPatternMatching.Person.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.ModernCSharp.AdvancedPatternMatching.Person.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.ModernCSharp.AdvancedPatternMatching.Person",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.ModernCSharp.AdvancedPatternMatching.Person.yml\" sourcestartlinenumber=\"1\">Recursive pattern matching with nested properties.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.ModernCSharp.AdvancedPatternMatching.Rectangle.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.ModernCSharp.AdvancedPatternMatching.Rectangle.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.ModernCSharp.AdvancedPatternMatching.Rectangle",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.ModernCSharp.AdvancedPatternMatching.Shape.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.ModernCSharp.AdvancedPatternMatching.Shape.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.ModernCSharp.AdvancedPatternMatching.Shape",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.ModernCSharp.AdvancedPatternMatching.Triangle.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.ModernCSharp.AdvancedPatternMatching.Triangle.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.ModernCSharp.AdvancedPatternMatching.Triangle",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.ModernCSharp.AdvancedPatternMatching.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.ModernCSharp.AdvancedPatternMatching.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.ModernCSharp.AdvancedPatternMatching",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.ModernCSharp.AdvancedPatternMatching.yml\" sourcestartlinenumber=\"1\">Advanced Pattern Matching in C# 12.\nDemonstrates type patterns, property patterns, list patterns, and more.\nSilicon Valley best practice: expressive code that's also performant.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.ModernCSharp.CollectionExpressionsExample.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.ModernCSharp.CollectionExpressionsExample.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.ModernCSharp.CollectionExpressionsExample",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.ModernCSharp.CollectionExpressionsExample.yml\" sourcestartlinenumber=\"1\">Modern C# Collection Patterns - Concise, performant syntax.\nNVIDIA developer mindset: write clean, performant code.\nNote: C# 12 collection expressions require .NET 8+\nThis example shows C# 10/11 modern patterns.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.ModernCSharp.PrimaryConstructorsExample.ElectricVehicle.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.ModernCSharp.PrimaryConstructorsExample.ElectricVehicle.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.ModernCSharp.PrimaryConstructorsExample.ElectricVehicle",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.ModernCSharp.PrimaryConstructorsExample.ElectricVehicle.yml\" sourcestartlinenumber=\"1\">Advanced: Record with validation and inheritance (C# 10+).</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.ModernCSharp.PrimaryConstructorsExample.VehicleModern.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.ModernCSharp.PrimaryConstructorsExample.VehicleModern.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.ModernCSharp.PrimaryConstructorsExample.VehicleModern",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.ModernCSharp.PrimaryConstructorsExample.VehicleModern.yml\" sourcestartlinenumber=\"1\">Modern C# with record type - same functionality, less code.\nBest practice: Use for simple data-holding classes.\nNote: C# 12 primary constructors for classes require .NET 8+</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.ModernCSharp.PrimaryConstructorsExample.VehicleTraditional.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.ModernCSharp.PrimaryConstructorsExample.VehicleTraditional.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.ModernCSharp.PrimaryConstructorsExample.VehicleTraditional",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.ModernCSharp.PrimaryConstructorsExample.VehicleTraditional.yml\" sourcestartlinenumber=\"1\">Traditional C# class with explicit constructor and fields.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.ModernCSharp.PrimaryConstructorsExample.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.ModernCSharp.PrimaryConstructorsExample.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.ModernCSharp.PrimaryConstructorsExample",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.ModernCSharp.PrimaryConstructorsExample.yml\" sourcestartlinenumber=\"1\">C# 12 Primary Constructors - Silicon Valley modern coding style.\nEliminates boilerplate, increases readability.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.ModernCSharp.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.ModernCSharp.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.ModernCSharp",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.Observability.EnhancedSerilogExamples.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.Observability.EnhancedSerilogExamples.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.Observability.EnhancedSerilogExamples",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.Observability.EnhancedSerilogExamples.yml\" sourcestartlinenumber=\"1\">Enhanced Serilog Examples - Production-grade structured logging.\nNVIDIA/Silicon Valley best practice: Enriched logging with contextual data.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.Observability.HealthCheckExamples.CacheHealthCheck.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.Observability.HealthCheckExamples.CacheHealthCheck.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.Observability.HealthCheckExamples.CacheHealthCheck",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.Observability.HealthCheckExamples.CacheHealthCheck.yml\" sourcestartlinenumber=\"1\">Redis cache health check - Verifies cache availability.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.Observability.HealthCheckExamples.DatabaseHealthCheck.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.Observability.HealthCheckExamples.DatabaseHealthCheck.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.Observability.HealthCheckExamples.DatabaseHealthCheck",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.Observability.HealthCheckExamples.DatabaseHealthCheck.yml\" sourcestartlinenumber=\"1\">Database health check - Verifies database connectivity.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.Observability.HealthCheckExamples.DiskSpaceHealthCheck.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.Observability.HealthCheckExamples.DiskSpaceHealthCheck.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.Observability.HealthCheckExamples.DiskSpaceHealthCheck",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.Observability.HealthCheckExamples.DiskSpaceHealthCheck.yml\" sourcestartlinenumber=\"1\">Disk space health check - Monitors available disk space.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.Observability.HealthCheckExamples.ExternalApiHealthCheck.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.Observability.HealthCheckExamples.ExternalApiHealthCheck.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.Observability.HealthCheckExamples.ExternalApiHealthCheck",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.Observability.HealthCheckExamples.ExternalApiHealthCheck.yml\" sourcestartlinenumber=\"1\">External API health check - Verifies external service availability.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.Observability.HealthCheckExamples.MemoryHealthCheck.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.Observability.HealthCheckExamples.MemoryHealthCheck.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.Observability.HealthCheckExamples.MemoryHealthCheck",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.Observability.HealthCheckExamples.MemoryHealthCheck.yml\" sourcestartlinenumber=\"1\">Memory health check - Monitors application memory usage.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.Observability.HealthCheckExamples.StartupHealthCheck.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.Observability.HealthCheckExamples.StartupHealthCheck.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.Observability.HealthCheckExamples.StartupHealthCheck",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.Observability.HealthCheckExamples.StartupHealthCheck.yml\" sourcestartlinenumber=\"1\">Startup health check - Ensures application is fully initialized.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.Observability.HealthCheckExamples.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.Observability.HealthCheckExamples.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.Observability.HealthCheckExamples",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.Observability.HealthCheckExamples.yml\" sourcestartlinenumber=\"1\">Health Check Examples - Production-grade application health monitoring.\nNVIDIA/Silicon Valley best practice: Comprehensive health checks for microservices.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.Observability.OpenTelemetryExamples.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.Observability.OpenTelemetryExamples.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.Observability.OpenTelemetryExamples",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.Observability.OpenTelemetryExamples.yml\" sourcestartlinenumber=\"1\">OpenTelemetry Examples - Production-grade metrics and tracing.\nNVIDIA/Silicon Valley best practice: Standardized observability with OpenTelemetry.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.Observability.StructuredLogging.DataProcessor.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.Observability.StructuredLogging.DataProcessor.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.Observability.StructuredLogging.DataProcessor",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.Observability.StructuredLogging.DataProcessor.yml\" sourcestartlinenumber=\"1\">Example class demonstrating structured logging.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.Observability.StructuredLogging.ErrorHandlingExample.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.Observability.StructuredLogging.ErrorHandlingExample.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.Observability.StructuredLogging.ErrorHandlingExample",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.Observability.StructuredLogging.ErrorHandlingExample.yml\" sourcestartlinenumber=\"1\">Demonstrates error handling with structured logging.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.Observability.StructuredLogging.PerformanceLogger.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.Observability.StructuredLogging.PerformanceLogger.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.Observability.StructuredLogging.PerformanceLogger",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.Observability.StructuredLogging.PerformanceLogger.yml\" sourcestartlinenumber=\"1\">Performance logging for benchmarks.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.Observability.StructuredLogging.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.Observability.StructuredLogging.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.Observability.StructuredLogging",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.Observability.StructuredLogging.yml\" sourcestartlinenumber=\"1\">Structured Logging with Serilog - Production-ready logging patterns.\nSilicon Valley best practice: Always use structured logging in production.\nNVIDIA-style: Capture context and performance metrics in logs.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.Observability.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.Observability.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.Observability",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.PerformanceBenchmarks.BenchmarkRunner.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.PerformanceBenchmarks.BenchmarkRunner.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.PerformanceBenchmarks.BenchmarkRunner",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.PerformanceBenchmarks.BenchmarkRunner.yml\" sourcestartlinenumber=\"1\">Benchmark runner for performance analysis.\nSilicon Valley best practice: always measure before optimizing.</p>\n<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.PerformanceBenchmarks.BenchmarkRunner.yml\" sourcestartlinenumber=\"4\">Usage: Run with --benchmark flag to execute all benchmarks.\nExample: dotnet run --configuration Release --benchmark</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.PerformanceBenchmarks.BoxingUnboxingBenchmark.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.PerformanceBenchmarks.BoxingUnboxingBenchmark.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.PerformanceBenchmarks.BoxingUnboxingBenchmark",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.PerformanceBenchmarks.BoxingUnboxingBenchmark.yml\" sourcestartlinenumber=\"1\">High-performance benchmark comparing boxing/unboxing vs generic collections.\nDemonstrates NVIDIA-style performance optimization thinking.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.PerformanceBenchmarks.CovarianceBenchmark.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.PerformanceBenchmarks.CovarianceBenchmark.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.PerformanceBenchmarks.CovarianceBenchmark",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.PerformanceBenchmarks.CovarianceBenchmark.yml\" sourcestartlinenumber=\"1\">Benchmark comparing different covariance/contravariance patterns.\nSilicon Valley best practices: measure before optimizing.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.PerformanceBenchmarks.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.PerformanceBenchmarks.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.PerformanceBenchmarks",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.Resilience.FluentValidationExamples.Address.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.Resilience.FluentValidationExamples.Address.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.Resilience.FluentValidationExamples.Address",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.Resilience.FluentValidationExamples.AddressValidator.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.Resilience.FluentValidationExamples.AddressValidator.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.Resilience.FluentValidationExamples.AddressValidator",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.Resilience.FluentValidationExamples.AddressValidator.yml\" sourcestartlinenumber=\"1\">Address Validator - Nested validation example.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.Resilience.FluentValidationExamples.Customer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.Resilience.FluentValidationExamples.Customer.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.Resilience.FluentValidationExamples.Customer",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.Resilience.FluentValidationExamples.Customer.yml\" sourcestartlinenumber=\"1\">Domain models for validation examples.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.Resilience.FluentValidationExamples.CustomerValidator.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.Resilience.FluentValidationExamples.CustomerValidator.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.Resilience.FluentValidationExamples.CustomerValidator",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.Resilience.FluentValidationExamples.CustomerValidator.yml\" sourcestartlinenumber=\"1\">Customer Validator - Demonstrates basic validation rules.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.Resilience.FluentValidationExamples.Order.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.Resilience.FluentValidationExamples.Order.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.Resilience.FluentValidationExamples.Order",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.Resilience.FluentValidationExamples.OrderItem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.Resilience.FluentValidationExamples.OrderItem.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.Resilience.FluentValidationExamples.OrderItem",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.Resilience.FluentValidationExamples.OrderItemValidator.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.Resilience.FluentValidationExamples.OrderItemValidator.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.Resilience.FluentValidationExamples.OrderItemValidator",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.Resilience.FluentValidationExamples.OrderItemValidator.yml\" sourcestartlinenumber=\"1\">Order Item Validator.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.Resilience.FluentValidationExamples.OrderValidator.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.Resilience.FluentValidationExamples.OrderValidator.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.Resilience.FluentValidationExamples.OrderValidator",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.Resilience.FluentValidationExamples.OrderValidator.yml\" sourcestartlinenumber=\"1\">Order Validator - Complex validation with collection rules.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.Resilience.FluentValidationExamples.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.Resilience.FluentValidationExamples.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.Resilience.FluentValidationExamples",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.Resilience.FluentValidationExamples.yml\" sourcestartlinenumber=\"1\">FluentValidation - Enterprise-grade validation framework.\nNVIDIA/Silicon Valley best practice: Expressive, testable validation rules.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.Resilience.NotFoundError.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.Resilience.NotFoundError.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.Resilience.NotFoundError",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.Resilience.PollyResiliencePatterns.CircuitBreakerExample.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.Resilience.PollyResiliencePatterns.CircuitBreakerExample.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.Resilience.PollyResiliencePatterns.CircuitBreakerExample",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.Resilience.PollyResiliencePatterns.CircuitBreakerExample.yml\" sourcestartlinenumber=\"1\">Circuit Breaker - Prevent cascading failures.\nOpens circuit after consecutive failures, then allows test requests.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.Resilience.PollyResiliencePatterns.CombinedPoliciesExample.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.Resilience.PollyResiliencePatterns.CombinedPoliciesExample.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.Resilience.PollyResiliencePatterns.CombinedPoliciesExample",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.Resilience.PollyResiliencePatterns.CombinedPoliciesExample.yml\" sourcestartlinenumber=\"1\">Combined Policies - Retry + Circuit Breaker + Timeout.\nNVIDIA-style: Layered resilience for production systems.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.Resilience.PollyResiliencePatterns.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.Resilience.PollyResiliencePatterns.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.Resilience.PollyResiliencePatterns",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.Resilience.PollyResiliencePatterns.yml\" sourcestartlinenumber=\"1\">Polly Resilience Patterns - Enterprise-grade error handling.\nNVIDIA/Silicon Valley best practice: Fault tolerance and graceful degradation.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.Resilience.Result-2.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.Resilience.Result-2.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.Resilience.Result<T, TError>",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.Resilience.Result-2.yml\" sourcestartlinenumber=\"1\">Result Pattern - Railway Oriented Programming.\nNVIDIA/Silicon Valley best practice: Explicit error handling without exceptions.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.Resilience.Result.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.Resilience.Result.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.Resilience.Result",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.Resilience.Result.yml\" sourcestartlinenumber=\"1\">Simple Result without error details (for boolean success/failure).</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.Resilience.ResultPatternExamples.User.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.Resilience.ResultPatternExamples.User.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.Resilience.ResultPatternExamples.User",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.Resilience.ResultPatternExamples.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.Resilience.ResultPatternExamples.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.Resilience.ResultPatternExamples",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.Resilience.ResultPatternExamples.yml\" sourcestartlinenumber=\"1\">Railway Oriented Programming Examples.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.Resilience.UnauthorizedError.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.Resilience.UnauthorizedError.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.Resilience.UnauthorizedError",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.Resilience.ValidationError.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.Resilience.ValidationError.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.Resilience.ValidationError",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.Resilience.ValidationError.yml\" sourcestartlinenumber=\"1\">Example domain errors.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.Resilience.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.Resilience.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.Resilience",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.BadAreaCalculator.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.BadAreaCalculator.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.BadAreaCalculator",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.BadAreaCalculator.yml\" sourcestartlinenumber=\"1\">BAD: Modifying class for every new shape type.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.BadBird.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.BadBird.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.BadBird",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.BadBird.yml\" sourcestartlinenumber=\"1\">BAD: Derived class violates base class contract.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.BadBusinessLogic.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.BadBusinessLogic.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.BadBusinessLogic",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.BadHumanWorker.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.BadHumanWorker.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.BadHumanWorker",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.BadPenguin.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.BadPenguin.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.BadPenguin",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.BadRobotWorker.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.BadRobotWorker.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.BadRobotWorker",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.BadSqlDatabase.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.BadSqlDatabase.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.BadSqlDatabase",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.BadSqlDatabase.yml\" sourcestartlinenumber=\"1\">BAD: High-level module depends on low-level module.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.BadUserService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.BadUserService.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.BadUserService",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.BadUserService.yml\" sourcestartlinenumber=\"1\">BAD: Class with multiple responsibilities.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.Circle.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.Circle.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.Circle",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.EmailService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.EmailService.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.EmailService",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.GoodAreaCalculator.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.GoodAreaCalculator.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.GoodAreaCalculator",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.GoodBusinessLogic.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.GoodBusinessLogic.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.GoodBusinessLogic",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.GoodHumanWorker.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.GoodHumanWorker.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.GoodHumanWorker",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.GoodRobotWorker.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.GoodRobotWorker.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.GoodRobotWorker",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.GoodUserService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.GoodUserService.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.GoodUserService",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.IBadWorker.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.IBadWorker.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.IBadWorker",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.IBadWorker.yml\" sourcestartlinenumber=\"1\">BAD: Fat interface forces clients to implement unused methods.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.IBird.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.IBird.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.IBird",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.IBird.yml\" sourcestartlinenumber=\"1\">GOOD: Proper abstraction hierarchy.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.IDatabase.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.IDatabase.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.IDatabase",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.IDatabase.yml\" sourcestartlinenumber=\"1\">GOOD: Both depend on abstraction.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.IEatable.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.IEatable.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.IEatable",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.IEmailService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.IEmailService.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.IEmailService",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.IFlyingBird.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.IFlyingBird.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.IFlyingBird",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.IShape.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.IShape.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.IShape",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.IShape.yml\" sourcestartlinenumber=\"1\">GOOD: Open for extension, closed for modification.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.ISleepable.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.ISleepable.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.ISleepable",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.ISwimmingBird.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.ISwimmingBird.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.ISwimmingBird",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.IUserRepository.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.IUserRepository.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.IUserRepository",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.IUserValidator.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.IUserValidator.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.IUserValidator",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.IWorkable.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.IWorkable.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.IWorkable",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.IWorkable.yml\" sourcestartlinenumber=\"1\">GOOD: Segregated interfaces - clients depend only on what they use.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.InMemoryDatabase.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.InMemoryDatabase.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.InMemoryDatabase",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.MongoDatabase.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.MongoDatabase.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.MongoDatabase",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.Penguin.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.Penguin.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.Penguin",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.Rectangle.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.Rectangle.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.Rectangle",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.Sparrow.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.Sparrow.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.Sparrow",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.SqlDatabase.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.SqlDatabase.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.SqlDatabase",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.Triangle.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.Triangle.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.Triangle",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.User.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.User.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.User",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.User.yml\" sourcestartlinenumber=\"1\">GOOD: Each class has a single responsibility.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.UserRepository.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.UserRepository.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.UserRepository",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.UserValidator.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.UserValidator.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.UserValidator",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.SOLIDPrinciplesExamples.yml\" sourcestartlinenumber=\"1\">SOLID Principles - Enterprise architecture fundamentals.\nSilicon Valley/NVIDIA best practices for maintainable, scalable systems.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Advanced.SOLIDPrinciples.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Advanced.SOLIDPrinciples",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Beginner.Override_Upcast_Downcast.Bike.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Beginner.Override_Upcast_Downcast.Bike.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Beginner.Override_Upcast_Downcast.Bike",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Beginner.Override_Upcast_Downcast.Bike.yml\" sourcestartlinenumber=\"1\">Represents a bike, which is a specific type of vehicle.\nDemonstrates method overriding and polymorphic behavior.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Beginner.Override_Upcast_Downcast.Car.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Beginner.Override_Upcast_Downcast.Car.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Beginner.Override_Upcast_Downcast.Car",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Beginner.Override_Upcast_Downcast.Car.yml\" sourcestartlinenumber=\"1\">Represents a car, which is a specific type of vehicle.\nDemonstrates method overriding and type casting (upcasting/downcasting) concepts.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Beginner.Override_Upcast_Downcast.Vehicle.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Beginner.Override_Upcast_Downcast.Vehicle.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Beginner.Override_Upcast_Downcast.Vehicle",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Beginner.Override_Upcast_Downcast.Vehicle.yml\" sourcestartlinenumber=\"1\">Represents a base vehicle class that demonstrates polymorphism through method overriding.\nThis class serves as a parent class for specific vehicle types like Car and Bike.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Beginner.Override_Upcast_Downcast.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Beginner.Override_Upcast_Downcast.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Beginner.Override_Upcast_Downcast",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Beginner.Polymorphism_AssignCompatibility.Animal.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Beginner.Polymorphism_AssignCompatibility.Animal.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Beginner.Polymorphism_AssignCompatibility.Animal",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Beginner.Polymorphism_AssignCompatibility.Animal.yml\" sourcestartlinenumber=\"1\">Represents an animal in the inheritance hierarchy.\nDemonstrates polymorphism and method overriding concepts.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Beginner.Polymorphism_AssignCompatibility.AssignmentCompatibility.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Beginner.Polymorphism_AssignCompatibility.AssignmentCompatibility.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Beginner.Polymorphism_AssignCompatibility.AssignmentCompatibility",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Beginner.Polymorphism_AssignCompatibility.Cat.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Beginner.Polymorphism_AssignCompatibility.Cat.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Beginner.Polymorphism_AssignCompatibility.Cat",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Beginner.Polymorphism_AssignCompatibility.Cat.yml\" sourcestartlinenumber=\"1\">Represents a cat, demonstrating polymorphism through method overriding.\nInherits from <xref href=\"AdvancedCsharpConcepts.Beginner.Polymorphism_AssignCompatibility.Animal\" data-throw-if-not-resolved=\"false\"></xref> and provides cat-specific behavior.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Beginner.Polymorphism_AssignCompatibility.Dog.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Beginner.Polymorphism_AssignCompatibility.Dog.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Beginner.Polymorphism_AssignCompatibility.Dog",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Beginner.Polymorphism_AssignCompatibility.Dog.yml\" sourcestartlinenumber=\"1\">Represents a dog, demonstrating polymorphism through method overriding.\nInherits from <xref href=\"AdvancedCsharpConcepts.Beginner.Polymorphism_AssignCompatibility.Animal\" data-throw-if-not-resolved=\"false\"></xref> and provides dog-specific behavior.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Beginner.Polymorphism_AssignCompatibility.Mammal.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Beginner.Polymorphism_AssignCompatibility.Mammal.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Beginner.Polymorphism_AssignCompatibility.Mammal",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Beginner.Polymorphism_AssignCompatibility.Mammal.yml\" sourcestartlinenumber=\"1\">Base class in the inheritance hierarchy demonstrating polymorphism.\nRepresents a mammal, the root of our animal classification.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Beginner.Polymorphism_AssignCompatibility.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Beginner.Polymorphism_AssignCompatibility.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Beginner.Polymorphism_AssignCompatibility",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Beginner.Upcast_Downcast.Employee.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Beginner.Upcast_Downcast.Employee.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Beginner.Upcast_Downcast.Employee",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Beginner.Upcast_Downcast.Manager.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Beginner.Upcast_Downcast.Manager.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Beginner.Upcast_Downcast.Manager",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Beginner.Upcast_Downcast.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Beginner.Upcast_Downcast.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Beginner.Upcast_Downcast",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Intermediate.BoxingUnboxing.BoxingUnboxingExamples.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Intermediate.BoxingUnboxing.BoxingUnboxingExamples.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Intermediate.BoxingUnboxing.BoxingUnboxingExamples",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Intermediate.BoxingUnboxing.BoxingUnboxingExamples.yml\" sourcestartlinenumber=\"1\">Demonstrates boxing and unboxing operations in C#.\nBoxing converts value types to reference types (heap allocation).\nUnboxing converts reference types back to value types (stack allocation).</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Intermediate.BoxingUnboxing.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Intermediate.BoxingUnboxing.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Intermediate.BoxingUnboxing",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Intermediate.CovarianceContravariance.Animal.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Intermediate.CovarianceContravariance.Animal.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Intermediate.CovarianceContravariance.Animal",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Intermediate.CovarianceContravariance.Animal.yml\" sourcestartlinenumber=\"1\">Represents a base animal class used for demonstrating covariance.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Intermediate.CovarianceContravariance.Cat-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Intermediate.CovarianceContravariance.Cat-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Intermediate.CovarianceContravariance.Cat<T>",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Intermediate.CovarianceContravariance.Cat-1.yml\" sourcestartlinenumber=\"1\">Generic cat class implementing the covariant ICat&lt;T&gt; interface.\nDemonstrates how covariance works with generic type parameters.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Intermediate.CovarianceContravariance.Cat.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Intermediate.CovarianceContravariance.Cat.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Intermediate.CovarianceContravariance.Cat",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Intermediate.CovarianceContravariance.Cat.yml\" sourcestartlinenumber=\"1\">Represents a cat, which is a specific type of animal.\nDemonstrates covariant return types in method overriding (C# 9+).</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Intermediate.CovarianceContravariance.Covariance.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Intermediate.CovarianceContravariance.Covariance.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Intermediate.CovarianceContravariance.Covariance",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Intermediate.CovarianceContravariance.Covariance.yml\" sourcestartlinenumber=\"1\">Demonstrates covariance concepts in C# across different contexts:\narrays, delegates, generic types, and return types.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Intermediate.CovarianceContravariance.ICat-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Intermediate.CovarianceContravariance.ICat-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Intermediate.CovarianceContravariance.ICat<T>",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Intermediate.CovarianceContravariance.ICat-1.yml\" sourcestartlinenumber=\"1\">Generic interface demonstrating covariance with the 'out' keyword.\nThe type parameter T is covariant, allowing derived type assignments.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Intermediate.CovarianceContravariance.VarianceExamples.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Intermediate.CovarianceContravariance.VarianceExamples.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Intermediate.CovarianceContravariance.VarianceExamples",
+      "Summary": "<p sourcefile=\"api/AdvancedCsharpConcepts.Intermediate.CovarianceContravariance.VarianceExamples.yml\" sourcestartlinenumber=\"1\">Demonstrates covariance and contravariance concepts in C#.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AdvancedCsharpConcepts.Intermediate.CovarianceContravariance.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AdvancedCsharpConcepts.Intermediate.CovarianceContravariance.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "AdvancedCsharpConcepts.Intermediate.CovarianceContravariance",
+      "Summary": null
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "api/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/toc.html"
+        },
+        ".json": {
+          "relative_path": "api/toc.json"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/ADVANCED_SAMPLES_COMPLETION_REPORT.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/ADVANCED_SAMPLES_COMPLETION_REPORT.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/BRUTAL_HONEST_ASSESSMENT.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/BRUTAL_HONEST_ASSESSMENT.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/CICD_WORKFLOWS.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/CICD_WORKFLOWS.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/EXPERT_SAMPLES_COMPLETION_REPORT.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/EXPERT_SAMPLES_COMPLETION_REPORT.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/FINAL_COMPLETION_REPORT.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/FINAL_COMPLETION_REPORT.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/IMMEDIATE_COMPLETION_SUMMARY.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/IMMEDIATE_COMPLETION_SUMMARY.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/KALAN_ISLER_DETAYLI.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/KALAN_ISLER_DETAYLI.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/LEARNING_PATHS.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/LEARNING_PATHS.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/LEARNING_PATHS_STATUS.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/LEARNING_PATHS_STATUS.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/NUGET_PACKAGE_COMPLETION.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/NUGET_PACKAGE_COMPLETION.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/PENDING_TASKS.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/PENDING_TASKS.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/PERFORMANCE.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/PERFORMANCE.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/PERFORMANCE_TESTING_COMPLETION.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/PERFORMANCE_TESTING_COMPLETION.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/PORTFOLIO_COMPLETION_REPORT.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/PORTFOLIO_COMPLETION_REPORT.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/PRIORITY_1_COMPLETION_REPORT.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/PRIORITY_1_COMPLETION_REPORT.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/PRIORITY_2_COMPLETION_REPORT.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/PRIORITY_2_COMPLETION_REPORT.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/QUICK_START_CICD.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/QUICK_START_CICD.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/RELEASE.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/RELEASE.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/START_HERE.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/START_HERE.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/YAPILMASI_GEREKENLER.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/YAPILMASI_GEREKENLER.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/architecture/01-architecture-decision-records/0001-adopting-dotnet-8-platform.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/architecture/01-architecture-decision-records/0001-adopting-dotnet-8-platform.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/architecture/01-architecture-decision-records/0002-using-dotnet-aspire.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/architecture/01-architecture-decision-records/0002-using-dotnet-aspire.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/architecture/01-architecture-decision-records/0003-entity-framework-core-data-access.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/architecture/01-architecture-decision-records/0003-entity-framework-core-data-access.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/architecture/01-architecture-decision-records/0004-postgresql-primary-database.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/architecture/01-architecture-decision-records/0004-postgresql-primary-database.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/architecture/01-architecture-decision-records/0005-redis-distributed-caching.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/architecture/01-architecture-decision-records/0005-redis-distributed-caching.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/architecture/01-architecture-decision-records/0006-stackexchange-redis-client.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/architecture/01-architecture-decision-records/0006-stackexchange-redis-client.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/architecture/01-architecture-decision-records/0007-opentelemetry-for-observability.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/architecture/01-architecture-decision-records/0007-opentelemetry-for-observability.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/architecture/01-architecture-decision-records/0008-blazor-server-frontend.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/architecture/01-architecture-decision-records/0008-blazor-server-frontend.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/architecture/01-architecture-decision-records/0009-minimal-apis-over-controllers.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/architecture/01-architecture-decision-records/0009-minimal-apis-over-controllers.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/architecture/01-architecture-decision-records/0010-direct-dbcontext-usage.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/architecture/01-architecture-decision-records/0010-direct-dbcontext-usage.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/architecture/01-architecture-decision-records/0011-service-discovery-pattern.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/architecture/01-architecture-decision-records/0011-service-discovery-pattern.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/architecture/01-architecture-decision-records/0012-container-first-development.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/architecture/01-architecture-decision-records/0012-container-first-development.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/architecture/01-architecture-decision-records/0013-servicedefaults-pattern.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/architecture/01-architecture-decision-records/0013-servicedefaults-pattern.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/architecture/01-architecture-decision-records/0014-health-checks-kubernetes.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/architecture/01-architecture-decision-records/0014-health-checks-kubernetes.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/architecture/01-architecture-decision-records/0015-stylecop-code-quality.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/architecture/01-architecture-decision-records/0015-stylecop-code-quality.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/architecture/01-architecture-decision-records/0016-cache-aside-pattern.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/architecture/01-architecture-decision-records/0016-cache-aside-pattern.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/architecture/01-architecture-decision-records/0017-async-first-api-design.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/architecture/01-architecture-decision-records/0017-async-first-api-design.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/architecture/01-architecture-decision-records/0018-swagger-openapi-documentation.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/architecture/01-architecture-decision-records/0018-swagger-openapi-documentation.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/architecture/01-architecture-decision-records/0019-apphost-orchestration.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/architecture/01-architecture-decision-records/0019-apphost-orchestration.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/architecture/01-architecture-decision-records/0020-zero-configuration-infrastructure.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/architecture/01-architecture-decision-records/0020-zero-configuration-infrastructure.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/architecture/01-architecture-decision-records/ADR-001-net8-upgrade.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/architecture/01-architecture-decision-records/ADR-001-net8-upgrade.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/architecture/01-architecture-decision-records/ADR-002-testing-strategy.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/architecture/01-architecture-decision-records/ADR-002-testing-strategy.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/architecture/01-architecture-decision-records/ADR-003-logging-framework.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/architecture/01-architecture-decision-records/ADR-003-logging-framework.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/architecture/01-architecture-decision-records/ADR-004-cicd-platform.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/architecture/01-architecture-decision-records/ADR-004-cicd-platform.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/architecture/01-architecture-decision-records/README.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/architecture/01-architecture-decision-records/README.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/architecture/01-architecture-decision-records/adr-template.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/architecture/01-architecture-decision-records/adr-template.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/architecture/02-c4-diagrams/code-diagram.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/architecture/02-c4-diagrams/code-diagram.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/architecture/02-c4-diagrams/component-diagram.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/architecture/02-c4-diagrams/component-diagram.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/architecture/02-c4-diagrams/container-diagram.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/architecture/02-c4-diagrams/container-diagram.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/architecture/02-c4-diagrams/context-diagram.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/architecture/02-c4-diagrams/context-diagram.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/architecture/ARCHITECTURE.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/architecture/ARCHITECTURE.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/code-reviews/01-Polymorphism-Misuse/lessons-learned.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/code-reviews/01-Polymorphism-Misuse/lessons-learned.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/code-reviews/01-Polymorphism-Misuse/review-comments.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/code-reviews/01-Polymorphism-Misuse/review-comments.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/code-reviews/01-Polymorphism-Misuse/senior-feedback.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/code-reviews/01-Polymorphism-Misuse/senior-feedback.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/code-reviews/01-Polymorphism-Review/review-comments.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/code-reviews/01-Polymorphism-Review/review-comments.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/code-reviews/02-API-Design-Review/lessons-learned.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/code-reviews/02-API-Design-Review/lessons-learned.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/code-reviews/02-API-Design-Review/review-comments.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/code-reviews/02-API-Design-Review/review-comments.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/code-reviews/02-API-Design-Review/review-feedback.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/code-reviews/02-API-Design-Review/review-feedback.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/code-reviews/02-API-Design-Review/senior-feedback.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/code-reviews/02-API-Design-Review/senior-feedback.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/code-reviews/02-API-Design-Review/v1-api.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/code-reviews/02-API-Design-Review/v1-api.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/code-reviews/02-API-Design-Review/v2-api.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/code-reviews/02-API-Design-Review/v2-api.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/code-reviews/03-Performance-Antipatterns/lessons-learned.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/code-reviews/03-Performance-Antipatterns/lessons-learned.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/code-reviews/03-Performance-Antipatterns/review-comments.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/code-reviews/03-Performance-Antipatterns/review-comments.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/code-reviews/03-Performance-Antipatterns/senior-feedback.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/code-reviews/03-Performance-Antipatterns/senior-feedback.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/code-reviews/04-Security-Vulnerabilities/review-comments.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/code-reviews/04-Security-Vulnerabilities/review-comments.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/code-reviews/README.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/code-reviews/README.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/decisions/0001-use-mediatr-for-cqrs.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/decisions/0001-use-mediatr-for-cqrs.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/decisions/0002-use-clean-architecture-layers.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/decisions/0002-use-clean-architecture-layers.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/decisions/0003-use-polly-for-resilience.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/decisions/0003-use-polly-for-resilience.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/decisions/0004-adopt-dotnet-aspire.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/decisions/0004-adopt-dotnet-aspire.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/decisions/0005-implement-custom-source-generators.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/decisions/0005-implement-custom-source-generators.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/decisions/0006-build-custom-roslyn-analyzers.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/decisions/0006-build-custom-roslyn-analyzers.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/decisions/0007-choose-postgresql-over-sql-server.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/decisions/0007-choose-postgresql-over-sql-server.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/decisions/0008-use-redis-for-distributed-caching.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/decisions/0008-use-redis-for-distributed-caching.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/decisions/0009-adopt-serilog-for-structured-logging.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/decisions/0009-adopt-serilog-for-structured-logging.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/decisions/0010-implement-opentelemetry.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/decisions/0010-implement-opentelemetry.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/decisions/0011-use-jwt-for-authentication.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/decisions/0011-use-jwt-for-authentication.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/decisions/0012-use-ef-core-for-data-access.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/decisions/0012-use-ef-core-for-data-access.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/decisions/0013-use-benchmarkdotnet.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/decisions/0013-use-benchmarkdotnet.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/decisions/0014-containerize-with-docker.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/decisions/0014-containerize-with-docker.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/decisions/0015-deploy-to-kubernetes.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/decisions/0015-deploy-to-kubernetes.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/decisions/README.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/decisions/README.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/decisions/TEMPLATE.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/decisions/TEMPLATE.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/guides/ADVANCED_PERFORMANCE.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/guides/ADVANCED_PERFORMANCE.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/guides/CHANGELOG_AUTOMATION.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/guides/CHANGELOG_AUTOMATION.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/guides/CLOUD_DEPLOYMENT.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/guides/CLOUD_DEPLOYMENT.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/guides/GETTING_STARTED.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/guides/GETTING_STARTED.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/guides/ML_NET_INTEGRATION.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/guides/ML_NET_INTEGRATION.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/guides/NATIVE_AOT.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/guides/NATIVE_AOT.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/guides/NUGET_PACKAGING.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/guides/NUGET_PACKAGING.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/guides/ROSLYN_ANALYZERS.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/guides/ROSLYN_ANALYZERS.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/guides/SOURCE_GENERATORS.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/guides/SOURCE_GENERATORS.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/guides/VERSIONING_STRATEGY.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/guides/VERSIONING_STRATEGY.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/learning-paths/README.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/learning-paths/README.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/learning-paths/assessment-tests/path1/README.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/learning-paths/assessment-tests/path1/README.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/learning-paths/assessment-tests/path1/final-exam.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/learning-paths/assessment-tests/path1/final-exam.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/learning-paths/assessment-tests/path1/month-01-assessment.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/learning-paths/assessment-tests/path1/month-01-assessment.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/learning-paths/assessment-tests/path1/month-02-assessment.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/learning-paths/assessment-tests/path1/month-02-assessment.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/learning-paths/assessment-tests/path1/month-03-assessment.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/learning-paths/assessment-tests/path1/month-03-assessment.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/learning-paths/assessment-tests/path1/month-04-assessment.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/learning-paths/assessment-tests/path1/month-04-assessment.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/learning-paths/assessment-tests/path1/month-05-assessment.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/learning-paths/assessment-tests/path1/month-05-assessment.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/learning-paths/assessment-tests/path1/month-06-assessment.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/learning-paths/assessment-tests/path1/month-06-assessment.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/learning-paths/assessment-tests/path1/week-01-test.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/learning-paths/assessment-tests/path1/week-01-test.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/learning-paths/assessment-tests/path1/week-02-test.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/learning-paths/assessment-tests/path1/week-02-test.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/learning-paths/assessment-tests/path1/week-03-test.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/learning-paths/assessment-tests/path1/week-03-test.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/learning-paths/assessment-tests/path1/week-04-test.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/learning-paths/assessment-tests/path1/week-04-test.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/learning-paths/assessment-tests/path1/week-05-test.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/learning-paths/assessment-tests/path1/week-05-test.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/learning-paths/assessment-tests/path1/week-06-test.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/learning-paths/assessment-tests/path1/week-06-test.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/learning-paths/assessment-tests/path1/week-07-test.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/learning-paths/assessment-tests/path1/week-07-test.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/learning-paths/assessment-tests/path1/weeks-08-24-tests.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/learning-paths/assessment-tests/path1/weeks-08-24-tests.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/learning-paths/checklists/path1-checklist.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/learning-paths/checklists/path1-checklist.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/learning-paths/checklists/path2-checklist.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/learning-paths/checklists/path2-checklist.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/learning-paths/checklists/path3-checklist.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/learning-paths/checklists/path3-checklist.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/learning-paths/checklists/path4-checklist.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/learning-paths/checklists/path4-checklist.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/learning-paths/project-templates/path1/final-task-management-api.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/learning-paths/project-templates/path1/final-task-management-api.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/learning-paths/project-templates/path1/month1-pet-shelter-system.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/learning-paths/project-templates/path1/month1-pet-shelter-system.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/learning-paths/project-templates/path1/month2-data-analysis-pipeline.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/learning-paths/project-templates/path1/month2-data-analysis-pipeline.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/learning-paths/project-templates/path1/month3-notification-system.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/learning-paths/project-templates/path1/month3-notification-system.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/learning-paths/project-templates/path1/month4-algorithm-visualizer.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/learning-paths/project-templates/path1/month4-algorithm-visualizer.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/learning-paths/project-templates/path1/month5-decorator-pipeline.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/learning-paths/project-templates/path1/month5-decorator-pipeline.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/learning-paths/project-templates/path1/month6-capstone-prep.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/learning-paths/project-templates/path1/month6-capstone-prep.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/learning-paths/project-templates/path2/month1-2-high-performance-log-parser.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/learning-paths/project-templates/path2/month1-2-high-performance-log-parser.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/learning-paths/project-templates/path2/month3-4-ecommerce-domain-layer.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/learning-paths/project-templates/path2/month3-4-ecommerce-domain-layer.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/learning-paths/project-templates/path2/month5-6-microservice-platform.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/learning-paths/project-templates/path2/month5-6-microservice-platform.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/learning-paths/project-templates/path2/month7-8-production-ready-api.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/learning-paths/project-templates/path2/month7-8-production-ready-api.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/learning-paths/project-templates/path2/month9-final-capstone.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/learning-paths/project-templates/path2/month9-final-capstone.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/learning-paths/project-templates/path3/month1-3-system-architecture-design.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/learning-paths/project-templates/path3/month1-3-system-architecture-design.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/learning-paths/project-templates/path3/month10-12-final-enterprise-architecture.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/learning-paths/project-templates/path3/month10-12-final-enterprise-architecture.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/learning-paths/project-templates/path3/month4-6-performance-optimization.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/learning-paths/project-templates/path3/month4-6-performance-optimization.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/mentorship/code-review-checklist.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/mentorship/code-review-checklist.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/mentorship/common-junior-mistakes.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/mentorship/common-junior-mistakes.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/mentorship/growth-plan-template.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/mentorship/growth-plan-template.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/mentorship/teaching-polymorphism.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/mentorship/teaching-polymorphism.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/security/BEST_PRACTICES.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/security/BEST_PRACTICES.html"
+        }
+      },
+      "version": ""
+    }
+  ],
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}

@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Common Junior Developer Mistakes (And How to Fix Them) | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Common Junior Developer Mistakes (And How to Fix Them) | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/mentorship/common-junior-mistakes.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="common-junior-developer-mistakes-and-how-to-fix-them">Common Junior Developer Mistakes (And How to Fix Them)</h1>
+
+<p><strong>Purpose:</strong> Help mentors identify patterns and teach effectively<br>
+<strong>Audience:</strong> Senior/Mid-level engineers mentoring juniors<br>
+<strong>Philosophy:</strong> Every mistake is a teaching opportunity</p>
+<hr>
+<h2 id="how-to-use-this-guide">How to Use This Guide</h2>
+<ol>
+<li><strong>Identify the pattern</strong> - Don't just fix the specific bug, recognize the underlying mistake</li>
+<li><strong>Teach the concept</strong> - Explain WHY it's a problem, not just WHAT is wrong</li>
+<li><strong>Show the fix</strong> - Give them the solution pattern they can apply elsewhere</li>
+<li><strong>Prevent recurrence</strong> - Help them catch this mistake themselves next time</li>
+</ol>
+<p><strong>Remember:</strong> You made these mistakes too. Be empathetic.</p>
+<hr>
+<h2 id="category-1-object-oriented-design-mistakes">Category 1: Object-Oriented Design Mistakes</h2>
+<h3 id="mistake-1-using-type-checking-instead-of-polymorphism">Mistake #1: Using Type Checking Instead of Polymorphism</h3>
+<p><strong>What You'll See:</strong></p>
+<pre><code class="lang-csharp">public void ProcessPayment(string paymentType)
+{
+    if (paymentType == &quot;CreditCard&quot;)
+    {
+        // 20 lines of credit card logic
+    }
+    else if (paymentType == &quot;PayPal&quot;)
+    {
+        // 20 lines of PayPal logic
+    }
+    else if (paymentType == &quot;Bitcoin&quot;)
+    {
+        // 20 lines of Bitcoin logic
+    }
+}
+</code></pre>
+<p><strong>Why They Do This:</strong></p>
+<ul>
+<li>Most intuitive approach for beginners</li>
+<li>Haven't experienced the pain of maintaining it</li>
+<li>Don't know polymorphism yet</li>
+</ul>
+<p><strong>The Problem:</strong></p>
+<ul>
+<li>Adding Apple Pay = modify this method + 4 other methods</li>
+<li>Typos aren't caught by compiler (&quot;paypal&quot; vs &quot;PayPal&quot;)</li>
+<li>Logic is scattered (credit card processing in 5 places)</li>
+<li>Testing requires mocking all types in every test</li>
+</ul>
+<p><strong>How to Fix:</strong></p>
+<pre><code class="lang-csharp">public interface IPaymentProcessor
+{
+    void Process(decimal amount);
+}
+
+public class CreditCardProcessor : IPaymentProcessor { ... }
+public class PayPalProcessor : IPaymentProcessor { ... }
+
+public void ProcessPayment(IPaymentProcessor processor, decimal amount)
+{
+    processor.Process(amount); // That's it!
+}
+</code></pre>
+<p><strong>How to Teach:</strong></p>
+<ol>
+<li>Show them the pain: &quot;What happens when we add 10 more payment types?&quot;</li>
+<li>Introduce polymorphism: &quot;What if each type knew how to process itself?&quot;</li>
+<li>Compare side-by-side: &quot;Which would you rather maintain?&quot;</li>
+<li>Have them refactor a similar example</li>
+</ol>
+<p><strong>Prevention:</strong></p>
+<ul>
+<li>Code review: Flag any <code>if (type == &quot;string&quot;)</code> patterns</li>
+<li>Ask: &quot;Will this grow? If yes, consider polymorphism.&quot;</li>
+</ul>
+<hr>
+<h3 id="mistake-2-god-classes-too-many-responsibilities">Mistake #2: God Classes (Too Many Responsibilities)</h3>
+<p><strong>What You'll See:</strong></p>
+<pre><code class="lang-csharp">public class UserService
+{
+    public void CreateUser() { }
+    public void UpdateUser() { }
+    public void DeleteUser() { }
+    public void SendWelcomeEmail() { } // ❌
+    public void LogAction() { } // ❌
+    public void GenerateReport() { } // ❌
+    public void ProcessPayment() { } // ❌
+    public void ValidateAddress() { } // ❌
+}
+</code></pre>
+<p><strong>Why They Do This:</strong></p>
+<ul>
+<li>&quot;UserService handles everything about users, right?&quot;</li>
+<li>Don't understand Single Responsibility Principle</li>
+<li>Didn't think about testing/maintenance</li>
+</ul>
+<p><strong>The Problem:</strong></p>
+<ul>
+<li>Hard to test (need to mock email, logging, reports to test user creation)</li>
+<li>Hard to reuse (can't use email sender in OrderService)</li>
+<li>Changes to reports affect user management (shouldn't!)</li>
+<li>Class grows to 2000 lines</li>
+</ul>
+<p><strong>How to Fix:</strong></p>
+<pre><code class="lang-csharp">public class UserService
+{
+    private readonly IEmailService _email;
+    private readonly ILogger _logger;
+    private readonly IPaymentService _payment;
+
+    public void CreateUser()
+    {
+        // User creation logic only
+        _email.SendWelcomeEmail(); // Delegate to email service
+        _logger.Log(&quot;User created&quot;); // Delegate to logger
+    }
+}
+</code></pre>
+<p><strong>How to Teach:</strong></p>
+<ol>
+<li>Ask: &quot;What is the single responsibility of UserService?&quot;</li>
+<li>List methods: &quot;Which of these are DIRECTLY about managing user data?&quot;</li>
+<li>Extract: &quot;Let's move email logic to EmailService&quot;</li>
+<li>Show benefits: &quot;Now we can test user creation without mocking email!&quot;</li>
+</ol>
+<p><strong>Prevention:</strong></p>
+<ul>
+<li>Rule of thumb: If class has &gt;10 methods, probably doing too much</li>
+<li>Ask: &quot;Does this method belong here?&quot; during code review</li>
+</ul>
+<hr>
+<h3 id="mistake-3-exposing-implementation-details">Mistake #3: Exposing Implementation Details</h3>
+<p><strong>What You'll See:</strong></p>
+<pre><code class="lang-csharp">public class OrderService
+{
+    public SqlConnection Connection { get; set; } // ❌ Exposes SqlConnection!
+    public List&lt;Order&gt; OrderCache { get; set; } // ❌ Exposes cache!
+    
+    public void SaveOrder(Order order)
+    {
+        Connection.Open(); // ❌ Caller must manage connection!
+        // ...
+    }
+}
+</code></pre>
+<p><strong>Why They Do This:</strong></p>
+<ul>
+<li>Don't understand encapsulation</li>
+<li>&quot;I need to access this from tests&quot;</li>
+<li>Haven't learned dependency injection</li>
+</ul>
+<p><strong>The Problem:</strong></p>
+<ul>
+<li>Callers depend on implementation (can't switch to Postgres without breaking callers)</li>
+<li>Can't change cache implementation (is it Redis? Memory? Callers know!)</li>
+<li>Testing requires setting up SqlConnection</li>
+</ul>
+<p><strong>How to Fix:</strong></p>
+<pre><code class="lang-csharp">public class OrderService
+{
+    private readonly IDbContext _db; // ✅ Private, abstracted
+    private readonly ICache _cache; // ✅ Private, abstracted
+    
+    public async Task SaveOrderAsync(Order order)
+    {
+        // Connection management is hidden
+        await _db.Orders.AddAsync(order);
+        await _db.SaveChangesAsync();
+    }
+}
+</code></pre>
+<p><strong>How to Teach:</strong></p>
+<ol>
+<li>Principle: &quot;Hide how it works, expose what it does&quot;</li>
+<li>Ask: &quot;If we switch from SQL Server to Postgres, what breaks?&quot;</li>
+<li>Refactor: &quot;Let's hide SqlConnection behind IDbContext&quot;</li>
+<li>Show: &quot;Now callers don't know or care about database type&quot;</li>
+</ol>
+<p><strong>Prevention:</strong></p>
+<ul>
+<li>Public properties should be business data only, not implementation details</li>
+<li>If it starts with <code>I</code> (interface), it's okay to expose</li>
+</ul>
+<hr>
+<h2 id="category-2-database--performance-mistakes">Category 2: Database &amp; Performance Mistakes</h2>
+<h3 id="mistake-4-n1-query-problem">Mistake #4: N+1 Query Problem</h3>
+<p><strong>What You'll See:</strong></p>
+<pre><code class="lang-csharp">var orders = await _db.Orders.ToListAsync();
+foreach (var order in orders)
+{
+    order.Customer = await _db.Customers.FindAsync(order.CustomerId); // N queries!
+}
+</code></pre>
+<p><strong>Why They Do This:</strong></p>
+<ul>
+<li>Lazy loading is enabled (hidden queries)</li>
+<li>Don't see the problem until production (works fine with 10 orders in dev)</li>
+<li>Don't understand how ORMs work</li>
+</ul>
+<p><strong>The Problem:</strong></p>
+<ul>
+<li>1 query for orders + N queries for customers = 1,001 queries for 1,000 orders</li>
+<li>Response time: 200ms → 15 seconds</li>
+<li>Database connection pool exhausted</li>
+</ul>
+<p><strong>How to Fix:</strong></p>
+<pre><code class="lang-csharp">var orders = await _db.Orders
+    .Include(o =&gt; o.Customer) // ✅ Single query with JOIN
+    .ToListAsync();
+</code></pre>
+<p><strong>How to Teach:</strong></p>
+<ol>
+<li>Enable SQL logging: Show them the 1,001 queries</li>
+<li>Explain: &quot;See how we're hitting database in a loop?&quot;</li>
+<li>Fix: &quot;Include() tells EF to JOIN instead of lazy load&quot;</li>
+<li>Benchmark: &quot;15s → 180ms. That's the impact.&quot;</li>
+</ol>
+<p><strong>Resources to Share:</strong></p>
+<ul>
+<li><code>samples/98-RealWorld-Problems/03-N-Plus-One-Problem/</code></li>
+</ul>
+<p><strong>Prevention:</strong></p>
+<ul>
+<li>Disable lazy loading in production</li>
+<li>Review any loop that accesses navigation properties</li>
+</ul>
+<hr>
+<h3 id="mistake-5-loading-entire-table-into-memory">Mistake #5: Loading Entire Table into Memory</h3>
+<p><strong>What You'll See:</strong></p>
+<pre><code class="lang-csharp">var allUsers = await _db.Users.ToListAsync(); // ❌ Loads 1 million rows!
+var activeUsers = allUsers.Where(u =&gt; u.IsActive).ToList(); // Filters in C#
+</code></pre>
+<p><strong>Why They Do This:</strong></p>
+<ul>
+<li>&quot;I need to filter, so I load then filter&quot;</li>
+<li>Don't understand LINQ translates to SQL</li>
+<li>Works in dev with 100 users, breaks in prod with 1M</li>
+</ul>
+<p><strong>The Problem:</strong></p>
+<ul>
+<li>1M rows × 200 bytes = 200 MB loaded into memory</li>
+<li>Query takes 30 seconds</li>
+<li>OutOfMemoryException in production</li>
+</ul>
+<p><strong>How to Fix:</strong></p>
+<pre><code class="lang-csharp">var activeUsers = await _db.Users
+    .Where(u =&gt; u.IsActive) // ✅ Filters in database
+    .ToListAsync();
+</code></pre>
+<p><strong>How to Teach:</strong></p>
+<ol>
+<li>Show SQL: &quot;Look at the query - no WHERE clause!&quot;</li>
+<li>Explain: &quot;EF can't translate after ToListAsync(), so it loads everything&quot;</li>
+<li>Rule: &quot;Filter BEFORE ToListAsync(), not after&quot;</li>
+<li>Show: &quot;Now SQL has WHERE IsActive = 1. Database does the work.&quot;</li>
+</ol>
+<p><strong>Prevention:</strong></p>
+<ul>
+<li>If you see <code>.ToListAsync()</code> followed by <code>.Where()</code>, flag it</li>
+<li>Rule: LINQ = SQL translation, stop as late as possible</li>
+</ul>
+<hr>
+<h3 id="mistake-6-not-using-asyncawait-correctly">Mistake #6: Not Using Async/Await Correctly</h3>
+<p><strong>What You'll See:</strong></p>
+<pre><code class="lang-csharp">// Pattern 1: Not awaiting
+public async Task&lt;User&gt; GetUserAsync(int id)
+{
+    var user = _db.Users.FindAsync(id); // ❌ Not awaited!
+    return user; // Compiler error: Task&lt;User&gt; != User
+}
+
+// Pattern 2: Unnecessary blocking
+public async Task&lt;User&gt; GetUserAsync(int id)
+{
+    var user = await _db.Users.FindAsync(id);
+    return user.Result; // ❌ .Result blocks!
+}
+
+// Pattern 3: Async void
+public async void SaveUser(User user) // ❌ Should be Task, not void
+{
+    await _db.SaveChangesAsync();
+}
+</code></pre>
+<p><strong>Why They Do This:</strong></p>
+<ul>
+<li>Async is confusing for beginners</li>
+<li>&quot;.Result made the compile error go away!&quot;</li>
+<li>Don't understand Task vs void</li>
+</ul>
+<p><strong>The Problem:</strong></p>
+<ul>
+<li>Not awaiting: Method returns before work is done</li>
+<li>.Result: Blocks thread, can cause deadlock</li>
+<li>async void: Can't be awaited, exceptions aren't caught</li>
+</ul>
+<p><strong>How to Fix:</strong></p>
+<pre><code class="lang-csharp">// ✅ Correct pattern
+public async Task&lt;User&gt; GetUserAsync(int id)
+{
+    var user = await _db.Users.FindAsync(id); // Await Task&lt;User&gt;
+    return user; // Return User
+}
+
+// ✅ Fire-and-forget (rare)
+public Task SaveUserAsync(User user) // Task, not void
+{
+    return _db.SaveChangesAsync(); // Return the Task
+}
+</code></pre>
+<p><strong>How to Teach:</strong></p>
+<ol>
+<li>Visual: &quot;async/await is like ordering at coffee shop&quot;
+<ul>
+<li>Place order (start Task)</li>
+<li>Do other things (not blocking)</li>
+<li>Get notification (await completes)</li>
+<li>Get coffee (return result)</li>
+</ul>
+</li>
+<li>Rule: &quot;If method name ends with Async, return Task&quot;</li>
+<li>Never: &quot;Never use .Result or .Wait(). Always await.&quot;</li>
+</ol>
+<p><strong>Prevention:</strong></p>
+<ul>
+<li>Compiler helps: Enable async warnings</li>
+<li>Search: Look for <code>.Result</code>, <code>.Wait()</code>, <code>async void</code> in PRs</li>
+</ul>
+<hr>
+<h2 id="category-3-security-mistakes">Category 3: Security Mistakes</h2>
+<h3 id="mistake-7-returning-sensitive-data">Mistake #7: Returning Sensitive Data</h3>
+<p><strong>What You'll See:</strong></p>
+<pre><code class="lang-csharp">[HttpGet(&quot;{id}&quot;)]
+public async Task&lt;User&gt; GetUser(int id)
+{
+    return await _db.Users.FindAsync(id); // ❌ Returns password hash!
+}
+</code></pre>
+<p><strong>Why They Do This:</strong></p>
+<ul>
+<li>&quot;I just return what the database gives me&quot;</li>
+<li>Don't understand security implications</li>
+<li>Didn't create DTOs</li>
+</ul>
+<p><strong>The Problem:</strong></p>
+<ul>
+<li>Password hashes exposed to clients (can be cracked offline)</li>
+<li>Internal IDs exposed (security through obscurity broken)</li>
+<li>GDPR violation (PII exposure without consent)</li>
+</ul>
+<p><strong>How to Fix:</strong></p>
+<pre><code class="lang-csharp">[HttpGet(&quot;{id}&quot;)]
+public async Task&lt;UserDto&gt; GetUser(int id)
+{
+    var user = await _db.Users.FindAsync(id);
+    return new UserDto
+    {
+        FirstName = user.FirstName,
+        Email = user.Email
+        // NO password, no sensitive data
+    };
+}
+</code></pre>
+<p><strong>How to Teach:</strong></p>
+<ol>
+<li>Ask: &quot;What data should clients see?&quot;</li>
+<li>Show impact: &quot;In 2019, a company exposed hashes. Attackers cracked 30%, $5M fine.&quot;</li>
+<li>Rule: &quot;Never return entity directly. Always use DTO.&quot;</li>
+<li>List: &quot;Never return: passwords, reset tokens, API keys, SSNs&quot;</li>
+</ol>
+<p><strong>Prevention:</strong></p>
+<ul>
+<li>API endpoints should return DTOs, never entities</li>
+<li>Code review: Any <code>Task&lt;User&gt;</code> in controller is a red flag</li>
+</ul>
+<hr>
+<h3 id="mistake-8-no-input-validation">Mistake #8: No Input Validation</h3>
+<p><strong>What You'll See:</strong></p>
+<pre><code class="lang-csharp">[HttpPost]
+public async Task&lt;IActionResult&gt; CreateUser(CreateUserRequest request)
+{
+    // ❌ No validation!
+    var user = new User
+    {
+        Email = request.Email, // Could be null, empty, or &quot;asdf&quot;
+        Age = request.Age // Could be -50 or 999
+    };
+    await _db.Users.AddAsync(user);
+    await _db.SaveChangesAsync();
+}
+</code></pre>
+<p><strong>Why They Do This:</strong></p>
+<ul>
+<li>&quot;Database will validate&quot;</li>
+<li>Didn't learn validation patterns yet</li>
+<li>Works in Postman with valid data</li>
+</ul>
+<p><strong>The Problem:</strong></p>
+<ul>
+<li>Garbage data in database</li>
+<li>No user-friendly error messages</li>
+<li>Security: Can bypass business rules</li>
+</ul>
+<p><strong>How to Fix:</strong></p>
+<pre><code class="lang-csharp">[HttpPost]
+public async Task&lt;IActionResult&gt; CreateUser(CreateUserRequest request)
+{
+    // ✅ Validation
+    if (string.IsNullOrEmpty(request.Email))
+        return BadRequest(&quot;Email is required&quot;);
+    
+    if (!IsValidEmail(request.Email))
+        return BadRequest(&quot;Email format is invalid&quot;);
+    
+    if (request.Age &lt; 0 || request.Age &gt; 150)
+        return BadRequest(&quot;Age must be between 0 and 150&quot;);
+    
+    // Or use FluentValidation
+    var validator = new CreateUserValidator();
+    var result = await validator.ValidateAsync(request);
+    if (!result.IsValid)
+        return BadRequest(result.Errors);
+    
+    // Now create user
+}
+</code></pre>
+<p><strong>How to Teach:</strong></p>
+<ol>
+<li>Principle: &quot;Never trust client input&quot;</li>
+<li>Show: &quot;Try sending Age: -50. It saves! That's bad.&quot;</li>
+<li>Options: &quot;Manual validation or FluentValidation library&quot;</li>
+<li>Practice: &quot;Add validation for this endpoint&quot;</li>
+</ol>
+<p><strong>Prevention:</strong></p>
+<ul>
+<li>First line in every POST/PUT: validation</li>
+<li>Rule: If it comes from outside, validate it</li>
+</ul>
+<hr>
+<h2 id="category-4-testing-mistakes">Category 4: Testing Mistakes</h2>
+<h3 id="mistake-9-not-writing-tests-at-all">Mistake #9: Not Writing Tests at All</h3>
+<p><strong>What You'll See:</strong></p>
+<pre><code>Pull Request:
++ OrderService.cs (200 new lines)
++ 0 test files
+
+Junior: &quot;I tested it manually in Postman. It works!&quot;
+</code></pre>
+<p><strong>Why They Do This:</strong></p>
+<ul>
+<li>&quot;Tests take too long to write&quot;</li>
+<li>Don't know how to write tests</li>
+<li>Haven't experienced regression bugs yet</li>
+</ul>
+<p><strong>The Problem:</strong></p>
+<ul>
+<li>No confidence that code works</li>
+<li>Refactoring is scary (might break things)</li>
+<li>Bugs slip into production</li>
+</ul>
+<p><strong>How to Fix:</strong>
+Start simple, don't demand 100% coverage:</p>
+<pre><code class="lang-csharp">[Fact]
+public async Task CreateOrder_ValidInput_CreatesOrder()
+{
+    // Arrange
+    var service = new OrderService(_mockDb.Object);
+    var request = new CreateOrderRequest { /* ... */ };
+    
+    // Act
+    var result = await service.CreateOrderAsync(request);
+    
+    // Assert
+    Assert.NotNull(result);
+    Assert.Equal(OrderStatus.Pending, result.Status);
+}
+</code></pre>
+<p><strong>How to Teach:</strong></p>
+<ol>
+<li>Pair: &quot;Let's write one test together&quot;</li>
+<li>Show: &quot;Now change the code. Test turns red. Fix it. Green!&quot;</li>
+<li>Benefit: &quot;You just saved yourself 10 minutes of manual testing&quot;</li>
+<li>Habit: &quot;Write 1-2 tests for each new feature&quot;</li>
+</ol>
+<p><strong>Prevention:</strong></p>
+<ul>
+<li>PR checklist: &quot;Are critical paths tested?&quot;</li>
+<li>Start small: Just happy path is fine</li>
+<li>Gamify: &quot;You wrote 5 tests this sprint. Nice!&quot;</li>
+</ul>
+<hr>
+<h3 id="mistake-10-testing-implementation-not-behavior">Mistake #10: Testing Implementation, Not Behavior</h3>
+<p><strong>What You'll See:</strong></p>
+<pre><code class="lang-csharp">[Fact]
+public void CreateUser_CallsSaveChanges() // ❌ Testing implementation detail
+{
+    _service.CreateUser(new User());
+    _mockDb.Verify(db =&gt; db.SaveChanges(), Times.Once);
+}
+</code></pre>
+<p><strong>Why They Do This:</strong></p>
+<ul>
+<li>&quot;I need to test that SaveChanges is called&quot;</li>
+<li>Learned mocking, applies it everywhere</li>
+<li>Doesn't understand what to test</li>
+</ul>
+<p><strong>The Problem:</strong></p>
+<ul>
+<li>Test breaks when you refactor (even though behavior didn't change)</li>
+<li>Doesn't actually test that user was created</li>
+<li>Brittle tests = ignored tests</li>
+</ul>
+<p><strong>How to Fix:</strong></p>
+<pre><code class="lang-csharp">[Fact]
+public async Task CreateUser_ValidInput_UserExistsInDatabase() // ✅ Test behavior
+{
+    // Arrange
+    var user = new User { Email = &quot;test@example.com&quot; };
+    
+    // Act
+    await _service.CreateUserAsync(user);
+    
+    // Assert
+    var saved = await _db.Users.FirstOrDefaultAsync(u =&gt; u.Email == &quot;test@example.com&quot;);
+    Assert.NotNull(saved);
+}
+</code></pre>
+<p><strong>How to Teach:</strong></p>
+<ol>
+<li>Principle: &quot;Test behavior (what), not implementation (how)&quot;</li>
+<li>Ask: &quot;What is this method supposed to do from the caller's perspective?&quot;</li>
+<li>Bad: &quot;It calls SaveChanges&quot;</li>
+<li>Good: &quot;It creates a user that can be retrieved later&quot;</li>
+</ol>
+<p><strong>Prevention:</strong></p>
+<ul>
+<li>Code review: If test uses <code>.Verify()</code> on internal method, question it</li>
+<li>Ask: &quot;If I refactor this method, should the test break?&quot;</li>
+</ul>
+<hr>
+<h2 id="category-5-api-design-mistakes">Category 5: API Design Mistakes</h2>
+<h3 id="mistake-11-inconsistent-http-status-codes">Mistake #11: Inconsistent HTTP Status Codes</h3>
+<p><strong>What You'll See:</strong></p>
+<pre><code class="lang-csharp">[HttpGet(&quot;{id}&quot;)]
+public IActionResult GetUser(int id)
+{
+    var user = _db.Users.Find(id);
+    if (user == null)
+        return Ok(new { success = false, error = &quot;Not found&quot; }); // ❌ 200 OK for error!
+    
+    return Ok(user);
+}
+
+[HttpPost]
+public IActionResult CreateUser(User user)
+{
+    try
+    {
+        _db.Users.Add(user);
+        _db.SaveChanges();
+        return Ok(new { success = true }); // ❌ Should be 201 Created!
+    }
+    catch (Exception ex)
+    {
+        return Ok(new { success = false, error = ex.Message }); // ❌ 200 OK for exception!
+    }
+}
+</code></pre>
+<p><strong>Why They Do This:</strong></p>
+<ul>
+<li>&quot;200 OK means it worked, right?&quot;</li>
+<li>Don't understand HTTP semantics</li>
+<li>Copying bad examples</li>
+</ul>
+<p><strong>The Problem:</strong></p>
+<ul>
+<li>Frontend frameworks check <code>response.ok</code> (200-299), miss errors</li>
+<li>HTTP caches cache 200s but not 404s (wrong behavior)</li>
+<li>Monitoring breaks (alerts on 5xx, not <code>{success: false}</code>)</li>
+</ul>
+<p><strong>How to Fix:</strong></p>
+<pre><code class="lang-csharp">[HttpGet(&quot;{id}&quot;)]
+public IActionResult GetUser(int id)
+{
+    var user = _db.Users.Find(id);
+    if (user == null)
+        return NotFound(); // ✅ 404 Not Found
+    
+    return Ok(user); // ✅ 200 OK
+}
+
+[HttpPost]
+public IActionResult CreateUser(User user)
+{
+    _db.Users.Add(user);
+    _db.SaveChanges();
+    return Created($&quot;/users/{user.Id}&quot;, user); // ✅ 201 Created
+}
+</code></pre>
+<p><strong>How to Teach:</strong></p>
+<ol>
+<li>Resource: Give them HTTP status code chart</li>
+<li>Rule: &quot;200-299 = success, 400-499 = client error, 500-599 = server error&quot;</li>
+<li>Common ones:
+<ul>
+<li>GET found: 200 OK</li>
+<li>GET not found: 404 Not Found</li>
+<li>POST created: 201 Created</li>
+<li>PUT updated: 200 OK or 204 No Content</li>
+<li>DELETE: 204 No Content</li>
+<li>Validation failed: 400 Bad Request</li>
+<li>Duplicate: 409 Conflict</li>
+</ul>
+</li>
+</ol>
+<p><strong>Prevention:</strong></p>
+<ul>
+<li>Code review: Any <code>return Ok(new { success = false })</code> is wrong</li>
+</ul>
+<hr>
+<h3 id="mistake-12-non-restful-endpoints">Mistake #12: Non-RESTful Endpoints</h3>
+<p><strong>What You'll See:</strong></p>
+<pre><code>POST /api/users/create        ❌ Verb in URL
+GET  /api/users/get?id=123    ❌ Verb + query param for ID
+PUT  /api/users/update        ❌ Verb in URL
+DELETE /api/users/delete?id=123  ❌ Verb + query param
+POST /api/users/updateStatus  ❌ Should be PATCH
+</code></pre>
+<p><strong>Why They Do This:</strong></p>
+<ul>
+<li>&quot;I need to name the endpoint, right?&quot;</li>
+<li>Haven't learned REST conventions</li>
+<li>Copying non-RESTful examples</li>
+</ul>
+<p><strong>The Problem:</strong></p>
+<ul>
+<li>Non-standard (every API is different)</li>
+<li>Can't leverage HTTP caching</li>
+<li>Can't use standard HTTP tooling</li>
+</ul>
+<p><strong>How to Fix:</strong></p>
+<pre><code>POST   /api/users           ✅ Create
+GET    /api/users/{id}      ✅ Get
+PUT    /api/users/{id}      ✅ Full update
+PATCH  /api/users/{id}      ✅ Partial update
+DELETE /api/users/{id}      ✅ Delete
+PATCH  /api/users/{id}/status  ✅ Update specific field
+</code></pre>
+<p><strong>How to Teach:</strong></p>
+<ol>
+<li>Principle: &quot;URLs are nouns, HTTP verbs are actions&quot;</li>
+<li>Show: &quot;POST /users = create, GET /users/{id} = read&quot;</li>
+<li>Resources: RESTful API design guide</li>
+<li>Practice: &quot;Redesign your endpoints using REST conventions&quot;</li>
+</ol>
+<p><strong>Resources to Share:</strong></p>
+<ul>
+<li><code>docs/code-reviews/02-API-Design-Review/v2-api.md</code></li>
+</ul>
+<p><strong>Prevention:</strong></p>
+<ul>
+<li>Code review: Any verb in URL route is a red flag</li>
+<li>Template: Give them RESTful route template to follow</li>
+</ul>
+<hr>
+<h2 id="how-to-approach-mentoring">How to Approach Mentoring</h2>
+<h3 id="when-junior-makes-the-same-mistake-twice">When Junior Makes the Same Mistake Twice</h3>
+<p><strong>Don't:</strong></p>
+<ul>
+<li>&quot;I told you about this last week!&quot;</li>
+<li>&quot;Didn't you read the resource I sent?&quot;</li>
+</ul>
+<p><strong>Do:</strong></p>
+<ul>
+<li>&quot;I see we're still having trouble with N+1 queries. Let's pair program this time so I can show you how I think through it.&quot;</li>
+<li>Ask: &quot;What makes this hard? How can I help you remember?&quot;</li>
+<li>Maybe they need: A checklist, more examples, pair programming, or deeper understanding</li>
+</ul>
+<hr>
+<h3 id="when-junior-pushes-back">When Junior Pushes Back</h3>
+<p><strong>Junior:</strong> &quot;But this way is simpler! Why do we need polymorphism?&quot;</p>
+<p><strong>Don't:</strong></p>
+<ul>
+<li>&quot;Because I said so&quot;</li>
+<li>&quot;You'll understand when you're senior&quot;</li>
+</ul>
+<p><strong>Do:</strong></p>
+<ul>
+<li>&quot;You're right, it IS simpler now. Let me show you what happens when we need to add 10 more types...&quot;</li>
+<li>Show the pain, don't just assert authority</li>
+<li>&quot;Try it your way. When you add the 4th type and realize it's painful, we'll refactor together.&quot;</li>
+</ul>
+<hr>
+<h3 id="when-youre-short-on-time">When You're Short on Time</h3>
+<p><strong>Don't:</strong></p>
+<ul>
+<li>Skip mentoring</li>
+<li>Just fix it yourself</li>
+</ul>
+<p><strong>Do:</strong></p>
+<ul>
+<li>&quot;I'll fix this one as an example. Next time, you do it.&quot;</li>
+<li>&quot;Let's spend 15 minutes. I'll show you the pattern, you apply it to the rest.&quot;</li>
+<li>Async: &quot;Watch this Loom video of me fixing it, then try the next one.&quot;</li>
+</ul>
+<hr>
+<h2 id="tracking-progress">Tracking Progress</h2>
+<p><strong>Week 1:</strong> They make all these mistakes<br>
+<strong>Week 4:</strong> They make half these mistakes<br>
+<strong>Week 8:</strong> They catch their own mistakes before you do<br>
+<strong>Week 12:</strong> They're teaching another junior</p>
+<p><strong>That's growth.</strong> Celebrate it.</p>
+<hr>
+<h2 id="remember">Remember</h2>
+<ul>
+<li>Every senior was a junior who made these mistakes</li>
+<li>Patience &gt; perfection</li>
+<li>Teaching takes longer than fixing, but builds the team</li>
+<li>Your goal: Make yourself redundant by leveling them up</li>
+</ul>
+<p><strong>The best code review is the one that teaches something.</strong></p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/mentorship/common-junior-mistakes.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

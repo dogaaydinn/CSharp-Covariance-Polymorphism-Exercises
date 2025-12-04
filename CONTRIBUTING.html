@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Contributing to Advanced C# Concepts | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Contributing to Advanced C# Concepts | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="favicon.ico">
+      <link rel="stylesheet" href="public/docfx.min.css">
+      <link rel="stylesheet" href="public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/CONTRIBUTING.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="index.html">
+            <img id="logo" class="svg" src="logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="contributing-to-advanced-c-concepts">Contributing to Advanced C# Concepts</h1>
+
+<p>Thank you for your interest in contributing! This document provides guidelines and instructions for contributing to this project.</p>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ul>
+<li><a href="#code-of-conduct">Code of Conduct</a></li>
+<li><a href="#getting-started">Getting Started</a></li>
+<li><a href="#how-to-contribute">How to Contribute</a></li>
+<li><a href="#development-setup">Development Setup</a></li>
+<li><a href="#coding-standards">Coding Standards</a></li>
+<li><a href="#testing-guidelines">Testing Guidelines</a></li>
+<li><a href="#pull-request-process">Pull Request Process</a></li>
+<li><a href="#documentation">Documentation</a></li>
+</ul>
+<h2 id="code-of-conduct">Code of Conduct</h2>
+<p>This project adheres to the <a href="CODE_OF_CONDUCT.html">Contributor Covenant Code of Conduct</a>. By participating, you are expected to uphold this code. Please report unacceptable behavior to dogaaydinn@gmail.com.</p>
+<h2 id="getting-started">Getting Started</h2>
+<h3 id="prerequisites">Prerequisites</h3>
+<ul>
+<li><strong>.NET 8 SDK</strong> (8.0.201 or later)</li>
+<li><strong>Git</strong> for version control</li>
+<li><strong>IDE:</strong> Visual Studio 2022, Rider, or VS Code with C# extension</li>
+<li><strong>Docker</strong> (optional, for running observability stack)</li>
+</ul>
+<h3 id="fork-and-clone">Fork and Clone</h3>
+<ol>
+<li><p>Fork the repository on GitHub</p>
+</li>
+<li><p>Clone your fork locally:</p>
+<pre><code class="lang-bash">git clone https://github.com/YOUR_USERNAME/CSharp-Covariance-Polymorphism-Exercises.git
+cd CSharp-Covariance-Polymorphism-Exercises
+</code></pre>
+</li>
+<li><p>Add upstream remote:</p>
+<pre><code class="lang-bash">git remote add upstream https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises.git
+</code></pre>
+</li>
+</ol>
+<h2 id="how-to-contribute">How to Contribute</h2>
+<h3 id="reporting-bugs">Reporting Bugs</h3>
+<ul>
+<li><strong>Search existing issues</strong> before creating a new one</li>
+<li>Use the <strong>bug report template</strong></li>
+<li>Include:
+<ul>
+<li>Clear description of the issue</li>
+<li>Steps to reproduce</li>
+<li>Expected vs actual behavior</li>
+<li>Environment details (.NET version, OS)</li>
+<li>Code samples or screenshots</li>
+</ul>
+</li>
+</ul>
+<h3 id="suggesting-enhancements">Suggesting Enhancements</h3>
+<ul>
+<li>Use the <strong>feature request template</strong></li>
+<li>Clearly describe the enhancement</li>
+<li>Explain why it would be valuable</li>
+<li>Provide examples if possible</li>
+</ul>
+<h3 id="code-contributions">Code Contributions</h3>
+<p>We welcome contributions in these areas:</p>
+<ul>
+<li><strong>New Examples:</strong> Additional C# concepts or patterns</li>
+<li><strong>Bug Fixes:</strong> Fix issues in existing code</li>
+<li><strong>Performance Improvements:</strong> Optimize existing examples</li>
+<li><strong>Documentation:</strong> Improve guides, tutorials, or API docs</li>
+<li><strong>Tests:</strong> Add missing test coverage</li>
+<li><strong>Benchmarks:</strong> New performance benchmarks</li>
+</ul>
+<h2 id="development-setup">Development Setup</h2>
+<h3 id="build-the-project">Build the Project</h3>
+<pre><code class="lang-bash"># Restore dependencies
+dotnet restore
+
+# Build solution
+dotnet build
+
+# Run tests
+dotnet test
+
+# Run specific test project
+dotnet test tests/AdvancedConcepts.UnitTests
+</code></pre>
+<h3 id="run-the-application">Run the Application</h3>
+<pre><code class="lang-bash"># Run the core application
+dotnet run --project src/AdvancedConcepts.Core
+
+# Run with specific example
+dotnet run --project src/AdvancedConcepts.Core -- --example polymorphism
+</code></pre>
+<h3 id="run-benchmarks">Run Benchmarks</h3>
+<pre><code class="lang-bash"># Run all benchmarks
+dotnet run --project benchmarks/AdvancedConcepts.Benchmarks -c Release
+
+# Run specific benchmark category
+dotnet run --project benchmarks/AdvancedConcepts.Benchmarks -c Release -- --filter *Boxing*
+</code></pre>
+<h3 id="docker-development-environment">Docker Development Environment</h3>
+<pre><code class="lang-bash"># Start observability stack (Seq, Prometheus, Grafana)
+docker-compose up -d
+
+# View logs in Seq: http://localhost:5342
+# View metrics in Grafana: http://localhost:3000
+</code></pre>
+<h2 id="coding-standards">Coding Standards</h2>
+<h3 id="c-style-guidelines">C# Style Guidelines</h3>
+<p>We follow Microsoft's C# coding conventions with these tools enforcing standards:</p>
+<ul>
+<li><strong>StyleCop.Analyzers</strong> - Code style rules</li>
+<li><strong>Roslynator.Analyzers</strong> - Code quality rules</li>
+<li><strong>SonarAnalyzer.CSharp</strong> - Security and code smell detection</li>
+<li><strong>Meziantou.Analyzer</strong> - Best practices</li>
+<li><strong>SecurityCodeScan</strong> - Security vulnerabilities</li>
+</ul>
+<h3 id="code-formatting">Code Formatting</h3>
+<pre><code class="lang-bash"># Format code before committing
+dotnet format
+
+# Check formatting without changing files
+dotnet format --verify-no-changes
+</code></pre>
+<h3 id="naming-conventions">Naming Conventions</h3>
+<ul>
+<li><strong>PascalCase:</strong> Classes, methods, properties, events</li>
+<li><strong>camelCase:</strong> Local variables, parameters</li>
+<li><strong>_camelCase:</strong> Private fields</li>
+<li><strong>UPPER_CASE:</strong> Constants</li>
+</ul>
+<h3 id="file-organization">File Organization</h3>
+<ul>
+<li>One class per file</li>
+<li>File name matches class name</li>
+<li>Use file-scoped namespaces (C# 10+)</li>
+<li>Order members: fields, constructors, properties, methods</li>
+</ul>
+<h3 id="example-code-structure">Example Code Structure</h3>
+<pre><code class="lang-csharp">namespace AdvancedConcepts.Advanced;
+
+public class ExamplePattern
+{
+    // Private fields
+    private readonly IService _service;
+    private readonly ILogger&lt;ExamplePattern&gt; _logger;
+
+    // Constructor
+    public ExamplePattern(IService service, ILogger&lt;ExamplePattern&gt; logger)
+    {
+        _service = service ?? throw new ArgumentNullException(nameof(service));
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    }
+
+    // Public properties
+    public string Name { get; init; }
+
+    // Public methods
+    public async Task&lt;Result&lt;Data&gt;&gt; ProcessAsync(int id)
+    {
+        _logger.LogInformation(&quot;Processing {Id}&quot;, id);
+
+        try
+        {
+            var data = await _service.GetDataAsync(id);
+            return Result.Success(data);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, &quot;Failed to process {Id}&quot;, id);
+            return Result.Failure&lt;Data&gt;(new ProcessingError(ex.Message));
+        }
+    }
+
+    // Private methods
+    private void ValidateData(Data data)
+    {
+        // Validation logic
+    }
+}
+</code></pre>
+<h2 id="testing-guidelines">Testing Guidelines</h2>
+<h3 id="unit-tests">Unit Tests</h3>
+<ul>
+<li>Use <strong>xUnit</strong> framework</li>
+<li>Use <strong>FluentAssertions</strong> for assertions</li>
+<li>Use <strong>Moq</strong> or <strong>NSubstitute</strong> for mocking</li>
+<li>Use <strong>AutoFixture</strong> for test data generation</li>
+</ul>
+<pre><code class="lang-csharp">public class ExamplePatternTests
+{
+    private readonly Mock&lt;IService&gt; _serviceMock;
+    private readonly ExamplePattern _sut;
+
+    public ExamplePatternTests()
+    {
+        _serviceMock = new Mock&lt;IService&gt;();
+        _sut = new ExamplePattern(_serviceMock.Object, Mock.Of&lt;ILogger&lt;ExamplePattern&gt;&gt;());
+    }
+
+    [Fact]
+    public async Task ProcessAsync_WhenSuccessful_ReturnsSuccess()
+    {
+        // Arrange
+        var expected = new Data { Id = 1, Name = &quot;Test&quot; };
+        _serviceMock.Setup(s =&gt; s.GetDataAsync(1)).ReturnsAsync(expected);
+
+        // Act
+        var result = await _sut.ProcessAsync(1);
+
+        // Assert
+        result.IsSuccess.Should().BeTrue();
+        result.Value.Should().BeEquivalentTo(expected);
+    }
+}
+</code></pre>
+<h3 id="test-coverage">Test Coverage</h3>
+<ul>
+<li>Aim for <strong>&gt;90% code coverage</strong> for new code</li>
+<li>Use <code>dotnet test --collect:&quot;XPlat Code Coverage&quot;</code></li>
+<li>View coverage reports in <code>coverage/</code> directory</li>
+</ul>
+<h3 id="property-based-testing">Property-Based Testing</h3>
+<ul>
+<li>Use <strong>FsCheck</strong> for property-based tests</li>
+<li>Test invariants and properties</li>
+<li>Let FsCheck generate test cases</li>
+</ul>
+<pre><code class="lang-csharp">[Property]
+public Property ReverseTwice_ReturnsOriginal(int[] array)
+{
+    var result = array.Reverse().Reverse();
+    return result.SequenceEqual(array).ToProperty();
+}
+</code></pre>
+<h2 id="pull-request-process">Pull Request Process</h2>
+<h3 id="before-submitting">Before Submitting</h3>
+<ol>
+<li><p><strong>Update from upstream:</strong></p>
+<pre><code class="lang-bash">git fetch upstream
+git rebase upstream/master
+</code></pre>
+</li>
+<li><p><strong>Ensure all checks pass:</strong></p>
+<pre><code class="lang-bash">dotnet build
+dotnet test
+dotnet format --verify-no-changes
+</code></pre>
+</li>
+<li><p><strong>Run security checks (if pre-commit installed):</strong></p>
+<pre><code class="lang-bash">pre-commit run --all-files
+</code></pre>
+</li>
+<li><p><strong>Update documentation</strong> if needed</p>
+</li>
+</ol>
+<h3 id="creating-pull-request">Creating Pull Request</h3>
+<ol>
+<li><p><strong>Create feature branch:</strong></p>
+<pre><code class="lang-bash">git checkout -b feature/your-feature-name
+</code></pre>
+</li>
+<li><p><strong>Commit with conventional commits:</strong></p>
+<pre><code class="lang-bash">git commit -m &quot;feat: add covariance example for IEnumerable&quot;
+git commit -m &quot;fix: resolve null reference in boxing example&quot;
+git commit -m &quot;docs: update CONTRIBUTING.md with testing guidelines&quot;
+</code></pre>
+<p><strong>Commit types:</strong> feat, fix, docs, style, refactor, perf, test, chore</p>
+</li>
+<li><p><strong>Push to your fork:</strong></p>
+<pre><code class="lang-bash">git push origin feature/your-feature-name
+</code></pre>
+</li>
+<li><p><strong>Open Pull Request</strong> on GitHub</p>
+</li>
+</ol>
+<h3 id="pr-requirements">PR Requirements</h3>
+<ul>
+<li>✅ <strong>Descriptive title</strong> using conventional commits format</li>
+<li>✅ <strong>Description</strong> explaining what and why</li>
+<li>✅ <strong>Link related issues</strong> (Fixes #123)</li>
+<li>✅ <strong>All CI checks passing</strong></li>
+<li>✅ <strong>Tests added/updated</strong></li>
+<li>✅ <strong>Documentation updated</strong></li>
+<li>✅ <strong>Code reviewed</strong> by at least one maintainer</li>
+</ul>
+<h3 id="pr-review-process">PR Review Process</h3>
+<ol>
+<li><strong>Automated checks</strong> run (build, test, security)</li>
+<li><strong>Code review</strong> by maintainers</li>
+<li><strong>Requested changes</strong> addressed</li>
+<li><strong>Approval</strong> from maintainer</li>
+<li><strong>Squash and merge</strong> to main branch</li>
+</ol>
+<h2 id="documentation">Documentation</h2>
+<h3 id="code-documentation">Code Documentation</h3>
+<ul>
+<li>Add <strong>XML documentation comments</strong> for public APIs</li>
+<li>Include <code>&lt;summary&gt;</code>, <code>&lt;param&gt;</code>, <code>&lt;returns&gt;</code>, <code>&lt;example&gt;</code></li>
+<li>Document complex algorithms or non-obvious logic</li>
+</ul>
+<pre><code class="lang-csharp">/// &lt;summary&gt;
+/// Processes the order asynchronously with retry logic.
+/// &lt;/summary&gt;
+/// &lt;param name=&quot;orderId&quot;&gt;The unique identifier of the order to process.&lt;/param&gt;
+/// &lt;returns&gt;A result containing the processed order or an error.&lt;/returns&gt;
+/// &lt;example&gt;
+/// &lt;code&gt;
+/// var result = await ProcessOrderAsync(123);
+/// if (result.IsSuccess)
+/// {
+///     Console.WriteLine($&quot;Order processed: {result.Value.Id}&quot;);
+/// }
+/// &lt;/code&gt;
+/// &lt;/example&gt;
+public async Task&lt;Result&lt;Order&gt;&gt; ProcessOrderAsync(int orderId)
+{
+    // Implementation
+}
+</code></pre>
+<h3 id="markdown-documentation">Markdown Documentation</h3>
+<ul>
+<li>Use <strong>clear headings</strong> and structure</li>
+<li>Include <strong>code examples</strong> where helpful</li>
+<li>Add <strong>diagrams</strong> using Mermaid when appropriate</li>
+<li>Keep <strong>line length</strong> under 120 characters</li>
+</ul>
+<h2 id="recognition">Recognition</h2>
+<p>Contributors will be recognized in:</p>
+<ul>
+<li><strong>Contributors section</strong> of README</li>
+<li><strong>Release notes</strong> for their contributions</li>
+<li><strong>GitHub contributors</strong> page</li>
+</ul>
+<h2 id="questions">Questions?</h2>
+<ul>
+<li><strong>Discussions:</strong> Use <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/discussions">GitHub Discussions</a></li>
+<li><strong>Issues:</strong> Search existing issues or create new one</li>
+<li><strong>Email:</strong> dogaaydinn@gmail.com for private inquiries</li>
+</ul>
+<p>Thank you for contributing to Advanced C# Concepts! 🚀</p>
+<hr>
+<p><strong>Last Updated:</strong> 2025-11-30
+<strong>Version:</strong> 1.0</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/CONTRIBUTING.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

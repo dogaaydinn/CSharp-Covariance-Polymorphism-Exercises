@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Code Review Checklist for Junior Developer Code | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Code Review Checklist for Junior Developer Code | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/mentorship/code-review-checklist.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="code-review-checklist-for-junior-developer-code">Code Review Checklist for Junior Developer Code</h1>
+
+<p><strong>Purpose:</strong> Catch common issues while teaching, not just criticizing<br>
+<strong>Tone:</strong> Constructive, educational, empowering<br>
+<strong>Goal:</strong> Help juniors level up, not feel bad</p>
+<hr>
+<h2 id="how-to-use-this-checklist">How to Use This Checklist</h2>
+<ol>
+<li><strong>First Pass:</strong> Read code with fresh eyes, no checklist (get overall impression)</li>
+<li><strong>Second Pass:</strong> Use this checklist systematically</li>
+<li><strong>Third Pass:</strong> Prioritize feedback (Critical → Important → Suggestions)</li>
+<li><strong>Write Review:</strong> Frame as learning opportunities, not criticisms</li>
+</ol>
+<p><strong>Remember:</strong> Every senior wrote code like this once. Be the mentor you wish you had.</p>
+<hr>
+<h2 id="-critical-issues-block-pr-until-fixed">🔴 Critical Issues (Block PR Until Fixed)</h2>
+<h3 id="1-security-vulnerabilities">1. Security Vulnerabilities</h3>
+<h4 id="-passwordsecrets-exposed">❌ Password/Secrets Exposed</h4>
+<pre><code class="lang-csharp">// BAD
+public class UserDto
+{
+    public string Password { get; set; } // ❌ NEVER return passwords!
+}
+
+// GOOD
+public class UserDto
+{
+    // NO password property at all
+}
+</code></pre>
+<p><strong>Review Comment Template:</strong></p>
+<blockquote>
+<p>&quot;⚠️ <strong>Security Issue:</strong> We're returning the password in the API response. Even hashed passwords shouldn't be exposed to clients. Let's remove the Password property from the DTO.</p>
+<p>Why: An attacker could harvest password hashes and attempt offline cracking.</p>
+<p>Fix: Create a DTO that excludes sensitive fields.</p>
+<p>Resource: See <code>docs/code-reviews/02-API-Design-Review/review-feedback.md</code> Issue #1&quot;</p>
+</blockquote>
+<hr>
+<h4 id="-sql-injection-vulnerable">❌ SQL Injection Vulnerable</h4>
+<pre><code class="lang-csharp">// BAD
+var query = $&quot;SELECT * FROM Users WHERE Name = '{userName}'&quot;; // ❌ SQL injection!
+var users = _db.Database.SqlQuery&lt;User&gt;(query).ToList();
+
+// GOOD
+var users = await _db.Users
+    .Where(u =&gt; u.Name == userName)
+    .ToListAsync(); // ✅ Parameterized
+</code></pre>
+<p><strong>Review Comment:</strong></p>
+<blockquote>
+<p>&quot;🚨 <strong>Critical: SQL Injection Vulnerability</strong></p>
+<p>String interpolation in SQL queries allows SQL injection attacks. An attacker could input: <code>'; DROP TABLE Users; --</code></p>
+<p>Fix: Use Entity Framework's Where() clause or parameterized queries.</p>
+<p>Example:</p>
+<pre><code class="lang-csharp">var users = await _db.Users.Where(u =&gt; u.Name == userName).ToListAsync();
+```&quot;
+</code></pre>
+</blockquote>
+<hr>
+<h4 id="-no-authenticationauthorization">❌ No Authentication/Authorization</h4>
+<pre><code class="lang-csharp">// BAD
+[HttpDelete(&quot;{id}&quot;)]
+public async Task&lt;IActionResult&gt; DeleteUser(int id) // ❌ Anyone can delete anyone!
+{
+    await _userService.DeleteAsync(id);
+    return NoContent();
+}
+
+// GOOD
+[HttpDelete(&quot;{id}&quot;)]
+[Authorize(Roles = &quot;Admin&quot;)] // ✅ Only admins
+public async Task&lt;IActionResult&gt; DeleteUser(int id)
+{
+    await _userService.DeleteAsync(id);
+    return NoContent();
+}
+</code></pre>
+<p><strong>Review Comment:</strong></p>
+<blockquote>
+<p>&quot;🔒 <strong>Security:</strong> This endpoint is public - anyone can delete any user!</p>
+<p>We need to add:</p>
+<ol>
+<li><code>[Authorize]</code> attribute (requires authentication)</li>
+<li>Role/policy check (only admins can delete users)</li>
+</ol>
+<p>Fix:</p>
+<pre><code class="lang-csharp">[Authorize(Roles = &quot;Admin&quot;)]
+</code></pre>
+<p>Also consider: Should users be able to delete themselves? If so, add policy: <code>[Authorize(Policy = \&quot;SelfOrAdmin\&quot;)]</code>&quot;</p>
+</blockquote>
+<hr>
+<h3 id="2-data-loss--corruption-risk">2. Data Loss / Corruption Risk</h3>
+<h4 id="-hard-delete-without-confirmation">❌ Hard Delete Without Confirmation</h4>
+<pre><code class="lang-csharp">// BAD
+[HttpDelete(&quot;{id}&quot;)]
+public async Task&lt;IActionResult&gt; DeleteUser(int id)
+{
+    _db.Users.Remove(user); // ❌ Permanent deletion, no recovery
+    await _db.SaveChangesAsync();
+}
+</code></pre>
+<p><strong>Review Comment:</strong></p>
+<blockquote>
+<p>&quot;⚠️ <strong>Data Loss Risk:</strong> Hard delete means data is gone forever. Consider:</p>
+<ol>
+<li><strong>Soft delete instead:</strong> Add <code>DeletedAt</code> timestamp, filter deleted records in queries</li>
+<li><strong>Require confirmation:</strong> For hard delete, require <code>{ \&quot;confirmation\&quot;: \&quot;DELETE\&quot; }</code> in body</li>
+<li><strong>Audit log:</strong> Log who deleted what when</li>
+</ol>
+<p>Recommendation: Implement soft delete. See <code>samples/98-RealWorld-Problems/02-API-Design-Review/v2-api.md</code> for pattern.&quot;</p>
+</blockquote>
+<hr>
+<h4 id="-race-condition-in-update">❌ Race Condition in Update</h4>
+<pre><code class="lang-csharp">// BAD
+public async Task UpdateBalance(int userId, decimal amount)
+{
+    var user = await _db.Users.FindAsync(userId);
+    user.Balance += amount; // ❌ Race condition if 2 requests happen simultaneously
+    await _db.SaveChangesAsync();
+}
+
+// GOOD
+public async Task UpdateBalance(int userId, decimal amount)
+{
+    await _db.Database.ExecuteSqlInterpolatedAsync(
+        $&quot;UPDATE Users SET Balance = Balance + {amount} WHERE Id = {userId}&quot;
+    ); // ✅ Atomic operation
+}
+</code></pre>
+<p><strong>Review Comment:</strong></p>
+<blockquote>
+<p>&quot;🐛 <strong>Concurrency Bug:</strong> If two requests update balance simultaneously, one update will be lost.</p>
+<p>Scenario:</p>
+<ol>
+<li>Request A reads balance: $100</li>
+<li>Request B reads balance: $100</li>
+<li>Request A adds $50 → saves $150</li>
+<li>Request B adds $30 → saves $130 (overwrites A's update!)</li>
+</ol>
+<p>Fix: Use atomic SQL UPDATE or add optimistic concurrency (row version).&quot;</p>
+</blockquote>
+<hr>
+<h3 id="3-performance-killers">3. Performance Killers</h3>
+<h4 id="-n1-query-problem">❌ N+1 Query Problem</h4>
+<pre><code class="lang-csharp">// BAD
+var orders = await _db.Orders.ToListAsync();
+foreach (var order in orders)
+{
+    order.Customer = await _db.Customers.FindAsync(order.CustomerId); // ❌ N queries!
+}
+
+// GOOD
+var orders = await _db.Orders
+    .Include(o =&gt; o.Customer) // ✅ 1 query with JOIN
+    .ToListAsync();
+</code></pre>
+<p><strong>Review Comment:</strong></p>
+<blockquote>
+<p>&quot;🐌 <strong>Performance: N+1 Query Problem</strong></p>
+<p>This code makes 501 database queries:</p>
+<ul>
+<li>1 to load orders</li>
+<li>500 to load each customer (one per order)</li>
+</ul>
+<p>Fix: Use <code>.Include()</code> for eager loading.</p>
+<pre><code class="lang-csharp">var orders = await _db.Orders.Include(o =&gt; o.Customer).ToListAsync();
+</code></pre>
+<p>Impact: Response time will drop from ~15s to ~200ms.</p>
+<p>See: <code>samples/98-RealWorld-Problems/03-N-Plus-One-Problem/</code> for detailed example.&quot;</p>
+</blockquote>
+<hr>
+<h4 id="-loading-entire-table">❌ Loading Entire Table</h4>
+<pre><code class="lang-csharp">// BAD
+var allUsers = await _db.Users.ToListAsync(); // ❌ Loads 1 million users!
+var activeUsers = allUsers.Where(u =&gt; u.IsActive).ToList();
+
+// GOOD
+var activeUsers = await _db.Users
+    .Where(u =&gt; u.IsActive) // ✅ Filters in database
+    .ToListAsync();
+</code></pre>
+<p><strong>Review Comment:</strong></p>
+<blockquote>
+<p>&quot;⚠️ <strong>Performance:</strong> We're loading ALL users into memory (1M rows), then filtering in C#.</p>
+<p>This causes:</p>
+<ul>
+<li>500 MB memory usage</li>
+<li>10-second query time</li>
+<li>OutOfMemoryException at scale</li>
+</ul>
+<p>Fix: Filter in database with <code>.Where()</code> before <code>.ToListAsync()</code>.</p>
+<p>Also consider pagination for large datasets.&quot;</p>
+</blockquote>
+<hr>
+<h2 id="-important-issues-should-fix-before-merge">⚠️ Important Issues (Should Fix Before Merge)</h2>
+<h3 id="4-maintainability-problems">4. Maintainability Problems</h3>
+<h4 id="-type-checking-anti-pattern">❌ Type Checking Anti-Pattern</h4>
+<pre><code class="lang-csharp">// BAD
+public void ProcessPayment(string type, decimal amount)
+{
+    if (type == &quot;CreditCard&quot;) { /* ... */ }
+    else if (type == &quot;PayPal&quot;) { /* ... */ }
+    else if (type == &quot;Bitcoin&quot;) { /* ... */ }
+}
+</code></pre>
+<p><strong>Review Comment:</strong></p>
+<blockquote>
+<p>&quot;🔧 <strong>Design:</strong> This uses type checking instead of polymorphism. When we add Apple Pay:</p>
+<ul>
+<li>Must modify this method</li>
+<li>Must update 4 other methods that check payment types</li>
+<li>Risk of typos (&quot;Paypal&quot; vs &quot;PayPal&quot;)</li>
+</ul>
+<p>Refactor using polymorphism:</p>
+<pre><code class="lang-csharp">public interface IPaymentProcessor {
+    void Process(decimal amount);
+}
+public class CreditCardProcessor : IPaymentProcessor { ... }
+</code></pre>
+<p>Benefits:</p>
+<ul>
+<li>Add Apple Pay = create 1 new class, NO changes to existing code</li>
+<li>Compiler catches errors (no typos)</li>
+<li>Easier to test</li>
+</ul>
+<p>See: <code>samples/01-Beginner/PolymorphismBasics/</code> for full example.</p>
+<p>Note: If this is only 2 types and won't grow, if/else is fine. But I see we're adding 3 more payment types next sprint, so polymorphism will save time.&quot;</p>
+</blockquote>
+<hr>
+<h4 id="-god-class-too-many-responsibilities">❌ God Class (Too Many Responsibilities)</h4>
+<pre><code class="lang-csharp">// BAD
+public class UserService
+{
+    public void CreateUser() { }
+    public void SendEmail() { } // ❌ Not user management!
+    public void GenerateReport() { } // ❌ Not user management!
+    public void ProcessPayment() { } // ❌ Not user management!
+}
+</code></pre>
+<p><strong>Review Comment:</strong></p>
+<blockquote>
+<p>&quot;📦 <strong>Single Responsibility Principle:</strong> UserService is doing too much:</p>
+<ul>
+<li>User management ✅</li>
+<li>Email sending ❌</li>
+<li>Report generation ❌</li>
+<li>Payment processing ❌</li>
+</ul>
+<p>This makes it:</p>
+<ul>
+<li>Hard to test (must mock email, reports, payments to test user creation)</li>
+<li>Hard to maintain (changes to reports affect user management)</li>
+<li>Hard to reuse (can't use email sender elsewhere)</li>
+</ul>
+<p>Refactor:</p>
+<ul>
+<li>Keep user CRUD in UserService</li>
+<li>Move email → EmailService</li>
+<li>Move reports → ReportService</li>
+<li>Move payments → PaymentService</li>
+</ul>
+<p>Then inject dependencies:</p>
+<pre><code class="lang-csharp">public class UserService(IEmailService email, ...) { }
+```&quot;
+</code></pre>
+</blockquote>
+<hr>
+<h3 id="5-error-handling-issues">5. Error Handling Issues</h3>
+<h4 id="-swallowing-exceptions">❌ Swallowing Exceptions</h4>
+<pre><code class="lang-csharp">// BAD
+try
+{
+    await _paymentService.ChargeAsync(amount);
+}
+catch (Exception)
+{
+    // ❌ Silent failure! User thinks payment succeeded!
+}
+</code></pre>
+<p><strong>Review Comment:</strong></p>
+<blockquote>
+<p>&quot;🐛 <strong>Error Handling:</strong> Exception is caught but not handled. User will think payment succeeded when it actually failed!</p>
+<p>Fix:</p>
+<pre><code class="lang-csharp">try
+{
+    await _paymentService.ChargeAsync(amount);
+}
+catch (PaymentFailedException ex)
+{
+    _logger.LogError(ex, \&quot;Payment failed for order {OrderId}\&quot;, orderId);
+    return BadRequest(new { error = \&quot;Payment failed. Your card was not charged.\&quot; });
+}
+</code></pre>
+<p>Key points:</p>
+<ol>
+<li>Log the error (for debugging)</li>
+<li>Return proper HTTP status (400 Bad Request)</li>
+<li>User-friendly message (don't expose ex.Message)&quot;</li>
+</ol>
+</blockquote>
+<hr>
+<h4 id="-exposing-exception-messages">❌ Exposing Exception Messages</h4>
+<pre><code class="lang-csharp">// BAD
+catch (Exception ex)
+{
+    return Ok(new { success = false, error = ex.Message }); // ❌ Leaks internals!
+}
+
+// User sees: &quot;Cannot insert duplicate key in dbo.Users...&quot;
+// Now attacker knows your table structure!
+</code></pre>
+<p><strong>Review Comment:</strong></p>
+<blockquote>
+<p>&quot;🔒 <strong>Information Disclosure:</strong> Returning <code>ex.Message</code> exposes implementation details:</p>
+<ul>
+<li>Database schema (&quot;dbo.Users&quot;)</li>
+<li>Stack traces (sometimes)</li>
+<li>Library versions</li>
+</ul>
+<p>Fix:</p>
+<pre><code class="lang-csharp">catch (DuplicateEmailException)
+{
+    _logger.LogWarning(ex, \&quot;Duplicate email: {Email}\&quot;, email);
+    return Conflict(new ProblemDetails {
+        Title = \&quot;Email already in use\&quot;,
+        Detail = \&quot;An account with this email exists. Try logging in.\&quot;,
+        Status = 409
+    });
+}
+catch (Exception ex)
+{
+    _logger.LogError(ex, \&quot;Failed to create user\&quot;);
+    return StatusCode(500, new ProblemDetails {
+        Title = \&quot;An error occurred\&quot;,
+        Detail = \&quot;Please try again later.\&quot;,
+        Status = 500
+    });
+}
+```&quot;
+</code></pre>
+</blockquote>
+<hr>
+<h3 id="6-testing-gaps">6. Testing Gaps</h3>
+<h4 id="-no-tests-for-new-feature">❌ No Tests for New Feature</h4>
+<pre><code>Files changed:
++ OrderService.cs (150 lines of new code)
++ 0 test files
+</code></pre>
+<p><strong>Review Comment:</strong></p>
+<blockquote>
+<p>&quot;🧪 <strong>Testing:</strong> I don't see tests for the new order processing logic. Let's add:</p>
+<ol>
+<li><strong>Happy path:</strong> Order is created successfully</li>
+<li><strong>Validation:</strong> Order fails if required fields missing</li>
+<li><strong>Edge cases:</strong> What if inventory is 0? What if payment fails?</li>
+</ol>
+<p>Don't need 100% coverage, but critical paths should be tested.</p>
+<p>Example:</p>
+<pre><code class="lang-csharp">[Fact]
+public async Task CreateOrder_ValidInput_CreatesOrder()
+{
+    // Arrange
+    var request = new CreateOrderRequest { /* ... */ };
+    
+    // Act
+    var result = await _service.CreateOrderAsync(request);
+    
+    // Assert
+    Assert.NotNull(result);
+    Assert.Equal(OrderStatus.Pending, result.Status);
+}
+</code></pre>
+<p>Want to pair on writing tests? I'm available tomorrow 2pm.&quot;</p>
+</blockquote>
+<hr>
+<h2 id="-suggestions-nice-to-have-not-blocking">💡 Suggestions (Nice to Have, Not Blocking)</h2>
+<h3 id="7-code-style--readability">7. Code Style &amp; Readability</h3>
+<h4 id="-magic-numbers">⚠️ Magic Numbers</h4>
+<pre><code class="lang-csharp">// MEH
+if (user.Age &gt; 18) { } // What's special about 18?
+
+// BETTER
+const int LegalAdultAge = 18;
+if (user.Age &gt; LegalAdultAge) { }
+</code></pre>
+<p><strong>Review Comment:</strong></p>
+<blockquote>
+<p>&quot;💡 <strong>Suggestion:</strong> Consider extracting magic numbers to named constants. Makes code self-documenting.</p>
+<p>Optional improvement:</p>
+<pre><code class="lang-csharp">private const int LegalAdultAge = 18;
+if (user.Age &gt;= LegalAdultAge) { }
+</code></pre>
+<p>Not blocking, but improves readability.&quot;</p>
+</blockquote>
+<hr>
+<h4 id="-long-method-50-lines">⚠️ Long Method (&gt;50 lines)</h4>
+<p><strong>Review Comment:</strong></p>
+<blockquote>
+<p>&quot;💡 <strong>Suggestion:</strong> This method is 80 lines. Consider extracting to smaller methods:</p>
+<pre><code class="lang-csharp">public async Task ProcessOrder(Order order)
+{
+    ValidateOrder(order);
+    await ChargePayment(order);
+    await UpdateInventory(order);
+    await SendConfirmation(order);
+}
+</code></pre>
+<p>Benefits:</p>
+<ul>
+<li>Easier to test each step</li>
+<li>Easier to understand what's happening</li>
+<li>Easier to reuse validation/payment logic</li>
+</ul>
+<p>Not urgent, but worth considering for next refactoring.&quot;</p>
+</blockquote>
+<hr>
+<h3 id="8-modern-c-features">8. Modern C# Features</h3>
+<h4 id="-can-use-pattern-matching">⚠️ Can Use Pattern Matching</h4>
+<pre><code class="lang-csharp">// OLD
+if (user != null &amp;&amp; user.IsActive)
+{
+    ProcessUser(user);
+}
+
+// MODERN
+if (user is { IsActive: true })
+{
+    ProcessUser(user);
+}
+</code></pre>
+<p><strong>Review Comment:</strong></p>
+<blockquote>
+<p>&quot;💡 <strong>C# 9:</strong> You could use pattern matching here. Optional, but more concise:</p>
+<pre><code class="lang-csharp">if (user is { IsActive: true })
+{
+    ProcessUser(user);
+}
+</code></pre>
+<p>Reads as: &quot;If user exists and IsActive is true&quot;</p>
+<p>Just FYI - your current code is fine too!&quot;</p>
+</blockquote>
+<hr>
+<h2 id="how-to-write-the-review">How to Write the Review</h2>
+<h3 id="structure-your-feedback">Structure Your Feedback</h3>
+<pre><code class="lang-markdown">## Summary
+
+Great work on the order processing feature! The logic is solid. I have a few suggestions:
+
+- 🔴 **Critical:** SQL injection vulnerability in user search (must fix)
+- ⚠️ **Important:** N+1 query in order loading (performance issue)
+- 💡 **Suggestion:** Consider extracting validation to separate method
+
+Overall looking good! Fix the critical item, and I'll approve. Happy to pair on the N+1 fix if you'd like.
+
+---
+
+## Critical Issues
+
+### 🔴 SQL Injection in UserSearch
+
+**File:** `UserService.cs:45`
+
+[Explanation + code example + resources]
+
+---
+
+## Important Issues
+
+### ⚠️ N+1 Query in GetOrders
+
+**File:** `OrderController.cs:23`
+
+[Explanation + code example + resources]
+
+---
+
+## Suggestions
+
+### 💡 Extract Validation Method
+
+**File:** `OrderService.cs:67`
+
+[Explanation + optional improvement]
+
+---
+
+## Questions
+
+1. Line 89: Why do we call `SaveChanges()` twice? Is this intentional?
+2. Line 123: Should this be async? The method it calls is async.
+
+---
+
+## What I Liked ✨
+
+- Great variable naming - very readable
+- Good error handling for payment failures
+- You added tests for the happy path - nice!
+
+---
+
+## Resources
+
+- N+1 queries: `samples/98-RealWorld-Problems/03-N-Plus-One-Problem/`
+- Polymorphism refactoring: `samples/01-Beginner/PolymorphismBasics/`
+
+Let me know if you have questions! Happy to discuss any of this.
+</code></pre>
+<hr>
+<h2 id="tone-guidelines">Tone Guidelines</h2>
+<h3 id="-dont-say">❌ Don't Say:</h3>
+<ul>
+<li>&quot;This is wrong&quot;</li>
+<li>&quot;Why did you do it this way?&quot;</li>
+<li>&quot;This is terrible&quot;</li>
+<li>&quot;You should know better&quot;</li>
+</ul>
+<h3 id="-do-say">✅ Do Say:</h3>
+<ul>
+<li>&quot;I see what you're trying to do. Let's make it safer by...&quot;</li>
+<li>&quot;Great start! Here's how we can improve X...&quot;</li>
+<li>&quot;I made this same mistake in my first year. Here's what I learned...&quot;</li>
+<li>&quot;Have you considered...?&quot;</li>
+</ul>
+<hr>
+<h2 id="balancing-criticism-with-praise">Balancing Criticism with Praise</h2>
+<p><strong>For Every Critical Issue, Mention 2 Things Done Well:</strong></p>
+<pre><code>🔴 Critical: SQL injection vulnerability
+
+But also:
+
+✨ I love how you named your variables - very clear
+✨ Your test coverage for the happy path is great
+✨ The error handling for null inputs is solid
+
+Let's fix the security issue, and this PR is gold!
+</code></pre>
+<hr>
+<h2 id="when-to-approve-vs-request-changes">When to Approve vs Request Changes</h2>
+<h3 id="-approve-if">✅ Approve If:</h3>
+<ul>
+<li>No critical/security issues</li>
+<li>Important issues have clear fixes noted</li>
+<li>You trust them to address suggestions later</li>
+</ul>
+<h3 id="-request-changes-if">🔄 Request Changes If:</h3>
+<ul>
+<li>Any critical/security issues</li>
+<li>Important issues that significantly impact users</li>
+<li>Multiple important issues combined</li>
+</ul>
+<h3 id="-comment-no-block-if">💬 Comment (No Block) If:</h3>
+<ul>
+<li>Only suggestions/style issues</li>
+<li>Questions for clarification</li>
+<li>Positive feedback</li>
+</ul>
+<hr>
+<h2 id="follow-up-after-review">Follow-Up After Review</h2>
+<p><strong>If They Fixed Issues Quickly:</strong></p>
+<blockquote>
+<p>&quot;Great turnaround! You addressed all the feedback quickly and correctly. This is exactly what we're looking for. ✅ Approved!&quot;</p>
+</blockquote>
+<p><strong>If They're Struggling:</strong></p>
+<blockquote>
+<p>&quot;I see you're stuck on the N+1 fix. Want to pair on this? I have 30 minutes at 2pm today.&quot;</p>
+</blockquote>
+<p><strong>If They Disagreed:</strong></p>
+<blockquote>
+<p>&quot;I see your point about the if/else approach. You're right that polymorphism is more code upfront. Let's discuss - I'll show you why it saves time when we add the 4th and 5th payment types next month. Coffee chat?&quot;</p>
+</blockquote>
+<hr>
+<h2 id="common-pitfalls-for-mentors">Common Pitfalls for Mentors</h2>
+<h3 id="-nitpicking-every-line">🚫 Nitpicking Every Line</h3>
+<p><strong>Bad:</strong> 47 comments, mostly style issues<br>
+<strong>Good:</strong> 5 important comments + 2 style suggestions</p>
+<h3 id="-rewriting-their-code">🚫 Rewriting Their Code</h3>
+<p><strong>Bad:</strong> &quot;Here's how I would do it: [50 lines of code]&quot;<br>
+<strong>Good:</strong> &quot;Consider extracting this to a method. Want to try? I'm here if you need help.&quot;</p>
+<h3 id="-assuming-they-know-context">🚫 Assuming They Know Context</h3>
+<p><strong>Bad:</strong> &quot;This violates SOLID&quot;<br>
+<strong>Good:</strong> &quot;This violates the Single Responsibility Principle - UserService is handling both user management and email sending. Let's separate those concerns.&quot;</p>
+<h3 id="-no-positive-feedback">🚫 No Positive Feedback</h3>
+<p><strong>Bad:</strong> Only pointing out problems<br>
+<strong>Good:</strong> &quot;Great naming! The logic is clear. Here are 2 improvements...&quot;</p>
+<hr>
+<h2 id="remember">Remember</h2>
+<p><strong>Your goal isn't to make their code perfect.</strong><br>
+<strong>Your goal is to make THEM a better developer.</strong></p>
+<p>Sometimes, approving with suggestions is better than blocking for style issues. They'll learn more from shipping code and seeing its impact than from endless review cycles.</p>
+<p><strong>Good Review:</strong> Catches critical issues, teaches 1-2 concepts, encourages them<br>
+<strong>Great Review:</strong> Same as good, plus makes them excited to improve</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/mentorship/code-review-checklist.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

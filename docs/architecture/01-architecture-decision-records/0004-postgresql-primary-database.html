@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>ADR-0004: PostgreSQL as Primary Database | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="ADR-0004: PostgreSQL as Primary Database | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/01-architecture-decision-records/0004-postgresql-primary-database.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="adr-0004-postgresql-as-primary-database">ADR-0004: PostgreSQL as Primary Database</h1>
+
+<p><strong>Status:</strong> Accepted
+<strong>Date:</strong> 2025-12-02
+<strong>Deciders:</strong> Architecture Team
+<strong>Technical Story:</strong> RDBMS selection for video metadata storage</p>
+<h2 id="context">Context</h2>
+<p>The VideoService requires a relational database for storing:</p>
+<ul>
+<li>Video metadata (title, description, URL, status)</li>
+<li>View counts and statistics</li>
+<li>Timestamps and audit information</li>
+<li>Potential future: user data, comments, ratings</li>
+</ul>
+<p>Requirements:</p>
+<ul>
+<li>ACID transactions</li>
+<li>Strong consistency</li>
+<li>Relational integrity (foreign keys)</li>
+<li>JSON support (for flexible metadata)</li>
+<li>Open-source preferred</li>
+<li>Cloud-native deployment support</li>
+<li>Strong .NET ecosystem integration</li>
+<li>Production-grade reliability</li>
+</ul>
+<h2 id="decision">Decision</h2>
+<p>We will use <strong>PostgreSQL 16</strong> as the primary database for AspireVideoService.</p>
+<p>Deployment:</p>
+<ul>
+<li>Development: Docker container via Aspire (<code>builder.AddPostgres()</code>)</li>
+<li>Production: Managed service (Azure PostgreSQL, AWS RDS, etc.)</li>
+<li>Connection: Npgsql driver with Entity Framework Core</li>
+<li>Management Tool: PgAdmin (included via Aspire)</li>
+</ul>
+<h2 id="consequences">Consequences</h2>
+<h3 id="positive">Positive</h3>
+<ul>
+<li><strong>Open Source</strong>: No licensing costs, full source code access</li>
+<li><strong>ACID Compliance</strong>: Strong consistency guarantees for video state</li>
+<li><strong>JSON Support</strong>: Native JSONB for flexible video metadata</li>
+<li><strong>Performance</strong>: Excellent query optimization and indexing</li>
+<li><strong>Reliability</strong>: Battle-tested in production at scale (Instagram, Reddit, Spotify)</li>
+<li><strong>Cloud-Native</strong>: First-class support in all major clouds</li>
+<li><strong>Aspire Integration</strong>: Built-in Aspire hosting (<code>AddPostgres()</code>, <code>AddPgAdmin()</code>)</li>
+<li><strong>Advanced Features</strong>: Full-text search, GIS data, arrays, custom types</li>
+<li><strong>Community</strong>: Large, active community and extensive documentation</li>
+<li><strong>.NET Ecosystem</strong>: Excellent Npgsql driver and EF Core provider</li>
+<li><strong>Compliance</strong>: Strong support for data compliance (GDPR, HIPAA)</li>
+<li><strong>Horizontal Scaling</strong>: Read replicas and partitioning support</li>
+</ul>
+<h3 id="negative">Negative</h3>
+<ul>
+<li><strong>Resource Usage</strong>: Higher memory usage than MySQL (10-30% more)</li>
+<li><strong>Complexity</strong>: More configuration options can be overwhelming</li>
+<li><strong>Windows Support</strong>: Not as well-optimized on Windows as Linux</li>
+<li><strong>Learning Curve</strong>: Advanced features require deeper database knowledge</li>
+<li><strong>Version Upgrades</strong>: Major version upgrades require planning</li>
+</ul>
+<h3 id="neutral">Neutral</h3>
+<ul>
+<li><strong>SQL Dialect</strong>: PostgreSQL-specific SQL may not translate to other databases</li>
+<li><strong>Tooling</strong>: Different tools than SQL Server (PgAdmin vs SSMS)</li>
+<li><strong>Backup Strategy</strong>: Requires understanding PostgreSQL-specific backup tools</li>
+</ul>
+<h2 id="alternatives-considered">Alternatives Considered</h2>
+<h3 id="alternative-1-sql-server">Alternative 1: SQL Server</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Microsoft Ecosystem</strong>: Native integration with .NET and Azure</li>
+<li><strong>Tooling</strong>: Best-in-class tooling (SSMS, Azure Data Studio)</li>
+<li><strong>Performance</strong>: Excellent for Windows workloads</li>
+<li><strong>Enterprise Features</strong>: Advanced analytics, reporting services</li>
+<li><strong>Familiar</strong>: Most .NET developers know SQL Server</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Licensing</strong>: Expensive for commercial use ($3,500-$14,000 per core)</li>
+<li><strong>Linux Support</strong>: Second-class citizen on Linux</li>
+<li><strong>Container Size</strong>: Larger Docker images (1.5GB+ vs 200MB for PostgreSQL)</li>
+<li><strong>Open Source</strong>: Not fully open source</li>
+<li><strong>Cloud Lock-in</strong>: Best experience on Azure only</li>
+</ul>
+<p><strong>Why rejected:</strong> Licensing costs make it unsuitable for open-source educational samples. PostgreSQL offers similar features at zero cost.</p>
+<h3 id="alternative-2-mysql">Alternative 2: MySQL</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Popularity</strong>: Most widely deployed open-source database</li>
+<li><strong>Resource Efficient</strong>: Lower memory footprint than PostgreSQL</li>
+<li><strong>Simple</strong>: Easier to get started for beginners</li>
+<li><strong>Ecosystem</strong>: Huge ecosystem of tools and hosting providers</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>ACID Compliance</strong>: Weaker guarantees than PostgreSQL (depends on engine)</li>
+<li><strong>JSON Support</strong>: Less mature JSONB support</li>
+<li><strong>Advanced Features</strong>: Lacks PostgreSQL's advanced features</li>
+<li><strong>.NET Integration</strong>: Weaker .NET ecosystem compared to PostgreSQL</li>
+<li><strong>Oracle Ownership</strong>: Concerns about future direction under Oracle</li>
+<li><strong>No Aspire Integration</strong>: No built-in Aspire hosting package</li>
+</ul>
+<p><strong>Why rejected:</strong> PostgreSQL offers superior features (JSON, arrays, full-text search) needed for modern cloud-native apps. Aspire's built-in PostgreSQL support is a significant advantage.</p>
+<h3 id="alternative-3-sqlite">Alternative 3: SQLite</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Zero Configuration</strong>: No server process required</li>
+<li><strong>Embedded</strong>: Single file database, easy to deploy</li>
+<li><strong>Lightweight</strong>: Minimal resource usage</li>
+<li><strong>Portable</strong>: Works everywhere .NET runs</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Concurrency</strong>: Limited concurrent write support</li>
+<li><strong>Scalability</strong>: Not suitable for production cloud apps</li>
+<li><strong>Features</strong>: Lacks advanced features (JSON, arrays, etc.)</li>
+<li><strong>No Network Access</strong>: Cannot be shared across services</li>
+<li><strong>Single Process</strong>: All services must access same file</li>
+</ul>
+<p><strong>Why rejected:</strong> SQLite is excellent for local/mobile apps but unsuitable for distributed microservices. Cannot demonstrate cloud-native patterns.</p>
+<h3 id="alternative-4-azure-cosmos-db-nosql">Alternative 4: Azure Cosmos DB (NoSQL)</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Globally Distributed</strong>: Multi-region replication</li>
+<li><strong>Flexible Schema</strong>: Schemaless JSON documents</li>
+<li><strong>Horizontal Scaling</strong>: Automatic partitioning</li>
+<li><strong>Multi-Model</strong>: Supports SQL, MongoDB, Cassandra APIs</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Cost</strong>: Very expensive compared to PostgreSQL ($0.25/hour minimum)</li>
+<li><strong>Azure Lock-in</strong>: Only available on Azure</li>
+<li><strong>Eventual Consistency</strong>: Default consistency model complex</li>
+<li><strong>Learning Curve</strong>: Different paradigm than relational</li>
+<li><strong>Overkill</strong>: Video metadata doesn't require global distribution</li>
+</ul>
+<p><strong>Why rejected:</strong> Cost-prohibitive for educational samples. Video metadata is inherently relational and doesn't require NoSQL capabilities.</p>
+<h2 id="related-decisions">Related Decisions</h2>
+<ul>
+<li><a href="0003-entity-framework-core-data-access.html">ADR-0003</a>: EF Core chosen for data access</li>
+<li><a href="0002-using-dotnet-aspire.html">ADR-0002</a>: Aspire provides PostgreSQL integration</li>
+<li><a href="0020-zero-configuration-infrastructure.html">ADR-0020</a>: Aspire simplifies PostgreSQL setup</li>
+</ul>
+<h2 id="related-links">Related Links</h2>
+<ul>
+<li><a href="https://www.postgresql.org/docs/">PostgreSQL Documentation</a></li>
+<li><a href="https://www.npgsql.org/doc/">Npgsql Documentation</a></li>
+<li><a href="https://www.npgsql.org/efcore/">EF Core PostgreSQL Provider</a></li>
+<li><a href="https://learn.microsoft.com/dotnet/aspire/database/postgresql-component">Aspire PostgreSQL Component</a></li>
+<li><a href="https://www.postgresql.org/about/featurematrix/">PostgreSQL vs MySQL Comparison</a></li>
+</ul>
+<h2 id="notes">Notes</h2>
+<ul>
+<li>Use JSONB (not JSON) for flexible metadata: better indexing and query performance</li>
+<li>Enable connection pooling via Npgsql (default with Aspire)</li>
+<li>Consider partitioning for video table if &gt;10M rows expected</li>
+<li>Use <code>TEXT</code> column type for video descriptions (unlimited length)</li>
+<li>Index strategy: Composite index on (UploadedAt DESC, Status)</li>
+<li>Production: Use managed PostgreSQL (Azure PostgreSQL Flexible Server, AWS RDS)</li>
+<li>Backup strategy: Automated daily backups with point-in-time recovery</li>
+<li>Future: Evaluate PostgreSQL 17's performance improvements (expected 2025)</li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/01-architecture-decision-records/0004-postgresql-primary-database.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

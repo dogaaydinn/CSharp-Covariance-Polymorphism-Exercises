@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>5. Implement Custom Source Generators | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="5. Implement Custom Source Generators | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/decisions/0005-implement-custom-source-generators.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="5-implement-custom-source-generators">5. Implement Custom Source Generators</h1>
+
+<p><strong>Status:</strong> ✅ Accepted</p>
+<p><strong>Date:</strong> 2024-12-01</p>
+<p><strong>Deciders:</strong> Architecture Team, Compiler Team</p>
+<p><strong>Technical Story:</strong> Implementation in <code>src/AdvancedConcepts.SourceGenerators</code></p>
+<hr>
+<h2 id="context-and-problem-statement">Context and Problem Statement</h2>
+<p>C# Source Generators allow compile-time code generation, reducing runtime reflection overhead and enabling advanced metaprogramming scenarios. We need to decide whether to implement custom source generators for repetitive patterns like:</p>
+<ul>
+<li>AutoMapper mappings</li>
+<li>Repository boilerplate</li>
+<li>Data validation</li>
+<li>Serialization code</li>
+<li>Builder patterns</li>
+</ul>
+<p><strong>Traditional approach problems:</strong></p>
+<ul>
+<li>Reflection at runtime adds overhead (boxing, dynamic dispatch)</li>
+<li>Manual boilerplate code is error-prone</li>
+<li>Generic constraints can't express all patterns</li>
+<li>Runtime code generation (Expression trees) is complex</li>
+</ul>
+<p><strong>We need a solution that:</strong></p>
+<ul>
+<li>Generates code at compile-time</li>
+<li>Eliminates runtime reflection</li>
+<li>Provides IntelliSense support</li>
+<li>Catches errors at compile-time</li>
+</ul>
+<hr>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li><strong>Performance</strong> - Eliminate reflection overhead</li>
+<li><strong>Developer Experience</strong> - Reduce boilerplate code</li>
+<li><strong>Type Safety</strong> - Catch errors at compile-time, not runtime</li>
+<li><strong>Maintainability</strong> - Generated code is visible and debuggable</li>
+<li><strong>Modern C#</strong> - Leverage cutting-edge .NET features</li>
+</ul>
+<hr>
+<h2 id="considered-options">Considered Options</h2>
+<ul>
+<li><strong>Option 1</strong> - Custom Source Generators (.NET 5+)</li>
+<li><strong>Option 2</strong> - Reflection at runtime (traditional approach)</li>
+<li><strong>Option 3</strong> - T4 Templates (legacy code generation)</li>
+<li><strong>Option 4</strong> - Third-party code generators (AutoMapper.SourceGenerator, etc.)</li>
+</ul>
+<hr>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p><strong>Chosen option:</strong> &quot;Custom Source Generators&quot;, because they provide compile-time code generation with zero runtime overhead, full IntelliSense support, and complete control over generated code.</p>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li><strong>Zero Reflection Overhead</strong> - All code generated at compile-time</li>
+<li><strong>IntelliSense Support</strong> - Generated code is visible to IDE</li>
+<li><strong>Compile-Time Errors</strong> - Catch issues during build, not runtime</li>
+<li><strong>AOT Compatible</strong> - Works with Native AOT compilation</li>
+<li><strong>Educational Value</strong> - Demonstrates advanced compiler concepts</li>
+<li><strong>Performance Gains</strong> - 10-100x faster than reflection for mapping/serialization</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li><strong>Complex Implementation</strong> - Roslyn API has steep learning curve</li>
+<li><strong>Build Time Impact</strong> - Adds time to compilation (usually &lt; 1 second)</li>
+<li><strong>Debugging Challenges</strong> - Generated code can be hard to debug</li>
+<li><strong>Breaking Changes</strong> - Roslyn APIs can change between versions</li>
+<li><strong>Tooling Requirements</strong> - Requires .NET 5+ SDK</li>
+</ul>
+<hr>
+<h2 id="pros-and-cons-of-the-options">Pros and Cons of the Options</h2>
+<h3 id="custom-source-generators-chosen">Custom Source Generators (Chosen)</h3>
+<p><strong>What Are Source Generators?</strong></p>
+<p>Source generators are compiler plugins that run during compilation and can inspect your code and generate additional C# files that are compiled alongside your project.</p>
+<p><strong>Architecture:</strong></p>
+<pre><code>Your Code (*.cs)
+    ↓
+Roslyn Compiler
+    ↓
+Source Generator (analyzes syntax trees)
+    ↓
+Generated Code (*.g.cs)
+    ↓
+Final Compilation (your code + generated code)
+</code></pre>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Compile-time execution</strong> - Zero runtime overhead</li>
+<li><strong>Type-safe</strong> - Generated code is checked by compiler</li>
+<li><strong>IntelliSense support</strong> - Can navigate to generated code</li>
+<li><strong>AOT compatible</strong> - Works with Native AOT and trimming</li>
+<li><strong>Incremental</strong> - Only regenerates when source changes</li>
+<li><strong>No dependencies at runtime</strong> - Generator is dev-only dependency</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Complex to write</strong> - Roslyn syntax trees are difficult</li>
+<li><strong>Slow iteration</strong> - Must rebuild to see generated code</li>
+<li><strong>Versioning issues</strong> - Roslyn APIs change</li>
+<li><strong>Limited diagnostics</strong> - Debugging generators is hard</li>
+</ul>
+<p><strong>Example Implementation:</strong></p>
+<pre><code class="lang-csharp">// MapFrom attribute (user code)
+[AttributeUsage(AttributeTargets.Class)]
+public class AutoMapAttribute : Attribute
+{
+    public Type SourceType { get; }
+    public AutoMapAttribute(Type sourceType) =&gt; SourceType = sourceType;
+}
+
+// User code
+public class ProductDto
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public decimal Price { get; set; }
+}
+
+[AutoMap(typeof(Product))]
+public partial class ProductViewModel
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string DisplayPrice { get; set; } // Computed property
+}
+
+// Source Generator (simplified)
+[Generator]
+public class AutoMapGenerator : ISourceGenerator
+{
+    public void Execute(GeneratorExecutionContext context)
+    {
+        // Find all classes with [AutoMap] attribute
+        var classesToGenerate = FindClassesWithAutoMapAttribute(context);
+
+        foreach (var classSymbol in classesToGenerate)
+        {
+            var sourceType = GetSourceType(classSymbol);
+            var source = GenerateMapperMethod(classSymbol, sourceType);
+
+            // Add generated code to compilation
+            context.AddSource($&quot;{classSymbol.Name}.Mapper.g.cs&quot;, source);
+        }
+    }
+
+    private string GenerateMapperMethod(INamedTypeSymbol target, INamedTypeSymbol source)
+    {
+        return $@&quot;
+public partial class {target.Name}
+{{
+    public static {target.Name} MapFrom({source.Name} source)
+    {{
+        return new {target.Name}
+        {{
+            Id = source.Id,
+            Name = source.Name,
+            DisplayPrice = $&quot;&quot;${{{source.Name}.Price:F2}}&quot;&quot;
+        }};
+    }}
+}}&quot;;
+    }
+}
+
+// Generated code (ProductViewModel.Mapper.g.cs)
+public partial class ProductViewModel
+{
+    public static ProductViewModel MapFrom(Product source)
+    {
+        return new ProductViewModel
+        {
+            Id = source.Id,
+            Name = source.Name,
+            DisplayPrice = $&quot;${source.Price:F2}&quot;
+        };
+    }
+}
+
+// Usage (no reflection!)
+var product = new Product { Id = 1, Name = &quot;Widget&quot;, Price = 29.99m };
+var viewModel = ProductViewModel.MapFrom(product); // Compile-time generated method!
+</code></pre>
+<p><strong>Performance Comparison:</strong></p>
+<pre><code class="lang-csharp">// Reflection-based mapping (traditional)
+public T Map&lt;T&gt;(object source) where T : new()
+{
+    var target = new T();
+    foreach (var sourceProp in source.GetType().GetProperties())
+    {
+        var targetProp = typeof(T).GetProperty(sourceProp.Name);
+        targetProp?.SetValue(target, sourceProp.GetValue(source));
+    }
+    return target;
+}
+// Benchmark: ~500ns per mapping, allocates ~2KB
+
+// Source Generator mapping
+var viewModel = ProductViewModel.MapFrom(product);
+// Benchmark: ~5ns per mapping, allocates ~64 bytes (object only)
+// 100x faster, 30x less memory!
+</code></pre>
+<h3 id="reflection-at-runtime-traditional">Reflection at Runtime (Traditional)</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Flexible - works with any type</li>
+<li>No code generation needed</li>
+<li>Easy to understand</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Slow</strong> - 10-100x slower than generated code</li>
+<li><strong>Boxing</strong> - Value types get boxed to object</li>
+<li><strong>No compile-time checks</strong> - Errors discovered at runtime</li>
+<li><strong>AOT incompatible</strong> - Doesn't work with Native AOT</li>
+<li><strong>No IntelliSense</strong> - Properties accessed by string names</li>
+</ul>
+<p><strong>Example (what we avoid):</strong></p>
+<pre><code class="lang-csharp">// Reflection-based mapper (slow)
+public class ReflectionMapper
+{
+    public TTarget Map&lt;TSource, TTarget&gt;(TSource source)
+        where TTarget : new()
+    {
+        var target = new TTarget();
+        var sourceProps = typeof(TSource).GetProperties(); // ❌ Slow!
+        var targetProps = typeof(TTarget).GetProperties(); // ❌ Slow!
+
+        foreach (var sourceProp in sourceProps)
+        {
+            var targetProp = targetProps.FirstOrDefault(p =&gt; p.Name == sourceProp.Name);
+            if (targetProp != null &amp;&amp; targetProp.CanWrite)
+            {
+                var value = sourceProp.GetValue(source); // ❌ Reflection!
+                targetProp.SetValue(target, value);      // ❌ Reflection!
+            }
+        }
+        return target;
+    }
+}
+
+// Usage
+var mapper = new ReflectionMapper();
+var viewModel = mapper.Map&lt;Product, ProductViewModel&gt;(product);
+// ❌ No compile-time type checking
+// ❌ Property name typos not caught
+// ❌ 100x slower than source generator
+</code></pre>
+<p><strong>Why Rejected:</strong>
+Reflection has legitimate uses (plugin systems, serializers), but for <strong>known types at compile-time</strong>, source generators are superior in every way.</p>
+<h3 id="t4-templates-legacy">T4 Templates (Legacy)</h3>
+<p><strong>What is T4?</strong>
+Text Template Transformation Toolkit - Visual Studio's legacy code generation system.</p>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Integrated with Visual Studio</li>
+<li>Supports any text output</li>
+<li>Can generate multiple files</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Legacy technology</strong> - No longer actively developed</li>
+<li><strong>No IntelliSense in templates</strong> - T4 syntax is painful</li>
+<li><strong>VS-only</strong> - Doesn't work in VS Code or Rider</li>
+<li><strong>Manual execution</strong> - Doesn't auto-regenerate on build</li>
+<li><strong>No incremental compilation</strong> - Regenerates everything</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="lang-xml">&lt;#@ template language=&quot;C#&quot; #&gt;
+&lt;#@ output extension=&quot;.cs&quot; #&gt;
+&lt;#
+    var types = new[] { &quot;Product&quot;, &quot;Order&quot;, &quot;Customer&quot; };
+#&gt;
+public static class Mappers
+{
+&lt;# foreach (var type in types) { #&gt;
+    public static &lt;#= type #&gt;Dto MapFrom(&lt;#= type #&gt; source) { ... }
+&lt;# } #&gt;
+}
+</code></pre>
+<p><strong>Why Rejected:</strong>
+T4 templates are legacy technology. Source Generators provide the same benefits with better IDE integration and automatic regeneration.</p>
+<h3 id="third-party-generators">Third-Party Generators</h3>
+<p><strong>Examples:</strong></p>
+<ul>
+<li>AutoMapper.SourceGenerator</li>
+<li>Mapperly</li>
+<li>StronglyTypedId</li>
+</ul>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Ready to use out-of-the-box</li>
+<li>Well-tested</li>
+<li>Community support</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Limited customization</strong> - Can't adapt to specific needs</li>
+<li><strong>External dependency</strong> - Another NuGet package</li>
+<li><strong>Learning curve</strong> - Need to learn library-specific syntax</li>
+<li><strong>May not cover all use cases</strong></li>
+</ul>
+<p><strong>Why Not Primary Choice:</strong>
+Third-party generators are excellent for common scenarios, but for <strong>educational purposes</strong> and <strong>custom patterns specific to our domain</strong>, implementing our own generators demonstrates deeper understanding.</p>
+<hr>
+<h2 id="real-world-source-generator-examples">Real-World Source Generator Examples</h2>
+<h3 id="example-1-repository-boilerplate-generator">Example 1: Repository Boilerplate Generator</h3>
+<p><strong>Problem:</strong> Every repository has the same CRUD methods.</p>
+<p><strong>Attribute:</strong></p>
+<pre><code class="lang-csharp">[GenerateRepository]
+public partial class ProductRepository
+{
+    // Source generator will add:
+    // - GetByIdAsync
+    // - GetAllAsync
+    // - AddAsync
+    // - UpdateAsync
+    // - DeleteAsync
+}
+</code></pre>
+<p><strong>Generated Code:</strong></p>
+<pre><code class="lang-csharp">public partial class ProductRepository : IProductRepository
+{
+    private readonly ApplicationDbContext _context;
+
+    public async Task&lt;Product?&gt; GetByIdAsync(int id, CancellationToken ct = default)
+    {
+        return await _context.Products
+            .AsNoTracking()
+            .FirstOrDefaultAsync(p =&gt; p.Id == id, ct);
+    }
+
+    public async Task&lt;List&lt;Product&gt;&gt; GetAllAsync(CancellationToken ct = default)
+    {
+        return await _context.Products
+            .AsNoTracking()
+            .ToListAsync(ct);
+    }
+
+    public async Task&lt;Product&gt; AddAsync(Product entity, CancellationToken ct = default)
+    {
+        _context.Products.Add(entity);
+        await _context.SaveChangesAsync(ct);
+        return entity;
+    }
+
+    // UpdateAsync, DeleteAsync...
+}
+</code></pre>
+<h3 id="example-2-builder-pattern-generator">Example 2: Builder Pattern Generator</h3>
+<p><strong>Problem:</strong> Writing builder patterns is tedious.</p>
+<p><strong>Attribute:</strong></p>
+<pre><code class="lang-csharp">[GenerateBuilder]
+public partial class Product
+{
+    public int Id { get; init; }
+    public string Name { get; init; }
+    public decimal Price { get; init; }
+}
+</code></pre>
+<p><strong>Generated Code:</strong></p>
+<pre><code class="lang-csharp">public partial class Product
+{
+    public class Builder
+    {
+        private int _id;
+        private string _name = string.Empty;
+        private decimal _price;
+
+        public Builder WithId(int value) { _id = value; return this; }
+        public Builder WithName(string value) { _name = value; return this; }
+        public Builder WithPrice(decimal value) { _price = value; return this; }
+
+        public Product Build() =&gt; new()
+        {
+            Id = _id,
+            Name = _name,
+            Price = _price
+        };
+    }
+}
+
+// Usage
+var product = new Product.Builder()
+    .WithId(1)
+    .WithName(&quot;Widget&quot;)
+    .WithPrice(29.99m)
+    .Build();
+</code></pre>
+<h3 id="example-3-validation-generator">Example 3: Validation Generator</h3>
+<p><strong>Problem:</strong> Writing validators is repetitive.</p>
+<p><strong>Attribute:</strong></p>
+<pre><code class="lang-csharp">public class Product
+{
+    [Required, StringLength(100)]
+    public string Name { get; set; }
+
+    [Range(0.01, 1000000)]
+    public decimal Price { get; set; }
+}
+</code></pre>
+<p><strong>Generated Code:</strong></p>
+<pre><code class="lang-csharp">public partial class ProductValidator
+{
+    public static ValidationResult Validate(Product product)
+    {
+        var errors = new List&lt;string&gt;();
+
+        if (string.IsNullOrWhiteSpace(product.Name))
+            errors.Add(&quot;Name is required&quot;);
+        else if (product.Name.Length &gt; 100)
+            errors.Add(&quot;Name must be 100 characters or less&quot;);
+
+        if (product.Price &lt; 0.01m || product.Price &gt; 1000000m)
+            errors.Add(&quot;Price must be between $0.01 and $1,000,000&quot;);
+
+        return new ValidationResult(errors.Count == 0, errors);
+    }
+}
+</code></pre>
+<hr>
+<h2 id="implementation-guidelines">Implementation Guidelines</h2>
+<h3 id="project-structure">Project Structure</h3>
+<pre><code>Solution
+├── YourApp (references SourceGenerators as analyzer)
+├── YourApp.SourceGenerators (generator implementation)
+│   ├── Generators/
+│   │   ├── AutoMapGenerator.cs
+│   │   ├── RepositoryGenerator.cs
+│   │   └── BuilderGenerator.cs
+│   ├── Attributes/ (included in generator output)
+│   │   ├── AutoMapAttribute.cs
+│   │   └── GenerateBuilderAttribute.cs
+│   └── YourApp.SourceGenerators.csproj
+└── YourApp.SourceGenerators.Tests
+</code></pre>
+<h3 id="generator-project-configuration">Generator Project Configuration</h3>
+<pre><code class="lang-xml">&lt;Project Sdk=&quot;Microsoft.NET.Sdk&quot;&gt;
+  &lt;PropertyGroup&gt;
+    &lt;TargetFramework&gt;netstandard2.0&lt;/TargetFramework&gt;
+    &lt;EnforceExtendedAnalyzerRules&gt;true&lt;/EnforceExtendedAnalyzerRules&gt;
+    &lt;IsRoslynComponent&gt;true&lt;/IsRoslynComponent&gt;
+  &lt;/PropertyGroup&gt;
+
+  &lt;ItemGroup&gt;
+    &lt;PackageReference Include=&quot;Microsoft.CodeAnalysis.CSharp&quot; Version=&quot;4.8.0&quot; PrivateAssets=&quot;all&quot; /&gt;
+    &lt;PackageReference Include=&quot;Microsoft.CodeAnalysis.Analyzers&quot; Version=&quot;3.3.4&quot; PrivateAssets=&quot;all&quot; /&gt;
+  &lt;/ItemGroup&gt;
+&lt;/Project&gt;
+</code></pre>
+<h3 id="consuming-project-configuration">Consuming Project Configuration</h3>
+<pre><code class="lang-xml">&lt;ItemGroup&gt;
+  &lt;ProjectReference Include=&quot;..\YourApp.SourceGenerators\YourApp.SourceGenerators.csproj&quot;
+                    OutputItemType=&quot;Analyzer&quot;
+                    ReferenceOutputAssembly=&quot;false&quot; /&gt;
+&lt;/ItemGroup&gt;
+
+&lt;!-- Optional: See generated files --&gt;
+&lt;PropertyGroup&gt;
+  &lt;EmitCompilerGeneratedFiles&gt;true&lt;/EmitCompilerGeneratedFiles&gt;
+  &lt;CompilerGeneratedFilesOutputPath&gt;$(BaseIntermediateOutputPath)Generated&lt;/CompilerGeneratedFilesOutputPath&gt;
+&lt;/PropertyGroup&gt;
+</code></pre>
+<hr>
+<h2 id="performance-benchmarks">Performance Benchmarks</h2>
+<pre><code>BenchmarkDotNet v0.13.11, Windows 11
+Intel Core i7-12700K, 1 CPU, 20 logical cores
+
+|                Method |      Mean |     Error |    StdDev |   Gen0 | Allocated |
+|---------------------- |----------:|----------:|----------:|-------:|----------:|
+| ReflectionMapper      | 512.3 ns  |  8.21 ns  |  7.68 ns  | 0.0815 |    2048 B |
+| ExpressionTreeMapper  | 127.6 ns  |  1.94 ns  |  1.81 ns  | 0.0153 |     384 B |
+| SourceGeneratorMapper |   4.8 ns  |  0.07 ns  |  0.06 ns  | 0.0026 |      64 B |
+
+Conclusion: Source Generator is 100x faster and uses 30x less memory than reflection
+</code></pre>
+<hr>
+<h2 id="links">Links</h2>
+<ul>
+<li><a href="https://github.com/dotnet/roslyn/blob/main/docs/features/source-generators.cookbook.md">Source Generators Cookbook</a></li>
+<li><a href="https://learn.microsoft.com/en-us/dotnet/csharp/roslyn-sdk/source-generators-overview">Source Generators Documentation</a></li>
+<li><a href="https://learn.microsoft.com/en-us/dotnet/api/microsoft.codeanalysis">Roslyn API Documentation</a></li>
+<li><a href="../../src/AdvancedConcepts.SourceGenerators">Sample Implementation</a></li>
+<li><a href="https://andrewlock.net/series/creating-a-source-generator/">Andrew Lock's Source Generator Series</a></li>
+</ul>
+<hr>
+<h2 id="notes">Notes</h2>
+<p><strong>When to Use Source Generators:</strong></p>
+<ul>
+<li>✅ Eliminating boilerplate for known types at compile-time</li>
+<li>✅ High-performance scenarios where reflection is too slow</li>
+<li>✅ Native AOT applications</li>
+<li>✅ Code that needs compile-time validation</li>
+<li>✅ Repetitive patterns (DTOs, builders, repositories)</li>
+</ul>
+<p><strong>When NOT to Use:</strong></p>
+<ul>
+<li>❌ Dynamic types only known at runtime</li>
+<li>❌ Simple one-off code generation (use snippets)</li>
+<li>❌ Plugin systems where types are loaded dynamically</li>
+<li>❌ When third-party generators already solve the problem</li>
+</ul>
+<p><strong>Common Pitfalls:</strong></p>
+<ol>
+<li><strong>Not making classes partial</strong> - Generated code extends class, must be partial</li>
+<li><strong>Forgetting netstandard2.0</strong> - Generators must target netstandard2.0</li>
+<li><strong>Slow generators</strong> - Generator runs on every compilation, keep it fast</li>
+<li><strong>Not handling incremental compilation</strong> - Implement IIncrementalGenerator for performance</li>
+<li><strong>Complex logic in generators</strong> - Keep generators simple, move logic to runtime</li>
+</ol>
+<p><strong>Debugging Tips:</strong></p>
+<pre><code class="lang-csharp">// View generated files
+// obj/Debug/net8.0/generated/YourApp.SourceGenerators/...
+
+// Debug source generator
+#if DEBUG
+    if (!System.Diagnostics.Debugger.IsAttached)
+    {
+        System.Diagnostics.Debugger.Launch();
+    }
+#endif
+</code></pre>
+<p><strong>Review Date:</strong> 2025-12-01</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/decisions/0005-implement-custom-source-generators.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

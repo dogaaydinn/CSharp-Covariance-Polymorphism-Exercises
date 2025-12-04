@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>ADR-0012: Container-First Development | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="ADR-0012: Container-First Development | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/01-architecture-decision-records/0012-container-first-development.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="adr-0012-container-first-development">ADR-0012: Container-First Development</h1>
+
+<p><strong>Status:</strong> Accepted
+<strong>Date:</strong> 2025-12-02
+<strong>Deciders:</strong> Architecture Team
+<strong>Technical Story:</strong> Development environment and deployment strategy</p>
+<h2 id="context">Context</h2>
+<p>Modern cloud-native applications deploy as containers. Development environments should match production to avoid &quot;works on my machine&quot; issues. We need to decide:</p>
+<ul>
+<li>How to run infrastructure (Redis, PostgreSQL) locally</li>
+<li>Whether to containerize application services in development</li>
+<li>How to ensure dev/prod parity</li>
+</ul>
+<p>Traditional approach: Install services locally (PostgreSQL, Redis via brew/apt)
+Modern approach: Everything runs in containers</p>
+<h2 id="decision">Decision</h2>
+<p>We will adopt a <strong>container-first development</strong> approach using Docker containers for all infrastructure and optional containerization for application services.</p>
+<p>Implementation:</p>
+<ul>
+<li>Infrastructure (Redis, PostgreSQL): Always containers via Aspire</li>
+<li>Application services: Run natively during development, containerize for deployment</li>
+<li>Docker Desktop required for development</li>
+<li>No local installation of databases/caches required</li>
+</ul>
+<h2 id="consequences">Consequences</h2>
+<h3 id="positive">Positive</h3>
+<ul>
+<li><strong>Dev/Prod Parity</strong>: Same PostgreSQL/Redis versions in dev and prod</li>
+<li><strong>Zero Local Installation</strong>: No need to install PostgreSQL, Redis locally</li>
+<li><strong>Isolation</strong>: No port conflicts with other projects</li>
+<li><strong>Clean Machine</strong>: Development machine stays clean</li>
+<li><strong>Version Control</strong>: Infrastructure versions defined in code (Aspire)</li>
+<li><strong>Onboarding</strong>: New developers up and running in minutes</li>
+<li><strong>Multiple Projects</strong>: Run multiple projects simultaneously (different ports)</li>
+<li><strong>Consistency</strong>: Everyone has identical environment</li>
+<li><strong>Easy Cleanup</strong>: <code>docker system prune</code> removes everything</li>
+</ul>
+<h3 id="negative">Negative</h3>
+<ul>
+<li><strong>Docker Requirement</strong>: Must install and run Docker Desktop</li>
+<li><strong>Resource Usage</strong>: Docker containers use memory (500MB-1GB for PostgreSQL)</li>
+<li><strong>Performance</strong>: Slightly slower than native (5-10% overhead)</li>
+<li><strong>Windows/Mac</strong>: Docker on Windows/Mac uses VM (additional overhead)</li>
+<li><strong>Learning Curve</strong>: Developers must understand container basics</li>
+<li><strong>Startup Time</strong>: Containers take 5-10 seconds to start</li>
+</ul>
+<h3 id="neutral">Neutral</h3>
+<ul>
+<li><strong>Disk Space</strong>: Containers use disk space (5-10GB for common images)</li>
+<li><strong>Networking</strong>: Container networking sometimes confusing for beginners</li>
+</ul>
+<h2 id="alternatives-considered">Alternatives Considered</h2>
+<h3 id="alternative-1-local-installation-postgresql-redis">Alternative 1: Local Installation (PostgreSQL, Redis)</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Native Performance</strong>: No container overhead</li>
+<li><strong>No Docker</strong>: Don't need Docker Desktop</li>
+<li><strong>Familiar</strong>: Traditional development approach</li>
+<li><strong>Instant Startup</strong>: Services always running</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Environment Drift</strong>: Different versions across developers</li>
+<li><strong>Port Conflicts</strong>: Redis on 6379 conflicts with other projects</li>
+<li><strong>Machine Pollution</strong>: Must install/maintain services locally</li>
+<li><strong>OS-Specific</strong>: Different setup on Windows vs Mac vs Linux</li>
+<li><strong>Hard to Clean</strong>: Services linger after project ends</li>
+<li><strong>Version Management</strong>: Hard to switch PostgreSQL versions</li>
+</ul>
+<p><strong>Why rejected:</strong> &quot;Works on my machine&quot; is unacceptable in modern development. Containers eliminate environment issues.</p>
+<h3 id="alternative-2-full-application-containerization">Alternative 2: Full Application Containerization</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Complete Parity</strong>: Entire app runs in containers</li>
+<li><strong>Production-Like</strong>: Exact production configuration</li>
+<li><strong>Reproducible</strong>: Dockerfile defines exact environment</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Slow Iteration</strong>: Must rebuild container on every code change</li>
+<li><strong>Debugging</strong>: Harder to attach debugger to container</li>
+<li><strong>Hot Reload</strong>: Doesn't work in containers (or requires volume mounts)</li>
+<li><strong>Resource Intensive</strong>: Running 5+ containers locally is heavy</li>
+<li><strong>Complexity</strong>: Debugging networking issues between containers</li>
+</ul>
+<p><strong>Why rejected:</strong> Too slow for development. Hybrid approach (native apps, containerized infrastructure) provides best developer experience.</p>
+<h3 id="alternative-3-docker-compose-only-no-aspire">Alternative 3: Docker Compose Only (No Aspire)</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Simple</strong>: Just docker-compose.yml</li>
+<li><strong>Standard</strong>: Widely understood</li>
+<li><strong>Portable</strong>: Works without Aspire</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Manual</strong>: Must write docker-compose.yml manually</li>
+<li><strong>No Observability</strong>: No built-in dashboard</li>
+<li><strong>No Service Discovery</strong>: Must manage ports manually</li>
+<li><strong>No Resilience</strong>: No retry/circuit breaker</li>
+<li><strong>Static Configuration</strong>: Can't easily change config</li>
+</ul>
+<p><strong>Why rejected:</strong> Aspire provides Docker Compose functionality + service discovery + observability + resilience.</p>
+<h3 id="alternative-4-kubernetes-minikubekind">Alternative 4: Kubernetes (Minikube/Kind)</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Production-Like</strong>: Exact production environment</li>
+<li><strong>Complete</strong>: Full Kubernetes features</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Extremely Slow</strong>: Startup time 1-2 minutes</li>
+<li><strong>Resource Intensive</strong>: Kubernetes cluster uses 2-4GB RAM</li>
+<li><strong>Complex</strong>: Requires deep Kubernetes knowledge</li>
+<li><strong>Overkill</strong>: Too much for local development</li>
+<li><strong>Poor DX</strong>: Terrible developer experience</li>
+</ul>
+<p><strong>Why rejected:</strong> Kubernetes is for production, not development. Aspire provides similar patterns without Kubernetes complexity.</p>
+<h3 id="alternative-5-cloud-development-github-codespaces-gitpod">Alternative 5: Cloud Development (GitHub Codespaces, Gitpod)</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Zero Local Setup</strong>: Everything in cloud</li>
+<li><strong>Consistent</strong>: Identical environment for everyone</li>
+<li><strong>Powerful</strong>: Can use any machine (even Chromebook)</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Cost</strong>: $0.18/hour (Codespaces) or $0.36/hour (Gitpod)</li>
+<li><strong>Latency</strong>: Network latency affects responsiveness</li>
+<li><strong>Offline</strong>: Cannot work without internet</li>
+<li><strong>Vendor Lock-in</strong>: Tied to specific cloud provider</li>
+</ul>
+<p><strong>Why rejected:</strong> Not everyone has budget or good internet. Local development should be primary approach.</p>
+<h2 id="related-decisions">Related Decisions</h2>
+<ul>
+<li><a href="0002-using-dotnet-aspire.html">ADR-0002</a>: Aspire manages containers</li>
+<li><a href="0004-postgresql-primary-database.html">ADR-0004</a>: PostgreSQL via container</li>
+<li><a href="0005-redis-distributed-caching.html">ADR-0005</a>: Redis via container</li>
+</ul>
+<h2 id="related-links">Related Links</h2>
+<ul>
+<li><a href="https://12factor.net/dev-prod-parity">The Twelve-Factor App</a></li>
+<li><a href="https://docs.docker.com/">Docker Documentation</a></li>
+<li><a href="https://learn.microsoft.com/dotnet/aspire/fundamentals/persist-data-volumes">Aspire Container Hosting</a></li>
+</ul>
+<h2 id="notes">Notes</h2>
+<ul>
+<li><p><strong>Docker Desktop Requirements</strong>:</p>
+<ul>
+<li>Windows: Docker Desktop for Windows (WSL2 required)</li>
+<li>Mac: Docker Desktop for Mac (Apple Silicon or Intel)</li>
+<li>Linux: Docker Engine (native, best performance)</li>
+</ul>
+</li>
+<li><p><strong>Container Images Used</strong>:</p>
+<ul>
+<li>PostgreSQL: <code>postgres:16-alpine</code> (~200MB)</li>
+<li>Redis: <code>redis:7-alpine</code> (~50MB)</li>
+<li>Management: PgAdmin (~150MB), Redis Commander (~100MB)</li>
+</ul>
+</li>
+<li><p><strong>Resource Allocation</strong>:</p>
+<ul>
+<li>Minimum: 8GB RAM, 20GB disk space</li>
+<li>Recommended: 16GB RAM, 50GB disk space</li>
+<li>Docker Desktop settings: Allocate 4GB RAM minimum</li>
+</ul>
+</li>
+<li><p><strong>Performance Optimization</strong>:</p>
+<ul>
+<li>Use named volumes for database persistence</li>
+<li>Enable Docker BuildKit for faster builds</li>
+<li>Prune unused images regularly: <code>docker system prune</code></li>
+</ul>
+</li>
+<li><p><strong>Development Workflow</strong>:</p>
+<ol>
+<li>Start Aspire AppHost: <code>dotnet run --project VideoService.AppHost</code></li>
+<li>Aspire starts Redis/PostgreSQL containers automatically</li>
+<li>Application services run natively (.NET process)</li>
+<li>Stop AppHost: Containers stop automatically</li>
+</ol>
+</li>
+<li><p><strong>Production Deployment</strong>:</p>
+<ul>
+<li>Build container images: <code>dotnet publish -p:PublishProfile=DefaultContainer</code></li>
+<li>Push to registry: <code>docker push myregistry/videoservice-api:1.0</code></li>
+<li>Deploy to Kubernetes/Azure Container Apps/AWS ECS</li>
+</ul>
+</li>
+<li><p><strong>Troubleshooting</strong>:</p>
+<ul>
+<li>Port conflicts: <code>docker ps</code> to see running containers</li>
+<li>Slow performance: Increase Docker Desktop memory allocation</li>
+<li>Disk space: <code>docker system df</code> and <code>docker system prune -a</code></li>
+</ul>
+</li>
+<li><p><strong>Future</strong>: .NET 9 improves container building with Native AOT support (smaller, faster images)</p>
+</li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/01-architecture-decision-records/0012-container-first-development.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

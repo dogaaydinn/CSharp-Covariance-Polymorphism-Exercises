@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>API Design Review Feedback | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="API Design Review Feedback | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/code-reviews/02-API-Design-Review/review-feedback.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="api-design-review-feedback">API Design Review Feedback</h1>
+
+<p><strong>Reviewer:</strong> Marcus Rodriguez (Staff Engineer)<br>
+<strong>Pull Request:</strong> #2345 - Add User Management API<br>
+<strong>Author:</strong> Jordan Lee (Junior Backend Developer)<br>
+<strong>Status:</strong> ❌ <strong>BLOCKED - Critical Security Issues</strong><br>
+<strong>Review Date:</strong> 2025-12-03</p>
+<hr>
+<h2 id="-critical---do-not-merge">⛔ CRITICAL - DO NOT MERGE</h2>
+<p>Jordan, I appreciate the effort, but this API has <strong>several critical security vulnerabilities</strong> that could lead to:</p>
+<ul>
+<li>User data breaches</li>
+<li>Account takeovers</li>
+<li>GDPR violations (€20M fine)</li>
+<li>Company reputation damage</li>
+</ul>
+<p><strong>This PR is blocked until all Critical issues are resolved.</strong></p>
+<p>Let's schedule a call today to walk through these. This is a learning opportunity!</p>
+<hr>
+<h2 id="-critical-security-issues-fix-immediately">🔴 Critical Security Issues (Fix Immediately)</h2>
+<h3 id="issue-1-password-exposed-in-api-response">Issue 1: Password Exposed in API Response</h3>
+<p><strong>Location:</strong> GET /api/users/get response, Line 54</p>
+<pre><code class="lang-json">{
+  &quot;password&quot;: &quot;$2b$10$abcdefg...&quot;, // ❌ NEVER return passwords!
+}
+</code></pre>
+<p><strong>Problem:</strong>
+You're returning the password hash in the API response. Even though it's hashed, this is a <strong>critical security vulnerability</strong>:</p>
+<ol>
+<li><strong>Attackers can crack hashes offline</strong> - Given enough time and rainbow tables, bcrypt hashes can be cracked</li>
+<li><strong>Exposes password patterns</strong> - If user uses same password on multiple sites, attacker can try the hash elsewhere</li>
+<li><strong>GDPR violation</strong> - Password is sensitive personal data</li>
+</ol>
+<p><strong>Real-World Impact:</strong>
+In 2019, a company did this. Attacker scraped 1M user hashes, cracked 30% offline, and sold credentials on dark web. Company faced:</p>
+<ul>
+<li>$5M GDPR fine</li>
+<li>40% customer churn</li>
+<li>CEO resigned</li>
+</ul>
+<p><strong>Fix:</strong></p>
+<pre><code class="lang-csharp">// In your User model or DTO
+public class UserDto
+{
+    public int Id { get; set; }
+    public string FirstName { get; set; }
+    public string Email { get; set; }
+    // NO password field!
+    
+    public static UserDto FromEntity(User user) =&gt; new UserDto
+    {
+        Id = user.Id,
+        FirstName = user.FirstName,
+        Email = user.Email
+        // Explicitly omit password
+    };
+}
+</code></pre>
+<p><strong>Never, ever return:</strong></p>
+<ul>
+<li>Passwords (even hashed)</li>
+<li>Password reset tokens</li>
+<li>MFA secrets</li>
+<li>API keys</li>
+<li>SSNs (unless absolutely necessary + encrypted)</li>
+</ul>
+<hr>
+<h3 id="issue-2-no-authenticationauthorization">Issue 2: No Authentication/Authorization</h3>
+<p><strong>Location:</strong> All endpoints</p>
+<p><strong>Problem:</strong>
+ALL your endpoints are publicly accessible! Anyone can:</p>
+<pre><code class="lang-bash"># Delete any user (including admins!)
+curl -X DELETE &quot;https://api.example.com/users/delete?id=1&quot;
+
+# Promote themselves to admin
+curl -X POST &quot;https://api.example.com/users/updateRole&quot; \
+  -d '{&quot;id&quot;: 123, &quot;role&quot;: &quot;admin&quot;}'
+
+# List all users (data breach!)
+curl &quot;https://api.example.com/users/list&quot;
+</code></pre>
+<p><strong>Real-World Impact:</strong>
+Last month, a competitor's API had this issue. Someone scripted it and downloaded their entire user database (2M users) in 10 minutes.</p>
+<p><strong>Fix:</strong></p>
+<pre><code class="lang-csharp">[Authorize] // Require authentication
+[ApiController]
+[Route(&quot;api/users&quot;)]
+public class UsersController : ControllerBase
+{
+    [HttpGet(&quot;{id}&quot;)]
+    [Authorize(Policy = &quot;SelfOrAdmin&quot;)] // Users can only see themselves, or admins see anyone
+    public async Task&lt;IActionResult&gt; GetUser(int id) { ... }
+
+    [HttpDelete(&quot;{id}&quot;)]
+    [Authorize(Roles = &quot;Admin&quot;)] // Only admins can delete
+    public async Task&lt;IActionResult&gt; DeleteUser(int id) { ... }
+
+    [HttpPost(&quot;{id}/role&quot;)]
+    [Authorize(Roles = &quot;SuperAdmin&quot;)] // Only super admins can change roles
+    public async Task&lt;IActionResult&gt; UpdateRole(int id, ...) { ... }
+}
+</code></pre>
+<hr>
+<h3 id="issue-3-returning-all-user-data-in-list">Issue 3: Returning All User Data in List</h3>
+<p><strong>Location:</strong> GET /api/users/list</p>
+<p><strong>Problem:</strong>
+You're returning EVERY field for EVERY user:</p>
+<pre><code class="lang-json">{
+  &quot;users&quot;: [
+    {
+      &quot;id&quot;: 1,
+      &quot;email&quot;: &quot;alice@example.com&quot;,
+      &quot;phone&quot;: &quot;555-1234&quot;,
+      &quot;address&quot;: &quot;123 Main St&quot;,
+      &quot;dob&quot;: &quot;1990-01-15&quot;,
+      &quot;ip_address&quot;: &quot;192.168.1.100&quot;,
+      // ... 20+ fields
+    },
+    // ... 10 users × 20 fields = 200 pieces of PII per request!
+  ]
+}
+</code></pre>
+<p><strong>Problems:</strong></p>
+<ol>
+<li><strong>Privacy violation</strong> - Do users really need to see other users' phone numbers, addresses, DOBs?</li>
+<li><strong>Performance</strong> - You're sending 200KB of data when 10KB would suffice</li>
+<li><strong>N+1 query</strong> - I bet you're doing <code>Include(u =&gt; u.Address).Include(u =&gt; u.Profile)...</code> for every field</li>
+</ol>
+<p><strong>Fix:</strong></p>
+<pre><code class="lang-csharp">// List view - minimal data
+public class UserListDto
+{
+    public int Id { get; set; }
+    public string FullName { get; set; } // Combined first + last
+    public string Email { get; set; }
+    public string Status { get; set; }
+    // That's it! 4 fields.
+}
+
+// Detail view - more data (but still not password!)
+public class UserDetailDto
+{
+    public int Id { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public string Email { get; set; }
+    public string Phone { get; set; }
+    // ... fields the REQUESTING USER is allowed to see
+}
+</code></pre>
+<hr>
+<h2 id="-critical-design-issues">🔴 Critical Design Issues</h2>
+<h3 id="issue-4-always-returns-200-ok">Issue 4: Always Returns 200 OK</h3>
+<p><strong>Location:</strong> Every endpoint</p>
+<pre><code class="lang-csharp">catch (Exception ex)
+{
+    return Ok(new { success = false, error = ex.Message }); // ❌ Should be 400/500!
+}
+</code></pre>
+<p><strong>Problem:</strong>
+You return <code>200 OK</code> even for errors! This breaks HTTP semantics and every client library:</p>
+<pre><code class="lang-javascript">// Frontend developer writes:
+const response = await fetch('/api/users/get?id=999');
+if (response.ok) { // ✅ 200 OK
+    const data = await response.json();
+    // Assumes user exists, but actually { success: false, error: &quot;User not found&quot; }
+    // Their app crashes here!
+}
+</code></pre>
+<p><strong>Proper HTTP Status Codes:</strong></p>
+<pre><code class="lang-csharp">// Success
+return Ok(user);                        // 200 OK
+return Created($&quot;/api/users/{id}&quot;, user); // 201 Created
+return NoContent();                     // 204 No Content
+
+// Client errors (user's fault)
+return NotFound();                      // 404 Not Found
+return BadRequest(&quot;Email is required&quot;); // 400 Bad Request
+return Conflict(&quot;Email already exists&quot;); // 409 Conflict
+return Unauthorized();                  // 401 Unauthorized
+return Forbid();                        // 403 Forbidden
+
+// Server errors (our fault)
+return StatusCode(500, &quot;Internal error&quot;); // 500 Internal Server Error
+return StatusCode(503, &quot;Service unavailable&quot;); // 503 Service Unavailable
+</code></pre>
+<p><strong>Why It Matters:</strong></p>
+<ul>
+<li>HTTP caching breaks (proxies cache 200s but not 404s)</li>
+<li>Monitoring breaks (alert on 5xx, not <code>{&quot;success&quot;: false}</code>)</li>
+<li>Client libraries break (axios, fetch, HttpClient all check status codes)</li>
+</ul>
+<hr>
+<h3 id="issue-5-inconsistent-rest-conventions">Issue 5: Inconsistent REST Conventions</h3>
+<p><strong>Location:</strong> Endpoint naming</p>
+<p><strong>Your Endpoints:</strong></p>
+<pre><code>POST /api/users/create    ❌
+GET  /api/users/get?id=123 ❌
+PUT  /api/users/update    ❌
+DELETE /api/users/delete?id=123 ❌
+POST /api/users/updateStatus ❌
+POST /api/users/updateRole ❌
+</code></pre>
+<p><strong>Problems:</strong></p>
+<ol>
+<li><strong>Verbs in URL</strong> - <code>/create</code>, <code>/get</code>, <code>/update</code>, <code>/delete</code> - URLs should be nouns, HTTP verbs provide the action</li>
+<li><strong>Query parameters for IDs</strong> - <code>?id=123</code> should be path parameter</li>
+<li><strong>Inconsistent methods</strong> - Why is <code>updateStatus</code> a POST when <code>update</code> is a PUT?</li>
+</ol>
+<p><strong>RESTful Endpoints:</strong></p>
+<pre><code>POST   /api/users              ✅ Create user
+GET    /api/users/{id}         ✅ Get user
+PUT    /api/users/{id}         ✅ Full update
+PATCH  /api/users/{id}         ✅ Partial update
+DELETE /api/users/{id}         ✅ Delete user
+PATCH  /api/users/{id}/status  ✅ Update status
+PATCH  /api/users/{id}/role    ✅ Update role
+GET    /api/users              ✅ List users
+GET    /api/users?search=John  ✅ Search users
+</code></pre>
+<p><strong>Why It Matters:</strong></p>
+<ul>
+<li><strong>Predictability</strong> - Developers know <code>/users/{id}</code> pattern from every other API</li>
+<li><strong>Tooling</strong> - Swagger/OpenAPI, Postman, clients all expect REST conventions</li>
+<li><strong>Caching</strong> - GET requests are cacheable, POST are not</li>
+</ul>
+<hr>
+<h3 id="issue-6-requires-all-fields-for-update">Issue 6: Requires All Fields for Update</h3>
+<p><strong>Location:</strong> PUT /api/users/update</p>
+<p><strong>Your API:</strong></p>
+<pre><code class="lang-json">// To update JUST the phone number, I must send ALL 13 fields:
+{
+  &quot;id&quot;: 123,
+  &quot;firstname&quot;: &quot;John&quot;,
+  &quot;lastname&quot;: &quot;Doe&quot;,
+  &quot;email&quot;: &quot;john@example.com&quot;,
+  &quot;phone&quot;: &quot;NEW-PHONE&quot;,  // Only field I want to update
+  &quot;address&quot;: &quot;123 Main St&quot;,
+  &quot;city&quot;: &quot;NYC&quot;,
+  // ... 6 more required fields ...
+}
+</code></pre>
+<p><strong>Problems:</strong></p>
+<ol>
+<li><strong>Wasteful</strong> - 90% of the payload is unchanged data</li>
+<li><strong>Race conditions</strong> - Two users updating different fields at same time = last write wins, data loss</li>
+<li><strong>Client complexity</strong> - Clients must fetch user, modify one field, send entire object back</li>
+</ol>
+<p><strong>Solution: Use PATCH</strong></p>
+<pre><code class="lang-csharp">[HttpPatch(&quot;{id}&quot;)]
+public async Task&lt;IActionResult&gt; UpdateUser(int id, [FromBody] JsonPatchDocument&lt;User&gt; patch)
+{
+    var user = await _userService.GetByIdAsync(id);
+    if (user == null) return NotFound();
+
+    patch.ApplyTo(user); // Only updates provided fields
+    await _userService.SaveAsync();
+    
+    return Ok(user);
+}
+
+// Usage:
+PATCH /api/users/123
+[
+  { &quot;op&quot;: &quot;replace&quot;, &quot;path&quot;: &quot;/phone&quot;, &quot;value&quot;: &quot;555-9999&quot; }
+]
+// Only phone is updated, everything else unchanged
+</code></pre>
+<p><strong>Or simpler PATCH:</strong></p>
+<pre><code class="lang-csharp">[HttpPatch(&quot;{id}&quot;)]
+public async Task&lt;IActionResult&gt; UpdateUser(int id, [FromBody] UserPatchDto patch)
+{
+    // Only non-null fields are updated
+    await _userService.UpdateAsync(id, patch);
+    return NoContent();
+}
+
+// DTO:
+public class UserPatchDto
+{
+    public string? FirstName { get; set; } // Nullable
+    public string? Phone { get; set; }     // Nullable
+    // ... only fields that are present are updated
+}
+</code></pre>
+<hr>
+<h2 id="-major-issues">⚠️ Major Issues</h2>
+<h3 id="issue-7-hard-delete-without-soft-delete-option">Issue 7: Hard Delete Without Soft Delete Option</h3>
+<p><strong>Location:</strong> DELETE /api/users/delete</p>
+<p><strong>Your Implementation:</strong></p>
+<pre><code class="lang-csharp">_userService.Delete(id); // Permanently deletes from database!
+</code></pre>
+<p><strong>Problems:</strong></p>
+<ol>
+<li><strong>No audit trail</strong> - Can't see who deleted what when</li>
+<li><strong>No recovery</strong> - User deleted by mistake? Gone forever.</li>
+<li><strong>Referential integrity</strong> - What about user's orders, comments, posts?</li>
+<li><strong>GDPR Right to be Forgotten</strong> - Yes, but you need to log the deletion!</li>
+</ol>
+<p><strong>Better Approach:</strong></p>
+<pre><code class="lang-csharp">// Soft delete by default
+[HttpDelete(&quot;{id}&quot;)]
+public async Task&lt;IActionResult&gt; DeleteUser(int id)
+{
+    await _userService.SoftDeleteAsync(id); // Sets DeletedAt timestamp
+    return NoContent();
+}
+
+// Hard delete only for admins with confirmation
+[HttpDelete(&quot;{id}/permanent&quot;)]
+[Authorize(Roles = &quot;SuperAdmin&quot;)]
+public async Task&lt;IActionResult&gt; PermanentlyDeleteUser(
+    int id,
+    [FromBody] DeleteConfirmation confirmation)
+{
+    if (confirmation.Confirmed != &quot;DELETE&quot; || confirmation.UserId != id)
+        return BadRequest(&quot;Confirmation required&quot;);
+
+    await _userService.HardDeleteAsync(id);
+    await _auditLog.LogAsync($&quot;User {id} permanently deleted by {User.Identity.Name}&quot;);
+    
+    return NoContent();
+}
+</code></pre>
+<hr>
+<h3 id="issue-8-exception-messages-exposed-to-clients">Issue 8: Exception Messages Exposed to Clients</h3>
+<p><strong>Location:</strong> All endpoints</p>
+<pre><code class="lang-csharp">catch (Exception ex)
+{
+    return Ok(new { success = false, error = ex.Message }); // ❌ Exposes internals!
+}
+</code></pre>
+<p><strong>Problem:</strong></p>
+<pre><code class="lang-json">// User sees:
+{
+  &quot;success&quot;: false,
+  &quot;error&quot;: &quot;Cannot insert duplicate key in object 'dbo.Users'. The duplicate key value is (john@example.com).&quot;
+}
+</code></pre>
+<p><strong>What's wrong:</strong></p>
+<ol>
+<li><strong>Information disclosure</strong> - Now attacker knows your database schema (<code>dbo.Users</code> table)</li>
+<li><strong>Bad UX</strong> - Users don't understand technical errors</li>
+<li><strong>Stack traces</strong> - Some exceptions include full stack traces!</li>
+</ol>
+<p><strong>Fix:</strong></p>
+<pre><code class="lang-csharp">try
+{
+    var user = await _userService.CreateAsync(request);
+    return Created($&quot;/api/users/{user.Id}&quot;, UserDto.FromEntity(user));
+}
+catch (DuplicateEmailException ex)
+{
+    // Log technical details server-side
+    _logger.LogWarning(ex, &quot;Duplicate email attempt: {Email}&quot;, request.Email);
+    
+    // Return user-friendly message
+    return Conflict(new ProblemDetails
+    {
+        Title = &quot;Email already in use&quot;,
+        Detail = &quot;An account with this email already exists. Try logging in or resetting your password.&quot;,
+        Status = 409
+    });
+}
+catch (Exception ex)
+{
+    // Log error server-side
+    _logger.LogError(ex, &quot;Failed to create user&quot;);
+    
+    // Generic error to client (don't expose internals)
+    return StatusCode(500, new ProblemDetails
+    {
+        Title = &quot;An error occurred&quot;,
+        Detail = &quot;We're unable to process your request right now. Please try again later.&quot;,
+        Status = 500
+    });
+}
+</code></pre>
+<hr>
+<h2 id="-suggestions-nice-to-have">💡 Suggestions (Nice to Have)</h2>
+<h3 id="issue-9-no-pagination-metadata">Issue 9: No Pagination Metadata</h3>
+<p><strong>Location:</strong> GET /api/users/list</p>
+<p><strong>Your Response:</strong></p>
+<pre><code class="lang-json">{
+  &quot;users&quot;: [...],
+  &quot;total&quot;: 247
+}
+</code></pre>
+<p><strong>Problem:</strong> Client can't navigate pages easily. They have to calculate:</p>
+<ul>
+<li>Total pages = Math.Ceiling(247 / 10) = 25 pages</li>
+<li>Has next page? currentPage &lt; totalPages</li>
+<li>Has previous page? currentPage &gt; 1</li>
+</ul>
+<p><strong>Better:</strong></p>
+<pre><code class="lang-json">{
+  &quot;data&quot;: [...],
+  &quot;pagination&quot;: {
+    &quot;page&quot;: 1,
+    &quot;pageSize&quot;: 10,
+    &quot;totalItems&quot;: 247,
+    &quot;totalPages&quot;: 25,
+    &quot;hasNextPage&quot;: true,
+    &quot;hasPreviousPage&quot;: false,
+    &quot;nextPageUrl&quot;: &quot;/api/users?page=2&amp;size=10&quot;,
+    &quot;previousPageUrl&quot;: null
+  }
+}
+</code></pre>
+<hr>
+<h3 id="issue-10-no-api-versioning">Issue 10: No API Versioning</h3>
+<p><strong>Location:</strong> All endpoints</p>
+<p><strong>Your Routes:</strong></p>
+<pre><code>/api/users
+</code></pre>
+<p><strong>Problem:</strong>
+When you need to make breaking changes (and you will!), how do you migrate clients?</p>
+<p><strong>Solution:</strong></p>
+<pre><code class="lang-csharp">// URL versioning (simple, visible)
+[Route(&quot;api/v1/users&quot;)]
+public class UsersV1Controller : ControllerBase { ... }
+
+[Route(&quot;api/v2/users&quot;)]
+public class UsersV2Controller : ControllerBase { ... }
+
+// Or header versioning (cleaner URLs)
+[ApiVersion(&quot;1.0&quot;)]
+[Route(&quot;api/users&quot;)]
+public class UsersV1Controller : ControllerBase { ... }
+
+// Request:
+GET /api/users
+Accept-Version: 1.0
+</code></pre>
+<hr>
+<h2 id="-learning-resources">📚 Learning Resources</h2>
+<p>Jordan, I know this is a LOT of feedback. Don't be discouraged - this is how you learn!</p>
+<p><strong>Study These:</strong></p>
+<ol>
+<li><p><strong>REST API Design</strong></p>
+<ul>
+<li>Read: RESTful Web APIs by Leonard Richardson</li>
+<li>Watch: &quot;REST API Best Practices&quot; on YouTube</li>
+<li>Study: <code>samples/05-RealWorld/WebApiAdvanced/</code> in this repo</li>
+</ul>
+</li>
+<li><p><strong>Security</strong></p>
+<ul>
+<li>Read: OWASP API Security Top 10</li>
+<li>Study: <code>docs/security/BEST_PRACTICES.md</code> in this repo</li>
+<li>Tool: Run OWASP ZAP against your API</li>
+</ul>
+</li>
+<li><p><strong>HTTP Status Codes</strong></p>
+<ul>
+<li>Reference: <a href="https://httpstatuses.com/">https://httpstatuses.com/</a></li>
+<li>Cheat sheet: Print and keep at desk!</li>
+</ul>
+</li>
+<li><p><strong>ASP.NET Core Best Practices</strong></p>
+<ul>
+<li>Read: <code>samples/05-RealWorld/WebApiAdvanced/README.md</code></li>
+<li>Study: <code>samples/03-Advanced/DesignPatterns/</code></li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="-action-items">🎯 Action Items</h2>
+<p><strong>Before Next Review:</strong></p>
+<p><strong>Critical (Must Fix):</strong></p>
+<ol>
+<li>[ ] Remove password from all API responses</li>
+<li>[ ] Add <code>[Authorize]</code> attributes to all endpoints</li>
+<li>[ ] Return proper HTTP status codes (not always 200)</li>
+<li>[ ] Change to RESTful endpoints (<code>/users/{id}</code> not <code>/users/get?id=</code>)</li>
+<li>[ ] Add rate limiting (prevent abuse)</li>
+</ol>
+<p><strong>Important (Should Fix):</strong>
+6. [ ] Implement PATCH for partial updates
+7. [ ] Implement soft delete instead of hard delete
+8. [ ] Add pagination metadata
+9. [ ] Use ProblemDetails for errors (don't expose exception messages)
+10. [ ] Add API versioning</p>
+<p><strong>Nice to Have:</strong>
+11. [ ] Add request validation (FluentValidation)
+12. [ ] Add OpenAPI/Swagger documentation
+13. [ ] Add integration tests</p>
+<hr>
+<h2 id="-lets-pair-program">📞 Let's Pair Program</h2>
+<p>This is a lot to absorb! Let's schedule a 2-hour pairing session:</p>
+<ul>
+<li><strong>Thursday 2-4pm?</strong></li>
+<li>We'll refactor one endpoint together</li>
+<li>You'll refactor the rest independently</li>
+<li>I'll review again on Friday</li>
+</ul>
+<p>Also, I've created <code>v2-api.md</code> showing the corrected design. Study it before our session!</p>
+<hr>
+<h2 id="-growth-mindset">🏆 Growth Mindset</h2>
+<p>Remember: <strong>Every senior developer has written insecure APIs as a junior.</strong> The difference is they learned from feedback.</p>
+<p>You're asking the right questions and implementing features. That's 50% of the job. The other 50% is:</p>
+<ul>
+<li>Security</li>
+<li>Maintainability</li>
+<li>RESTful conventions</li>
+<li>Error handling</li>
+</ul>
+<p>You'll get there! This feedback is how you level up to mid-level engineer. 💪</p>
+<p><strong>Status:</strong> BLOCKED until critical security issues resolved.</p>
+<hr>
+<p><strong>Next Steps:</strong></p>
+<ol>
+<li>Read <code>v2-api.md</code> (the fixed version)</li>
+<li>Study the resources above</li>
+<li>Fix critical issues 1-5</li>
+<li>Request re-review</li>
+<li>Schedule pairing session</li>
+</ol>
+<p>Let's ship this API the right way! 🚀</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/code-reviews/02-API-Design-Review/review-feedback.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

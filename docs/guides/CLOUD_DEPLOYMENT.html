@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Cloud Platform Deployment Guide | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Cloud Platform Deployment Guide | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/guides/CLOUD_DEPLOYMENT.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="cloud-platform-deployment-guide">Cloud Platform Deployment Guide</h1>
+
+<p>This guide covers deploying Advanced C# Concepts to major cloud platforms: Azure, AWS, and Google Cloud Platform (GCP).</p>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ul>
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#azure-deployment-aks">Azure Deployment (AKS)</a></li>
+<li><a href="#aws-deployment-eks">AWS Deployment (EKS)</a></li>
+<li><a href="#gcp-deployment-gke">GCP Deployment (GKE)</a></li>
+<li><a href="#multi-cloud-considerations">Multi-Cloud Considerations</a></li>
+</ul>
+<h2 id="prerequisites">Prerequisites</h2>
+<h3 id="required-tools">Required Tools</h3>
+<ul>
+<li><strong>kubectl</strong> (v1.25+)</li>
+<li><strong>helm</strong> (v3.10+)</li>
+<li><strong>kustomize</strong> (v5.0+)</li>
+<li>Cloud CLI tools (az, aws, gcloud)</li>
+<li><strong>Docker</strong> (for local testing)</li>
+</ul>
+<h3 id="general-prerequisites">General Prerequisites</h3>
+<ul>
+<li>Container registry access (ACR, ECR, or GCR)</li>
+<li>Cloud account with appropriate permissions</li>
+<li>TLS certificates (optional but recommended)</li>
+</ul>
+<hr>
+<h2 id="azure-deployment-aks">Azure Deployment (AKS)</h2>
+<h3 id="1-azure-setup">1. Azure Setup</h3>
+<pre><code class="lang-bash"># Install Azure CLI
+curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
+# Login to Azure
+az login
+
+# Set subscription
+az account set --subscription &quot;YOUR_SUBSCRIPTION_ID&quot;
+
+# Create resource group
+az group create --name advancedconcepts-rg --location eastus
+</code></pre>
+<h3 id="2-create-aks-cluster">2. Create AKS Cluster</h3>
+<pre><code class="lang-bash"># Create AKS cluster with autoscaling
+az aks create \
+  --resource-group advancedconcepts-rg \
+  --name advancedconcepts-aks \
+  --node-count 3 \
+  --enable-cluster-autoscaler \
+  --min-count 2 \
+  --max-count 10 \
+  --node-vm-size Standard_DS2_v2 \
+  --enable-managed-identity \
+  --enable-aad \
+  --enable-azure-rbac \
+  --network-plugin azure \
+  --load-balancer-sku standard \
+  --vm-set-type VirtualMachineScaleSets \
+  --zones 1 2 3 \
+  --generate-ssh-keys
+
+# Get credentials
+az aks get-credentials \
+  --resource-group advancedconcepts-rg \
+  --name advancedconcepts-aks
+</code></pre>
+<h3 id="3-azure-container-registry-acr">3. Azure Container Registry (ACR)</h3>
+<pre><code class="lang-bash"># Create ACR
+az acr create \
+  --resource-group advancedconcepts-rg \
+  --name advancedconceptsacr \
+  --sku Premium \
+  --location eastus
+
+# Attach ACR to AKS
+az aks update \
+  --resource-group advancedconcepts-rg \
+  --name advancedconcepts-aks \
+  --attach-acr advancedconceptsacr
+
+# Build and push image
+az acr build \
+  --registry advancedconceptsacr \
+  --image advancedconcepts:v1.0.0 \
+  --file Dockerfile .
+</code></pre>
+<h3 id="4-deploy-with-helm">4. Deploy with Helm</h3>
+<pre><code class="lang-bash"># Create namespace
+kubectl create namespace production
+
+# Add secrets (Azure Key Vault)
+kubectl create secret generic advancedconcepts-secrets \
+  --from-literal=DATABASE_CONNECTION_STRING=&quot;$DB_CONN_STRING&quot; \
+  --namespace production
+
+# Deploy with Helm
+helm upgrade --install advancedconcepts ./helm/advancedconcepts \
+  --namespace production \
+  --set image.repository=advancedconceptsacr.azurecr.io/advancedconcepts \
+  --set image.tag=v1.0.0 \
+  --set replicaCount=3 \
+  --set autoscaling.enabled=true \
+  --set service.type=LoadBalancer \
+  --wait
+</code></pre>
+<h3 id="5-azure-specific-features">5. Azure-Specific Features</h3>
+<h4 id="azure-key-vault-integration">Azure Key Vault Integration</h4>
+<pre><code class="lang-bash"># Install CSI Driver
+helm repo add csi-secrets-store-provider-azure https://azure.github.io/secrets-store-csi-driver-provider-azure/charts
+helm install csi csi-secrets-store-provider-azure/csi-secrets-store-provider-azure
+
+# Create SecretProviderClass
+kubectl apply -f - &lt;&lt;EOL
+apiVersion: secrets-store.csi.x-k8s.io/v1
+kind: SecretProviderClass
+metadata:
+  name: azure-keyvault
+spec:
+  provider: azure
+  parameters:
+    usePodIdentity: &quot;true&quot;
+    keyvaultName: &quot;advancedconcepts-kv&quot;
+    objects: |
+      array:
+        - objectName: db-connection-string
+          objectType: secret
+    tenantId: &quot;YOUR_TENANT_ID&quot;
+EOL
+</code></pre>
+<h4 id="application-insights">Application Insights</h4>
+<pre><code class="lang-yaml"># Add to Helm values
+env:
+  APPLICATIONINSIGHTS_CONNECTION_STRING: &quot;&lt;your-connection-string&gt;&quot;
+  ApplicationInsights__EnableAdaptiveSampling: &quot;true&quot;
+</code></pre>
+<hr>
+<h2 id="aws-deployment-eks">AWS Deployment (EKS)</h2>
+<h3 id="1-aws-setup">1. AWS Setup</h3>
+<pre><code class="lang-bash"># Install AWS CLI
+curl &quot;https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip&quot; -o &quot;awscliv2.zip&quot;
+unzip awscliv2.zip
+sudo ./aws/install
+
+# Configure AWS CLI
+aws configure
+
+# Install eksctl
+curl --silent --location &quot;https://github.com/weksctl-io/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz&quot; | tar xz -C /tmp
+sudo mv /tmp/eksctl /usr/local/bin
+</code></pre>
+<h3 id="2-create-eks-cluster">2. Create EKS Cluster</h3>
+<pre><code class="lang-bash"># Create cluster with eksctl
+eksctl create cluster \
+  --name advancedconcepts-eks \
+  --version 1.28 \
+  --region us-east-1 \
+  --nodegroup-name standard-workers \
+  --node-type t3.medium \
+  --nodes 3 \
+  --nodes-min 2 \
+  --nodes-max 10 \
+  --managed \
+  --enable-ssm \
+  --asg-access \
+  --alb-ingress-access \
+  --zones us-east-1a,us-east-1b,us-east-1c
+
+# Update kubeconfig
+aws eks update-kubeconfig --region us-east-1 --name advancedconcepts-eks
+</code></pre>
+<h3 id="3-amazon-ecr">3. Amazon ECR</h3>
+<pre><code class="lang-bash"># Create ECR repository
+aws ecr create-repository \
+  --repository-name advancedconcepts \
+  --image-scanning-configuration scanOnPush=true \
+  --encryption-configuration encryptionType=AES256 \
+  --region us-east-1
+
+# Login to ECR
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $(aws sts get-caller-identity --query Account --output text).dkr.ecr.us-east-1.amazonaws.com
+
+# Build and push
+docker build -t advancedconcepts:v1.0.0 .
+docker tag advancedconcepts:v1.0.0 $(aws sts get-caller-identity --query Account --output text).dkr.ecr.us-east-1.amazonaws.com/advancedconcepts:v1.0.0
+docker push $(aws sts get-caller-identity --query Account --output text).dkr.ecr.us-east-1.amazonaws.com/advancedconcepts:v1.0.0
+</code></pre>
+<h3 id="4-deploy-with-helm-1">4. Deploy with Helm</h3>
+<pre><code class="lang-bash"># Create namespace
+kubectl create namespace production
+
+# Deploy with Helm
+helm upgrade --install advancedconcepts ./helm/advancedconcepts \
+  --namespace production \
+  --set image.repository=$(aws sts get-caller-identity --query Account --output text).dkr.ecr.us-east-1.amazonaws.com/advancedconcepts \
+  --set image.tag=v1.0.0 \
+  --set service.type=LoadBalancer \
+  --set service.annotations.&quot;service\.beta\.kubernetes\.io/aws-load-balancer-type&quot;=&quot;nlb&quot; \
+  --wait
+</code></pre>
+<h3 id="5-aws-specific-features">5. AWS-Specific Features</h3>
+<h4 id="aws-secrets-manager-integration">AWS Secrets Manager Integration</h4>
+<pre><code class="lang-bash"># Install External Secrets Operator
+helm repo add external-secrets https://charts.external-secrets.io
+helm install external-secrets external-secrets/external-secrets
+
+# Create SecretStore
+kubectl apply -f - &lt;&lt;EOL
+apiVersion: external-secrets.io/v1beta1
+kind: SecretStore
+metadata:
+  name: aws-secrets-manager
+spec:
+  provider:
+    aws:
+      service: SecretsManager
+      region: us-east-1
+      auth:
+        jwt:
+          serviceAccountRef:
+            name: advancedconcepts
+EOL
+</code></pre>
+<h4 id="cloudwatch-logging">CloudWatch Logging</h4>
+<pre><code class="lang-yaml"># Add to Helm values
+podAnnotations:
+  fluentbit.io/parser: json
+env:
+  AWS_REGION: &quot;us-east-1&quot;
+</code></pre>
+<hr>
+<h2 id="gcp-deployment-gke">GCP Deployment (GKE)</h2>
+<h3 id="1-gcp-setup">1. GCP Setup</h3>
+<pre><code class="lang-bash"># Install gcloud CLI
+curl https://sdk.cloud.google.com | bash
+exec -l $SHELL
+
+# Initialize gcloud
+gcloud init
+
+# Set project
+gcloud config set project YOUR_PROJECT_ID
+</code></pre>
+<h3 id="2-create-gke-cluster">2. Create GKE Cluster</h3>
+<pre><code class="lang-bash"># Enable APIs
+gcloud services enable container.googleapis.com
+
+# Create GKE cluster
+gcloud container clusters create advancedconcepts-gke \
+  --zone us-central1-a \
+  --num-nodes 3 \
+  --enable-autoscaling \
+  --min-nodes 2 \
+  --max-nodes 10 \
+  --machine-type n1-standard-2 \
+  --enable-autorepair \
+  --enable-autoupgrade \
+  --enable-ip-alias \
+  --enable-stackdriver-kubernetes \
+  --addons HorizontalPodAutoscaling,HttpLoadBalancing,GcePersistentDiskCsiDriver
+
+# Get credentials
+gcloud container clusters get-credentials advancedconcepts-gke --zone us-central1-a
+</code></pre>
+<h3 id="3-google-container-registry-gcr">3. Google Container Registry (GCR)</h3>
+<pre><code class="lang-bash"># Configure Docker for GCR
+gcloud auth configure-docker
+
+# Build and push
+docker build -t advancedconcepts:v1.0.0 .
+docker tag advancedconcepts:v1.0.0 gcr.io/YOUR_PROJECT_ID/advancedconcepts:v1.0.0
+docker push gcr.io/YOUR_PROJECT_ID/advancedconcepts:v1.0.0
+</code></pre>
+<h3 id="4-deploy-with-helm-2">4. Deploy with Helm</h3>
+<pre><code class="lang-bash"># Create namespace
+kubectl create namespace production
+
+# Deploy with Helm
+helm upgrade --install advancedconcepts ./helm/advancedconcepts \
+  --namespace production \
+  --set image.repository=gcr.io/YOUR_PROJECT_ID/advancedconcepts \
+  --set image.tag=v1.0.0 \
+  --set service.type=LoadBalancer \
+  --wait
+</code></pre>
+<h3 id="5-gcp-specific-features">5. GCP-Specific Features</h3>
+<h4 id="google-secret-manager">Google Secret Manager</h4>
+<pre><code class="lang-bash"># Install Workload Identity
+gcloud iam service-accounts create advancedconcepts-sa
+
+# Bind to Kubernetes SA
+kubectl annotate serviceaccount advancedconcepts \
+  iam.gke.io/gcp-service-account=advancedconcepts-sa@YOUR_PROJECT_ID.iam.gserviceaccount.com
+</code></pre>
+<h4 id="cloud-loggingmonitoring">Cloud Logging/Monitoring</h4>
+<pre><code class="lang-yaml"># Automatic with GKE - logs go to Cloud Logging
+# Metrics go to Cloud Monitoring
+</code></pre>
+<hr>
+<h2 id="multi-cloud-considerations">Multi-Cloud Considerations</h2>
+<h3 id="using-kustomize-for-multi-cloud">Using Kustomize for Multi-Cloud</h3>
+<pre><code class="lang-bash"># Deploy to Azure (production)
+kubectl apply -k k8s/overlays/production
+
+# Deploy to AWS (staging)
+kubectl apply -k k8s/overlays/staging
+
+# Deploy to GCP (development)
+kubectl apply -k k8s/overlays/development
+</code></pre>
+<h3 id="container-registry-multi-cloud-push">Container Registry Multi-Cloud Push</h3>
+<pre><code class="lang-bash"># Build once
+docker build -t advancedconcepts:v1.0.0 .
+
+# Push to all registries
+docker tag advancedconcepts:v1.0.0 advancedconceptsacr.azurecr.io/advancedconcepts:v1.0.0
+docker push advancedconceptsacr.azurecr.io/advancedconcepts:v1.0.0
+
+docker tag advancedconcepts:v1.0.0 $(aws sts get-caller-identity --query Account --output text).dkr.ecr.us-east-1.amazonaws.com/advancedconcepts:v1.0.0
+docker push $(aws sts get-caller-identity --query Account --output text).dkr.ecr.us-east-1.amazonaws.com/advancedconcepts:v1.0.0
+
+docker tag advancedconcepts:v1.0.0 gcr.io/YOUR_PROJECT_ID/advancedconcepts:v1.0.0
+docker push gcr.io/YOUR_PROJECT_ID/advancedconcepts:v1.0.0
+</code></pre>
+<h3 id="monitoring-across-clouds">Monitoring Across Clouds</h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Azure</th>
+<th>AWS</th>
+<th>GCP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Logging</td>
+<td>Azure Monitor</td>
+<td>CloudWatch Logs</td>
+<td>Cloud Logging</td>
+</tr>
+<tr>
+<td>Metrics</td>
+<td>Application Insights</td>
+<td>CloudWatch Metrics</td>
+<td>Cloud Monitoring</td>
+</tr>
+<tr>
+<td>Tracing</td>
+<td>Application Insights</td>
+<td>X-Ray</td>
+<td>Cloud Trace</td>
+</tr>
+<tr>
+<td>Alerting</td>
+<td>Azure Monitor Alerts</td>
+<td>CloudWatch Alarms</td>
+<td>Cloud Monitoring Alerts</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><strong>Last Updated:</strong> 2025-11-30
+<strong>Version:</strong> 1.0</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/guides/CLOUD_DEPLOYMENT.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Architecture Decision Records (ADRs) | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Architecture Decision Records (ADRs) | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/01-architecture-decision-records/README.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="architecture-decision-records-adrs">Architecture Decision Records (ADRs)</h1>
+
+<p>This directory contains Architecture Decision Records (ADRs) documenting significant architectural and technology decisions made in the AspireVideoService project.</p>
+<h2 id="what-is-an-adr">What is an ADR?</h2>
+<p>An Architecture Decision Record (ADR) is a document that captures an important architectural decision made along with its context and consequences. ADRs help teams:</p>
+<ul>
+<li>Understand <strong>why</strong> decisions were made</li>
+<li>Evaluate <strong>alternatives</strong> that were considered</li>
+<li>Document <strong>trade-offs</strong> and <strong>consequences</strong></li>
+<li>Provide <strong>context</strong> for future decisions</li>
+<li>Onboard new team members quickly</li>
+</ul>
+<h2 id="adr-format">ADR Format</h2>
+<p>Each ADR follows a consistent structure:</p>
+<ul>
+<li><strong>Status</strong>: Proposed | Accepted | Deprecated | Superseded</li>
+<li><strong>Context</strong>: The problem or situation requiring a decision</li>
+<li><strong>Decision</strong>: The chosen solution</li>
+<li><strong>Consequences</strong>: Positive, negative, and neutral impacts</li>
+<li><strong>Alternatives Considered</strong>: Other options and why they were rejected</li>
+<li><strong>Related Decisions</strong>: Links to related ADRs</li>
+<li><strong>Notes</strong>: Implementation details and best practices</li>
+</ul>
+<h2 id="index-of-decisions">Index of Decisions</h2>
+<h3 id="platform--framework">Platform &amp; Framework</h3>
+<ul>
+<li><p><strong><a href="0001-adopting-dotnet-8-platform.html">ADR-0001</a></strong>: Adopting .NET 8 Platform</p>
+<ul>
+<li>Why .NET 8 over .NET 6/7/9</li>
+<li>LTS support, performance, modern features</li>
+</ul>
+</li>
+<li><p><strong><a href="0002-using-dotnet-aspire.html">ADR-0002</a></strong>: Using .NET Aspire for Cloud-Native Development</p>
+<ul>
+<li>Why Aspire over Docker Compose, Kubernetes, manual setup</li>
+<li>Service orchestration, discovery, observability</li>
+</ul>
+</li>
+</ul>
+<h3 id="data-layer">Data Layer</h3>
+<ul>
+<li><p><strong><a href="0003-entity-framework-core-data-access.html">ADR-0003</a></strong>: Entity Framework Core for Data Access</p>
+<ul>
+<li>Why EF Core over Dapper, ADO.NET, NHibernate</li>
+<li>ORM benefits vs performance trade-offs</li>
+</ul>
+</li>
+<li><p><strong><a href="0004-postgresql-primary-database.html">ADR-0004</a></strong>: PostgreSQL as Primary Database</p>
+<ul>
+<li>Why PostgreSQL over SQL Server, MySQL, SQLite, NoSQL</li>
+<li>Open source, JSON support, cloud-native</li>
+</ul>
+</li>
+<li><p><strong><a href="0010-direct-dbcontext-usage.html">ADR-0010</a></strong>: Direct DbContext Usage (No Repository Pattern)</p>
+<ul>
+<li>Why no Repository pattern over EF Core</li>
+<li>Simplicity vs abstraction debate</li>
+</ul>
+</li>
+</ul>
+<h3 id="caching--performance">Caching &amp; Performance</h3>
+<ul>
+<li><p><strong><a href="0005-redis-distributed-caching.html">ADR-0005</a></strong>: Redis for Distributed Caching</p>
+<ul>
+<li>Why Redis over in-memory cache, Memcached, SQL Server</li>
+<li>Distributed caching for horizontal scaling</li>
+</ul>
+</li>
+<li><p><strong><a href="0006-stackexchange-redis-client.html">ADR-0006</a></strong>: StackExchange.Redis Client Library</p>
+<ul>
+<li>Why StackExchange.Redis over ServiceStack, CSRedis</li>
+<li>Performance, Aspire integration, community support</li>
+</ul>
+</li>
+<li><p><strong><a href="0016-cache-aside-pattern.html">ADR-0016</a></strong>: Cache-Aside Pattern for Data Access</p>
+<ul>
+<li>Caching strategy and invalidation</li>
+<li>Performance vs consistency trade-offs</li>
+</ul>
+</li>
+</ul>
+<h3 id="observability--monitoring">Observability &amp; Monitoring</h3>
+<ul>
+<li><p><strong><a href="0007-opentelemetry-for-observability.html">ADR-0007</a></strong>: OpenTelemetry for Observability</p>
+<ul>
+<li>Why OpenTelemetry over Application Insights, Serilog, custom</li>
+<li>Vendor-neutral, distributed tracing, metrics, logging</li>
+</ul>
+</li>
+<li><p><strong><a href="0014-health-checks-kubernetes.html">ADR-0014</a></strong>: Health Checks for Kubernetes Readiness</p>
+<ul>
+<li>Liveness and readiness probes</li>
+<li>Kubernetes-compatible health endpoints</li>
+</ul>
+</li>
+</ul>
+<h3 id="frontend--api">Frontend &amp; API</h3>
+<ul>
+<li><p><strong><a href="0008-blazor-server-frontend.html">ADR-0008</a></strong>: Blazor Server for Web Frontend</p>
+<ul>
+<li>Why Blazor Server over WebAssembly, React, Angular, Vue</li>
+<li>C# full-stack, real-time updates, type safety</li>
+</ul>
+</li>
+<li><p><strong><a href="0009-minimal-apis-over-controllers.html">ADR-0009</a></strong>: Minimal APIs over MVC Controllers</p>
+<ul>
+<li>Why Minimal APIs over traditional Controllers</li>
+<li>Performance, simplicity, modern .NET direction</li>
+</ul>
+</li>
+<li><p><strong><a href="0017-async-first-api-design.html">ADR-0017</a></strong>: Async-First API Design</p>
+<ul>
+<li>Why all endpoints must be async</li>
+<li>Scalability and performance benefits</li>
+</ul>
+</li>
+<li><p><strong><a href="0018-swagger-openapi-documentation.html">ADR-0018</a></strong>: Swagger/OpenAPI for API Documentation</p>
+<ul>
+<li>Interactive API documentation</li>
+<li>Code-first, always up-to-date</li>
+</ul>
+</li>
+</ul>
+<h3 id="architecture-patterns">Architecture Patterns</h3>
+<ul>
+<li><p><strong><a href="0011-service-discovery-pattern.html">ADR-0011</a></strong>: Service Discovery Pattern</p>
+<ul>
+<li>Why service discovery over hardcoded URLs</li>
+<li>Aspire-based discovery for development</li>
+</ul>
+</li>
+<li><p><strong><a href="0013-servicedefaults-pattern.html">ADR-0013</a></strong>: ServiceDefaults Pattern for Cross-Cutting Concerns</p>
+<ul>
+<li>Consistent configuration across services</li>
+<li>DRY principle for observability, resilience, health checks</li>
+</ul>
+</li>
+<li><p><strong><a href="0019-apphost-orchestration.html">ADR-0019</a></strong>: AppHost for Service Orchestration</p>
+<ul>
+<li>Development environment orchestration</li>
+<li>Declarative service composition</li>
+</ul>
+</li>
+</ul>
+<h3 id="development--deployment">Development &amp; Deployment</h3>
+<ul>
+<li><p><strong><a href="0012-container-first-development.html">ADR-0012</a></strong>: Container-First Development</p>
+<ul>
+<li>Why containers for infrastructure</li>
+<li>Dev/prod parity, clean machine</li>
+</ul>
+</li>
+<li><p><strong><a href="0015-stylecop-code-quality.html">ADR-0015</a></strong>: StyleCop and Analyzers for Code Quality</p>
+<ul>
+<li>Automated code quality enforcement</li>
+<li>Consistent style, best practices</li>
+</ul>
+</li>
+<li><p><strong><a href="0020-zero-configuration-infrastructure.html">ADR-0020</a></strong>: Zero-Configuration Infrastructure</p>
+<ul>
+<li>5-minute onboarding with no setup</li>
+<li>Aspire-managed infrastructure</li>
+</ul>
+</li>
+</ul>
+<h2 id="decision-categories">Decision Categories</h2>
+<h3 id="technology-stack">Technology Stack</h3>
+<ul>
+<li>Platform: .NET 8</li>
+<li>Framework: ASP.NET Core, Aspire</li>
+<li>Database: PostgreSQL + EF Core</li>
+<li>Cache: Redis + StackExchange.Redis</li>
+<li>Frontend: Blazor Server</li>
+<li>Observability: OpenTelemetry</li>
+</ul>
+<h3 id="architectural-patterns">Architectural Patterns</h3>
+<ul>
+<li>Service Discovery</li>
+<li>Cache-Aside</li>
+<li>ServiceDefaults (Cross-Cutting Concerns)</li>
+<li>Health Checks (Kubernetes-compatible)</li>
+<li>Minimal APIs (vs Controllers)</li>
+<li>Direct DbContext (No Repository)</li>
+</ul>
+<h3 id="development-practices">Development Practices</h3>
+<ul>
+<li>Container-First Development</li>
+<li>Zero-Configuration Infrastructure</li>
+<li>Async-First API Design</li>
+<li>Code Quality (StyleCop, Analyzers)</li>
+<li>API Documentation (Swagger/OpenAPI)</li>
+</ul>
+<h2 id="creating-new-adrs">Creating New ADRs</h2>
+<p>When making a significant architectural decision:</p>
+<ol>
+<li><strong>Copy the template</strong>: Use <code>adr-template.md</code> as starting point</li>
+<li><strong>Number sequentially</strong>: Next ADR is 0021</li>
+<li><strong>Fill in all sections</strong>: Don't skip Context, Alternatives, or Consequences</li>
+<li><strong>Link related ADRs</strong>: Reference decisions that influenced or relate to this one</li>
+<li><strong>Update this README</strong>: Add entry to index and relevant category</li>
+<li><strong>Get review</strong>: Discuss with team before marking &quot;Accepted&quot;</li>
+</ol>
+<h2 id="adr-lifecycle">ADR Lifecycle</h2>
+<ul>
+<li><strong>Proposed</strong>: Decision under discussion</li>
+<li><strong>Accepted</strong>: Decision made and implemented</li>
+<li><strong>Deprecated</strong>: No longer follows this decision</li>
+<li><strong>Superseded</strong>: Replaced by newer ADR (link to replacement)</li>
+</ul>
+<h2 id="best-practices">Best Practices</h2>
+<ol>
+<li><strong>Write when you decide</strong>, not months later</li>
+<li><strong>Include alternatives</strong> - show you considered multiple options</li>
+<li><strong>Be honest about trade-offs</strong> - every decision has pros and cons</li>
+<li><strong>Link extensively</strong> - to related ADRs, PRs, issues, docs</li>
+<li><strong>Keep concise</strong> - ADRs are documentation, not novels</li>
+<li><strong>Use present tense</strong> - &quot;We will use X&quot; not &quot;We used X&quot;</li>
+</ol>
+<h2 id="further-reading">Further Reading</h2>
+<ul>
+<li><a href="https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions">Michael Nygard's ADR concept</a></li>
+<li><a href="https://adr.github.io/">ADR GitHub Organization</a></li>
+<li><a href="https://github.com/joelparkerhenderson/architecture-decision-record">Markdown Architectural Decision Records</a></li>
+<li><a href="https://www.thoughtworks.com/radar/techniques/lightweight-architecture-decision-records">ThoughtWorks on ADRs</a></li>
+</ul>
+<hr>
+<p><strong>Total ADRs</strong>: 20
+<strong>Last Updated</strong>: 2025-12-02
+<strong>Status</strong>: All Accepted ✅</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/01-architecture-decision-records/README.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

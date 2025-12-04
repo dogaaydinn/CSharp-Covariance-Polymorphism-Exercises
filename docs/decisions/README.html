@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Architecture Decision Records (ADRs) | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Architecture Decision Records (ADRs) | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/decisions/README.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="architecture-decision-records-adrs">Architecture Decision Records (ADRs)</h1>
+
+<h2 id="what-are-adrs">What are ADRs?</h2>
+<p><strong>Architecture Decision Records (ADRs)</strong> are documents that capture important architectural decisions made along with their context and consequences. They serve as a historical record of the &quot;why&quot; behind the &quot;what&quot; in our codebase.</p>
+<h2 id="why-we-use-adrs">Why We Use ADRs</h2>
+<p>In professional software engineering, documenting architectural decisions is crucial for:</p>
+<p>✅ <strong>Knowledge Transfer</strong> - New team members understand why things are the way they are
+✅ <strong>Historical Context</strong> - Future developers know what was considered and why certain paths were chosen
+✅ <strong>Avoiding Repeated Discussions</strong> - Decisions are documented once, referenced many times
+✅ <strong>Critical Thinking</strong> - Forces us to articulate trade-offs and alternatives
+✅ <strong>Reversibility</strong> - Provides context for when decisions need to be revisited</p>
+<h2 id="adr-index">ADR Index</h2>
+<table>
+<thead>
+<tr>
+<th>ADR</th>
+<th>Title</th>
+<th>Status</th>
+<th>Date</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="0001-use-mediatr-for-cqrs.html">0001</a></td>
+<td>Use MediatR for CQRS Implementation</td>
+<td>✅ Accepted</td>
+<td>2024-12</td>
+</tr>
+<tr>
+<td><a href="0002-use-clean-architecture-layers.html">0002</a></td>
+<td>Adopt Clean Architecture Layering</td>
+<td>✅ Accepted</td>
+<td>2024-12</td>
+</tr>
+<tr>
+<td><a href="0003-use-polly-for-resilience.html">0003</a></td>
+<td>Use Polly for Resilience Patterns</td>
+<td>✅ Accepted</td>
+<td>2024-12</td>
+</tr>
+<tr>
+<td><a href="0004-adopt-dotnet-aspire.html">0004</a></td>
+<td>Adopt .NET Aspire for Cloud-Native Stack</td>
+<td>✅ Accepted</td>
+<td>2024-12</td>
+</tr>
+<tr>
+<td><a href="0005-implement-source-generators.md">0005</a></td>
+<td>Implement Custom Source Generators</td>
+<td>✅ Accepted</td>
+<td>2024-12</td>
+</tr>
+<tr>
+<td><a href="0006-build-custom-roslyn-analyzers.html">0006</a></td>
+<td>Build Custom Roslyn Analyzers</td>
+<td>✅ Accepted</td>
+<td>2024-12</td>
+</tr>
+<tr>
+<td><a href="0007-choose-postgresql-over-sqlserver.md">0007</a></td>
+<td>Choose PostgreSQL over SQL Server</td>
+<td>✅ Accepted</td>
+<td>2024-12</td>
+</tr>
+<tr>
+<td><a href="0008-use-redis-for-distributed-caching.html">0008</a></td>
+<td>Use Redis for Distributed Caching</td>
+<td>✅ Accepted</td>
+<td>2024-12</td>
+</tr>
+<tr>
+<td><a href="0009-adopt-serilog-structured-logging.md">0009</a></td>
+<td>Adopt Serilog for Structured Logging</td>
+<td>✅ Accepted</td>
+<td>2024-12</td>
+</tr>
+<tr>
+<td><a href="0010-implement-opentelemetry.html">0010</a></td>
+<td>Implement OpenTelemetry for Observability</td>
+<td>✅ Accepted</td>
+<td>2024-12</td>
+</tr>
+<tr>
+<td><a href="0011-use-jwt-for-authentication.html">0011</a></td>
+<td>Use JWT Bearer Tokens for Authentication</td>
+<td>✅ Accepted</td>
+<td>2024-12</td>
+</tr>
+<tr>
+<td><a href="0012-use-ef-core-for-data-access.html">0012</a></td>
+<td>Use Entity Framework Core for Data Access</td>
+<td>✅ Accepted</td>
+<td>2024-12</td>
+</tr>
+<tr>
+<td><a href="0013-use-benchmarkdotnet.html">0013</a></td>
+<td>Use BenchmarkDotNet for Performance Measurement</td>
+<td>✅ Accepted</td>
+<td>2024-12</td>
+</tr>
+<tr>
+<td><a href="0014-containerize-with-docker.html">0014</a></td>
+<td>Containerize Applications with Docker</td>
+<td>✅ Accepted</td>
+<td>2024-12</td>
+</tr>
+<tr>
+<td><a href="0015-deploy-to-kubernetes.html">0015</a></td>
+<td>Deploy to Kubernetes for Production</td>
+<td>✅ Accepted</td>
+<td>2024-12</td>
+</tr>
+</tbody>
+</table>
+<h2 id="adr-template">ADR Template</h2>
+<p>When creating new ADRs, use the <a href="TEMPLATE.html">template</a> provided.</p>
+<h2 id="adr-statuses">ADR Statuses</h2>
+<ul>
+<li><strong>✅ Accepted</strong> - Decision has been made and is currently in use</li>
+<li><strong>🟡 Proposed</strong> - Decision is under consideration</li>
+<li><strong>🔴 Deprecated</strong> - Decision is no longer valid but kept for historical reference</li>
+<li><strong>🔄 Superseded</strong> - Decision has been replaced by a newer ADR (link to new ADR)</li>
+</ul>
+<h2 id="how-to-contribute">How to Contribute</h2>
+<p>When making a significant architectural decision:</p>
+<ol>
+<li>Copy the <a href="TEMPLATE.html">TEMPLATE.md</a> file</li>
+<li>Rename it with the next sequential number (e.g., <code>0016-your-decision.md</code>)</li>
+<li>Fill in all sections thoroughly</li>
+<li>Submit a pull request</li>
+<li>After review and approval, update this index</li>
+</ol>
+<h2 id="questions">Questions?</h2>
+<p>If you have questions about any decision, please:</p>
+<ol>
+<li>Read the ADR thoroughly</li>
+<li>Check the &quot;Consequences&quot; and &quot;Alternatives&quot; sections</li>
+<li>If still unclear, open an issue referencing the ADR number</li>
+</ol>
+<hr>
+<p><strong>Remember:</strong> ADRs are living documents. They can be superseded but should never be deleted. Historical context is valuable.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/decisions/README.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

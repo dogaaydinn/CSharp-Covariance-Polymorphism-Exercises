@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>ADR-0002: Using .NET Aspire for Cloud-Native Development | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="ADR-0002: Using .NET Aspire for Cloud-Native Development | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/01-architecture-decision-records/0002-using-dotnet-aspire.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="adr-0002-using-net-aspire-for-cloud-native-development">ADR-0002: Using .NET Aspire for Cloud-Native Development</h1>
+
+<p><strong>Status:</strong> Accepted
+<strong>Date:</strong> 2025-12-02
+<strong>Deciders:</strong> Architecture Team
+<strong>Technical Story:</strong> Cloud-native orchestration and observability requirements</p>
+<h2 id="context">Context</h2>
+<p>Building cloud-native microservices requires solving common distributed system challenges:</p>
+<ul>
+<li>Service discovery and communication</li>
+<li>Observability (tracing, metrics, logging)</li>
+<li>Infrastructure dependencies (databases, caches, message queues)</li>
+<li>Local development environment complexity</li>
+<li>Configuration management across services</li>
+<li>Health checks and resilience patterns</li>
+</ul>
+<p>Traditional approaches require:</p>
+<ul>
+<li>Manual Docker Compose setup</li>
+<li>Custom service discovery implementation</li>
+<li>Manual OpenTelemetry configuration</li>
+<li>Complex connection string management</li>
+<li>Separate development and production tooling</li>
+</ul>
+<p>We need a solution that provides production-ready patterns while maintaining developer productivity.</p>
+<h2 id="decision">Decision</h2>
+<p>We will use <strong>.NET Aspire</strong> as the orchestration and cloud-native development framework for the AspireVideoService sample.</p>
+<p>Specific implementation:</p>
+<ul>
+<li>AppHost project for service orchestration</li>
+<li>ServiceDefaults library for shared configuration</li>
+<li>Aspire hosting packages for infrastructure (Redis, PostgreSQL)</li>
+<li>Built-in service discovery</li>
+<li>Automatic OpenTelemetry configuration</li>
+</ul>
+<h2 id="consequences">Consequences</h2>
+<h3 id="positive">Positive</h3>
+<ul>
+<li><strong>Zero-Config Infrastructure</strong>: <code>builder.AddRedis(&quot;cache&quot;)</code> provisions Redis with zero configuration</li>
+<li><strong>Automatic Service Discovery</strong>: Services reference each other by name (<code>http://api</code>) without URLs</li>
+<li><strong>Built-in Observability</strong>: OpenTelemetry tracing, metrics, and logging configured automatically</li>
+<li><strong>Developer Experience</strong>: Single command (<code>dotnet run</code>) starts entire distributed system</li>
+<li><strong>Aspire Dashboard</strong>: Real-time observability dashboard at <code>localhost:18888</code></li>
+<li><strong>Production Patterns</strong>: Circuit breakers, retries, and health checks included by default</li>
+<li><strong>Type-Safe Configuration</strong>: Compile-time checks for service references</li>
+<li><strong>Cloud-Agnostic</strong>: Deploy to any cloud (Azure, AWS, GCP) or on-premises</li>
+<li><strong>Consistent Environment</strong>: Dev environment matches production topology</li>
+<li><strong>Rapid Prototyping</strong>: Add new services in minutes, not hours</li>
+</ul>
+<h3 id="negative">Negative</h3>
+<ul>
+<li><strong>Learning Curve</strong>: Developers must learn Aspire-specific APIs and patterns</li>
+<li><strong>Abstraction Layer</strong>: Less control over low-level infrastructure configuration</li>
+<li><strong>Tooling Requirement</strong>: Requires .NET 8 SDK (not compatible with older versions)</li>
+<li><strong>Early Adoption Risk</strong>: Aspire 13.0 is relatively new (GA: February 2024)</li>
+<li><strong>Deployment Complexity</strong>: Production deployment requires understanding Aspire manifests</li>
+<li><strong>Docker Dependency</strong>: Requires Docker Desktop for local development</li>
+<li><strong>Limited Customization</strong>: Some infrastructure options limited by Aspire abstractions</li>
+</ul>
+<h3 id="neutral">Neutral</h3>
+<ul>
+<li><strong>Package Updates</strong>: Aspire evolves rapidly; frequent updates expected</li>
+<li><strong>Community Size</strong>: Growing but smaller than established frameworks (Kubernetes, Docker Compose)</li>
+<li><strong>Documentation</strong>: Comprehensive Microsoft docs, but community resources still developing</li>
+</ul>
+<h2 id="alternatives-considered">Alternatives Considered</h2>
+<h3 id="alternative-1-docker-compose">Alternative 1: Docker Compose</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Industry standard, widely understood</li>
+<li>Simple YAML configuration</li>
+<li>No framework lock-in</li>
+<li>Large community and ecosystem</li>
+<li>Works with any language/platform</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li>No service discovery (must use static ports or DNS)</li>
+<li>Manual observability setup (must configure OpenTelemetry separately)</li>
+<li>No built-in resilience patterns</li>
+<li>Connection strings must be managed manually</li>
+<li>No integrated dashboard</li>
+<li>Dev environment differs from production</li>
+<li>Limited type safety</li>
+</ul>
+<p><strong>Why rejected:</strong> Requires too much manual configuration. Aspire provides same capabilities with better developer experience and production-ready patterns.</p>
+<h3 id="alternative-2-kubernetes-with-helm">Alternative 2: Kubernetes with Helm</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Production-grade orchestration</li>
+<li>Battle-tested in large-scale deployments</li>
+<li>Comprehensive ecosystem (Istio, Prometheus, Grafana)</li>
+<li>Industry standard for cloud-native apps</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li>Extremely complex for local development</li>
+<li>Steep learning curve (weeks to months)</li>
+<li>Overkill for development environment</li>
+<li>Requires Minikube/Kind/Docker Desktop Kubernetes</li>
+<li>YAML configuration hell (100s of lines)</li>
+<li>Slow iteration cycle</li>
+<li>Not beginner-friendly for educational samples</li>
+</ul>
+<p><strong>Why rejected:</strong> Too complex for local development and educational purposes. Kubernetes is appropriate for production, but Aspire provides similar patterns with 10x better developer experience.</p>
+<h3 id="alternative-3-manual-configuration-no-orchestrator">Alternative 3: Manual Configuration (No Orchestrator)</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Complete control over every aspect</li>
+<li>No abstraction layers</li>
+<li>No additional dependencies</li>
+<li>Simple mental model</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li>Must manually implement service discovery</li>
+<li>Must manually configure OpenTelemetry</li>
+<li>Must write custom health checks</li>
+<li>Must implement resilience patterns from scratch</li>
+<li>No dashboard out of the box</li>
+<li>High maintenance burden</li>
+<li>Error-prone (easy to misconfigure)</li>
+<li>Not scalable beyond 2-3 services</li>
+</ul>
+<p><strong>Why rejected:</strong> Defeats the purpose of demonstrating cloud-native best practices. Would require 1000s of lines of boilerplate code that Aspire provides for free.</p>
+<h3 id="alternative-4-tye-microsoft-project-tye">Alternative 4: Tye (Microsoft Project Tye)</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Microsoft's previous microservices tool</li>
+<li>Similar goals to Aspire</li>
+<li>YAML-based configuration</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li>Deprecated in favor of Aspire</li>
+<li>No active development</li>
+<li>Limited observability features</li>
+<li>No built-in dashboard</li>
+<li>Less type-safe than Aspire</li>
+</ul>
+<p><strong>Why rejected:</strong> Microsoft officially deprecated Tye in favor of Aspire. Aspire is the spiritual successor with significantly better features.</p>
+<h2 id="related-decisions">Related Decisions</h2>
+<ul>
+<li><a href="0001-adopting-dotnet-8-platform.html">ADR-0001</a>: .NET 8 required for Aspire</li>
+<li><a href="0007-opentelemetry-for-observability.html">ADR-0007</a>: Aspire includes OpenTelemetry</li>
+<li><a href="0011-service-discovery-pattern.html">ADR-0011</a>: Service discovery provided by Aspire</li>
+<li><a href="0019-apphost-orchestration.html">ADR-0019</a>: AppHost pattern from Aspire</li>
+<li><a href="0020-zero-configuration-infrastructure.html">ADR-0020</a>: Aspire's infrastructure model</li>
+</ul>
+<h2 id="related-links">Related Links</h2>
+<ul>
+<li><a href="https://learn.microsoft.com/dotnet/aspire/">.NET Aspire Documentation</a></li>
+<li><a href="https://github.com/dotnet/aspire">Aspire GitHub Repository</a></li>
+<li><a href="https://devblogs.microsoft.com/dotnet/aspire-13-0-ga/">Aspire 13.0 Announcement</a></li>
+<li><a href="https://learn.microsoft.com/dotnet/aspire/get-started/aspire-overview#aspire-vs-docker-compose">Aspire vs Docker Compose</a></li>
+</ul>
+<h2 id="notes">Notes</h2>
+<ul>
+<li>Aspire is designed for local development; production deployment uses standard containers/Kubernetes</li>
+<li>Aspire Dashboard is development-only; production uses Prometheus/Grafana/Jaeger</li>
+<li>Consider <code>azd</code> (Azure Developer CLI) for Azure Container Apps deployment</li>
+<li>Watch for Aspire 14.0 (expected Q2 2025) with enhanced features</li>
+<li>ServiceDefaults pattern is key to consistent configuration across services</li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/01-architecture-decision-records/0002-using-dotnet-aspire.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

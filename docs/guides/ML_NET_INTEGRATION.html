@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>ML.NET Integration Guide | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="ML.NET Integration Guide | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/guides/ML_NET_INTEGRATION.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="mlnet-integration-guide">ML.NET Integration Guide</h1>
+
+<h2 id="overview">Overview</h2>
+<p>ML.NET is a cross-platform, open-source machine learning framework for .NET developers. This guide covers integrating ML.NET into your C# applications for various machine learning scenarios.</p>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ul>
+<li><a href="#what-is-mlnet">What is ML.NET?</a></li>
+<li><a href="#getting-started">Getting Started</a></li>
+<li><a href="#classification">Classification</a></li>
+<li><a href="#regression">Regression</a></li>
+<li><a href="#clustering">Clustering</a></li>
+<li><a href="#anomaly-detection">Anomaly Detection</a></li>
+<li><a href="#time-series-forecasting">Time Series Forecasting</a></li>
+<li><a href="#onnx-runtime-integration">ONNX Runtime Integration</a></li>
+<li><a href="#model-deployment">Model Deployment</a></li>
+<li><a href="#performance-optimization">Performance Optimization</a></li>
+<li><a href="#best-practices">Best Practices</a></li>
+</ul>
+<h2 id="what-is-mlnet">What is ML.NET?</h2>
+<p>ML.NET enables .NET developers to develop and integrate custom machine learning models in their applications without prior ML expertise.</p>
+<h3 id="key-features">Key Features</h3>
+<ul>
+<li>✅ <strong>Cross-platform</strong>: Windows, Linux, macOS</li>
+<li>✅ <strong>Multiple scenarios</strong>: Classification, regression, clustering, anomaly detection, forecasting</li>
+<li>✅ <strong>AutoML</strong>: Automated machine learning</li>
+<li>✅ <strong>ONNX support</strong>: Use pre-trained models</li>
+<li>✅ <strong>Production-ready</strong>: Optimized for .NET performance</li>
+</ul>
+<h3 id="supported-tasks">Supported Tasks</h3>
+<ul>
+<li>Binary Classification (spam detection, sentiment analysis)</li>
+<li>Multiclass Classification (image classification, categorization)</li>
+<li>Regression (price prediction, forecasting)</li>
+<li>Clustering (customer segmentation)</li>
+<li>Anomaly Detection (fraud detection)</li>
+<li>Ranking (recommendation systems)</li>
+<li>Time Series (forecasting)</li>
+</ul>
+<h2 id="getting-started">Getting Started</h2>
+<h3 id="installation">Installation</h3>
+<pre><code class="lang-xml">&lt;ItemGroup&gt;
+  &lt;!-- Core ML.NET --&gt;
+  &lt;PackageReference Include=&quot;Microsoft.ML&quot; Version=&quot;3.0.1&quot; /&gt;
+
+  &lt;!-- Additional components --&gt;
+  &lt;PackageReference Include=&quot;Microsoft.ML.AutoML&quot; Version=&quot;0.21.1&quot; /&gt;
+  &lt;PackageReference Include=&quot;Microsoft.ML.Vision&quot; Version=&quot;3.0.1&quot; /&gt;
+  &lt;PackageReference Include=&quot;Microsoft.ML.ImageAnalytics&quot; Version=&quot;3.0.1&quot; /&gt;
+  &lt;PackageReference Include=&quot;Microsoft.ML.TimeSeries&quot; Version=&quot;3.0.1&quot; /&gt;
+
+  &lt;!-- ONNX support --&gt;
+  &lt;PackageReference Include=&quot;Microsoft.ML.OnnxRuntime&quot; Version=&quot;1.16.3&quot; /&gt;
+  &lt;PackageReference Include=&quot;Microsoft.ML.OnnxTransformer&quot; Version=&quot;3.0.1&quot; /&gt;
+&lt;/ItemGroup&gt;
+</code></pre>
+<h3 id="basic-workflow">Basic Workflow</h3>
+<pre><code class="lang-csharp">using Microsoft.ML;
+
+public class MLWorkflow
+{
+    public static void BasicWorkflow()
+    {
+        // 1. Create ML Context
+        var mlContext = new MLContext(seed: 0);
+
+        // 2. Load Data
+        var data = mlContext.Data.LoadFromTextFile&lt;ModelInput&gt;(&quot;data.csv&quot;, separatorChar: ',');
+
+        // 3. Build Pipeline
+        var pipeline = mlContext.Transforms.Concatenate(&quot;Features&quot;, &quot;Feature1&quot;, &quot;Feature2&quot;)
+            .Append(mlContext.Regression.Trainers.Sdca(labelColumnName: &quot;Label&quot;));
+
+        // 4. Train Model
+        var model = pipeline.Fit(data);
+
+        // 5. Make Predictions
+        var predictionEngine = mlContext.Model.CreatePredictionEngine&lt;ModelInput, ModelOutput&gt;(model);
+        var prediction = predictionEngine.Predict(new ModelInput { Feature1 = 1.0f, Feature2 = 2.0f });
+
+        // 6. Save Model
+        mlContext.Model.Save(model, data.Schema, &quot;model.zip&quot;);
+    }
+}
+</code></pre>
+<h2 id="classification">Classification</h2>
+<h3 id="binary-classification---sentiment-analysis">Binary Classification - Sentiment Analysis</h3>
+<pre><code class="lang-csharp">using Microsoft.ML;
+using Microsoft.ML.Data;
+
+// Input data model
+public class SentimentData
+{
+    [LoadColumn(0)]
+    public string Text { get; set; }
+
+    [LoadColumn(1)]
+    public bool Sentiment { get; set; }
+}
+
+// Prediction model
+public class SentimentPrediction
+{
+    [ColumnName(&quot;PredictedLabel&quot;)]
+    public bool Prediction { get; set; }
+
+    public float Probability { get; set; }
+
+    public float Score { get; set; }
+}
+
+public class SentimentAnalysis
+{
+    private readonly MLContext _mlContext;
+    private ITransformer _model;
+
+    public SentimentAnalysis()
+    {
+        _mlContext = new MLContext(seed: 0);
+    }
+
+    public void TrainModel(string dataPath)
+    {
+        // Load data
+        var dataView = _mlContext.Data.LoadFromTextFile&lt;SentimentData&gt;(
+            dataPath,
+            separatorChar: ',',
+            hasHeader: true);
+
+        // Split data
+        var splitData = _mlContext.Data.TrainTestSplit(dataView, testFraction: 0.2);
+
+        // Build pipeline
+        var pipeline = _mlContext.Transforms.Text.FeaturizeText(
+                outputColumnName: &quot;Features&quot;,
+                inputColumnName: nameof(SentimentData.Text))
+            .Append(_mlContext.BinaryClassification.Trainers.SdcaLogisticRegression(
+                labelColumnName: nameof(SentimentData.Sentiment),
+                featureColumnName: &quot;Features&quot;));
+
+        // Train model
+        Console.WriteLine(&quot;Training model...&quot;);
+        _model = pipeline.Fit(splitData.TrainSet);
+
+        // Evaluate model
+        var predictions = _model.Transform(splitData.TestSet);
+        var metrics = _mlContext.BinaryClassification.Evaluate(predictions);
+
+        Console.WriteLine($&quot;Accuracy: {metrics.Accuracy:P2}&quot;);
+        Console.WriteLine($&quot;AUC: {metrics.AreaUnderRocCurve:P2}&quot;);
+        Console.WriteLine($&quot;F1 Score: {metrics.F1Score:P2}&quot;);
+    }
+
+    public SentimentPrediction Predict(string text)
+    {
+        var predictionEngine = _mlContext.Model
+            .CreatePredictionEngine&lt;SentimentData, SentimentPrediction&gt;(_model);
+
+        return predictionEngine.Predict(new SentimentData { Text = text });
+    }
+
+    public void SaveModel(string path)
+    {
+        _mlContext.Model.Save(_model, null, path);
+    }
+
+    public void LoadModel(string path)
+    {
+        _model = _mlContext.Model.Load(path, out _);
+    }
+}
+
+// Usage
+var sentimentAnalyzer = new SentimentAnalysis();
+sentimentAnalyzer.TrainModel(&quot;sentiment_data.csv&quot;);
+
+var prediction = sentimentAnalyzer.Predict(&quot;This product is amazing!&quot;);
+Console.WriteLine($&quot;Sentiment: {(prediction.Prediction ? &quot;Positive&quot; : &quot;Negative&quot;)}&quot;);
+Console.WriteLine($&quot;Confidence: {prediction.Probability:P2}&quot;);
+</code></pre>
+<h3 id="multiclass-classification---issue-categorization">Multiclass Classification - Issue Categorization</h3>
+<pre><code class="lang-csharp">// Input model
+public class IssueData
+{
+    [LoadColumn(0)]
+    public string Title { get; set; }
+
+    [LoadColumn(1)]
+    public string Description { get; set; }
+
+    [LoadColumn(2)]
+    public string Area { get; set; } // Label: bug, feature, question, etc.
+}
+
+// Prediction model
+public class IssuePrediction
+{
+    [ColumnName(&quot;PredictedLabel&quot;)]
+    public string Area { get; set; }
+
+    public float[] Score { get; set; }
+}
+
+public class IssueClassification
+{
+    private readonly MLContext _mlContext;
+
+    public IssueClassification()
+    {
+        _mlContext = new MLContext();
+    }
+
+    public ITransformer TrainModel(string dataPath)
+    {
+        var dataView = _mlContext.Data.LoadFromTextFile&lt;IssueData&gt;(
+            dataPath,
+            separatorChar: '\t',
+            hasHeader: true);
+
+        var pipeline = _mlContext.Transforms.Conversion.MapValueToKey(
+                outputColumnName: &quot;Label&quot;,
+                inputColumnName: nameof(IssueData.Area))
+            .Append(_mlContext.Transforms.Text.FeaturizeText(
+                outputColumnName: &quot;TitleFeaturized&quot;,
+                inputColumnName: nameof(IssueData.Title)))
+            .Append(_mlContext.Transforms.Text.FeaturizeText(
+                outputColumnName: &quot;DescriptionFeaturized&quot;,
+                inputColumnName: nameof(IssueData.Description)))
+            .Append(_mlContext.Transforms.Concatenate(
+                &quot;Features&quot;,
+                &quot;TitleFeaturized&quot;,
+                &quot;DescriptionFeaturized&quot;))
+            .Append(_mlContext.MulticlassClassification.Trainers.SdcaMaximumEntropy())
+            .Append(_mlContext.Transforms.Conversion.MapKeyToValue(&quot;PredictedLabel&quot;));
+
+        var model = pipeline.Fit(dataView);
+
+        // Evaluate
+        var predictions = model.Transform(dataView);
+        var metrics = _mlContext.MulticlassClassification.Evaluate(predictions);
+
+        Console.WriteLine($&quot;Macro Accuracy: {metrics.MacroAccuracy:P2}&quot;);
+        Console.WriteLine($&quot;Micro Accuracy: {metrics.MicroAccuracy:P2}&quot;);
+        Console.WriteLine($&quot;Log Loss: {metrics.LogLoss:F2}&quot;);
+
+        return model;
+    }
+}
+</code></pre>
+<h2 id="regression">Regression</h2>
+<h3 id="price-prediction">Price Prediction</h3>
+<pre><code class="lang-csharp">// Input model
+public class HousingData
+{
+    [LoadColumn(0)]
+    public float Size { get; set; }
+
+    [LoadColumn(1)]
+    public float Bedrooms { get; set; }
+
+    [LoadColumn(2)]
+    public float Age { get; set; }
+
+    [LoadColumn(3)]
+    public float Location { get; set; }
+
+    [LoadColumn(4)]
+    public float Price { get; set; } // Label
+}
+
+// Prediction model
+public class HousingPrediction
+{
+    [ColumnName(&quot;Score&quot;)]
+    public float Price { get; set; }
+}
+
+public class PricePrediction
+{
+    private readonly MLContext _mlContext;
+
+    public PricePrediction()
+    {
+        _mlContext = new MLContext(seed: 0);
+    }
+
+    public ITransformer TrainModel(IDataView trainingData)
+    {
+        var pipeline = _mlContext.Transforms.Concatenate(
+                &quot;Features&quot;,
+                nameof(HousingData.Size),
+                nameof(HousingData.Bedrooms),
+                nameof(HousingData.Age),
+                nameof(HousingData.Location))
+            .Append(_mlContext.Regression.Trainers.FastTree(
+                labelColumnName: nameof(HousingData.Price),
+                featureColumnName: &quot;Features&quot;));
+
+        var model = pipeline.Fit(trainingData);
+
+        // Evaluate
+        var predictions = model.Transform(trainingData);
+        var metrics = _mlContext.Regression.Evaluate(predictions);
+
+        Console.WriteLine($&quot;R²: {metrics.RSquared:0.##}&quot;);
+        Console.WriteLine($&quot;RMSE: {metrics.RootMeanSquaredError:#.##}&quot;);
+        Console.WriteLine($&quot;MAE: {metrics.MeanAbsoluteError:#.##}&quot;);
+
+        return model;
+    }
+
+    // Use AutoML for automatic algorithm selection
+    public ITransformer AutoTrainModel(IDataView trainingData)
+    {
+        var experimentSettings = new Microsoft.ML.AutoML.RegressionExperimentSettings
+        {
+            MaxExperimentTimeInSeconds = 60,
+            OptimizingMetric = Microsoft.ML.AutoML.RegressionMetric.RSquared
+        };
+
+        var experiment = _mlContext.Auto()
+            .CreateRegressionExperiment(experimentSettings);
+
+        var result = experiment.Execute(
+            trainingData,
+            labelColumnName: nameof(HousingData.Price));
+
+        Console.WriteLine($&quot;Best trainer: {result.BestRun.TrainerName}&quot;);
+        Console.WriteLine($&quot;R²: {result.BestRun.ValidationMetrics.RSquared:0.##}&quot;);
+
+        return result.BestRun.Model;
+    }
+}
+</code></pre>
+<h2 id="clustering">Clustering</h2>
+<h3 id="customer-segmentation">Customer Segmentation</h3>
+<pre><code class="lang-csharp">// Input model
+public class CustomerData
+{
+    [LoadColumn(0)]
+    public float Age { get; set; }
+
+    [LoadColumn(1)]
+    public float AnnualIncome { get; set; }
+
+    [LoadColumn(2)]
+    public float SpendingScore { get; set; }
+}
+
+// Prediction model
+public class CustomerSegmentation
+{
+    [ColumnName(&quot;PredictedLabel&quot;)]
+    public uint ClusterId { get; set; }
+
+    [ColumnName(&quot;Score&quot;)]
+    public float[] Distances { get; set; }
+}
+
+public class CustomerClustering
+{
+    private readonly MLContext _mlContext;
+
+    public CustomerClustering()
+    {
+        _mlContext = new MLContext(seed: 0);
+    }
+
+    public ITransformer TrainModel(IDataView trainingData, int numberOfClusters = 3)
+    {
+        var pipeline = _mlContext.Transforms.Concatenate(
+                &quot;Features&quot;,
+                nameof(CustomerData.Age),
+                nameof(CustomerData.AnnualIncome),
+                nameof(CustomerData.SpendingScore))
+            .Append(_mlContext.Clustering.Trainers.KMeans(
+                featureColumnName: &quot;Features&quot;,
+                numberOfClusters: numberOfClusters));
+
+        var model = pipeline.Fit(trainingData);
+
+        // Evaluate
+        var predictions = model.Transform(trainingData);
+        var metrics = _mlContext.Clustering.Evaluate(predictions);
+
+        Console.WriteLine($&quot;Average Distance: {metrics.AverageDistance}&quot;);
+        Console.WriteLine($&quot;Davies Bouldin Index: {metrics.DaviesBouldinIndex}&quot;);
+
+        return model;
+    }
+
+    public void AnalyzeClusters(ITransformer model, IDataView data)
+    {
+        var predictions = model.Transform(data);
+        var clusterData = _mlContext.Data
+            .CreateEnumerable&lt;CustomerSegmentation&gt;(predictions, reuseRowObject: false);
+
+        // Group by cluster
+        var clusters = clusterData
+            .GroupBy(x =&gt; x.ClusterId)
+            .OrderBy(g =&gt; g.Key);
+
+        foreach (var cluster in clusters)
+        {
+            Console.WriteLine($&quot;\nCluster {cluster.Key}:&quot;);
+            Console.WriteLine($&quot;  Size: {cluster.Count()}&quot;);
+            Console.WriteLine($&quot;  Avg Distance: {cluster.Average(c =&gt; c.Distances[0]):F2}&quot;);
+        }
+    }
+}
+</code></pre>
+<h2 id="anomaly-detection">Anomaly Detection</h2>
+<h3 id="spike-and-change-point-detection">Spike and Change Point Detection</h3>
+<pre><code class="lang-csharp">// Input model
+public class SalesData
+{
+    [LoadColumn(0)]
+    public string Month { get; set; }
+
+    [LoadColumn(1)]
+    public float Sales { get; set; }
+}
+
+// Prediction models
+public class SpikeDetection
+{
+    [VectorType(3)]
+    public double[] Prediction { get; set; }
+}
+
+public class ChangePointDetection
+{
+    [VectorType(4)]
+    public double[] Prediction { get; set; }
+}
+
+public class AnomalyDetector
+{
+    private readonly MLContext _mlContext;
+
+    public AnomalyDetector()
+    {
+        _mlContext = new MLContext();
+    }
+
+    // Detect sudden spikes
+    public void DetectSpikes(IDataView data)
+    {
+        var pipeline = _mlContext.Transforms.DetectIidSpike(
+            outputColumnName: nameof(SpikeDetection.Prediction),
+            inputColumnName: nameof(SalesData.Sales),
+            confidence: 95,
+            pvalueHistoryLength: 30);
+
+        var model = pipeline.Fit(data);
+        var transformedData = model.Transform(data);
+
+        var predictions = _mlContext.Data
+            .CreateEnumerable&lt;SpikeDetection&gt;(transformedData, reuseRowObject: false);
+
+        var results = predictions.Select((p, i) =&gt; new
+        {
+            Index = i,
+            IsSpike = p.Prediction[0] == 1,
+            Score = p.Prediction[1],
+            PValue = p.Prediction[2]
+        }).Where(x =&gt; x.IsSpike);
+
+        foreach (var result in results)
+        {
+            Console.WriteLine($&quot;Spike detected at index {result.Index}&quot;);
+            Console.WriteLine($&quot;  Score: {result.Score:F2}, P-Value: {result.PValue:F4}&quot;);
+        }
+    }
+
+    // Detect change points (trend changes)
+    public void DetectChangePoints(IDataView data)
+    {
+        var pipeline = _mlContext.Transforms.DetectIidChangePoint(
+            outputColumnName: nameof(ChangePointDetection.Prediction),
+            inputColumnName: nameof(SalesData.Sales),
+            confidence: 95,
+            changeHistoryLength: 30);
+
+        var model = pipeline.Fit(data);
+        var transformedData = model.Transform(data);
+
+        var predictions = _mlContext.Data
+            .CreateEnumerable&lt;ChangePointDetection&gt;(transformedData, reuseRowObject: false);
+
+        var results = predictions.Select((p, i) =&gt; new
+        {
+            Index = i,
+            IsChangePoint = p.Prediction[0] == 1,
+            Score = p.Prediction[1],
+            PValue = p.Prediction[2],
+            Martingale = p.Prediction[3]
+        }).Where(x =&gt; x.IsChangePoint);
+
+        foreach (var result in results)
+        {
+            Console.WriteLine($&quot;Change point detected at index {result.Index}&quot;);
+            Console.WriteLine($&quot;  Score: {result.Score:F2}, P-Value: {result.PValue:F4}&quot;);
+        }
+    }
+}
+</code></pre>
+<h2 id="time-series-forecasting">Time Series Forecasting</h2>
+<pre><code class="lang-csharp">// Input model
+public class TimeSeriesData
+{
+    public DateTime Date { get; set; }
+    public float Value { get; set; }
+}
+
+// Prediction model
+public class TimeSeriesPrediction
+{
+    public float[] ForecastedValues { get; set; }
+    public float[] LowerBoundValues { get; set; }
+    public float[] UpperBoundValues { get; set; }
+}
+
+public class TimeSeriesForecaster
+{
+    private readonly MLContext _mlContext;
+
+    public TimeSeriesForecaster()
+    {
+        _mlContext = new MLContext(seed: 0);
+    }
+
+    public void ForecastSales(IDataView data, int horizon = 7)
+    {
+        // Use Singular Spectrum Analysis (SSA)
+        var pipeline = _mlContext.Forecasting.ForecastBySsa(
+            outputColumnName: nameof(TimeSeriesPrediction.ForecastedValues),
+            inputColumnName: nameof(TimeSeriesData.Value),
+            windowSize: 30,
+            seriesLength: 90,
+            trainSize: data.GetRowCount() ?? 0,
+            horizon: horizon,
+            confidenceLevel: 0.95f,
+            confidenceLowerBoundColumn: nameof(TimeSeriesPrediction.LowerBoundValues),
+            confidenceUpperBoundColumn: nameof(TimeSeriesPrediction.UpperBoundValues));
+
+        var model = pipeline.Fit(data);
+
+        // Create forecasting engine
+        var forecastEngine = model.CreateTimeSeriesEngine&lt;TimeSeriesData, TimeSeriesPrediction&gt;(_mlContext);
+
+        // Generate forecast
+        var forecast = forecastEngine.Predict();
+
+        Console.WriteLine(&quot;Sales Forecast:&quot;);
+        for (int i = 0; i &lt; horizon; i++)
+        {
+            Console.WriteLine($&quot;Day {i + 1}: {forecast.ForecastedValues[i]:F2} &quot; +
+                            $&quot;(±{forecast.UpperBoundValues[i] - forecast.ForecastedValues[i]:F2})&quot;);
+        }
+
+        // Save model for later use
+        forecastEngine.CheckPoint(_mlContext, &quot;forecasting_model.zip&quot;);
+    }
+}
+</code></pre>
+<h2 id="onnx-runtime-integration">ONNX Runtime Integration</h2>
+<h3 id="using-pre-trained-onnx-models">Using Pre-trained ONNX Models</h3>
+<pre><code class="lang-csharp">using Microsoft.ML.OnnxRuntime;
+using Microsoft.ML.OnnxRuntime.Tensors;
+
+public class OnnxModelInference
+{
+    private readonly InferenceSession _session;
+
+    public OnnxModelInference(string modelPath)
+    {
+        _session = new InferenceSession(modelPath);
+    }
+
+    // Image classification example
+    public float[] ClassifyImage(float[] imageData, int batchSize, int channels, int height, int width)
+    {
+        // Create input tensor
+        var inputTensor = new DenseTensor&lt;float&gt;(
+            imageData,
+            new[] { batchSize, channels, height, width });
+
+        var inputs = new List&lt;NamedOnnxValue&gt;
+        {
+            NamedOnnxValue.CreateFromTensor(&quot;input&quot;, inputTensor)
+        };
+
+        // Run inference
+        using var results = _session.Run(inputs);
+
+        // Get output
+        var output = results.First().AsEnumerable&lt;float&gt;().ToArray();
+
+        return output;
+    }
+
+    public void Dispose()
+    {
+        _session?.Dispose();
+    }
+}
+
+// ML.NET integration with ONNX
+public class OnnxWithMLNet
+{
+    private readonly MLContext _mlContext;
+
+    public OnnxWithMLNet()
+    {
+        _mlContext = new MLContext();
+    }
+
+    public void UseOnnxModel(string modelPath, IDataView data)
+    {
+        // Create pipeline with ONNX model
+        var pipeline = _mlContext.Transforms.ApplyOnnxModel(
+            modelFile: modelPath,
+            outputColumnName: &quot;output&quot;,
+            inputColumnName: &quot;input&quot;);
+
+        // Transform data through ONNX model
+        var transformedData = pipeline.Fit(data).Transform(data);
+
+        // Use predictions
+        var predictions = _mlContext.Data
+            .CreateEnumerable&lt;OnnxOutput&gt;(transformedData, reuseRowObject: false);
+    }
+}
+
+public class OnnxOutput
+{
+    [VectorType]
+    public float[] Output { get; set; }
+}
+</code></pre>
+<h2 id="model-deployment">Model Deployment</h2>
+<h3 id="aspnet-core-integration">ASP.NET Core Integration</h3>
+<pre><code class="lang-csharp">// Startup.cs or Program.cs
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
+
+        // Register ML model as singleton
+        builder.Services.AddSingleton&lt;MLContext&gt;(sp =&gt;
+        {
+            return new MLContext(seed: 0);
+        });
+
+        builder.Services.AddSingleton&lt;PredictionEnginePool&lt;SentimentData, SentimentPrediction&gt;&gt;(sp =&gt;
+        {
+            var mlContext = sp.GetRequiredService&lt;MLContext&gt;();
+            var model = mlContext.Model.Load(&quot;sentiment_model.zip&quot;, out _);
+            return new PredictionEnginePool&lt;SentimentData, SentimentPrediction&gt;(mlContext, model);
+        });
+
+        builder.Services.AddControllers();
+
+        var app = builder.Build();
+        app.MapControllers();
+        app.Run();
+    }
+}
+
+// Controller
+[ApiController]
+[Route(&quot;api/[controller]&quot;)]
+public class PredictionController : ControllerBase
+{
+    private readonly PredictionEnginePool&lt;SentimentData, SentimentPrediction&gt; _predictionEngine;
+
+    public PredictionController(
+        PredictionEnginePool&lt;SentimentData, SentimentPrediction&gt; predictionEngine)
+    {
+        _predictionEngine = predictionEngine;
+    }
+
+    [HttpPost(&quot;sentiment&quot;)]
+    public ActionResult&lt;SentimentPrediction&gt; PredictSentiment([FromBody] SentimentRequest request)
+    {
+        var input = new SentimentData { Text = request.Text };
+        var prediction = _predictionEngine.Predict(input);
+
+        return Ok(new
+        {
+            sentiment = prediction.Prediction ? &quot;Positive&quot; : &quot;Negative&quot;,
+            confidence = prediction.Probability
+        });
+    }
+}
+
+public record SentimentRequest(string Text);
+</code></pre>
+<h3 id="model-versioning">Model Versioning</h3>
+<pre><code class="lang-csharp">public class ModelRegistry
+{
+    private readonly Dictionary&lt;string, (ITransformer Model, string Version)&gt; _models = new();
+    private readonly MLContext _mlContext;
+
+    public ModelRegistry(MLContext mlContext)
+    {
+        _mlContext = mlContext;
+    }
+
+    public void RegisterModel(string name, string modelPath, string version)
+    {
+        var model = _mlContext.Model.Load(modelPath, out _);
+        _models[name] = (model, version);
+    }
+
+    public ITransformer GetModel(string name)
+    {
+        return _models.TryGetValue(name, out var entry) ? entry.Model : null;
+    }
+
+    public string GetModelVersion(string name)
+    {
+        return _models.TryGetValue(name, out var entry) ? entry.Version : null;
+    }
+}
+</code></pre>
+<h2 id="performance-optimization">Performance Optimization</h2>
+<h3 id="batch-predictions">Batch Predictions</h3>
+<pre><code class="lang-csharp">public class BatchPrediction
+{
+    private readonly MLContext _mlContext;
+    private readonly ITransformer _model;
+
+    public BatchPrediction(MLContext mlContext, ITransformer model)
+    {
+        _mlContext = mlContext;
+        _model = model;
+    }
+
+    // Efficient batch prediction
+    public IEnumerable&lt;SentimentPrediction&gt; PredictBatch(IEnumerable&lt;SentimentData&gt; inputs)
+    {
+        // Create data view from inputs
+        var inputData = _mlContext.Data.LoadFromEnumerable(inputs);
+
+        // Transform all at once (much faster than individual predictions)
+        var predictions = _model.Transform(inputData);
+
+        // Return results
+        return _mlContext.Data
+            .CreateEnumerable&lt;SentimentPrediction&gt;(predictions, reuseRowObject: false);
+    }
+}
+</code></pre>
+<h3 id="gpu-acceleration">GPU Acceleration</h3>
+<pre><code class="lang-csharp">public class GpuTraining
+{
+    public ITransformer TrainOnGpu(IDataView trainingData)
+    {
+        var mlContext = new MLContext(seed: 0);
+
+        // Use GPU-accelerated trainer (requires CUDA)
+        var pipeline = mlContext.Transforms.Concatenate(&quot;Features&quot;, &quot;Feature1&quot;, &quot;Feature2&quot;)
+            .Append(mlContext.Regression.Trainers.LightGbm(
+                labelColumnName: &quot;Label&quot;,
+                featureColumnName: &quot;Features&quot;,
+                numberOfIterations: 100,
+                numberOfLeaves: 31,
+                minimumExampleCountPerLeaf: 20,
+                learningRate: 0.1,
+                useCategoricalSplit: false,
+                handleMissingValue: false,
+                useSoftmax: false,
+                verbose: true,
+                device: &quot;gpu&quot;)); // Enable GPU
+
+        return pipeline.Fit(trainingData);
+    }
+}
+</code></pre>
+<h3 id="caching-predictions">Caching Predictions</h3>
+<pre><code class="lang-csharp">using Microsoft.Extensions.Caching.Memory;
+
+public class CachedPredictionService
+{
+    private readonly IMemoryCache _cache;
+    private readonly PredictionEnginePool&lt;SentimentData, SentimentPrediction&gt; _predictionEngine;
+
+    public CachedPredictionService(
+        IMemoryCache cache,
+        PredictionEnginePool&lt;SentimentData, SentimentPrediction&gt; predictionEngine)
+    {
+        _cache = cache;
+        _predictionEngine = predictionEngine;
+    }
+
+    public SentimentPrediction Predict(string text)
+    {
+        var cacheKey = $&quot;prediction_{text.GetHashCode()}&quot;;
+
+        return _cache.GetOrCreate(cacheKey, entry =&gt;
+        {
+            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5);
+
+            var input = new SentimentData { Text = text };
+            return _predictionEngine.Predict(input);
+        });
+    }
+}
+</code></pre>
+<h2 id="best-practices">Best Practices</h2>
+<h3 id="1-data-preparation">1. Data Preparation</h3>
+<ul>
+<li>✅ Clean and normalize data</li>
+<li>✅ Handle missing values</li>
+<li>✅ Split train/test/validation sets</li>
+<li>✅ Balance datasets for classification</li>
+<li>✅ Feature engineering</li>
+</ul>
+<h3 id="2-model-training">2. Model Training</h3>
+<ul>
+<li>✅ Use cross-validation</li>
+<li>✅ Try multiple algorithms (or use AutoML)</li>
+<li>✅ Tune hyperparameters</li>
+<li>✅ Monitor overfitting</li>
+<li>✅ Track metrics over time</li>
+</ul>
+<h3 id="3-deployment">3. Deployment</h3>
+<ul>
+<li>✅ Use PredictionEnginePool for thread-safety</li>
+<li>✅ Batch predictions when possible</li>
+<li>✅ Cache frequently requested predictions</li>
+<li>✅ Version your models</li>
+<li>✅ Monitor model performance in production</li>
+</ul>
+<h3 id="4-performance">4. Performance</h3>
+<ul>
+<li>✅ Use appropriate data types (float vs double)</li>
+<li>✅ Minimize allocations</li>
+<li>✅ Consider GPU training for large datasets</li>
+<li>✅ Profile and benchmark</li>
+<li>✅ Use Native AOT for deployment</li>
+</ul>
+<h2 id="integration-example">Integration Example</h2>
+<p>Complete example integrating ML.NET with the project:</p>
+<pre><code class="lang-csharp">// src/AdvancedConcepts.ML/BenchmarkPredictor.cs
+namespace AdvancedConcepts.ML;
+
+public class BenchmarkData
+{
+    public float ArraySize { get; set; }
+    public float Iterations { get; set; }
+    public float ThreadCount { get; set; }
+    public float ExecutionTime { get; set; } // Label
+}
+
+public class BenchmarkPrediction
+{
+    [ColumnName(&quot;Score&quot;)]
+    public float PredictedTime { get; set; }
+}
+
+public class BenchmarkPredictor
+{
+    private readonly MLContext _mlContext;
+    private ITransformer _model;
+
+    public BenchmarkPredictor()
+    {
+        _mlContext = new MLContext(seed: 0);
+    }
+
+    public void TrainFromBenchmarkResults(string csvPath)
+    {
+        var data = _mlContext.Data.LoadFromTextFile&lt;BenchmarkData&gt;(
+            csvPath,
+            separatorChar: ',',
+            hasHeader: true);
+
+        var pipeline = _mlContext.Transforms.Concatenate(
+                &quot;Features&quot;,
+                nameof(BenchmarkData.ArraySize),
+                nameof(BenchmarkData.Iterations),
+                nameof(BenchmarkData.ThreadCount))
+            .Append(_mlContext.Regression.Trainers.FastTree());
+
+        _model = pipeline.Fit(data);
+
+        var predictions = _model.Transform(data);
+        var metrics = _mlContext.Regression.Evaluate(predictions);
+
+        Console.WriteLine($&quot;R²: {metrics.RSquared:0.##}&quot;);
+        Console.WriteLine($&quot;RMSE: {metrics.RootMeanSquaredError:#.##}ms&quot;);
+    }
+
+    public float PredictExecutionTime(float arraySize, float iterations, float threadCount)
+    {
+        var predictionEngine = _mlContext.Model
+            .CreatePredictionEngine&lt;BenchmarkData, BenchmarkPrediction&gt;(_model);
+
+        var input = new BenchmarkData
+        {
+            ArraySize = arraySize,
+            Iterations = iterations,
+            ThreadCount = threadCount
+        };
+
+        var prediction = predictionEngine.Predict(input);
+        return prediction.PredictedTime;
+    }
+}
+</code></pre>
+<h2 id="resources">Resources</h2>
+<ul>
+<li><a href="https://learn.microsoft.com/en-us/dotnet/machine-learning/">ML.NET Documentation</a></li>
+<li><a href="https://github.com/dotnet/machinelearning-samples">ML.NET Samples</a></li>
+<li><a href="https://dotnet.microsoft.com/apps/machinelearning-ai/ml-dotnet/model-builder">ML.NET Model Builder</a></li>
+<li><a href="https://onnxruntime.ai/">ONNX Runtime</a></li>
+<li><a href="https://github.com/dotnet/machinelearning/blob/main/docs/code/AutoMLAPISweeper.md">AutoML.NET</a></li>
+</ul>
+<hr>
+<p><strong>Last Updated:</strong> 2025-12-01
+<strong>Version:</strong> 1.0</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/guides/ML_NET_INTEGRATION.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

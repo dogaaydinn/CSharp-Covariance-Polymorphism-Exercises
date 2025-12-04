@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Month 2 Comprehensive Assessment - LINQ Mastery | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Month 2 Comprehensive Assessment - LINQ Mastery | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../../favicon.ico">
+      <link rel="stylesheet" href="../../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/assessment-tests/path1/month-02-assessment.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../../index.html">
+            <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="month-2-comprehensive-assessment---linq-mastery">Month 2 Comprehensive Assessment - LINQ Mastery</h1>
+
+<p><strong>Month</strong>: 2 (Weeks 5-8) | <strong>Duration</strong>: 75 min | <strong>Pass</strong>: 80% (20/25) | <strong>Points</strong>: 25</p>
+<h2 id="section-1-multiple-choice-12-questions-05-pts-each--6-pts">Section 1: Multiple Choice (12 questions, 0.5 pts each = 6 pts)</h2>
+<ol>
+<li><p>Deferred execution means:</p>
+<ul>
+<li>a) Query never executes | b) Query executes when enumerated | c) Query executes immediately | d) Query is delayed</li>
+</ul>
+</li>
+<li><p>Which forces immediate execution?</p>
+<ul>
+<li>a) Where() | b) Select() | c) ToList() | d) OrderBy()</li>
+</ul>
+</li>
+<li><p>IGrouping&lt;TKey, TElement&gt; represents:</p>
+<ul>
+<li>a) Dictionary | b) Group with key and elements | c) Array | d) Set</li>
+</ul>
+</li>
+<li><p>Left outer join requires:</p>
+<ul>
+<li>a) Join() | b) GroupJoin() + SelectMany() + DefaultIfEmpty() | c) LeftJoin() | d) Merge()</li>
+</ul>
+</li>
+<li><p>What does <code>Average()</code> return for empty collection?</p>
+<ul>
+<li>a) 0 | b) null | c) Exception | d) NaN</li>
+</ul>
+</li>
+<li><p><code>ToDictionary()</code> on duplicate keys:</p>
+<ul>
+<li>a) Keeps first | b) Keeps last | c) Throws exception | d) Creates list</li>
+</ul>
+</li>
+<li><p>Anonymous types are:</p>
+<ul>
+<li>a) Named types | b) Compiler-generated types | c) Generic types | d) Abstract types</li>
+</ul>
+</li>
+<li><p>Func&lt;int, bool&gt; represents:</p>
+<ul>
+<li>a) Function taking bool returning int | b) Function taking int returning bool | c) Action | d) Predicate only</li>
+</ul>
+</li>
+<li><p>Closure captures:</p>
+<ul>
+<li>a) Nothing | b) Local variables from outer scope | c) Only parameters | d) Global variables</li>
+</ul>
+</li>
+<li><p>Higher-order function:</p>
+<ul>
+<li>a) Fast function | b) Function taking/returning functions | c) Static function | d) Abstract function</li>
+</ul>
+</li>
+<li><p><code>SelectMany()</code> does:</p>
+<ul>
+<li>a) Filters | b) Flattens nested collections | c) Projects | d) Groups</li>
+</ul>
+</li>
+<li><p>Query syntax vs method syntax:</p>
+<ul>
+<li>a) Query more powerful | b) Method more powerful | c) Equivalent, method more flexible | d) Different execution</li>
+</ul>
+</li>
+</ol>
+<h2 id="section-2-short-answer-5-questions-2-pts-each--10-pts">Section 2: Short Answer (5 questions, 2 pts each = 10 pts)</h2>
+<ol start="13">
+<li><p>Write LINQ to get products where price &gt; 100, group by category, calculate average price per category, order by average descending.</p>
+</li>
+<li><p>Explain deferred execution and its implications. Give example where it causes unexpected behavior.</p>
+</li>
+<li><p>Implement left outer join between Products and Orders tables. Show products with no orders.</p>
+</li>
+<li><p>What's a closure? Write code demonstrating closure problem in a loop and its solution.</p>
+</li>
+<li><p>Compare <code>First()</code>, <code>FirstOrDefault()</code>, <code>Single()</code>, <code>SingleOrDefault()</code>. When does each throw?</p>
+</li>
+</ol>
+<h2 id="section-3-code-implementation-3-questions-3-pts-each--9-pts">Section 3: Code Implementation (3 questions, 3 pts each = 9 pts)</h2>
+<ol start="18">
+<li><p>Implement <code>Map()</code>, <code>Filter()</code>, <code>Reduce()</code> extension methods from scratch (functional programming primitives).</p>
+</li>
+<li><p>Write query to find top 5 customers by total order value, including customer name, total value, order count.</p>
+</li>
+<li><p>Fix this deferred execution bug:</p>
+</li>
+</ol>
+<pre><code class="lang-csharp">var numbers = new List&lt;int&gt; { 1, 2, 3 };
+var query = numbers.Where(n =&gt; n &gt; threshold);
+threshold = 5; // Bug: threshold changed after query created
+foreach (var n in query) Console.WriteLine(n);
+</code></pre>
+<h2 id="answer-key-summary">Answer Key (Summary)</h2>
+<p><strong>MC</strong>: 1.b | 2.c | 3.b | 4.b | 5.c | 6.c | 7.b | 8.b | 9.b | 10.b | 11.b | 12.c</p>
+<p><strong>13</strong>:</p>
+<pre><code class="lang-csharp">products
+    .Where(p =&gt; p.Price &gt; 100)
+    .GroupBy(p =&gt; p.Category)
+    .Select(g =&gt; new { Category = g.Key, AvgPrice = g.Average(p =&gt; p.Price) })
+    .OrderByDescending(x =&gt; x.AvgPrice)
+</code></pre>
+<p><strong>14</strong>: Deferred execution delays query until enumeration. Unexpected: If source changes after query created but before enumeration, query sees new data. Solution: Force with ToList().</p>
+<p><strong>15</strong>:</p>
+<pre><code class="lang-csharp">products.GroupJoin(
+    orders,
+    p =&gt; p.Id,
+    o =&gt; o.ProductId,
+    (p, orders) =&gt; new { Product = p, Orders = orders }
+).SelectMany(
+    x =&gt; x.Orders.DefaultIfEmpty(),
+    (p, o) =&gt; new { p.Product.Name, OrderId = o?.Id ?? 0 }
+)
+</code></pre>
+<p><strong>16</strong>: Closure captures variable reference. Loop bug:</p>
+<pre><code class="lang-csharp">// Bug
+for (int i = 0; i &lt; 5; i++)
+    actions.Add(() =&gt; Console.WriteLine(i)); // All print 5!
+
+// Fix
+for (int i = 0; i &lt; 5; i++) {
+    int copy = i;
+    actions.Add(() =&gt; Console.WriteLine(copy)); // Each prints correct value
+}
+</code></pre>
+<p><strong>17</strong>:</p>
+<ul>
+<li>First(): Throws if empty</li>
+<li>FirstOrDefault(): Returns default if empty</li>
+<li>Single(): Throws if empty OR &gt;1 element</li>
+<li>SingleOrDefault(): Throws if &gt;1 element, returns default if empty</li>
+</ul>
+<p><strong>18</strong>:</p>
+<pre><code class="lang-csharp">public static IEnumerable&lt;TResult&gt; Map&lt;T, TResult&gt;(
+    this IEnumerable&lt;T&gt; source, Func&lt;T, TResult&gt; selector)
+{
+    foreach (var item in source)
+        yield return selector(item);
+}
+
+public static IEnumerable&lt;T&gt; Filter&lt;T&gt;(
+    this IEnumerable&lt;T&gt; source, Func&lt;T, bool&gt; predicate)
+{
+    foreach (var item in source)
+        if (predicate(item))
+            yield return item;
+}
+
+public static TResult Reduce&lt;T, TResult&gt;(
+    this IEnumerable&lt;T&gt; source, TResult seed, Func&lt;TResult, T, TResult&gt; func)
+{
+    var result = seed;
+    foreach (var item in source)
+        result = func(result, item);
+    return result;
+}
+</code></pre>
+<p><strong>19</strong>:</p>
+<pre><code class="lang-csharp">orders
+    .GroupBy(o =&gt; o.CustomerId)
+    .Select(g =&gt; new {
+        CustomerId = g.Key,
+        TotalValue = g.Sum(o =&gt; o.Amount),
+        OrderCount = g.Count()
+    })
+    .Join(customers, x =&gt; x.CustomerId, c =&gt; c.Id, (x, c) =&gt; new { c.Name, x.TotalValue, x.OrderCount })
+    .OrderByDescending(x =&gt; x.TotalValue)
+    .Take(5)
+</code></pre>
+<p><strong>20</strong>: Fix - capture threshold value:</p>
+<pre><code class="lang-csharp">var threshold = 2;
+var thresholdCopy = threshold; // Capture current value
+var query = numbers.Where(n =&gt; n &gt; thresholdCopy);
+threshold = 5; // Now doesn't affect query
+</code></pre>
+<p><strong>Resources</strong>: <code>samples/99-Exercises/LINQ/</code> (all 3 exercises)</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/assessment-tests/path1/month-02-assessment.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

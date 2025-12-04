@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Month 3 Capstone: Event-Driven Notification System | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Month 3 Capstone: Event-Driven Notification System | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../../favicon.ico">
+      <link rel="stylesheet" href="../../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/project-templates/path1/month3-notification-system.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../../index.html">
+            <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="month-3-capstone-event-driven-notification-system">Month 3 Capstone: Event-Driven Notification System</h1>
+
+<p><strong>Difficulty</strong>: ⭐⭐⭐☆☆ (Intermediate+)
+<strong>Estimated Time</strong>: 25-30 hours
+<strong>Prerequisites</strong>: Completed Week 9-12 of Path 1 (Generics &amp; Design Patterns)</p>
+<hr>
+<h2 id="-project-overview">🎯 Project Overview</h2>
+<p>Build a complete event-driven notification system using Observer pattern, Builder pattern, generic covariance/contravariance, and demonstrating thread-safe operations.</p>
+<h3 id="learning-objectives">Learning Objectives</h3>
+<ul>
+<li>✅ IObservable<t> and IObserver<t> implementation</t></t></li>
+<li>✅ Builder pattern for complex object construction</li>
+<li>✅ Generic covariance (<code>IProducer&lt;out T&gt;</code>)</li>
+<li>✅ Generic contravariance (<code>IConsumer&lt;in T&gt;</code>)</li>
+<li>✅ Generic constraints (class, new(), interfaces)</li>
+<li>✅ Subscription lifecycle management</li>
+<li>✅ Thread-safe event handling</li>
+</ul>
+<hr>
+<h2 id="-requirements">📋 Requirements</h2>
+<h3 id="functional-requirements">Functional Requirements</h3>
+<ol>
+<li><p><strong>Notification Types</strong>:</p>
+<ul>
+<li>Email notification</li>
+<li>SMS notification</li>
+<li>Push notification</li>
+<li>Logger (special observer)</li>
+<li>Analytics tracker (special observer)</li>
+</ul>
+</li>
+<li><p><strong>Event Sources</strong>:</p>
+<ul>
+<li>User actions (login, logout, purchase, etc.)</li>
+<li>System events (error, warning, info)</li>
+<li>Custom events</li>
+</ul>
+</li>
+<li><p><strong>Builder Pattern</strong>:</p>
+<ul>
+<li>NotificationBuilder for constructing complex notifications</li>
+<li>Fluent interface with chaining</li>
+<li>Validation before <code>Build()</code></li>
+<li>Support for templates</li>
+</ul>
+</li>
+<li><p><strong>Observer Pattern</strong>:</p>
+<ul>
+<li>Multiple observers per event stream</li>
+<li>Subscribe/Unsubscribe with IDisposable</li>
+<li>OnNext, OnError, OnCompleted implementation</li>
+<li>Filter notifications by type</li>
+</ul>
+</li>
+<li><p><strong>Variance Usage</strong>:</p>
+<ul>
+<li>Covariant <code>INotificationProducer&lt;out T&gt;</code></li>
+<li>Contravariant <code>INotificationHandler&lt;in T&gt;</code></li>
+<li>Demonstrate safe variance scenarios</li>
+</ul>
+</li>
+<li><p><strong>Generic Constraints</strong>:</p>
+<ul>
+<li>Repository<t> where T : INotification, new()</t></li>
+<li>Validator<t> where T : class, IValidatable</t></li>
+<li>Factory pattern with new() constraint</li>
+</ul>
+</li>
+</ol>
+<h3 id="technical-requirements">Technical Requirements</h3>
+<ul>
+<li><strong>Performance</strong>: Handle 10,000+ events/second</li>
+<li><strong>Thread Safety</strong>: Safe for concurrent access</li>
+<li><strong>Unit Tests</strong>: 20+ tests</li>
+<li><strong>Design Patterns</strong>: Builder, Observer, Factory, Repository</li>
+<li><strong>SOLID Principles</strong>: Demonstrate all 5 principles</li>
+</ul>
+<hr>
+<h2 id="-project-structure">🏗️ Project Structure</h2>
+<pre><code>NotificationSystem/
+├── Models/
+│   ├── INotification.cs (base interface)
+│   ├── Notification.cs (abstract base)
+│   ├── EmailNotification.cs
+│   ├── SmsNotification.cs
+│   ├── PushNotification.cs
+│   ├── SystemEvent.cs
+│   └── UserEvent.cs
+├── Builders/
+│   ├── NotificationBuilder.cs
+│   ├── EmailNotificationBuilder.cs
+│   └── SmsNotificationBuilder.cs
+├── Observers/
+│   ├── IObserver.cs
+│   ├── EmailObserver.cs
+│   ├── SmsObserver.cs
+│   ├── PushObserver.cs
+│   ├── LoggerObserver.cs
+│   └── AnalyticsObserver.cs
+├── Observables/
+│   ├── IObservable.cs
+│   ├── NotificationStream.cs
+│   └── EventStream.cs
+├── Variance/
+│   ├── INotificationProducer.cs (out T)
+│   ├── INotificationHandler.cs (in T)
+│   ├── NotificationProducer.cs
+│   └── NotificationHandler.cs
+├── Services/
+│   ├── NotificationService.cs
+│   ├── SubscriptionManager.cs
+│   └── NotificationRepository.cs
+└── Tests/
+    ├── ObserverTests.cs
+    ├── BuilderTests.cs
+    ├── VarianceTests.cs
+    └── PerformanceTests.cs
+</code></pre>
+<hr>
+<h2 id="-getting-started">🚀 Getting Started</h2>
+<h3 id="step-1-define-base-interfaces-and-models">Step 1: Define Base Interfaces and Models</h3>
+<pre><code class="lang-csharp">// Models/INotification.cs
+public interface INotification
+{
+    Guid Id { get; }
+    string Title { get; }
+    string Message { get; }
+    DateTime Timestamp { get; }
+    NotificationPriority Priority { get; }
+}
+
+// Models/Notification.cs
+public abstract class Notification : INotification
+{
+    public Guid Id { get; set; }
+    public string Title { get; set; }
+    public string Message { get; set; }
+    public DateTime Timestamp { get; set; }
+    public NotificationPriority Priority { get; set; }
+
+    protected Notification()
+    {
+        Id = Guid.NewGuid();
+        Timestamp = DateTime.UtcNow;
+        Priority = NotificationPriority.Normal;
+    }
+}
+
+// TODO: Implement EmailNotification
+public class EmailNotification : Notification
+{
+    public string To { get; set; }
+    public string From { get; set; }
+    public string Subject { get; set; }
+    public string Body { get; set; }
+}
+
+// TODO: Implement SmsNotification
+public class SmsNotification : Notification
+{
+    public string PhoneNumber { get; set; }
+    public string Text { get; set; }
+}
+
+// TODO: Implement PushNotification
+public class PushNotification : Notification
+{
+    public string DeviceId { get; set; }
+    public string Title { get; set; }
+    public string Body { get; set; }
+}
+</code></pre>
+<h3 id="step-2-implement-builder-pattern">Step 2: Implement Builder Pattern</h3>
+<pre><code class="lang-csharp">// Builders/NotificationBuilder.cs
+public class NotificationBuilder
+{
+    private string _title;
+    private string _message;
+    private NotificationPriority _priority;
+
+    // TODO: Implement fluent methods
+    public NotificationBuilder WithTitle(string title)
+    {
+        _title = title;
+        return this;
+    }
+
+    public NotificationBuilder WithMessage(string message)
+    {
+        _message = message;
+        return this;
+    }
+
+    public NotificationBuilder WithPriority(NotificationPriority priority)
+    {
+        _priority = priority;
+        return this;
+    }
+
+    // TODO: Add validation before Build()
+    public Notification Build()
+    {
+        // Validate
+        if (string.IsNullOrEmpty(_title))
+            throw new InvalidOperationException(&quot;Title is required&quot;);
+
+        // TODO: Create and return notification
+        throw new NotImplementedException();
+    }
+}
+
+// TODO: Implement EmailNotificationBuilder
+public class EmailNotificationBuilder : NotificationBuilder
+{
+    private string _to;
+    private string _from;
+    private string _subject;
+    private string _body;
+
+    public EmailNotificationBuilder To(string email)
+    {
+        _to = email;
+        return this;
+    }
+
+    // TODO: Implement remaining fluent methods
+    // TODO: Override Build() to create EmailNotification
+}
+</code></pre>
+<h3 id="step-3-implement-observer-pattern">Step 3: Implement Observer Pattern</h3>
+<pre><code class="lang-csharp">// Observers/IObserver.cs
+public interface IObserver&lt;in T&gt;
+{
+    void OnNext(T value);
+    void OnError(Exception error);
+    void OnCompleted();
+}
+
+// Observables/IObservable.cs
+public interface IObservable&lt;out T&gt;
+{
+    IDisposable Subscribe(IObserver&lt;T&gt; observer);
+}
+
+// Observables/NotificationStream.cs
+public class NotificationStream&lt;T&gt; : IObservable&lt;T&gt; where T : INotification
+{
+    private readonly List&lt;IObserver&lt;T&gt;&gt; _observers = new();
+    private readonly object _lock = new();
+
+    public IDisposable Subscribe(IObserver&lt;T&gt; observer)
+    {
+        lock (_lock)
+        {
+            _observers.Add(observer);
+        }
+        return new Subscription(() =&gt; Unsubscribe(observer));
+    }
+
+    private void Unsubscribe(IObserver&lt;T&gt; observer)
+    {
+        lock (_lock)
+        {
+            _observers.Remove(observer);
+        }
+    }
+
+    // TODO: Implement Publish method
+    public void Publish(T notification)
+    {
+        lock (_lock)
+        {
+            foreach (var observer in _observers)
+            {
+                try
+                {
+                    observer.OnNext(notification);
+                }
+                catch (Exception ex)
+                {
+                    observer.OnError(ex);
+                }
+            }
+        }
+    }
+
+    // TODO: Implement Complete method
+    public void Complete()
+    {
+        // TODO: Call OnCompleted on all observers
+        throw new NotImplementedException();
+    }
+}
+
+// Subscription.cs (helper)
+public class Subscription : IDisposable
+{
+    private readonly Action _unsubscribe;
+    private bool _disposed;
+
+    public Subscription(Action unsubscribe)
+    {
+        _unsubscribe = unsubscribe;
+    }
+
+    public void Dispose()
+    {
+        if (!_disposed)
+        {
+            _unsubscribe();
+            _disposed = true;
+        }
+    }
+}
+</code></pre>
+<h3 id="step-4-implement-concrete-observers">Step 4: Implement Concrete Observers</h3>
+<pre><code class="lang-csharp">// Observers/EmailObserver.cs
+public class EmailObserver : IObserver&lt;EmailNotification&gt;
+{
+    public void OnNext(EmailNotification notification)
+    {
+        // TODO: Send email
+        Console.WriteLine($&quot;Sending email to {notification.To}: {notification.Subject}&quot;);
+    }
+
+    public void OnError(Exception error)
+    {
+        Console.WriteLine($&quot;Email observer error: {error.Message}&quot;);
+    }
+
+    public void OnCompleted()
+    {
+        Console.WriteLine(&quot;Email observer completed&quot;);
+    }
+}
+
+// TODO: Implement SmsObserver, PushObserver, LoggerObserver, AnalyticsObserver
+</code></pre>
+<h3 id="step-5-demonstrate-variance">Step 5: Demonstrate Variance</h3>
+<pre><code class="lang-csharp">// Variance/INotificationProducer.cs (Covariant)
+public interface INotificationProducer&lt;out T&gt; where T : INotification
+{
+    T Produce();
+    IEnumerable&lt;T&gt; ProduceMany(int count);
+}
+
+// Variance/INotificationHandler.cs (Contravariant)
+public interface INotificationHandler&lt;in T&gt; where T : INotification
+{
+    void Handle(T notification);
+    void HandleMany(IEnumerable&lt;T&gt; notifications);
+}
+
+// Demonstrate covariance
+INotificationProducer&lt;EmailNotification&gt; emailProducer = new EmailProducer();
+INotificationProducer&lt;INotification&gt; notificationProducer = emailProducer; // Covariance!
+
+// Demonstrate contravariance
+INotificationHandler&lt;INotification&gt; generalHandler = new GeneralHandler();
+INotificationHandler&lt;EmailNotification&gt; emailHandler = generalHandler; // Contravariance!
+</code></pre>
+<h3 id="step-6-implement-generic-repository-with-constraints">Step 6: Implement Generic Repository with Constraints</h3>
+<pre><code class="lang-csharp">// Services/NotificationRepository.cs
+public class NotificationRepository&lt;T&gt; where T : class, INotification, new()
+{
+    private readonly List&lt;T&gt; _notifications = new();
+
+    public void Add(T notification)
+    {
+        // TODO: Add to collection
+        _notifications.Add(notification);
+    }
+
+    public T GetById(Guid id)
+    {
+        // TODO: Find by ID
+        return _notifications.FirstOrDefault(n =&gt; n.Id == id);
+    }
+
+    public IEnumerable&lt;T&gt; GetAll()
+    {
+        return _notifications;
+    }
+
+    public IEnumerable&lt;T&gt; GetByPriority(NotificationPriority priority)
+    {
+        // TODO: Filter by priority
+        return _notifications.Where(n =&gt; n.Priority == priority);
+    }
+
+    // TODO: Factory method using new() constraint
+    public T CreateNew()
+    {
+        return new T();
+    }
+}
+</code></pre>
+<hr>
+<h2 id="-milestones">🎯 Milestones</h2>
+<h3 id="milestone-1-core-models--builder-day-1-3">Milestone 1: Core Models &amp; Builder (Day 1-3)</h3>
+<ul>
+<li>✅ All notification models implemented</li>
+<li>✅ Builder pattern with fluent interface</li>
+<li>✅ Validation working</li>
+</ul>
+<h3 id="milestone-2-observer-pattern-day-4-6">Milestone 2: Observer Pattern (Day 4-6)</h3>
+<ul>
+<li>✅ IObservable/IObserver implemented</li>
+<li>✅ Subscription management working</li>
+<li>✅ All 5 observers functional</li>
+<li>✅ Thread-safe implementation</li>
+</ul>
+<h3 id="milestone-3-variance--generics-day-7-8">Milestone 3: Variance &amp; Generics (Day 7-8)</h3>
+<ul>
+<li>✅ Covariant producer interface</li>
+<li>✅ Contravariant handler interface</li>
+<li>✅ Repository with constraints</li>
+<li>✅ Demonstrate variance safety</li>
+</ul>
+<h3 id="milestone-4-integration--testing-day-9-10">Milestone 4: Integration &amp; Testing (Day 9-10)</h3>
+<ul>
+<li>✅ All components integrated</li>
+<li>✅ 20+ unit tests passing</li>
+<li>✅ Performance tested (10k+ events/sec)</li>
+<li>✅ Console demo working</li>
+</ul>
+<hr>
+<h2 id="-evaluation-criteria">✅ Evaluation Criteria</h2>
+<table>
+<thead>
+<tr>
+<th>Criteria</th>
+<th>Points</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Observer Pattern Implementation</td>
+<td>25</td>
+</tr>
+<tr>
+<td>Builder Pattern Implementation</td>
+<td>15</td>
+</tr>
+<tr>
+<td>Variance Demonstrations</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Generic Constraints</td>
+<td>15</td>
+</tr>
+<tr>
+<td>Thread Safety</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Tests</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Documentation</td>
+<td>5</td>
+</tr>
+<tr>
+<td><strong>TOTAL</strong></td>
+<td><strong>100</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Pass: 75+</strong></p>
+<hr>
+<h2 id="-tips">💡 Tips</h2>
+<ol>
+<li><strong>Start with Observer</strong>: Get pattern working first</li>
+<li><strong>Builder Last</strong>: Add fluent interface after core works</li>
+<li><strong>Thread Safety</strong>: Use <code>lock</code> for collections</li>
+<li><strong>Variance</strong>: Study covariance/contravariance rules carefully</li>
+<li><strong>Test Early</strong>: Write tests as you build</li>
+<li><strong>Performance</strong>: Profile with BenchmarkDotNet</li>
+</ol>
+<hr>
+<h2 id="-resources">📚 Resources</h2>
+<ul>
+<li><code>samples/02-Intermediate/CovarianceContravariance/</code></li>
+<li><code>samples/03-Advanced/GenericCovarianceContravariance/</code></li>
+<li><code>samples/99-Exercises/Generics/</code> (all 3)</li>
+<li><code>samples/99-Exercises/DesignPatterns/01-Builder/</code></li>
+<li><code>samples/99-Exercises/DesignPatterns/02-Observer/</code></li>
+</ul>
+<hr>
+<p><em>Template Version: 1.0</em>
+<em>Last Updated: 2025-12-02</em></p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/project-templates/path1/month3-notification-system.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

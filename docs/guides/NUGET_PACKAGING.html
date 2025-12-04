@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>NuGet Package Publishing Guide | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="NuGet Package Publishing Guide | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/guides/NUGET_PACKAGING.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="nuget-package-publishing-guide">NuGet Package Publishing Guide</h1>
+
+<h2 id="overview">Overview</h2>
+<p>This guide covers creating, configuring, and publishing NuGet packages for the Advanced C# Concepts project, including multi-target packages, symbol packages, Source Link integration, and publishing to NuGet.org and GitHub Packages.</p>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ul>
+<li><a href="#package-configuration">Package Configuration</a></li>
+<li><a href="#package-metadata">Package Metadata</a></li>
+<li><a href="#multi-targeting">Multi-Targeting</a></li>
+<li><a href="#symbol-packages">Symbol Packages</a></li>
+<li><a href="#source-link">Source Link</a></li>
+<li><a href="#package-validation">Package Validation</a></li>
+<li><a href="#publishing-to-nugetorg">Publishing to NuGet.org</a></li>
+<li><a href="#publishing-to-github-packages">Publishing to GitHub Packages</a></li>
+<li><a href="#package-icons-and-readme">Package Icons and README</a></li>
+<li><a href="#best-practices">Best Practices</a></li>
+</ul>
+<h2 id="package-configuration">Package Configuration</h2>
+<h3 id="basic-package-properties">Basic Package Properties</h3>
+<p>Add to your <code>.csproj</code> file:</p>
+<pre><code class="lang-xml">&lt;Project Sdk=&quot;Microsoft.NET.Sdk&quot;&gt;
+  &lt;PropertyGroup&gt;
+    &lt;!-- Basic Configuration --&gt;
+    &lt;TargetFramework&gt;net8.0&lt;/TargetFramework&gt;
+    &lt;OutputType&gt;Library&lt;/OutputType&gt;
+    &lt;ImplicitUsings&gt;enable&lt;/ImplicitUsings&gt;
+    &lt;Nullable&gt;enable&lt;/Nullable&gt;
+
+    &lt;!-- Package Configuration --&gt;
+    &lt;IsPackable&gt;true&lt;/IsPackable&gt;
+    &lt;GeneratePackageOnBuild&gt;false&lt;/GeneratePackageOnBuild&gt;
+    &lt;IncludeSymbols&gt;true&lt;/IncludeSymbols&gt;
+    &lt;SymbolPackageFormat&gt;snupkg&lt;/SymbolPackageFormat&gt;
+
+    &lt;!-- Deterministic Build --&gt;
+    &lt;ContinuousIntegrationBuild Condition=&quot;'$(GITHUB_ACTIONS)' == 'true'&quot;&gt;true&lt;/ContinuousIntegrationBuild&gt;
+    &lt;Deterministic&gt;true&lt;/Deterministic&gt;
+  &lt;/PropertyGroup&gt;
+&lt;/Project&gt;
+</code></pre>
+<h3 id="complete-package-metadata">Complete Package Metadata</h3>
+<pre><code class="lang-xml">&lt;PropertyGroup&gt;
+  &lt;!-- Package Identity --&gt;
+  &lt;PackageId&gt;AdvancedConcepts.Core&lt;/PackageId&gt;
+  &lt;Version&gt;1.0.0&lt;/Version&gt;
+  &lt;AssemblyVersion&gt;1.0.0.0&lt;/AssemblyVersion&gt;
+  &lt;FileVersion&gt;1.0.0.0&lt;/FileVersion&gt;
+
+  &lt;!-- Package Description --&gt;
+  &lt;Title&gt;Advanced C# Concepts - Core Library&lt;/Title&gt;
+  &lt;Description&gt;
+    Enterprise-grade C# library demonstrating advanced concepts including
+    covariance, contravariance, polymorphism, SOLID principles, design patterns,
+    and performance optimization techniques. Built with .NET 8 for production use.
+  &lt;/Description&gt;
+  &lt;Summary&gt;Production-ready C# advanced concepts and design patterns&lt;/Summary&gt;
+
+  &lt;!-- Authors and Ownership --&gt;
+  &lt;Authors&gt;Doğa Aydın&lt;/Authors&gt;
+  &lt;Company&gt;AdvancedConcepts&lt;/Company&gt;
+  &lt;Product&gt;Advanced C# Concepts&lt;/Product&gt;
+  &lt;Copyright&gt;Copyright © 2025 Doğa Aydın&lt;/Copyright&gt;
+
+  &lt;!-- Package Metadata --&gt;
+  &lt;PackageTags&gt;csharp;covariance;contravariance;polymorphism;solid;design-patterns;performance;dotnet;enterprise&lt;/PackageTags&gt;
+  &lt;PackageProjectUrl&gt;https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises&lt;/PackageProjectUrl&gt;
+  &lt;RepositoryUrl&gt;https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises&lt;/RepositoryUrl&gt;
+  &lt;RepositoryType&gt;git&lt;/RepositoryType&gt;
+
+  &lt;!-- License --&gt;
+  &lt;PackageLicenseExpression&gt;MIT&lt;/PackageLicenseExpression&gt;
+  &lt;!-- OR use license file: --&gt;
+  &lt;!-- &lt;PackageLicenseFile&gt;LICENSE&lt;/PackageLicenseFile&gt; --&gt;
+
+  &lt;!-- Documentation --&gt;
+  &lt;PackageReadmeFile&gt;README.md&lt;/PackageReadmeFile&gt;
+  &lt;PackageIcon&gt;icon.png&lt;/PackageIcon&gt;
+
+  &lt;!-- Release Notes --&gt;
+  &lt;PackageReleaseNotes&gt;
+    See https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/releases
+  &lt;/PackageReleaseNotes&gt;
+
+  &lt;!-- Repository Info --&gt;
+  &lt;PublishRepositoryUrl&gt;true&lt;/PublishRepositoryUrl&gt;
+  &lt;EmbedUntrackedSources&gt;true&lt;/EmbedUntrackedSources&gt;
+
+  &lt;!-- NuGet Package Validation --&gt;
+  &lt;EnablePackageValidation&gt;true&lt;/EnablePackageValidation&gt;
+  &lt;PackageValidationBaselineVersion&gt;1.0.0&lt;/PackageValidationBaselineVersion&gt;
+&lt;/PropertyGroup&gt;
+
+&lt;!-- Include files in package --&gt;
+&lt;ItemGroup&gt;
+  &lt;None Include=&quot;..\..\README.md&quot; Pack=&quot;true&quot; PackagePath=&quot;\&quot; /&gt;
+  &lt;None Include=&quot;..\..\LICENSE&quot; Pack=&quot;true&quot; PackagePath=&quot;\&quot; /&gt;
+  &lt;None Include=&quot;..\..\docs\images\icon.png&quot; Pack=&quot;true&quot; PackagePath=&quot;\&quot; /&gt;
+&lt;/ItemGroup&gt;
+</code></pre>
+<h2 id="package-metadata">Package Metadata</h2>
+<h3 id="required-metadata">Required Metadata</h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PackageId</code></td>
+<td>Unique package identifier</td>
+<td>AdvancedConcepts.Core</td>
+</tr>
+<tr>
+<td><code>Version</code></td>
+<td>Package version (SemVer)</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>Authors</code></td>
+<td>Package authors</td>
+<td>Doğa Aydın</td>
+</tr>
+<tr>
+<td><code>Description</code></td>
+<td>Detailed description</td>
+<td>Enterprise-grade C# library...</td>
+</tr>
+</tbody>
+</table>
+<h3 id="recommended-metadata">Recommended Metadata</h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Title</code></td>
+<td>Display name</td>
+<td>Advanced C# Concepts - Core</td>
+</tr>
+<tr>
+<td><code>PackageTags</code></td>
+<td>Searchable tags</td>
+<td>csharp;design-patterns</td>
+</tr>
+<tr>
+<td><code>PackageProjectUrl</code></td>
+<td>Project homepage</td>
+<td><a href="https://github.com/user/repo">https://github.com/user/repo</a></td>
+</tr>
+<tr>
+<td><code>RepositoryUrl</code></td>
+<td>Source repository</td>
+<td><a href="https://github.com/user/repo">https://github.com/user/repo</a></td>
+</tr>
+<tr>
+<td><code>PackageLicenseExpression</code></td>
+<td>License (SPDX)</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td><code>PackageReadmeFile</code></td>
+<td>README file</td>
+<td>README.md</td>
+</tr>
+<tr>
+<td><code>PackageIcon</code></td>
+<td>Package icon</td>
+<td>icon.png</td>
+</tr>
+</tbody>
+</table>
+<h3 id="optional-metadata">Optional Metadata</h3>
+<pre><code class="lang-xml">&lt;PropertyGroup&gt;
+  &lt;!-- Additional Info --&gt;
+  &lt;PackageRequireLicenseAcceptance&gt;false&lt;/PackageRequireLicenseAcceptance&gt;
+  &lt;PackageReleaseNotes&gt;Bug fixes and performance improvements&lt;/PackageReleaseNotes&gt;
+  &lt;PackageOutputPath&gt;./nupkg&lt;/PackageOutputPath&gt;
+
+  &lt;!-- Development Dependency --&gt;
+  &lt;DevelopmentDependency&gt;false&lt;/DevelopmentDependency&gt;
+
+  &lt;!-- Service Index (for multi-package solutions) --&gt;
+  &lt;PackageType&gt;Dependency&lt;/PackageType&gt;
+&lt;/PropertyGroup&gt;
+</code></pre>
+<h2 id="multi-targeting">Multi-Targeting</h2>
+<h3 id="target-multiple-frameworks">Target Multiple Frameworks</h3>
+<pre><code class="lang-xml">&lt;PropertyGroup&gt;
+  &lt;!-- Multiple targets --&gt;
+  &lt;TargetFrameworks&gt;net6.0;net7.0;net8.0&lt;/TargetFrameworks&gt;
+
+  &lt;!-- OR target .NET Standard for broader compatibility --&gt;
+  &lt;TargetFrameworks&gt;netstandard2.0;netstandard2.1;net8.0&lt;/TargetFrameworks&gt;
+&lt;/PropertyGroup&gt;
+
+&lt;!-- Conditional compilation --&gt;
+&lt;PropertyGroup Condition=&quot;'$(TargetFramework)' == 'net8.0'&quot;&gt;
+  &lt;DefineConstants&gt;$(DefineConstants);NET8_0_OR_GREATER&lt;/DefineConstants&gt;
+&lt;/PropertyGroup&gt;
+
+&lt;!-- Framework-specific dependencies --&gt;
+&lt;ItemGroup Condition=&quot;'$(TargetFramework)' == 'netstandard2.0'&quot;&gt;
+  &lt;PackageReference Include=&quot;System.Text.Json&quot; Version=&quot;8.0.0&quot; /&gt;
+&lt;/ItemGroup&gt;
+
+&lt;ItemGroup Condition=&quot;'$(TargetFramework)' == 'net8.0'&quot;&gt;
+  &lt;!-- .NET 8 has built-in System.Text.Json --&gt;
+&lt;/ItemGroup&gt;
+</code></pre>
+<h3 id="conditional-code">Conditional Code</h3>
+<pre><code class="lang-csharp">#if NET8_0_OR_GREATER
+    // Use .NET 8 specific features
+    public async IAsyncEnumerable&lt;int&gt; GetNumbersAsync()
+    {
+        await foreach (var number in GenerateAsync())
+        {
+            yield return number;
+        }
+    }
+#else
+    // Fallback for older frameworks
+    public async Task&lt;IEnumerable&lt;int&gt;&gt; GetNumbersAsync()
+    {
+        var results = new List&lt;int&gt;();
+        await foreach (var number in GenerateAsync())
+        {
+            results.Add(number);
+        }
+        return results;
+    }
+#endif
+</code></pre>
+<h2 id="symbol-packages">Symbol Packages</h2>
+<h3 id="configuration">Configuration</h3>
+<pre><code class="lang-xml">&lt;PropertyGroup&gt;
+  &lt;!-- Generate symbol package (.snupkg) --&gt;
+  &lt;IncludeSymbols&gt;true&lt;/IncludeSymbols&gt;
+  &lt;SymbolPackageFormat&gt;snupkg&lt;/SymbolPackageFormat&gt;
+
+  &lt;!-- Debug Information --&gt;
+  &lt;DebugType&gt;portable&lt;/DebugType&gt;
+  &lt;DebugSymbols&gt;true&lt;/DebugSymbols&gt;
+
+  &lt;!-- Embed PDB in DLL (alternative) --&gt;
+  &lt;!-- &lt;DebugType&gt;embedded&lt;/DebugType&gt; --&gt;
+&lt;/PropertyGroup&gt;
+</code></pre>
+<h3 id="symbol-package-types">Symbol Package Types</h3>
+<p><strong>Portable PDB (Recommended):</strong></p>
+<pre><code class="lang-xml">&lt;DebugType&gt;portable&lt;/DebugType&gt;
+&lt;!-- Generates .pdb file compatible with all platforms --&gt;
+</code></pre>
+<p><strong>Embedded PDB:</strong></p>
+<pre><code class="lang-xml">&lt;DebugType&gt;embedded&lt;/DebugType&gt;
+&lt;!-- Embeds PDB inside DLL, no separate .snupkg needed --&gt;
+</code></pre>
+<p><strong>Full PDB (Windows only):</strong></p>
+<pre><code class="lang-xml">&lt;DebugType&gt;full&lt;/DebugType&gt;
+&lt;!-- Legacy Windows format, not recommended --&gt;
+</code></pre>
+<h2 id="source-link">Source Link</h2>
+<h3 id="installation">Installation</h3>
+<pre><code class="lang-xml">&lt;ItemGroup&gt;
+  &lt;!-- Source Link for GitHub --&gt;
+  &lt;PackageReference Include=&quot;Microsoft.SourceLink.GitHub&quot; Version=&quot;8.0.0&quot; PrivateAssets=&quot;All&quot; /&gt;
+
+  &lt;!-- OR for GitLab --&gt;
+  &lt;!-- &lt;PackageReference Include=&quot;Microsoft.SourceLink.GitLab&quot; Version=&quot;8.0.0&quot; PrivateAssets=&quot;All&quot; /&gt; --&gt;
+
+  &lt;!-- OR for Azure DevOps --&gt;
+  &lt;!-- &lt;PackageReference Include=&quot;Microsoft.SourceLink.AzureRepos.Git&quot; Version=&quot;8.0.0&quot; PrivateAssets=&quot;All&quot; /&gt; --&gt;
+
+  &lt;!-- OR for Bitbucket --&gt;
+  &lt;!-- &lt;PackageReference Include=&quot;Microsoft.SourceLink.Bitbucket.Git&quot; Version=&quot;8.0.0&quot; PrivateAssets=&quot;All&quot; /&gt; --&gt;
+&lt;/ItemGroup&gt;
+
+&lt;PropertyGroup&gt;
+  &lt;!-- Enable Source Link --&gt;
+  &lt;PublishRepositoryUrl&gt;true&lt;/PublishRepositoryUrl&gt;
+
+  &lt;!-- Include untracked sources (build-generated files) --&gt;
+  &lt;EmbedUntrackedSources&gt;true&lt;/EmbedUntrackedSources&gt;
+
+  &lt;!-- Continuous Integration Build (for determinism) --&gt;
+  &lt;ContinuousIntegrationBuild Condition=&quot;'$(CI)' == 'true'&quot;&gt;true&lt;/ContinuousIntegrationBuild&gt;
+&lt;/PropertyGroup&gt;
+</code></pre>
+<h3 id="verification">Verification</h3>
+<pre><code class="lang-bash"># Install Source Link test tool
+dotnet tool install --global sourcelink
+
+# Test Source Link in package
+sourcelink test AdvancedConcepts.Core.1.0.0.nupkg
+
+# Expected output:
+# sourcelink test passed: AdvancedConcepts.Core.dll
+</code></pre>
+<h2 id="package-validation">Package Validation</h2>
+<h3 id="enable-package-validation">Enable Package Validation</h3>
+<pre><code class="lang-xml">&lt;PropertyGroup&gt;
+  &lt;!-- Enable package validation --&gt;
+  &lt;EnablePackageValidation&gt;true&lt;/EnablePackageValidation&gt;
+
+  &lt;!-- Baseline version for breaking change detection --&gt;
+  &lt;PackageValidationBaselineVersion&gt;1.0.0&lt;/PackageValidationBaselineVersion&gt;
+
+  &lt;!-- Strict mode (recommended) --&gt;
+  &lt;EnableStrictModeForCompatibleTfms&gt;true&lt;/EnableStrictModeForCompatibleTfms&gt;
+  &lt;EnableStrictModeForCompatibleFrameworksInPackage&gt;true&lt;/EnableStrictModeForCompatibleFrameworksInPackage&gt;
+
+  &lt;!-- Generate compatibility suppression file --&gt;
+  &lt;GenerateCompatibilitySuppressionFile&gt;true&lt;/GenerateCompatibilitySuppressionFile&gt;
+&lt;/PropertyGroup&gt;
+
+&lt;ItemGroup&gt;
+  &lt;!-- Package validation package --&gt;
+  &lt;PackageReference Include=&quot;Microsoft.DotNet.PackageValidation&quot; Version=&quot;8.0.0&quot; PrivateAssets=&quot;All&quot; /&gt;
+&lt;/ItemGroup&gt;
+</code></pre>
+<h3 id="running-validation">Running Validation</h3>
+<pre><code class="lang-bash"># Pack with validation
+dotnet pack --configuration Release
+
+# Validation runs automatically and reports:
+# - Breaking changes (compared to baseline)
+# - Missing XML documentation
+# - Missing target frameworks
+# - Assembly compatibility issues
+</code></pre>
+<h3 id="suppression-file">Suppression File</h3>
+<p>If you have intentional breaking changes:</p>
+<pre><code class="lang-xml">&lt;!-- CompatibilitySuppressions.xml --&gt;
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;Suppressions xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+  &lt;Suppression&gt;
+    &lt;DiagnosticId&gt;CP0002&lt;/DiagnosticId&gt;
+    &lt;Target&gt;M:AdvancedConcepts.Core.UserService.DeleteUser(System.Int32)&lt;/Target&gt;
+    &lt;Left&gt;lib/net6.0/AdvancedConcepts.Core.dll&lt;/Left&gt;
+    &lt;Right&gt;lib/net8.0/AdvancedConcepts.Core.dll&lt;/Right&gt;
+    &lt;Justification&gt;Method removed as part of v2.0 redesign&lt;/Justification&gt;
+  &lt;/Suppression&gt;
+&lt;/Suppressions&gt;
+</code></pre>
+<h2 id="publishing-to-nugetorg">Publishing to NuGet.org</h2>
+<h3 id="create-api-key">Create API Key</h3>
+<ol>
+<li>Go to <a href="https://www.nuget.org/">https://www.nuget.org/</a></li>
+<li>Sign in or create account</li>
+<li>Go to &quot;API Keys&quot; section</li>
+<li>Create new API key with push permissions</li>
+<li>Store securely (add to GitHub Secrets)</li>
+</ol>
+<h3 id="manual-publishing">Manual Publishing</h3>
+<pre><code class="lang-bash"># Pack the project
+dotnet pack --configuration Release
+
+# Push to NuGet.org
+dotnet nuget push bin/Release/AdvancedConcepts.Core.1.0.0.nupkg \
+  --api-key YOUR_API_KEY \
+  --source https://api.nuget.org/v3/index.json
+
+# Push symbol package
+dotnet nuget push bin/Release/AdvancedConcepts.Core.1.0.0.snupkg \
+  --api-key YOUR_API_KEY \
+  --source https://api.nuget.org/v3/index.json
+</code></pre>
+<h3 id="automated-publishing-github-actions">Automated Publishing (GitHub Actions)</h3>
+<pre><code class="lang-yaml"># .github/workflows/publish-nuget.yml
+name: Publish to NuGet
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Pack
+        run: dotnet pack --configuration Release --no-build --output ./nupkg
+
+      - name: Push to NuGet
+        run: dotnet nuget push ./nupkg/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+
+      - name: Push Symbols
+        run: dotnet nuget push ./nupkg/*.snupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+</code></pre>
+<h3 id="nugetorg-best-practices">NuGet.org Best Practices</h3>
+<ul>
+<li>✅ Use meaningful package ID (namespace-based)</li>
+<li>✅ Follow semantic versioning</li>
+<li>✅ Include comprehensive description</li>
+<li>✅ Add relevant tags (max 20)</li>
+<li>✅ Include README and icon</li>
+<li>✅ Publish symbol packages</li>
+<li>✅ Enable Source Link</li>
+<li>✅ Respond to package issues</li>
+</ul>
+<h2 id="publishing-to-github-packages">Publishing to GitHub Packages</h2>
+<h3 id="configuration-1">Configuration</h3>
+<pre><code class="lang-bash"># Add GitHub Packages as source
+dotnet nuget add source --username YOUR_GITHUB_USERNAME --password YOUR_GITHUB_TOKEN --store-password-in-clear-text --name github &quot;https://nuget.pkg.github.com/YOUR_GITHUB_USERNAME/index.json&quot;
+</code></pre>
+<h3 id="manual-publishing-1">Manual Publishing</h3>
+<pre><code class="lang-bash"># Pack the project
+dotnet pack --configuration Release
+
+# Push to GitHub Packages
+dotnet nuget push bin/Release/AdvancedConcepts.Core.1.0.0.nupkg \
+  --api-key YOUR_GITHUB_TOKEN \
+  --source &quot;github&quot;
+</code></pre>
+<h3 id="automated-publishing-github-actions-1">Automated Publishing (GitHub Actions)</h3>
+<pre><code class="lang-yaml"># .github/workflows/publish-github.yml
+name: Publish to GitHub Packages
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Pack
+        run: dotnet pack --configuration Release --output ./nupkg
+
+      - name: Push to GitHub Packages
+        run: dotnet nuget push ./nupkg/*.nupkg --api-key ${{ secrets.GITHUB_TOKEN }} --source &quot;https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json&quot; --skip-duplicate
+</code></pre>
+<h3 id="consuming-github-packages">Consuming GitHub Packages</h3>
+<pre><code class="lang-xml">&lt;!-- nuget.config --&gt;
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;configuration&gt;
+  &lt;packageSources&gt;
+    &lt;add key=&quot;nuget.org&quot; value=&quot;https://api.nuget.org/v3/index.json&quot; /&gt;
+    &lt;add key=&quot;github&quot; value=&quot;https://nuget.pkg.github.com/YOUR_USERNAME/index.json&quot; /&gt;
+  &lt;/packageSources&gt;
+  &lt;packageSourceCredentials&gt;
+    &lt;github&gt;
+      &lt;add key=&quot;Username&quot; value=&quot;YOUR_USERNAME&quot; /&gt;
+      &lt;add key=&quot;ClearTextPassword&quot; value=&quot;YOUR_GITHUB_TOKEN&quot; /&gt;
+    &lt;/github&gt;
+  &lt;/packageSourceCredentials&gt;
+&lt;/configuration&gt;
+</code></pre>
+<h2 id="package-icons-and-readme">Package Icons and README</h2>
+<h3 id="package-icon">Package Icon</h3>
+<pre><code class="lang-xml">&lt;PropertyGroup&gt;
+  &lt;PackageIcon&gt;icon.png&lt;/PackageIcon&gt;
+&lt;/PropertyGroup&gt;
+
+&lt;ItemGroup&gt;
+  &lt;None Include=&quot;../../docs/images/icon.png&quot; Pack=&quot;true&quot; PackagePath=&quot;\&quot; /&gt;
+&lt;/ItemGroup&gt;
+</code></pre>
+<p><strong>Icon Requirements:</strong></p>
+<ul>
+<li>Format: PNG</li>
+<li>Size: 128x128 pixels (recommended)</li>
+<li>Max: 1 MB</li>
+<li>Transparent background recommended</li>
+</ul>
+<h3 id="package-readme">Package README</h3>
+<pre><code class="lang-xml">&lt;PropertyGroup&gt;
+  &lt;PackageReadmeFile&gt;README.md&lt;/PackageReadmeFile&gt;
+&lt;/PropertyGroup&gt;
+
+&lt;ItemGroup&gt;
+  &lt;None Include=&quot;../../README.md&quot; Pack=&quot;true&quot; PackagePath=&quot;\&quot; /&gt;
+&lt;/ItemGroup&gt;
+</code></pre>
+<p><strong>README Best Practices:</strong></p>
+<ul>
+<li>Clear description</li>
+<li>Installation instructions</li>
+<li>Quick start example</li>
+<li>Link to full documentation</li>
+<li>Keep it concise (&lt;500 lines)</li>
+</ul>
+<h3 id="example-package-readme">Example Package README</h3>
+<pre><code class="lang-markdown"># Advanced C# Concepts - Core Library
+
+Enterprise-grade C# library demonstrating advanced concepts and design patterns.
+
+## Installation
+
+```bash
+dotnet add package AdvancedConcepts.Core
+</code></pre>
+<h2 id="quick-start">Quick Start</h2>
+<pre><code class="lang-csharp">using AdvancedConcepts.Core;
+
+var service = new UserService();
+var result = await service.ProcessUserAsync(userId);
+</code></pre>
+<h2 id="features">Features</h2>
+<ul>
+<li>✅ SOLID Principles</li>
+<li>✅ Design Patterns</li>
+<li>✅ Performance Optimization</li>
+<li>✅ Production Ready</li>
+</ul>
+<h2 id="documentation">Documentation</h2>
+<p>Full documentation: <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises">https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises</a></p>
+<h2 id="license">License</h2>
+<p>MIT License - see <a href="LICENSE">LICENSE</a></p>
+<pre><code>
+## Best Practices
+
+### 1. Package Design
+
+- ✅ Single responsibility per package
+- ✅ Minimal dependencies
+- ✅ Follow semantic versioning strictly
+- ✅ Support multiple target frameworks when appropriate
+- ✅ Keep package size small (&lt;5 MB ideal)
+
+### 2. Metadata
+
+- ✅ Provide comprehensive description
+- ✅ Use relevant, searchable tags
+- ✅ Include project URL and repository URL
+- ✅ Specify license clearly
+- ✅ Add package icon and README
+
+### 3. Versioning
+
+- ✅ Never delete published packages
+- ✅ Use pre-release versions for testing (1.0.0-beta.1)
+- ✅ Test packages before publishing
+- ✅ Maintain backwards compatibility
+- ✅ Document breaking changes
+
+### 4. Documentation
+
+- ✅ Include XML documentation for public APIs
+- ✅ Provide code examples
+- ✅ Link to detailed documentation
+- ✅ Update release notes
+- ✅ Maintain CHANGELOG.md
+
+### 5. Quality
+
+- ✅ Enable package validation
+- ✅ Include symbol packages
+- ✅ Enable Source Link
+- ✅ Sign packages (optional)
+- ✅ Run security scans
+
+### 6. Publishing
+
+- ✅ Automate publishing via CI/CD
+- ✅ Publish to multiple registries (NuGet.org, GitHub)
+- ✅ Test in clean environment before publishing
+- ✅ Monitor package download stats
+- ✅ Respond to issues and feedback
+
+## Package Lifecycle
+
+```mermaid
+graph LR
+    A[Development] --&gt; B[Pack]
+    B --&gt; C[Validate]
+    C --&gt; D{Valid?}
+    D --&gt;|No| A
+    D --&gt;|Yes| E[Test Locally]
+    E --&gt; F[Publish to GitHub Packages]
+    F --&gt; G[Test from Package]
+    G --&gt; H{Ready?}
+    H --&gt;|No| A
+    H --&gt;|Yes| I[Publish to NuGet.org]
+    I --&gt; J[Monitor &amp; Support]
+    J --&gt; K[Next Version]
+    K --&gt; A
+</code></pre>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<h3 id="common-issues">Common Issues</h3>
+<p><strong>Issue: &quot;Package already exists&quot;</strong></p>
+<pre><code class="lang-bash"># Solution: Use --skip-duplicate flag
+dotnet nuget push package.nupkg --skip-duplicate
+</code></pre>
+<p><strong>Issue: &quot;Unable to load the service index&quot;</strong></p>
+<pre><code class="lang-bash"># Solution: Check source URL and authentication
+dotnet nuget list source
+</code></pre>
+<p><strong>Issue: &quot;Package validation failed&quot;</strong></p>
+<pre><code class="lang-bash"># Solution: Review breaking changes and add suppressions
+dotnet pack --configuration Release /p:GenerateCompatibilitySuppressionFile=true
+</code></pre>
+<p><strong>Issue: &quot;Source Link test failed&quot;</strong></p>
+<pre><code class="lang-bash"># Solution: Ensure ContinuousIntegrationBuild is set
+dotnet pack /p:ContinuousIntegrationBuild=true
+</code></pre>
+<h2 id="commands-reference">Commands Reference</h2>
+<pre><code class="lang-bash"># Pack project
+dotnet pack
+
+# Pack with specific configuration
+dotnet pack --configuration Release --output ./nupkg
+
+# Push to NuGet.org
+dotnet nuget push package.nupkg --source nuget.org --api-key KEY
+
+# List NuGet sources
+dotnet nuget list source
+
+# Add source
+dotnet nuget add source URL --name NAME
+
+# Remove source
+dotnet nuget remove source NAME
+
+# Delete package (NuGet.org - deprecation only)
+dotnet nuget delete PACKAGE_ID VERSION --source nuget.org --api-key KEY
+
+# Verify package contents
+dotnet nuget verify package.nupkg
+</code></pre>
+<h2 id="resources">Resources</h2>
+<ul>
+<li><a href="https://docs.microsoft.com/nuget/">NuGet Documentation</a></li>
+<li><a href="https://docs.microsoft.com/nuget/create-packages/">Creating NuGet Packages</a></li>
+<li><a href="https://devblogs.microsoft.com/dotnet/package-validation/">Package Validation</a></li>
+<li><a href="https://github.com/dotnet/sourcelink">Source Link</a></li>
+<li><a href="https://docs.microsoft.com/nuget/create-packages/package-authoring-best-practices">NuGet Best Practices</a></li>
+</ul>
+<hr>
+<p><strong>Last Updated:</strong> 2025-12-01
+<strong>Version:</strong> 1.0</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/guides/NUGET_PACKAGING.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

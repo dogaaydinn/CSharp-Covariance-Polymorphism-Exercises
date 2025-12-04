@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Path 2 - Months 3-4 Capstone: E-Commerce Domain Layer with CQRS | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Path 2 - Months 3-4 Capstone: E-Commerce Domain Layer with CQRS | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../../favicon.ico">
+      <link rel="stylesheet" href="../../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/project-templates/path2/month3-4-ecommerce-domain-layer.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../../index.html">
+            <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="path-2---months-3-4-capstone-e-commerce-domain-layer-with-cqrs">Path 2 - Months 3-4 Capstone: E-Commerce Domain Layer with CQRS</h1>
+
+<p><strong>Difficulty</strong>: ⭐⭐⭐⭐☆ (Advanced)
+<strong>Estimated Time</strong>: 50-60 hours
+<strong>Prerequisites</strong>: Months 1-2 of Path 2 completed</p>
+<hr>
+<h2 id="-project-overview">🎯 Project Overview</h2>
+<p>Implement a complete e-commerce domain layer using Domain-Driven Design (DDD), CQRS pattern, Event Sourcing, MediatR, and Clean Architecture.</p>
+<h3 id="learning-objectives">Learning Objectives</h3>
+<ul>
+<li>✅ Domain-Driven Design principles</li>
+<li>✅ CQRS (Command Query Responsibility Segregation)</li>
+<li>✅ Event Sourcing basics</li>
+<li>✅ MediatR for command/query handling</li>
+<li>✅ Repository and Unit of Work patterns</li>
+<li>✅ Clean Architecture layers</li>
+</ul>
+<hr>
+<h2 id="-requirements">📋 Requirements</h2>
+<h3 id="domain-model">Domain Model</h3>
+<p><strong>Aggregates</strong>:</p>
+<ol>
+<li><p><strong>Order</strong> (root)</p>
+<ul>
+<li>OrderId, CustomerId, OrderDate, Status, TotalAmount</li>
+<li>OrderItems (value objects)</li>
+<li>Domain events: OrderPlaced, OrderShipped, OrderCancelled</li>
+</ul>
+</li>
+<li><p><strong>Customer</strong> (root)</p>
+<ul>
+<li>CustomerId, Name, Email, LoyaltyPoints</li>
+<li>ShippingAddresses (value objects)</li>
+<li>Domain events: CustomerRegistered, AddressAdded</li>
+</ul>
+</li>
+<li><p><strong>Product</strong> (root)</p>
+<ul>
+<li>ProductId, Name, Price, StockQuantity</li>
+<li>Category (value object)</li>
+<li>Domain events: ProductCreated, StockUpdated</li>
+</ul>
+</li>
+</ol>
+<p><strong>Value Objects</strong>:</p>
+<ul>
+<li>Money (Amount, Currency)</li>
+<li>Address (Street, City, PostalCode, Country)</li>
+<li>OrderItem (ProductId, Quantity, UnitPrice)</li>
+</ul>
+<h3 id="cqrs-implementation">CQRS Implementation</h3>
+<p><strong>Commands</strong> (write operations):</p>
+<pre><code class="lang-csharp">// Place order
+public record PlaceOrderCommand(
+    Guid CustomerId,
+    List&lt;OrderItemDto&gt; Items,
+    AddressDto ShippingAddress
+) : IRequest&lt;Guid&gt;;
+
+// Update stock
+public record UpdateStockCommand(
+    Guid ProductId,
+    int Quantity
+) : IRequest&lt;bool&gt;;
+</code></pre>
+<p><strong>Queries</strong> (read operations):</p>
+<pre><code class="lang-csharp">// Get order details
+public record GetOrderByIdQuery(Guid OrderId) : IRequest&lt;OrderDto&gt;;
+
+// Get customer orders
+public record GetCustomerOrdersQuery(
+    Guid CustomerId,
+    int Page,
+    int PageSize
+) : IRequest&lt;PaginatedList&lt;OrderSummaryDto&gt;&gt;;
+</code></pre>
+<p><strong>Handlers</strong>:</p>
+<pre><code class="lang-csharp">public class PlaceOrderCommandHandler : IRequestHandler&lt;PlaceOrderCommand, Guid&gt;
+{
+    private readonly IOrderRepository _orderRepository;
+    private readonly IProductRepository _productRepository;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IDomainEventDispatcher _eventDispatcher;
+
+    public async Task&lt;Guid&gt; Handle(PlaceOrderCommand request, CancellationToken ct)
+    {
+        // 1. Validate customer exists
+        // 2. Validate products and stock
+        // 3. Create order aggregate
+        // 4. Deduct stock
+        // 5. Raise domain events
+        // 6. Save to repository
+        // 7. Commit unit of work
+
+        var order = Order.Create(request.CustomerId, request.Items);
+        await _orderRepository.AddAsync(order);
+
+        order.Place(); // Raises OrderPlaced event
+
+        await _unitOfWork.SaveChangesAsync(ct);
+        await _eventDispatcher.DispatchAsync(order.DomainEvents, ct);
+
+        return order.Id;
+    }
+}
+</code></pre>
+<h3 id="event-sourcing">Event Sourcing</h3>
+<pre><code class="lang-csharp">public abstract class EventSourcedAggregate
+{
+    private readonly List&lt;IDomainEvent&gt; _domainEvents = new();
+    public IReadOnlyList&lt;IDomainEvent&gt; DomainEvents =&gt; _domainEvents;
+
+    protected void RaiseEvent(IDomainEvent @event)
+    {
+        _domainEvents.Add(@event);
+        Apply(@event);
+    }
+
+    protected abstract void Apply(IDomainEvent @event);
+
+    public void ClearEvents() =&gt; _domainEvents.Clear();
+}
+
+public class Order : EventSourcedAggregate
+{
+    public Guid Id { get; private set; }
+    public OrderStatus Status { get; private set; }
+    private readonly List&lt;OrderItem&gt; _items = new();
+
+    protected override void Apply(IDomainEvent @event)
+    {
+        switch (@event)
+        {
+            case OrderPlacedEvent e:
+                Id = e.OrderId;
+                Status = OrderStatus.Placed;
+                break;
+            case OrderShippedEvent e:
+                Status = OrderStatus.Shipped;
+                break;
+            // ... more events
+        }
+    }
+
+    public void Place()
+    {
+        if (Status != OrderStatus.Draft)
+            throw new InvalidOperationException(&quot;Order already placed&quot;);
+
+        RaiseEvent(new OrderPlacedEvent(Id, DateTime.UtcNow));
+    }
+}
+</code></pre>
+<hr>
+<h2 id="-clean-architecture-structure">🏗️ Clean Architecture Structure</h2>
+<pre><code>ECommerce.Domain/            # Core domain logic
+├── Aggregates/
+│   ├── Order.cs
+│   ├── Customer.cs
+│   └── Product.cs
+├── ValueObjects/
+│   ├── Money.cs
+│   ├── Address.cs
+│   └── OrderItem.cs
+├── Events/
+│   ├── IDomainEvent.cs
+│   ├── OrderPlacedEvent.cs
+│   └── StockUpdatedEvent.cs
+├── Repositories/            # Interfaces only
+│   ├── IOrderRepository.cs
+│   └── IProductRepository.cs
+└── Exceptions/
+    └── DomainException.cs
+
+ECommerce.Application/       # Use cases (CQRS)
+├── Commands/
+│   ├── PlaceOrderCommand.cs
+│   └── UpdateStockCommand.cs
+├── Queries/
+│   ├── GetOrderByIdQuery.cs
+│   └── GetCustomerOrdersQuery.cs
+├── Handlers/
+│   ├── PlaceOrderCommandHandler.cs
+│   └── GetOrderByIdQueryHandler.cs
+├── DTOs/
+├── Validators/
+└── Services/
+    └── INotificationService.cs
+
+ECommerce.Infrastructure/    # Implementation
+├── Persistence/
+│   ├── ECommerceDbContext.cs
+│   ├── Repositories/
+│   │   ├── OrderRepository.cs
+│   │   └── ProductRepository.cs
+│   └── UnitOfWork.cs
+├── EventStore/
+│   └── InMemoryEventStore.cs
+└── Services/
+    └── EmailNotificationService.cs
+
+ECommerce.Api/               # Web API (thin layer)
+└── Controllers/
+    ├── OrdersController.cs
+    └── ProductsController.cs
+</code></pre>
+<hr>
+<h2 id="-milestones">🎯 Milestones</h2>
+<ol>
+<li><strong>Week 1-2</strong>: Domain model with aggregates and value objects</li>
+<li><strong>Week 3-4</strong>: CQRS commands and queries with MediatR</li>
+<li><strong>Week 5-6</strong>: Event sourcing implementation</li>
+<li><strong>Week 7-8</strong>: Clean architecture integration, testing</li>
+</ol>
+<hr>
+<h2 id="-evaluation">✅ Evaluation</h2>
+<table>
+<thead>
+<tr>
+<th>Criteria</th>
+<th>Weight</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Domain Model (DDD)</td>
+<td>25%</td>
+</tr>
+<tr>
+<td>CQRS Implementation</td>
+<td>25%</td>
+</tr>
+<tr>
+<td>Event Sourcing</td>
+<td>20%</td>
+</tr>
+<tr>
+<td>Clean Architecture</td>
+<td>15%</td>
+</tr>
+<tr>
+<td>Tests</td>
+<td>15%</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Pass</strong>: 75%</p>
+<hr>
+<h2 id="-resources">📚 Resources</h2>
+<ul>
+<li>DDD: &quot;Domain-Driven Design&quot; by Eric Evans</li>
+<li>CQRS: <a href="https://martinfowler.com/bliki/CQRS.html">https://martinfowler.com/bliki/CQRS.html</a></li>
+<li>MediatR: <a href="https://github.com/jbogard/MediatR">https://github.com/jbogard/MediatR</a></li>
+<li>Clean Architecture: <a href="https://github.com/jasontaylordev/CleanArchitecture">https://github.com/jasontaylordev/CleanArchitecture</a></li>
+</ul>
+<hr>
+<p><em>Template Version: 1.0</em></p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/project-templates/path2/month3-4-ecommerce-domain-layer.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

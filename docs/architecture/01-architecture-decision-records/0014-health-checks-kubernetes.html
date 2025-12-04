@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>ADR-0014: Health Checks for Kubernetes Readiness | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="ADR-0014: Health Checks for Kubernetes Readiness | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/01-architecture-decision-records/0014-health-checks-kubernetes.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="adr-0014-health-checks-for-kubernetes-readiness">ADR-0014: Health Checks for Kubernetes Readiness</h1>
+
+<p><strong>Status:</strong> Accepted
+<strong>Date:</strong> 2025-12-02
+<strong>Deciders:</strong> Architecture Team
+<strong>Technical Story:</strong> Production readiness and orchestration support</p>
+<h2 id="context">Context</h2>
+<p>Cloud platforms (Kubernetes, Azure Container Apps) need to know:</p>
+<ul>
+<li>Is service alive? (liveness)</li>
+<li>Is service ready to accept traffic? (readiness)</li>
+<li>What dependencies are healthy?</li>
+</ul>
+<p>Without health checks:</p>
+<ul>
+<li>Orchestrator routes traffic to failed instances</li>
+<li>No automatic restart on crash</li>
+<li>Cannot detect degraded state</li>
+</ul>
+<h2 id="decision">Decision</h2>
+<p>Implement Kubernetes-compatible <strong>health check endpoints</strong> in all services.</p>
+<p>Endpoints:</p>
+<ul>
+<li><code>/health</code> - Overall health (liveness + readiness)</li>
+<li><code>/alive</code> - Liveness probe (is process running?)</li>
+<li><code>/ready</code> - Readiness probe (can handle requests?)</li>
+</ul>
+<h2 id="consequences">Consequences</h2>
+<h3 id="positive">Positive</h3>
+<ul>
+<li><strong>Automatic Recovery</strong>: Kubernetes restarts failed pods</li>
+<li><strong>Zero-Downtime Deploys</strong>: No traffic to unready pods</li>
+<li><strong>Dependency Monitoring</strong>: Track database/cache health</li>
+<li><strong>Cloud-Native</strong>: Works with any orchestrator</li>
+<li><strong>Observability</strong>: Aspire Dashboard shows health status</li>
+</ul>
+<h3 id="negative">Negative</h3>
+<ul>
+<li><strong>Endpoint Overhead</strong>: Additional HTTP endpoints</li>
+<li><strong>Configuration</strong>: Must configure Kubernetes probes correctly</li>
+</ul>
+<h2 id="related-decisions">Related Decisions</h2>
+<ul>
+<li><a href="0013-servicedefaults-pattern.html">ADR-0013</a>: ServiceDefaults adds health checks</li>
+<li><a href="0002-using-dotnet-aspire.html">ADR-0002</a>: Aspire includes health check support</li>
+</ul>
+<h2 id="notes">Notes</h2>
+<p>Implementation:</p>
+<pre><code class="lang-csharp">builder.Services.AddHealthChecks()
+    .AddCheck(&quot;self&quot;, () =&gt; HealthCheckResult.Healthy(), [&quot;live&quot;])
+    .AddNpgsql(connectionString, tags: [&quot;ready&quot;])
+    .AddRedis(connectionString, tags: [&quot;ready&quot;]);
+
+app.MapHealthChecks(&quot;/health&quot;);
+app.MapHealthChecks(&quot;/alive&quot;, new() { Predicate = r =&gt; r.Tags.Contains(&quot;live&quot;) });
+app.MapHealthChecks(&quot;/ready&quot;, new() { Predicate = r =&gt; r.Tags.Contains(&quot;ready&quot;) });
+</code></pre>
+<p>Kubernetes configuration:</p>
+<pre><code class="lang-yaml">livenessProbe:
+  httpGet:
+    path: /alive
+    port: 8080
+  initialDelaySeconds: 5
+  periodSeconds: 10
+
+readinessProbe:
+  httpGet:
+    path: /ready
+    port: 8080
+  initialDelaySeconds: 10
+  periodSeconds: 5
+</code></pre>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/01-architecture-decision-records/0014-health-checks-kubernetes.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

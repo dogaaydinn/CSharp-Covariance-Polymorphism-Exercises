@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Month 3 Comprehensive Assessment - Generics &amp; Design Patterns | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Month 3 Comprehensive Assessment - Generics &amp; Design Patterns | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../../favicon.ico">
+      <link rel="stylesheet" href="../../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/assessment-tests/path1/month-03-assessment.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../../index.html">
+            <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="month-3-comprehensive-assessment---generics--design-patterns">Month 3 Comprehensive Assessment - Generics &amp; Design Patterns</h1>
+
+<p><strong>Month</strong>: 3 (Weeks 9-12) | <strong>Duration</strong>: 90 min | <strong>Pass</strong>: 80% (24/30) | <strong>Points</strong>: 30</p>
+<h2 id="section-1-multiple-choice-15-questions-05-pts-each--75-pts">Section 1: Multiple Choice (15 questions, 0.5 pts each = 7.5 pts)</h2>
+<ol>
+<li><p>What does the <code>out</code> keyword mean in <code>IEnumerable&lt;out T&gt;</code>?</p>
+<ul>
+<li>a) Output parameter | b) Covariance | c) Contravariance | d) Optional</li>
+</ul>
+</li>
+<li><p>Covariance allows:</p>
+<ul>
+<li>a) IEnumerable<dog> to IEnumerable<animal> | b) IEnumerable<animal> to IEnumerable<dog> | c) Both | d) Neither</dog></animal></animal></dog></li>
+</ul>
+</li>
+<li><p>What does the <code>in</code> keyword mean in <code>IComparer&lt;in T&gt;</code>?</p>
+<ul>
+<li>a) Input parameter | b) Covariance | c) Contravariance | d) Required</li>
+</ul>
+</li>
+<li><p>Contravariance allows:</p>
+<ul>
+<li>a) Action<dog> to Action<animal> | b) Action<animal> to Action<dog> | c) Both | d) Neither</dog></animal></animal></dog></li>
+</ul>
+</li>
+<li><p>Which constraint means &quot;must be reference type&quot;?</p>
+<ul>
+<li>a) where T : struct | b) where T : class | c) where T : new() | d) where T : object</li>
+</ul>
+</li>
+<li><p><code>where T : new()</code> constraint requires:</p>
+<ul>
+<li>a) Any constructor | b) Parameterless constructor | c) Static constructor | d) Private constructor</li>
+</ul>
+</li>
+<li><p>Can you combine multiple constraints?</p>
+<ul>
+<li>a) No | b) Yes, with comma | c) Yes, with AND | d) Only two max</li>
+</ul>
+</li>
+<li><p>Builder pattern primary benefit:</p>
+<ul>
+<li>a) Performance | b) Readability for complex objects | c) Thread safety | d) Immutability</li>
+</ul>
+</li>
+<li><p>Fluent interface means:</p>
+<ul>
+<li>a) Fast execution | b) Method chaining returning <code>this</code> | c) Async methods | d) Interface inheritance</li>
+</ul>
+</li>
+<li><p>Observer pattern implements:</p>
+<ul>
+<li>a) One-to-one | b) One-to-many | c) Many-to-many | d) Many-to-one</li>
+</ul>
+</li>
+<li><p>IObservable<t> represents:</t></p>
+<ul>
+<li>a) Observer | b) Subject/Publisher | c) Subscription | d) Event</li>
+</ul>
+</li>
+<li><p>IObserver<t> has which methods?</t></p>
+<ul>
+<li>a) OnNext, OnError, OnCompleted | b) Subscribe, Unsubscribe | c) Notify, Update | d) Publish, Subscribe</li>
+</ul>
+</li>
+<li><p>Why is <code>List&lt;T&gt;</code> invariant?</p>
+<ul>
+<li>a) Performance | b) Safety (read and write) | c) Legacy | d) No reason</li>
+</ul>
+</li>
+<li><p>Can you have <code>IEnumerable&lt;out T&gt;</code> and still write to it?</p>
+<ul>
+<li>a) Yes | b) No, covariance only allows reading | c) Only if T is class | d) Depends</li>
+</ul>
+</li>
+<li><p>Builder vs Factory pattern difference:</p>
+<ul>
+<li>a) No difference | b) Builder for complex multi-step, Factory for simple creation | c) Factory is newer | d) Builder is faster</li>
+</ul>
+</li>
+</ol>
+<h2 id="section-2-short-answer-7-questions-2-pts-each--14-pts">Section 2: Short Answer (7 questions, 2 pts each = 14 pts)</h2>
+<ol start="16">
+<li><p>Explain covariance with a real example. Why is it safe for <code>IEnumerable&lt;T&gt;</code> but not <code>List&lt;T&gt;</code>?</p>
+</li>
+<li><p>Explain contravariance. Give example with <code>IComparer&lt;T&gt;</code> showing why <code>IComparer&lt;Animal&gt;</code> can compare cats.</p>
+</li>
+<li><p>What's the difference between these constraints?</p>
+</li>
+</ol>
+<pre><code class="lang-csharp">where T : class
+where T : struct
+where T : new()
+where T : IComparable&lt;T&gt;
+where T : U
+</code></pre>
+<ol start="19">
+<li><p>Design a Builder pattern for creating complex email messages. What methods would your fluent interface have?</p>
+</li>
+<li><p>Explain the Observer pattern. What problem does it solve? How does it differ from C# events?</p>
+</li>
+<li><p>When would you use <code>IEnumerable&lt;out T&gt;</code> covariance in a repository pattern?</p>
+</li>
+<li><p>Explain the difference between variance in delegates vs interfaces. Give examples.</p>
+</li>
+</ol>
+<h2 id="section-3-code-implementation-4-questions-2-pts-each--8-pts">Section 3: Code Implementation (4 questions, 2 pts each = 8 pts)</h2>
+<ol start="23">
+<li>Implement a generic <code>Repository&lt;T&gt;</code> with proper constraints:</li>
+</ol>
+<pre><code class="lang-csharp">// Requirements:
+// - T must be a reference type
+// - T must have parameterless constructor
+// - T must implement IEntity interface (Id property)
+// - Methods: Add(T), GetById(int), GetAll()
+</code></pre>
+<ol start="24">
+<li>Create a covariant interface for a data producer:</li>
+</ol>
+<pre><code class="lang-csharp">// Create IProducer&lt;out T&gt; interface with GetNext() method
+// Show that IProducer&lt;Dog&gt; can be assigned to IProducer&lt;Animal&gt;
+// Demonstrate with concrete implementation
+</code></pre>
+<ol start="25">
+<li>Implement Builder pattern for QueryBuilder:</li>
+</ol>
+<pre><code class="lang-csharp">// Requirements:
+// - Fluent interface: Select(), From(), Where(), OrderBy()
+// - Build() method returns SQL string
+// - Example: query.Select(&quot;*&quot;).From(&quot;Users&quot;).Where(&quot;Age &gt; 18&quot;).Build()
+</code></pre>
+<ol start="26">
+<li>Implement basic Observer pattern:</li>
+</ol>
+<pre><code class="lang-csharp">// Requirements:
+// - TemperatureSensor (observable)
+// - TemperatureDisplay (observer)
+// - Attach/Detach observers
+// - Notify all observers when temperature changes
+// Don't use IObservable&lt;T&gt;, implement from scratch
+</code></pre>
+<h2 id="answer-key">Answer Key</h2>
+<p><strong>MC</strong>: 1.b | 2.a | 3.c | 4.b | 5.b | 6.b | 7.b | 8.b | 9.b | 10.b | 11.b | 12.a | 13.b | 14.b | 15.b</p>
+<h3 id="short-answer">Short Answer</h3>
+<p><strong>16. Covariance</strong> (2 pts):</p>
+<ul>
+<li>Covariance: More derived type can be used where less derived is expected</li>
+<li>Example: <code>IEnumerable&lt;Dog&gt; dogs = ...; IEnumerable&lt;Animal&gt; animals = dogs;</code> ✅ Safe</li>
+<li>Safe for IEnumerable because it's read-only (only <code>out</code> T, never accepts T as input)</li>
+<li>Unsafe for List<t>: <code>List&lt;Dog&gt; dogs = new(); List&lt;Animal&gt; animals = dogs; animals.Add(new Cat());</code> ❌ Would break type safety</t></li>
+<li>Rule: Covariance safe when T only appears in output positions</li>
+</ul>
+<p><strong>17. Contravariance</strong> (2 pts):</p>
+<ul>
+<li>Contravariance: Less derived type can be used where more derived is expected (reverse direction)</li>
+<li>Example with IComparer<t>:</t></li>
+</ul>
+<pre><code class="lang-csharp">IComparer&lt;Animal&gt; animalComparer = new AnimalComparer(); // Compares by weight
+IComparer&lt;Cat&gt; catComparer = animalComparer; // ✅ Safe!
+// Why? animalComparer knows how to compare ANY animal, so it can compare cats
+catComparer.Compare(cat1, cat2); // Works fine, treats cats as animals
+</code></pre>
+<ul>
+<li>Safe because T only appears in input positions (consumed, not produced)</li>
+<li>Comparer that handles base type can handle derived type</li>
+</ul>
+<p><strong>18. Constraints</strong> (2 pts):</p>
+<ul>
+<li><code>where T : class</code> - T must be reference type (class, interface, delegate, array)</li>
+<li><code>where T : struct</code> - T must be value type (int, struct, enum) excluding Nullable<t></t></li>
+<li><code>where T : new()</code> - T must have public parameterless constructor (for instantiation)</li>
+<li><code>where T : IComparable&lt;T&gt;</code> - T must implement IComparable<t> interface</t></li>
+<li><code>where T : U</code> - T must be or derive from U (type parameter constraint)</li>
+</ul>
+<p><strong>19. Email Builder Design</strong> (2 pts):</p>
+<pre><code class="lang-csharp">public class EmailBuilder
+{
+    public EmailBuilder To(string recipient) { ... return this; }
+    public EmailBuilder From(string sender) { ... return this; }
+    public EmailBuilder Subject(string subject) { ... return this; }
+    public EmailBuilder Body(string body) { ... return this; }
+    public EmailBuilder Attach(string file) { ... return this; }
+    public EmailBuilder Cc(string recipient) { ... return this; }
+    public Email Build() { return new Email(...); }
+}
+
+// Usage
+var email = new EmailBuilder()
+    .From(&quot;me@example.com&quot;)
+    .To(&quot;you@example.com&quot;)
+    .Subject(&quot;Hello&quot;)
+    .Body(&quot;World&quot;)
+    .Build();
+</code></pre>
+<p><strong>20. Observer Pattern</strong> (2 pts):</p>
+<ul>
+<li><strong>Problem</strong>: Need to notify multiple objects when state changes without tight coupling</li>
+<li><strong>Solution</strong>: Subject maintains list of observers, notifies them automatically</li>
+<li><strong>vs C# events</strong>:
+<ul>
+<li>Observer: Formal pattern, IObservable<t>/IObserver<t>, subscription lifecycle</t></t></li>
+<li>Events: Language feature, simpler, delegate-based, no subscription object</li>
+<li>Observer: More control (dispose subscription), async support (Rx)</li>
+<li>Events: Less ceremony, better for simple scenarios</li>
+</ul>
+</li>
+</ul>
+<p><strong>21. Covariance in Repository</strong> (2 pts):</p>
+<pre><code class="lang-csharp">public interface IRepository&lt;out T&gt; where T : IEntity
+{
+    IEnumerable&lt;T&gt; GetAll(); // OK - T in output position
+    T GetById(int id);       // OK - T in output position
+    // void Add(T entity);   // ❌ NOT ALLOWED - T in input position
+}
+
+// Usage - covariance allows this
+IRepository&lt;Dog&gt; dogRepo = new DogRepository();
+IRepository&lt;Animal&gt; animalRepo = dogRepo; // ✅ Safe!
+IEnumerable&lt;Animal&gt; animals = animalRepo.GetAll(); // Returns dogs
+</code></pre>
+<p><strong>22. Variance in Delegates vs Interfaces</strong> (2 pts):</p>
+<ul>
+<li><strong>Delegates</strong>:</li>
+</ul>
+<pre><code class="lang-csharp">Func&lt;Dog&gt; dogFunc = () =&gt; new Dog();
+Func&lt;Animal&gt; animalFunc = dogFunc; // ✅ Covariance (return type)
+
+Action&lt;Animal&gt; animalAction = (a) =&gt; Console.WriteLine(a);
+Action&lt;Dog&gt; dogAction = animalAction; // ✅ Contravariance (parameter type)
+</code></pre>
+<ul>
+<li><strong>Interfaces</strong>:</li>
+</ul>
+<pre><code class="lang-csharp">IEnumerable&lt;Dog&gt; dogs = ...;
+IEnumerable&lt;Animal&gt; animals = dogs; // ✅ Covariance (out T)
+
+IComparer&lt;Animal&gt; animalComparer = ...;
+IComparer&lt;Dog&gt; dogComparer = animalComparer; // ✅ Contravariance (in T)
+</code></pre>
+<ul>
+<li>Both support variance, but interfaces require explicit <code>out</code>/<code>in</code> keywords</li>
+<li>Delegates have built-in variance rules for return/parameter types</li>
+</ul>
+<h3 id="code-implementation">Code Implementation</h3>
+<p><strong>23. Repository<t></t></strong> (2 pts):</p>
+<pre><code class="lang-csharp">public interface IEntity
+{
+    int Id { get; set; }
+}
+
+public class Repository&lt;T&gt; where T : class, IEntity, new()
+{
+    private readonly List&lt;T&gt; _storage = new();
+    private int _nextId = 1;
+
+    public void Add(T entity)
+    {
+        entity.Id = _nextId++;
+        _storage.Add(entity);
+    }
+
+    public T GetById(int id)
+    {
+        return _storage.FirstOrDefault(e =&gt; e.Id == id);
+    }
+
+    public IEnumerable&lt;T&gt; GetAll()
+    {
+        return _storage;
+    }
+}
+
+// Usage
+public class User : IEntity
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+}
+
+var repo = new Repository&lt;User&gt;();
+repo.Add(new User { Name = &quot;John&quot; });
+</code></pre>
+<p><strong>24. Covariant Producer</strong> (2 pts):</p>
+<pre><code class="lang-csharp">public interface IProducer&lt;out T&gt;
+{
+    T GetNext();
+    bool HasNext { get; }
+}
+
+public class Animal { }
+public class Dog : Animal { }
+
+public class DogProducer : IProducer&lt;Dog&gt;
+{
+    private readonly Queue&lt;Dog&gt; _dogs = new();
+
+    public DogProducer()
+    {
+        _dogs.Enqueue(new Dog());
+        _dogs.Enqueue(new Dog());
+    }
+
+    public Dog GetNext() =&gt; _dogs.Dequeue();
+    public bool HasNext =&gt; _dogs.Count &gt; 0;
+}
+
+// Demonstration of covariance
+IProducer&lt;Dog&gt; dogProducer = new DogProducer();
+IProducer&lt;Animal&gt; animalProducer = dogProducer; // ✅ Covariance!
+
+Animal animal = animalProducer.GetNext(); // Returns Dog as Animal
+</code></pre>
+<p><strong>25. Query Builder</strong> (2 pts):</p>
+<pre><code class="lang-csharp">public class QueryBuilder
+{
+    private string _select;
+    private string _from;
+    private string _where;
+    private string _orderBy;
+
+    public QueryBuilder Select(string columns)
+    {
+        _select = columns;
+        return this;
+    }
+
+    public QueryBuilder From(string table)
+    {
+        _from = table;
+        return this;
+    }
+
+    public QueryBuilder Where(string condition)
+    {
+        _where = condition;
+        return this;
+    }
+
+    public QueryBuilder OrderBy(string column)
+    {
+        _orderBy = column;
+        return this;
+    }
+
+    public string Build()
+    {
+        var query = $&quot;SELECT {_select} FROM {_from}&quot;;
+        if (!string.IsNullOrEmpty(_where))
+            query += $&quot; WHERE {_where}&quot;;
+        if (!string.IsNullOrEmpty(_orderBy))
+            query += $&quot; ORDER BY {_orderBy}&quot;;
+        return query;
+    }
+}
+
+// Usage
+var sql = new QueryBuilder()
+    .Select(&quot;Name, Age&quot;)
+    .From(&quot;Users&quot;)
+    .Where(&quot;Age &gt; 18&quot;)
+    .OrderBy(&quot;Name&quot;)
+    .Build();
+// Result: &quot;SELECT Name, Age FROM Users WHERE Age &gt; 18 ORDER BY Name&quot;
+</code></pre>
+<p><strong>26. Observer Pattern</strong> (2 pts):</p>
+<pre><code class="lang-csharp">// Observer interface
+public interface IObserver
+{
+    void Update(float temperature);
+}
+
+// Subject (Observable)
+public class TemperatureSensor
+{
+    private readonly List&lt;IObserver&gt; _observers = new();
+    private float _temperature;
+
+    public void Attach(IObserver observer)
+    {
+        _observers.Add(observer);
+    }
+
+    public void Detach(IObserver observer)
+    {
+        _observers.Remove(observer);
+    }
+
+    public float Temperature
+    {
+        get =&gt; _temperature;
+        set
+        {
+            _temperature = value;
+            Notify();
+        }
+    }
+
+    private void Notify()
+    {
+        foreach (var observer in _observers)
+        {
+            observer.Update(_temperature);
+        }
+    }
+}
+
+// Concrete Observer
+public class TemperatureDisplay : IObserver
+{
+    private readonly string _name;
+
+    public TemperatureDisplay(string name)
+    {
+        _name = name;
+    }
+
+    public void Update(float temperature)
+    {
+        Console.WriteLine($&quot;{_name}: Temperature is now {temperature}°C&quot;);
+    }
+}
+
+// Usage
+var sensor = new TemperatureSensor();
+var display1 = new TemperatureDisplay(&quot;Display 1&quot;);
+var display2 = new TemperatureDisplay(&quot;Display 2&quot;);
+
+sensor.Attach(display1);
+sensor.Attach(display2);
+
+sensor.Temperature = 25.5f; // Both displays notified
+sensor.Detach(display1);
+sensor.Temperature = 30.0f; // Only display2 notified
+</code></pre>
+<h2 id="grading-rubric">Grading Rubric</h2>
+<table>
+<thead>
+<tr>
+<th>Section</th>
+<th>Max Points</th>
+<th>Criteria</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Multiple Choice</td>
+<td>7.5</td>
+<td>0.5 per correct answer</td>
+</tr>
+<tr>
+<td>Short Answer (each)</td>
+<td>2 × 7 = 14</td>
+<td>Full: Complete answer. Partial: 1.0-1.5. Wrong: 0</td>
+</tr>
+<tr>
+<td>Code Implementation (each)</td>
+<td>2 × 4 = 8</td>
+<td>Full: Working code + constraints. Partial: 1.0-1.5. Wrong: 0</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>30</strong></td>
+<td><strong>Pass: 24 points (80%)</strong></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="study-resources">Study Resources</h2>
+<p><strong>Week 9 - Generic Covariance</strong>:</p>
+<ul>
+<li><code>samples/02-Intermediate/CovarianceContravariance/Covariance.cs</code></li>
+<li><code>samples/99-Exercises/Generics/01-Covariance/</code></li>
+</ul>
+<p><strong>Week 10 - Generic Contravariance</strong>:</p>
+<ul>
+<li><code>samples/99-Exercises/Generics/02-Contravariance/</code></li>
+</ul>
+<p><strong>Week 11 - Generic Constraints</strong>:</p>
+<ul>
+<li><code>samples/99-Exercises/Generics/03-GenericConstraints/</code></li>
+</ul>
+<p><strong>Week 12 - Builder Pattern</strong>:</p>
+<ul>
+<li><code>samples/03-Advanced/DesignPatterns/BuilderPattern.cs</code></li>
+<li><code>samples/99-Exercises/DesignPatterns/01-Builder/</code></li>
+</ul>
+<p><strong>Supplementary</strong>:</p>
+<ul>
+<li><code>samples/99-Exercises/DesignPatterns/02-Observer/</code></li>
+</ul>
+<hr>
+<h2 id="next-steps">Next Steps</h2>
+<p><strong>If you passed (≥24 pts)</strong>: Proceed to Month 4 (Algorithms &amp; Data Structures)</p>
+<p><strong>If you didn't pass (&lt;24 pts)</strong>: Review weak areas:</p>
+<ul>
+<li>Score 0-10: Review all Month 3 materials</li>
+<li>Score 11-18: Focus on variance and constraints</li>
+<li>Score 19-23: Practice Builder and Observer patterns</li>
+</ul>
+<hr>
+<p><em>Assessment Version: 1.0</em>
+<em>Last Updated: 2025-12-02</em></p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/assessment-tests/path1/month-03-assessment.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

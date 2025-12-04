@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>&#127919; NEREDEN BAŞLAMALI? - MERKEZI &#214;ĞRENME HARITASI | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="&#127919; NEREDEN BAŞLAMALI? - MERKEZI &#214;ĞRENME HARITASI | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/START_HERE.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="-nereden-başlamali---merkezi-öğrenme-haritasi">🎯 NEREDEN BAŞLAMALI? - MERKEZI ÖĞRENME HARITASI</h1>
+
+<p><strong>&quot;Bu repo'da kayboldum, nereden başlamalıyım?&quot;</strong> - İşte net cevabı.</p>
+<hr>
+<h2 id="-hızlı-başlangıç-5-dakika">📍 Hızlı Başlangıç (5 dakika)</h2>
+<h3 id="adım-1-seviyeni-belirle">Adım 1: Seviyeni Belirle</h3>
+<p><strong>Aşağıdaki sorulara cevap ver:</strong></p>
+<ul>
+<li>[ ] C# syntax'ını biliyor musun? (class, method, if/else)</li>
+<li>[ ] OOP'yi anlıyor musun? (inheritance, polymorphism)</li>
+<li>[ ] Design patterns'lerle çalıştın mı?</li>
+<li>[ ] Production'da mikroservis geliştirdin mi?</li>
+</ul>
+<p><strong>Sonuç:</strong></p>
+<ul>
+<li><strong>0 evet</strong> → YOL 1: Sıfırdan Junior (sayfa 10'a git)</li>
+<li><strong>1-2 evet</strong> → YOL 2: Junior'dan Mid-Level (sayfa 45'e git)</li>
+<li><strong>3 evet</strong> → YOL 3: Mid-Level'dan Senior (sayfa 95'e git)</li>
+<li><strong>Interview hazırlığı?</strong> → YOL 4: Mülakat Prep (sayfa 150'ye git)</li>
+</ul>
+<hr>
+<h3 id="adım-2-İlk-3-dosyayı-aç">Adım 2: İlk 3 Dosyayı Aç</h3>
+<p>Hangi yolu seçersen seç, ilk 3 dosya HER ZAMAN aynı:</p>
+<ol>
+<li><strong>Bu dosya</strong> - <code>docs/START_HERE.md</code> (şu an okuyorsun)</li>
+<li><strong>Senin yolun</strong> - <code>docs/LEARNING_PATHS.md</code> içinde ilgili bölüm</li>
+<li><strong>İlk sample</strong> - Yoluna göre değişir</li>
+</ol>
+<hr>
+<h3 id="adım-3-İlk-saatte-yapılacaklar">Adım 3: İlk Saatte Yapılacaklar</h3>
+<p><strong>Yol 1 (Başlangıç):</strong></p>
+<pre><code class="lang-bash">1. Aç: samples/01-Beginner/PolymorphismBasics/
+2. Oku: WHY_THIS_PATTERN.md
+3. Çalıştır: 01_SimplePolymorphism.cs
+4. Anla: Polymorphism nedir, neden önemli?
+Süre: ~60 dakika
+</code></pre>
+<p><strong>Yol 2 (Junior → Mid):</strong></p>
+<pre><code class="lang-bash">1. Aç: samples/03-Advanced/DesignPatterns/
+2. Oku: WHY_THIS_PATTERN.md
+3. Çalıştır: FactoryPattern.cs
+4. Uygula: Kendi projenizde Factory örneği bulun
+Süre: ~60 dakika
+</code></pre>
+<p><strong>Yol 3 (Mid → Senior):</strong></p>
+<pre><code class="lang-bash">1. Aç: samples/98-RealWorld-Problems/01-API-Rate-Limiting/
+2. Oku: PROBLEM.md
+3. Çöz: Kendi çözümünü yaz (bakmadan)
+4. Karşılaştır: SOLUTION-A.md ile karşılaştır
+Süre: ~90 dakika
+</code></pre>
+<p><strong>Yol 4 (Mülakat):</strong></p>
+<pre><code class="lang-bash">1. Aç: docs/code-reviews/01-Polymorphism-Review/
+2. Oku: bad-code.cs
+3. Düşün: Sen olsan nasıl review yapardın?
+4. Karşılaştır: review-comments.md ile karşılaştır
+Süre: ~45 dakika
+</code></pre>
+<hr>
+<h2 id="-4-ana-öğrenme-yolu">📚 4 ANA ÖĞRENME YOLU</h2>
+<table>
+<thead>
+<tr>
+<th>Yol</th>
+<th>Başlangıç</th>
+<th>Hedef</th>
+<th>Süre</th>
+<th>Hafta/Saat</th>
+<th>Ön Koşul</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><a href="#-yol-1-sifirdan-junior-developera">YOL 1</a></strong></td>
+<td>Hiç C# bilmiyorum</td>
+<td>Junior Developer</td>
+<td>3-6 ay</td>
+<td>10-15h</td>
+<td>Programlama temelleri</td>
+</tr>
+<tr>
+<td><strong><a href="#-yol-2-juniordan-mid-levela">YOL 2</a></strong></td>
+<td>Temel C# biliyorum</td>
+<td>Mid-Level</td>
+<td>6-9 ay</td>
+<td>8-12h</td>
+<td>Yol 1 VEYA eşdeğer</td>
+</tr>
+<tr>
+<td><strong><a href="#-yol-3-mid-leveldan-seniora">YOL 3</a></strong></td>
+<td>2-3 yıl deneyim</td>
+<td>Senior Developer</td>
+<td>9-12 ay</td>
+<td>6-10h</td>
+<td>Yol 2 VEYA eşdeğer</td>
+</tr>
+<tr>
+<td><strong><a href="#-yol-4-mulakata-hazirlik">YOL 4</a></strong></td>
+<td>Herhangi bir seviye</td>
+<td>Interview Ready</td>
+<td>1-2 ay</td>
+<td>15-20h (yoğun)</td>
+<td>İlgili yol tamamlanmış</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="-yol-1-sifirdan-junior-developera">🚀 YOL 1: SIFIRDAN JUNIOR DEVELOPER'A</h2>
+<p><strong>👤 Hedef Kitle:</strong></p>
+<ul>
+<li>Hiç C# bilmeyenler</li>
+<li>Başka dilden geçiş yapanlar (Python, Java, etc.)</li>
+<li>CS öğrencileri</li>
+</ul>
+<p><strong>📋 Ön Koşullar:</strong></p>
+<ul>
+<li>Programlama mantığını biliyorsun (değişken, döngü, fonksiyon)</li>
+<li>VS Code veya Visual Studio yüklü</li>
+<li>Git temelleri (commit, push)</li>
+</ul>
+<p><strong>⏱️ Süre:</strong> 3-6 ay (haftada 10-15 saat çalışma ile)</p>
+<p><strong>🎯 Çıktı:</strong></p>
+<ul>
+<li>Junior .NET Developer pozisyonuna başvurabilme</li>
+<li>Basit REST API'lar yazabilme</li>
+<li>CRUD uygulamaları geliştirebilme</li>
+<li>Junior-level teknik mülakata girebilme</li>
+</ul>
+<p><strong>💰 Hedef Maaş:</strong> $60,000-$80,000/yıl (ABD) veya ₺40,000-₺60,000/ay (Türkiye)</p>
+<hr>
+<h3 id="-hafta-hafta-detayli-plan-yol-1">📅 HAFTA HAFTA DETAYLI PLAN (Yol 1)</h3>
+<h4 id="hafta-1-c-temelleri-ve-İlk-polymorphism">HAFTA 1: C# Temelleri ve İlk Polymorphism</h4>
+<p><strong>🎯 Bu Hafta Ne Öğreneceksin:</strong></p>
+<ul>
+<li>C# syntax temellerini</li>
+<li>Virtual ve override kavramlarını</li>
+<li>İlk polymorphic kodunu yazacaksın</li>
+</ul>
+<p><strong>📖 Okuma Materyalleri (3 saat):</strong></p>
+<ol>
+<li><p><code>samples/01-Beginner/PolymorphismBasics/WHY_THIS_PATTERN.md</code></p>
+<ul>
+<li>Polymorphism nedir?</li>
+<li>Neden if/else zincirleri kötü?</li>
+<li>Gerçek dünya örnekleri</li>
+</ul>
+</li>
+<li><p><code>docs/code-reviews/01-Polymorphism-Review/bad-code.cs</code></p>
+<ul>
+<li>Kötü kodun nasıl göründüğünü gör</li>
+<li>Junior'ların yaptığı hataları öğren</li>
+</ul>
+</li>
+</ol>
+<p><strong>💻 Kod Örnekleri (4 saat):</strong></p>
+<ol>
+<li><p><code>samples/01-Beginner/PolymorphismBasics/01_SimplePolymorphism.cs</code></p>
+<ul>
+<li>Çalıştır, debug et, satır satır anla</li>
+<li><code>MakeSound()</code> metodunu nasıl override ediyor?</li>
+</ul>
+</li>
+<li><p><code>samples/01-Beginner/PolymorphismBasics/02_AbstractClasses.cs</code></p>
+<ul>
+<li>Abstract class nedir?</li>
+<li>Ne zaman kullanmalı?</li>
+</ul>
+</li>
+<li><p><code>samples/01-Beginner/PolymorphismBasics/03_InterfacePolymorphism.cs</code></p>
+<ul>
+<li>Interface vs abstract class farkı</li>
+<li>Hangi durumda hangisi?</li>
+</ul>
+</li>
+</ol>
+<p><strong>🧪 Alıştırmalar (5 saat):</strong></p>
+<ol>
+<li><p><strong>Alıştırma 1:</strong> <code>samples/99-Exercises/Polymorphism/01-ShapeCalculator/</code></p>
+<ul>
+<li>Görev: Circle, Rectangle, Triangle için <code>CalculateArea()</code> yaz</li>
+<li>Polymorphism kullanarak</li>
+<li>Test: <code>dotnet test</code> ile doğrula</li>
+</ul>
+</li>
+<li><p><strong>Alıştırma 2:</strong> <code>samples/99-Exercises/Polymorphism/02-VehicleSystem/</code></p>
+<ul>
+<li>Görev: Car, Motorcycle, Truck için <code>CalculateFuel()</code> yaz</li>
+<li>Abstract base class kullan</li>
+<li>Test: Tüm testler yeşil olmalı</li>
+</ul>
+</li>
+</ol>
+<p><strong>🎯 Mini Proje (3 saat):</strong></p>
+<pre><code>Proje: Hayvanat Bahçesi Yönetim Sistemi
+Dosya: YOL1_Hafta1_ZooProject/
+
+Gereksinimler:
+- Animal base class (abstract)
+- Dog, Cat, Bird, Fish child class'ları
+- Her hayvanın:
+  - MakeSound() metodu (polymorphic)
+  - Eat() metodu (polymorphic)
+  - Move() metodu (polymorphic)
+- Zoo class'ı:
+  - AddAnimal() metodu
+  - FeedAllAnimals() metodu (döngü ile tüm hayvanları besle)
+  - MakeAllSounds() metodu
+
+Hedef: if/else kullanmadan polymorphism ile çöz!
+</code></pre>
+<p><strong>✅ Hafta Sonu Başarı Ölçütleri:</strong></p>
+<ul>
+<li>[ ] Polymorphism'i kendi cümlelerinle açıklayabiliyorsun</li>
+<li>[ ] Virtual, override, abstract kavramlarını ayırt edebiliyorsun</li>
+<li>[ ] Zoo projesi çalışıyor ve testler geçiyor</li>
+<li>[ ] Kendi başına yeni hayvan ekleyebiliyorsun (örnek: Snake)</li>
+</ul>
+<p><strong>📊 Zorluk:</strong> ⭐⭐☆☆☆ (Orta)<br>
+<strong>📈 Tahmini İlerleme:</strong> %4 (24 haftanın 1'i)</p>
+<hr>
+<h4 id="hafta-2-upcasting-downcasting-ve-type-safety">HAFTA 2: Upcasting, Downcasting ve Type Safety</h4>
+<p><strong>🎯 Bu Hafta Ne Öğreneceksin:</strong></p>
+<ul>
+<li>Upcasting (güvenli, implicit)</li>
+<li>Downcasting (riskli, explicit)</li>
+<li><code>is</code>, <code>as</code> pattern matching</li>
+<li>InvalidCastException'dan kaçınma</li>
+</ul>
+<p><strong>📖 Okuma (2 saat):</strong></p>
+<ol>
+<li><code>samples/01-Beginner/CastingExamples/WHY_THIS_PATTERN.md</code></li>
+<li><code>samples/01-Beginner/Upcasting-Downcasting/</code> tüm dosyalar</li>
+</ol>
+<p><strong>💻 Kod Örnekleri (3 saat):</strong></p>
+<ol>
+<li><p><code>samples/01-Beginner/Upcast-Downcast/Vehicle.cs</code></p>
+<ul>
+<li>Upcast örneği: <code>Vehicle vehicle = new Car();</code></li>
+<li>Neden her zaman güvenli?</li>
+</ul>
+</li>
+<li><p><code>samples/01-Beginner/Upcast-Downcast/Car.cs</code></p>
+<ul>
+<li>Downcast örneği: <code>Car car = (Car)vehicle;</code></li>
+<li>Ne zaman InvalidCastException fırlatır?</li>
+</ul>
+</li>
+<li><p><code>samples/01-Beginner/CastingExamples/SafeCasting.cs</code></p>
+<ul>
+<li><code>is</code> kullanımı</li>
+<li><code>as</code> kullanımı</li>
+<li>Pattern matching (C# 7+)</li>
+</ul>
+</li>
+</ol>
+<p><strong>🧪 Alıştırmalar (6 saat):</strong></p>
+<ol>
+<li><p><strong>Exercise:</strong> <code>samples/99-Exercises/Casting/01-EmployeeSystem/</code></p>
+<ul>
+<li>Employee, Manager, Developer hierarchy</li>
+<li>Upcasting ile polymorphic collection</li>
+<li>Downcasting ile specific özellikler</li>
+</ul>
+</li>
+<li><p><strong>Exercise:</strong> <code>samples/99-Exercises/Casting/02-PaymentProcessor/</code></p>
+<ul>
+<li>IPaymentMethod interface</li>
+<li>CreditCard, PayPal, Bitcoin implementations</li>
+<li>Safe casting with <code>is</code> and <code>as</code></li>
+</ul>
+</li>
+</ol>
+<p><strong>🎯 Mini Proje (4 saat):</strong></p>
+<pre><code>Proje: Şirket Bordro Sistemi
+Dosya: YOL1_Hafta2_PayrollProject/
+
+Gereksinimler:
+- Employee base class
+  - CalculateSalary() abstract
+- FullTimeEmployee (sabit maaş)
+- HourlyEmployee (saat × ücret)
+- ContractorEmployee (proje bazlı)
+
+Company class:
+- List&lt;Employee&gt; employees
+- AddEmployee() 
+- CalculateTotalPayroll() → toplam maaş
+- GetManagers() → sadece manager'ları döndür (downcast kullan!)
+- GiveRaiseToFullTime(decimal percentage) → sadece full-time'a zam
+
+Zorluk: Type-safe casting kullan, InvalidCastException fırlatma!
+</code></pre>
+<p><strong>✅ Hafta Sonu Kontrol:</strong></p>
+<ul>
+<li>[ ] Upcasting vs downcasting farkını biliyorsun</li>
+<li>[ ] <code>is</code> ve <code>as</code> operatörlerini kullanabiliyorsun</li>
+<li>[ ] InvalidCastException ne zaman olur biliyorsun</li>
+<li>[ ] Bordro projesi hatasız çalışıyor</li>
+</ul>
+<p><strong>📊 Zorluk:</strong> ⭐⭐☆☆☆<br>
+<strong>📈 İlerleme:</strong> %8</p>
+<hr>
+<h4 id="hafta-3-linq-temelleri">HAFTA 3: LINQ Temelleri</h4>
+<p><strong>🎯 Bu Hafta Ne Öğreneceksin:</strong></p>
+<ul>
+<li>LINQ syntax (query ve method)</li>
+<li>Where, Select, OrderBy</li>
+<li>FirstOrDefault, Any, All</li>
+<li>LINQ to Objects</li>
+</ul>
+<p><strong>📖 Okuma (2 saat):</strong></p>
+<ol>
+<li><code>samples/02-Intermediate/LINQ-Basics/WHY_THIS_PATTERN.md</code></li>
+<li>Microsoft LINQ documentation (link repo'da)</li>
+</ol>
+<p><strong>💻 Kod Örnekleri (4 saat):</strong></p>
+<ol>
+<li><code>samples/02-Intermediate/LINQ-Basics/01_BasicQueries.cs</code></li>
+<li><code>samples/02-Intermediate/LINQ-Basics/02_Filtering.cs</code></li>
+<li><code>samples/02-Intermediate/LINQ-Basics/03_Projections.cs</code></li>
+</ol>
+<p><strong>🧪 Alıştırmalar (7 saat):</strong></p>
+<ol>
+<li><p><code>samples/99-Exercises/LINQ/01-BasicQueries/</code> (TÜM tasklar)</p>
+<ul>
+<li>10 LINQ sorgusu yaz</li>
+<li>Her biri için test geçmeli</li>
+</ul>
+</li>
+<li><p><code>samples/99-Exercises/LINQ/02-ProductCatalog/</code></p>
+<ul>
+<li>E-ticaret product filtreleme</li>
+<li>Fiyat, kategori, stok bazlı sorgular</li>
+</ul>
+</li>
+</ol>
+<p><strong>🎯 Mini Proje (2 saat):</strong></p>
+<pre><code>Proje: Öğrenci Yönetim Sistemi
+- Student listesi (Name, Grade, Age, Department)
+- LINQ ile:
+  - En başarılı 10 öğrenci
+  - Departmana göre ortalama not
+  - Başarısız öğrenciler (Grade &lt; 50)
+  - Yaş grubuna göre gruplama
+</code></pre>
+<p><strong>✅ Kontrol:</strong></p>
+<ul>
+<li>[ ] LINQ sorgusu yazabiliyorsun</li>
+<li>[ ] Method syntax vs query syntax biliyorsun</li>
+<li>[ ] Where, Select, OrderBy kullanabiliyorsun</li>
+</ul>
+<p><strong>📊 Zorluk:</strong> ⭐⭐☆☆☆<br>
+<strong>📈 İlerleme:</strong> %12</p>
+<hr>
+<h4 id="hafta-4-6-oop-derinlemesine-details-in-learning_pathsmd">HAFTA 4-6: OOP Derinlemesine (Details in LEARNING_PATHS.md)</h4>
+<p><strong>Özet:</strong> Encapsulation, Inheritance, Composition, Interface Segregation</p>
+<hr>
+<h4 id="hafta-7-9-aspnet-core-basics-details-in-learning_pathsmd">HAFTA 7-9: ASP.NET Core Basics (Details in LEARNING_PATHS.md)</h4>
+<p><strong>Özet:</strong> Controller, Routing, Dependency Injection, API basics</p>
+<hr>
+<h4 id="hafta-10-12-entity-framework--database-details-in-learning_pathsmd">HAFTA 10-12: Entity Framework + Database (Details in LEARNING_PATHS.md)</h4>
+<p><strong>Özet:</strong> ORM temelleri, CRUD, migrations, relationships</p>
+<hr>
+<h4 id="hafta-13-16-capstone-project---blog-platform">HAFTA 13-16: CAPSTONE PROJECT - Blog Platform</h4>
+<p><strong>Gereksinimler:</strong></p>
+<ul>
+<li>ASP.NET Core Web API</li>
+<li>Entity Framework Core (SQL Server)</li>
+<li>REST API endpoints (CRUD)</li>
+<li>Authentication (JWT - basit)</li>
+<li>Unit tests (xUnit)</li>
+</ul>
+<p><strong>Tam detay:</strong> <code>docs/LEARNING_PATHS.md</code> içinde &quot;Path 1 Capstone&quot; bölümüne bakın.</p>
+<hr>
+<h3 id="-yol-1-mezuniyet-kriterleri">🎓 Yol 1 Mezuniyet Kriterleri</h3>
+<p><strong>Şunları yapabiliyorsan Junior Developer'sın:</strong></p>
+<p><strong>✅ Teknik:</strong></p>
+<ul>
+<li>[ ] Polymorphism kullanarak genişletilebilir kod yazabiliyorsun</li>
+<li>[ ] LINQ ile veri sorgulama yapabiliyorsun</li>
+<li>[ ] Basit REST API geliştirebiliyorsun</li>
+<li>[ ] Entity Framework ile database işlemleri yapabiliyorsun</li>
+<li>[ ] Unit test yazabiliyorsun</li>
+</ul>
+<p><strong>✅ Pratik:</strong></p>
+<ul>
+<li>[ ] Blog platformu capstone projeni tamamladın</li>
+<li>[ ] GitHub'da 3+ proje var</li>
+<li>[ ] README.md yazabiliyorsun</li>
+<li>[ ] Git ile versiyon kontrol yapabiliyorsun</li>
+</ul>
+<p><strong>✅ Mülakat:</strong></p>
+<ul>
+<li>[ ] &quot;Polymorphism nedir?&quot; sorusunu cevaplayabiliyorsun</li>
+<li>[ ] &quot;REST API nedir?&quot; sorusunu cevaplayabiliyorsun</li>
+<li>[ ] FizzBuzz benzeri coding challenge çözebiliyorsun</li>
+</ul>
+<p><strong>🎉 Mezun olduysan:</strong>
+→ YOL 2'ye geç (Junior → Mid-Level)<br>
+→ VEYA iş aramaya başla + YOL 4 (Mülakat Prep) yap</p>
+<hr>
+<h2 id="-yol-2-juniordan-mid-levela">🔥 YOL 2: JUNIOR'DAN MID-LEVEL'A</h2>
+<p><strong>👤 Hedef Kitle:</strong></p>
+<ul>
+<li>6-12 ay C# deneyimi olan developer'lar</li>
+<li>Yol 1'i tamamlayanlar</li>
+<li>Basit CRUD uygulamaları yazabilenler</li>
+</ul>
+<p><strong>📋 Ön Koşullar:</strong></p>
+<ul>
+<li>OOP'yi anlıyorsun (polymorphism, inheritance)</li>
+<li>Basit REST API yazabiliyorsun</li>
+<li>Entity Framework kullanabiliyorsun</li>
+<li>Git biliyorsun</li>
+</ul>
+<p><strong>⏱️ Süre:</strong> 6-9 ay (haftada 8-12 saat)</p>
+<p><strong>🎯 Çıktı:</strong></p>
+<ul>
+<li>Mid-Level .NET Developer pozisyonu</li>
+<li>Design patterns uygulayabilme</li>
+<li>Mikroservis mimarisi anlama</li>
+<li>Performance optimization yapabilme</li>
+<li>Mid-level teknik mülakatlara hazır olma</li>
+</ul>
+<p><strong>💰 Hedef Maaş:</strong> $90,000-$120,000/yıl (ABD) veya ₺70,000-₺100,000/ay (Türkiye)</p>
+<hr>
+<h3 id="-hafta-hafta-detayli-plan-yol-2">📅 HAFTA HAFTA DETAYLI PLAN (Yol 2)</h3>
+<h4 id="hafta-1-2-design-patterns-giriş---factory--strategy">HAFTA 1-2: Design Patterns Giriş - Factory &amp; Strategy</h4>
+<p><strong>🎯 Hedef:</strong></p>
+<ul>
+<li>Factory Pattern'i anlama ve uygulama</li>
+<li>Strategy Pattern ile polymorphism bağlantısını görme</li>
+<li>Ne zaman hangi pattern kullanılacağını bilme</li>
+</ul>
+<p><strong>📖 Okuma (3 saat):</strong></p>
+<ol>
+<li><p><code>samples/03-Advanced/DesignPatterns/WHY_THIS_PATTERN.md</code></p>
+<ul>
+<li>Factory ne problemi çözüyor?</li>
+<li>Strategy ne zaman kullanılmalı?</li>
+<li>Alternatives ve trade-offs</li>
+</ul>
+</li>
+<li><p><code>docs/code-reviews/02-API-Design-Review/</code></p>
+<ul>
+<li>Production'da pattern usage örnekleri</li>
+</ul>
+</li>
+</ol>
+<p><strong>💻 Kod Örnekleri (5 saat):</strong></p>
+<ol>
+<li><p><code>samples/03-Advanced/DesignPatterns/FactoryPattern.cs</code></p>
+<ul>
+<li>PaymentProcessorFactory örneği</li>
+<li>Ne zaman factory, ne zaman direkt instantiation?</li>
+</ul>
+</li>
+<li><p><code>samples/03-Advanced/DesignPatterns/StrategyPattern.cs</code></p>
+<ul>
+<li>Shipping calculator örneği</li>
+<li>Strategy vs if/else farkı</li>
+</ul>
+</li>
+<li><p><code>samples/03-Advanced/DesignPatterns/BuilderPattern.cs</code></p>
+<ul>
+<li>Complex object construction</li>
+<li>Fluent interface pattern</li>
+</ul>
+</li>
+</ol>
+<p><strong>🧪 Alıştırmalar (8 saat):</strong></p>
+<ol>
+<li><p><strong>Exercise:</strong> <code>samples/99-Exercises/DesignPatterns/01-PaymentGateway/</code></p>
+<ul>
+<li>Stripe, PayPal, Cryptocurrency için factory</li>
+<li>Her ödeme tipi için strategy implementation</li>
+<li>Unit tests yaz</li>
+</ul>
+</li>
+<li><p><strong>Exercise:</strong> <code>samples/99-Exercises/DesignPatterns/02-NotificationSystem/</code></p>
+<ul>
+<li>Email, SMS, Push için factory</li>
+<li>Notification strategy'leri</li>
+<li>Retry policy ekle (decorator pattern teaser)</li>
+</ul>
+</li>
+</ol>
+<p><strong>🎯 Gerçek Dünya Problemi (8 saat):</strong></p>
+<pre><code>Problem: samples/98-RealWorld-Problems/01-API-Rate-Limiting/
+
+Görev:
+1. PROBLEM.md'yi oku
+2. Kendi çözümünü yaz (2 saat)
+3. SOLUTION-A.md ile karşılaştır
+4. SOLUTION-B.md'yi incele (Redis approach)
+5. COMPARISON.md'den hangisini ne zaman kullanacağını öğren
+
+Factory Pattern Uygulaması:
+- RateLimiterFactory
+- InMemoryRateLimiter strategy
+- RedisRateLimiter strategy
+- ApiGatewayRateLimiter strategy
+
+Bu senaryo GERÇEK production problem!
+</code></pre>
+<p><strong>✅ 2 Hafta Sonu Kontrol:</strong></p>
+<ul>
+<li>[ ] Factory pattern ile object creation yapabiliyorsun</li>
+<li>[ ] Strategy pattern ile algorithm değiştirebiiyorsun</li>
+<li>[ ] Rate limiting problemini çözdün</li>
+<li>[ ] 3 farklı yaklaşımın trade-off'larını anlıyorsun</li>
+</ul>
+<p><strong>📊 Zorluk:</strong> ⭐⭐⭐☆☆<br>
+<strong>📈 İlerleme:</strong> %7 (28 haftanın 2'si)</p>
+<hr>
+<h4 id="hafta-3-4-n1-query-problem--database-optimization">HAFTA 3-4: N+1 Query Problem &amp; Database Optimization</h4>
+<p><strong>🎯 Hedef:</strong></p>
+<ul>
+<li>N+1 query nedir, nasıl tespit edilir?</li>
+<li>Eager loading vs lazy loading</li>
+<li>Query performance optimization</li>
+</ul>
+<p><strong>📖 Okuma (2 saat):</strong></p>
+<ol>
+<li><code>samples/98-RealWorld-Problems/03-N-Plus-One-Problem/PROBLEM.md</code>
+<ul>
+<li>1,527 sorgu problemi nasıl oluştu?</li>
+<li>Production impact neydi?</li>
+</ul>
+</li>
+</ol>
+<p><strong>💻 Kod Örnekleri (4 saat):</strong></p>
+<ol>
+<li><p><code>samples/98-RealWorld-Problems/03-N-Plus-One-Problem/SOLUTION-A.md</code></p>
+<ul>
+<li>Include/ThenInclude kullanımı</li>
+<li>AsNoTracking ne zaman?</li>
+</ul>
+</li>
+<li><p><code>samples/03-Advanced/PerformanceOptimization/DatabaseOptimization.cs</code></p>
+<ul>
+<li>Query performance best practices</li>
+</ul>
+</li>
+</ol>
+<p><strong>🧪 Pratik (10 saat):</strong></p>
+<pre><code>Senaryo: E-Ticaret Order Sistemi
+
+Verilen:
+- Orders tablosu (500 satır)
+- Order → Customer ilişkisi
+- Order → OrderItems ilişkisi
+- OrderItem → Product ilişkisi
+
+Problem:
+Şu anki kod 1,527 sorgu atıyor!
+
+foreach (var order in orders)
+{
+    order.Customer = db.Customers.Find(order.CustomerId); // N queries
+    foreach (var item in order.Items)
+    {
+        item.Product = db.Products.Find(item.ProductId); // N*M queries
+    }
+}
+
+Görevler:
+1. Sorunu tespit et (profiler kullan)
+2. Eager loading ile düzelt
+3. Benchmark yap (before/after)
+4. Projection ile daha da optimize et
+
+Hedef: 1,527 sorgu → 1 sorgu
+</code></pre>
+<p><strong>✅ Kontrol:</strong></p>
+<ul>
+<li>[ ] N+1 query problemini tespit edebiliyorsun</li>
+<li>[ ] Include ile fix yapabiliyorsun</li>
+<li>[ ] Before/after performance farkını gördün</li>
+</ul>
+<p><strong>📊 Zorluk:</strong> ⭐⭐⭐⭐☆<br>
+<strong>📈 İlerleme:</strong> %14</p>
+<hr>
+<h4 id="hafta-5-6-caching-strategies">HAFTA 5-6: Caching Strategies</h4>
+<p><strong>Gerçek Problem:</strong> <code>samples/98-RealWorld-Problems/02-Cache-Strategy/</code></p>
+<p><strong>3 Çözüm Öğren:</strong></p>
+<ol>
+<li>Cache-Aside (lazy loading)</li>
+<li>Write-Through (strong consistency)</li>
+<li>Hybrid (best of both)</li>
+</ol>
+<p><strong>Uygulama:</strong></p>
+<ul>
+<li>Product catalog cache implementation</li>
+<li>Redis integration</li>
+<li>Cache invalidation strategies</li>
+</ul>
+<p><strong>Detay:</strong> <code>docs/LEARNING_PATHS.md</code> Yol 2, Hafta 5-6</p>
+<hr>
+<h4 id="hafta-7-24-devam-eden-konular">HAFTA 7-24: Devam Eden Konular</h4>
+<p><strong>Hafta 7-9:</strong> Microservice Error Handling<br>
+<strong>Hafta 10-12:</strong> SOLID Principles Deep Dive<br>
+<strong>Hafta 13-15:</strong> Performance Optimization (Span<t>, Memory<t>)<br>
+<strong>Hafta 16-18:</strong> Advanced Testing (Integration, E2E)<br>
+<strong>Hafta 19-21:</strong> CI/CD &amp; DevOps Basics<br>
+<strong>Hafta 22-24:</strong> Capstone - Microservice E-Commerce</t></t></p>
+<p><strong>Tam detay:</strong> <code>docs/LEARNING_PATHS.md</code> içinde</p>
+<hr>
+<h3 id="-yol-2-mezuniyet-kriterleri">🎓 Yol 2 Mezuniyet Kriterleri</h3>
+<p><strong>Şunları yapabiliyorsan Mid-Level Developer'sın:</strong></p>
+<p><strong>✅ Teknik:</strong></p>
+<ul>
+<li>[ ] 5+ design pattern uygulayabiliyorsun (Factory, Strategy, Observer, Decorator, Builder)</li>
+<li>[ ] N+1 query problemini tespit ve çözebiliyorsun</li>
+<li>[ ] Caching strategy tasarlayabiliyorsun</li>
+<li>[ ] Mikroservis mimarisini anlıyorsun</li>
+<li>[ ] Performance optimization yapabiliyorsun</li>
+</ul>
+<p><strong>✅ Pratik:</strong></p>
+<ul>
+<li>[ ] 3 real-world problemi çözdün</li>
+<li>[ ] Mikroservis capstone'u tamamladın</li>
+<li>[ ] GitHub'da production-quality kod var</li>
+</ul>
+<p><strong>✅ Mülakat:</strong></p>
+<ul>
+<li>[ ] System design soruları cevaplayabiliyorsun</li>
+<li>[ ] &quot;Design a rate limiter&quot; gibi sorulara yaklaşabiliyorsun</li>
+<li>[ ] Trade-off analizi yapabiliyorsun</li>
+</ul>
+<p><strong>🎉 Mezun olduysan:</strong>
+→ YOL 3'e geç (Mid → Senior)<br>
+→ VEYA mid-level pozisyonlara başvur + YOL 4 yap</p>
+<hr>
+<h2 id="-yol-3-mid-leveldan-seniora">🚀 YOL 3: MID-LEVEL'DAN SENIOR'A</h2>
+<p><strong>👤 Hedef Kitle:</strong></p>
+<ul>
+<li>2-4 yıl C# deneyimi</li>
+<li>Design patterns biliyor</li>
+<li>Mikroservis deneyimi var</li>
+</ul>
+<p><strong>⏱️ Süre:</strong> 9-12 ay (haftada 6-10 saat)</p>
+<p><strong>🎯 Çıktı:</strong></p>
+<ul>
+<li>Senior .NET Developer pozisyonu</li>
+<li>Sistem mimarisi tasarlayabilme</li>
+<li>Takım liderliği yapabilme</li>
+<li>Mentorship verebilme</li>
+</ul>
+<p><strong>💰 Hedef Maaş:</strong> $130,000-$180,000/yıl (ABD) veya ₺120,000-₺180,000/ay (Türkiye)</p>
+<hr>
+<h3 id="-yol-3-özet-detay-learning_pathsmdde">📅 YOL 3 ÖZET (Detay LEARNING_PATHS.md'de)</h3>
+<p><strong>Ay 1-3: Sistem Mimarisi</strong></p>
+<ul>
+<li>Distributed systems patterns</li>
+<li>Event-driven architecture</li>
+<li>CQRS, Event Sourcing</li>
+</ul>
+<p><strong>Ay 4-6: Performance &amp; Scalability</strong></p>
+<ul>
+<li>High-performance C# (Span<t>, stackalloc)</t></li>
+<li>Profiling ve optimization</li>
+<li>Load testing, stress testing</li>
+</ul>
+<p><strong>Ay 7-9: Leadership &amp; Mentorship</strong></p>
+<ul>
+<li>Code review leadership (docs/mentorship/ kullan)</li>
+<li>Junior mentoring</li>
+<li>Technical decision making</li>
+</ul>
+<p><strong>Ay 10-12: Capstone - Enterprise System</strong></p>
+<ul>
+<li>Full-stack distributed system</li>
+<li>High availability, fault tolerance</li>
+<li>Production deployment</li>
+</ul>
+<p><strong>Detay:</strong> <code>docs/LEARNING_PATHS.md</code> Yol 3</p>
+<hr>
+<h2 id="-yol-4-mülakata-hazirlik">💼 YOL 4: MÜLAKATA HAZIRLIK</h2>
+<p><strong>👤 Hedef Kitle:</strong></p>
+<ul>
+<li>İş görüşmesine hazırlanan HER seviye</li>
+<li>Yol 1, 2 veya 3'ü tamamlayanlar</li>
+</ul>
+<p><strong>⏱️ Süre:</strong> 4-8 hafta (yoğun çalışma)</p>
+<p><strong>🎯 Çıktı:</strong> Interview-ready, özgüvenli, hazır</p>
+<hr>
+<h3 id="-4-haftalik-yoğun-program">📅 4 HAFTALIK YOĞUN PROGRAM</h3>
+<h4 id="hafta-1-temel-kavramlar-revision">HAFTA 1: Temel Kavramlar Revision</h4>
+<p><strong>Her Gün (2 saat):</strong></p>
+<ul>
+<li>Polymorphism, SOLID, Design Patterns revision</li>
+<li><code>samples/01-Beginner/</code> ve <code>samples/03-Advanced/</code> hızlı geçiş</li>
+<li>CAREER_IMPACT.md dosyalarındaki mülakat sorularını çöz</li>
+</ul>
+<p><strong>Yapılacaklar:</strong></p>
+<ul>
+<li>[ ] Tüm WHY_THIS_PATTERN.md'leri tekrar oku</li>
+<li>[ ] Her pattern için 1 cümle özet çıkar</li>
+<li>[ ] Whiteboard'da UML çizme pratiği yap</li>
+</ul>
+<hr>
+<h4 id="hafta-2-system-design-practice">HAFTA 2: System Design Practice</h4>
+<p><strong>Her Gün (3 saat):</strong></p>
+<ul>
+<li><code>samples/98-RealWorld-Problems/</code> her problemi whiteboard'da çöz</li>
+<li>Decision tree'leri ezberle</li>
+<li>Trade-off analysis pratiği</li>
+</ul>
+<p><strong>Mock Interview Practice:</strong></p>
+<pre><code>Sorular:
+1. &quot;Design a rate limiter&quot; (samples/98-RealWorld-Problems/01)
+2. &quot;Design a cache&quot; (samples/98-RealWorld-Problems/02)
+3. &quot;Why are queries slow?&quot; (samples/98-RealWorld-Problems/03)
+
+Her birini:
+- 5 dakika: Problem anla
+- 10 dakika: High-level design çiz
+- 15 dakika: Deep dive (trade-offs discuss)
+- 5 dakika: Questions &amp; clarifications
+</code></pre>
+<hr>
+<h4 id="hafta-3-code-review-simülasyonu">HAFTA 3: Code Review Simülasyonu</h4>
+<p><strong>Her Gün (2 saat):</strong></p>
+<ul>
+<li><code>docs/code-reviews/</code> tüm senaryoları çalış</li>
+<li><code>docs/mentorship/common-junior-mistakes.md</code> oku</li>
+<li>Kötü kodu görünce ne söylersin? Practice yap</li>
+</ul>
+<p><strong>Yapılacaklar:</strong></p>
+<ul>
+<li>[ ] 5 bad code örneği bul (GitHub'dan)</li>
+<li>[ ] Her biri için review comment yaz</li>
+<li>[ ] <code>docs/mentorship/code-review-checklist.md</code> ile karşılaştır</li>
+</ul>
+<hr>
+<h4 id="hafta-4-behavioral--final-prep">HAFTA 4: Behavioral + Final Prep</h4>
+<p><strong>Her Gün (2-3 saat):</strong></p>
+<ul>
+<li>CAREER_IMPACT.md'lerden &quot;Production Problems&quot; senaryolarını hikaye olarak hazırla</li>
+<li>&quot;Tell me about a time...&quot; sorularına cevap hazırla</li>
+<li>GitHub portfolio'nu gözden geçir</li>
+</ul>
+<p><strong>Mock Interview (Kendine veya Arkadaşınla):</strong></p>
+<ol>
+<li>45 dakika: Technical (coding + system design)</li>
+<li>30 dakika: Behavioral questions</li>
+<li>15 dakika: Questions for interviewer</li>
+</ol>
+<p><strong>Detay:</strong> <code>docs/LEARNING_PATHS.md</code> Yol 4</p>
+<hr>
+<h2 id="-İlerleme-takİbİ">📊 İLERLEME TAKİBİ</h2>
+<h3 id="nasıl-takip-ederim">Nasıl Takip Ederim?</h3>
+<p><strong>Haftalık:</strong></p>
+<pre><code class="lang-markdown">## Hafta X Raporu
+
+✅ Tamamlanan:
+- [ ] Sample/Exercise adı
+- [ ] Mini proje
+
+⏳ Devam Edenler:
+- [ ] Zorluk çektiğim konu
+
+📝 Notlar:
+- Ne öğrendim?
+- Nerede takıldım?
+- Yardıma ihtiyacım var mı?
+</code></pre>
+<p><strong>Aylık:</strong></p>
+<pre><code class="lang-markdown">## Ay X Değerlendirme
+
+Teknik Seviye (1-5):
+- Polymorphism: [X/5]
+- Design Patterns: [X/5]
+- Performance: [X/5]
+
+Hedefler:
+- [ ] Bu ay tamamlanan
+- [ ] Gelecek ay hedefi
+</code></pre>
+<hr>
+<h2 id="-sikça-sorulan-sorular">🆘 SIKÇA SORULAN SORULAR</h2>
+<p><strong>S: &quot;Programlama bilmiyorum, buradan başlayabilir miyim?&quot;</strong>
+C: HAYIR. Önce temel programlama öğren (değişken, döngü, fonksiyon). Sonra Yol 1'e başla.</p>
+<p><strong>S: &quot;3 yıl Python biliyorum, C# bilmiyorum. Nereden başlamalıyım?&quot;</strong>
+C: Yol 1'in ilk 4 haftasını hızlı geç (C# syntax). Sonra Yol 2'ye atla.</p>
+<p><strong>S: &quot;5 yıl C# biliyorum ama design pattern bilmiyorum. Hangisi?&quot;</strong>
+C: Yol 2. Design patterns senior olmak için şart.</p>
+<p><strong>S: &quot;Her hafta 10 saat ayıramıyorum, ne yapmalıyım?&quot;</strong>
+C: Süreyi 2x uzat. Mesela Yol 1 → 6 ay yerine 12 ay. Önemli olan düzenli çalışmak.</p>
+<p><strong>S: &quot;Capstone projesinde takıldım, yardım?&quot;</strong>
+C: GitHub Issues'a yaz veya docs/mentorship/common-junior-mistakes.md'ye bak.</p>
+<p><strong>S: &quot;Tüm 4 yolu tamamlarsam ne olur?&quot;</strong>
+C: Senior .NET Developer olursun! ~2-3 yıl sürer ama her yol seni bir üst levele çıkarır.</p>
+<hr>
+<h2 id="-sonrakİ-adim">🎯 SONRAKİ ADIM</h2>
+<p><strong>ŞİMDİ YAP:</strong></p>
+<ol>
+<li><strong>Seviyeni belirle</strong> (yukarıdaki sorulara cevap ver)</li>
+<li><strong>Yolunu seç</strong> (Yol 1, 2, 3 veya 4)</li>
+<li><strong>İlk dosyayı aç</strong> (bu README'nin başındaki &quot;İlk 3 Dosya&quot; bölümü)</li>
+<li><strong>İlk saatini başlat</strong> (60 dakika, şimdi!)</li>
+</ol>
+<p><strong>Başlamak için:</strong></p>
+<pre><code class="lang-bash"># Yol 1 → Junior için:
+cd samples/01-Beginner/PolymorphismBasics/
+code WHY_THIS_PATTERN.md
+
+# Yol 2 → Mid için:
+cd samples/03-Advanced/DesignPatterns/
+code WHY_THIS_PATTERN.md
+
+# Yol 3 → Senior için:
+cd samples/98-RealWorld-Problems/01-API-Rate-Limiting/
+code PROBLEM.md
+
+# Yol 4 → Mülakat için:
+cd docs/code-reviews/01-Polymorphism-Review/
+code review-comments.md
+</code></pre>
+<hr>
+<h2 id="-ek-kaynaklar">📚 EK KAYNAKLAR</h2>
+<p><strong>Tam Detay İçin:</strong></p>
+<ul>
+<li><code>docs/LEARNING_PATHS.md</code> - 1,885 satır hafta hafta plan</li>
+<li><code>docs/mentorship/growth-plan-template.md</code> - Kişisel growth plan</li>
+<li>Her sample'ın <code>WHY_THIS_PATTERN.md</code> - Derinlemesine açıklama</li>
+<li>Her sample'ın <code>CAREER_IMPACT.md</code> - CV ve mülakat rehberi</li>
+</ul>
+<p><strong>Community:</strong></p>
+<ul>
+<li>GitHub Issues: Soru sor</li>
+<li>GitHub Discussions: Diğer öğrencilerle konuş</li>
+<li>Pull Requests: Kendi çözümlerini paylaş</li>
+</ul>
+<hr>
+<p><strong>🎉 BAŞARILAR! İlk adımı atmak en zoruydu. Şimdi git ve YAP! 🚀</strong></p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/START_HERE.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

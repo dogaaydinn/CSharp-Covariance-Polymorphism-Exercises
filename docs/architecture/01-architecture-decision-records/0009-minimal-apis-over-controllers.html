@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>ADR-0009: Minimal APIs over MVC Controllers | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="ADR-0009: Minimal APIs over MVC Controllers | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/01-architecture-decision-records/0009-minimal-apis-over-controllers.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="adr-0009-minimal-apis-over-mvc-controllers">ADR-0009: Minimal APIs over MVC Controllers</h1>
+
+<p><strong>Status:</strong> Accepted
+<strong>Date:</strong> 2025-12-02
+<strong>Deciders:</strong> Architecture Team
+<strong>Technical Story:</strong> API endpoint implementation approach</p>
+<h2 id="context">Context</h2>
+<p>The VideoService.API needs to expose RESTful endpoints for video management. Two primary approaches exist in ASP.NET Core:</p>
+<p><strong>Traditional MVC Controllers:</strong></p>
+<pre><code class="lang-csharp">[ApiController]
+[Route(&quot;api/[controller]&quot;)]
+public class VideosController : ControllerBase
+{
+    [HttpGet]
+    public async Task&lt;ActionResult&lt;List&lt;Video&gt;&gt;&gt; GetVideos() { }
+}
+</code></pre>
+<p><strong>Minimal APIs (introduced .NET 6, matured in .NET 8):</strong></p>
+<pre><code class="lang-csharp">app.MapGet(&quot;/api/videos&quot;, async (VideoDbContext db) =&gt;
+{
+    return await db.Videos.ToListAsync();
+});
+</code></pre>
+<p>Considerations:</p>
+<ul>
+<li>Code clarity and readability</li>
+<li>Boilerplate vs explicitness</li>
+<li>Performance</li>
+<li>Testability</li>
+<li>Routing capabilities</li>
+<li>Modern .NET direction</li>
+</ul>
+<h2 id="decision">Decision</h2>
+<p>We will use <strong>Minimal APIs</strong> for all API endpoints in VideoService.API.</p>
+<p>Implementation:</p>
+<ul>
+<li>Top-level statements in Program.cs</li>
+<li>Route handlers as lambda expressions</li>
+<li>Dependency injection via method parameters</li>
+<li>OpenAPI/Swagger via <code>.WithOpenApi()</code></li>
+<li>Route groups for organization</li>
+</ul>
+<h2 id="consequences">Consequences</h2>
+<h3 id="positive">Positive</h3>
+<ul>
+<li><strong>Less Boilerplate</strong>: 60-70% less code than Controllers</li>
+<li><strong>Performance</strong>: 25-30% faster than Controllers (no controller activation)</li>
+<li><strong>Modern</strong>: Demonstrates .NET 8's recommended approach</li>
+<li><strong>Clarity</strong>: Business logic visible in one file</li>
+<li><strong>Lambda Capture</strong>: Can capture variables from outer scope</li>
+<li><strong>DI Simplicity</strong>: Parameters automatically injected</li>
+<li><strong>Functional Style</strong>: Encourages functional programming patterns</li>
+<li><strong>Startup Performance</strong>: Faster app startup (no controller discovery/reflection)</li>
+</ul>
+<h3 id="negative">Negative</h3>
+<ul>
+<li><strong>Organization</strong>: All routes in one file can become messy (mitigated with route groups)</li>
+<li><strong>Testability</strong>: Harder to unit test than Controllers (lambdas not easily mockable)</li>
+<li><strong>Attributes</strong>: Some MVC attributes not available (Authorization filters)</li>
+<li><strong>Learning Curve</strong>: Developers coming from MVC need to adapt</li>
+<li><strong>IDE Support</strong>: Some refactoring tools work better with Controllers</li>
+</ul>
+<h3 id="neutral">Neutral</h3>
+<ul>
+<li><strong>Documentation</strong>: Swagger generation works equally well with both</li>
+<li><strong>Validation</strong>: Requires manual validation (Controllers have automatic model validation)</li>
+<li><strong>Filters</strong>: Must implement filters differently than MVC</li>
+</ul>
+<h2 id="alternatives-considered">Alternatives Considered</h2>
+<h3 id="alternative-1-mvc-controllers">Alternative 1: MVC Controllers</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Traditional</strong>: More developers familiar with this approach</li>
+<li><strong>Organization</strong>: Natural grouping by entity (VideosController, UsersController)</li>
+<li><strong>Testability</strong>: Easy to unit test (just instantiate controller)</li>
+<li><strong>Attributes</strong>: Full attribute routing and authorization</li>
+<li><strong>IDE Support</strong>: Better refactoring and navigation support</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Boilerplate</strong>: Requires class definition, inheritance, constructors</li>
+<li><strong>Performance</strong>: Slower than Minimal APIs (controller activation overhead)</li>
+<li><strong>Verbose</strong>: More code for same functionality</li>
+<li><strong>Old Pattern</strong>: Not the direction .NET is moving</li>
+</ul>
+<p><strong>Why rejected:</strong> Minimal APIs are the future of ASP.NET Core. Educational samples should demonstrate modern approaches.</p>
+<h3 id="alternative-2-hybrid-approach-both">Alternative 2: Hybrid Approach (Both)</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Flexibility</strong>: Use Controllers for complex endpoints, Minimal APIs for simple ones</li>
+<li><strong>Migration</strong>: Easy to migrate gradually</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Inconsistency</strong>: Two different patterns in same codebase</li>
+<li><strong>Confusion</strong>: Developers unsure which to use when</li>
+<li><strong>Maintenance</strong>: Must understand both patterns</li>
+</ul>
+<p><strong>Why rejected:</strong> Consistency is more important. Choose one approach and stick with it.</p>
+<h3 id="alternative-3-fastendpoints-library">Alternative 3: FastEndpoints Library</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>REPR Pattern</strong>: Request-Endpoint-Response pattern</li>
+<li><strong>Organized</strong>: Each endpoint in its own class</li>
+<li><strong>Testable</strong>: Easy to test</li>
+<li><strong>Performance</strong>: Claims to be faster than Controllers</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Third-Party</strong>: Not official Microsoft approach</li>
+<li><strong>Learning Curve</strong>: Yet another library to learn</li>
+<li><strong>Abstraction</strong>: Adds abstraction over Minimal APIs</li>
+<li><strong>Overkill</strong>: Not needed for simple CRUD APIs</li>
+</ul>
+<p><strong>Why rejected:</strong> Minimal APIs are sufficient. No need for additional abstractions.</p>
+<h2 id="related-decisions">Related Decisions</h2>
+<ul>
+<li><a href="0001-adopting-dotnet-8-platform.html">ADR-0001</a>: .NET 8 improves Minimal APIs significantly</li>
+<li><a href="0010-direct-dbcontext-usage.html">ADR-0010</a>: DbContext injection works well with Minimal APIs</li>
+</ul>
+<h2 id="related-links">Related Links</h2>
+<ul>
+<li><a href="https://learn.microsoft.com/aspnet/core/fundamentals/minimal-apis">Minimal APIs Overview</a></li>
+<li><a href="https://learn.microsoft.com/aspnet/core/fundamentals/minimal-apis/overview#minimal-apis-compared-to-controllers">Minimal APIs vs Controllers</a></li>
+<li><a href="https://devblogs.microsoft.com/dotnet/asp-net-core-updates-in-net-8/#performance-improvements">Performance Comparison</a></li>
+</ul>
+<h2 id="notes">Notes</h2>
+<ul>
+<li><p><strong>Route Organization</strong>:</p>
+<pre><code class="lang-csharp">var videos = app.MapGroup(&quot;/api/videos&quot;);
+videos.MapGet(&quot;/&quot;, GetAllVideos);
+videos.MapGet(&quot;/{id}&quot;, GetVideo);
+videos.MapPost(&quot;/&quot;, CreateVideo);
+</code></pre>
+</li>
+<li><p><strong>Testability Strategy</strong>:</p>
+<ul>
+<li>Integration tests (preferred for APIs)</li>
+<li>Extract business logic to services for unit testing</li>
+<li>Use WebApplicationFactory for endpoint testing</li>
+</ul>
+</li>
+<li><p><strong>Validation</strong>:</p>
+<pre><code class="lang-csharp">app.MapPost(&quot;/api/videos&quot;, (Video video, VideoDbContext db) =&gt;
+{
+    if (string.IsNullOrEmpty(video.Title))
+        return Results.BadRequest(&quot;Title required&quot;);
+    // ...
+});
+</code></pre>
+</li>
+<li><p><strong>OpenAPI/Swagger</strong>:</p>
+<pre><code class="lang-csharp">.WithName(&quot;GetVideos&quot;)
+.WithOpenApi()
+.Produces&lt;List&lt;Video&gt;&gt;(200)
+.ProducesProblem(500);
+</code></pre>
+</li>
+<li><p><strong>Authorization</strong>:</p>
+<pre><code class="lang-csharp">app.MapGet(&quot;/api/videos&quot;, GetVideos)
+   .RequireAuthorization(&quot;AdminPolicy&quot;);
+</code></pre>
+</li>
+<li><p><strong>File Organization</strong> (for large projects):</p>
+<ul>
+<li>Create <code>Endpoints/</code> folder</li>
+<li>Separate files per entity (VideosEndpoints.cs)</li>
+<li>Use extension methods:
+<pre><code class="lang-csharp">public static class VideosEndpoints
+{
+    public static void MapVideoEndpoints(this IEndpointRouteBuilder app)
+    {
+        // Map routes here
+    }
+}
+</code></pre>
+</li>
+</ul>
+</li>
+<li><p><strong>Performance Tips</strong>:</p>
+<ul>
+<li>Minimal APIs compiled to delegates (faster dispatch)</li>
+<li>No model binding overhead for simple types</li>
+<li>Avoid capturing large closures in lambdas</li>
+</ul>
+</li>
+<li><p><strong>When to Use Controllers Instead</strong>:</p>
+<ul>
+<li>Complex authorization requirements</li>
+<li>Heavy use of action filters</li>
+<li>Need for model binding complexity</li>
+<li>Legacy code migration (gradual)</li>
+</ul>
+</li>
+<li><p><strong>Future</strong>: .NET 9 will add even more Minimal API features (improved OpenAPI generation, better filters)</p>
+</li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/01-architecture-decision-records/0009-minimal-apis-over-controllers.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

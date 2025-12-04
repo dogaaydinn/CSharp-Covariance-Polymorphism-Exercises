@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>ADR-0001: Adopting .NET 8 Platform | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="ADR-0001: Adopting .NET 8 Platform | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/01-architecture-decision-records/0001-adopting-dotnet-8-platform.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="adr-0001-adopting-net-8-platform">ADR-0001: Adopting .NET 8 Platform</h1>
+
+<p><strong>Status:</strong> Accepted
+<strong>Date:</strong> 2025-12-02
+<strong>Deciders:</strong> Architecture Team
+<strong>Technical Story:</strong> Foundation for cloud-native samples</p>
+<h2 id="context">Context</h2>
+<p>The project needs a modern, performant platform for building cloud-native microservices with enterprise-grade features. The choice of runtime platform affects performance, tooling, ecosystem support, and long-term maintainability. We need to demonstrate current best practices and modern .NET development.</p>
+<p>Key requirements:</p>
+<ul>
+<li>Long-term support (LTS) release</li>
+<li>Cloud-native features and performance</li>
+<li>Modern C# language features</li>
+<li>First-class container support</li>
+<li>Cross-platform deployment</li>
+<li>Strong observability tooling</li>
+</ul>
+<h2 id="decision">Decision</h2>
+<p>We will use <strong>.NET 8</strong> as the target framework for all projects in the AspireVideoService sample.</p>
+<p>Specific choices:</p>
+<ul>
+<li>Target Framework: <code>net8.0</code></li>
+<li>C# Language Version: 12 (implicit with .NET 8)</li>
+<li>Runtime: .NET 8.0 Runtime</li>
+<li>SDK: .NET 8.0 SDK or later</li>
+</ul>
+<h2 id="consequences">Consequences</h2>
+<h3 id="positive">Positive</h3>
+<ul>
+<li><strong>LTS Support</strong>: .NET 8 is a Long-Term Support release (supported until November 2026)</li>
+<li><strong>Performance</strong>: Significant performance improvements over .NET 6/7 (20-40% faster in many scenarios)</li>
+<li><strong>Native AOT</strong>: Support for Native Ahead-of-Time compilation (future optimization path)</li>
+<li><strong>Modern C#</strong>: Access to C# 12 features (primary constructors, collection expressions, etc.)</li>
+<li><strong>Aspire Support</strong>: .NET 8 is required for .NET Aspire (13.0+)</li>
+<li><strong>Container Optimization</strong>: Built-in support for minimal container images and chiseled Ubuntu images</li>
+<li><strong>Observability</strong>: Enhanced OpenTelemetry integration and metrics APIs</li>
+<li><strong>JSON Performance</strong>: System.Text.Json improvements with source generators</li>
+<li><strong>Ecosystem</strong>: All major libraries support .NET 8 (EF Core 8, ASP.NET Core 8, etc.)</li>
+</ul>
+<h3 id="negative">Negative</h3>
+<ul>
+<li><strong>Adoption Barrier</strong>: Requires developers to upgrade from .NET 6/7</li>
+<li><strong>Tooling Requirements</strong>: Requires Visual Studio 2022 17.8+ or Rider 2023.3+</li>
+<li><strong>Breaking Changes</strong>: Some APIs deprecated from .NET 6 (minimal migration impact)</li>
+<li><strong>Container Image Size</strong>: .NET 8 images slightly larger than Alpine .NET 6 (mitigated with chiseled images)</li>
+</ul>
+<h3 id="neutral">Neutral</h3>
+<ul>
+<li><strong>Regular Updates</strong>: Monthly security and bug fix patches</li>
+<li><strong>Migration Path</strong>: Clear upgrade path from .NET 6/7 (standard upgrade process)</li>
+<li><strong>Learning Curve</strong>: Developers familiar with .NET 6/7 adapt quickly</li>
+</ul>
+<h2 id="alternatives-considered">Alternatives Considered</h2>
+<h3 id="alternative-1-net-6-lts">Alternative 1: .NET 6 LTS</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Mature ecosystem with 3+ years of production use</li>
+<li>Wider adoption in enterprise environments</li>
+<li>Supported until November 2024 (extended support available)</li>
+<li>More conservative choice</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li>End of standard support in November 2024 (6 months from project start)</li>
+<li>Lacks .NET Aspire support (requires .NET 8)</li>
+<li>Missing C# 11/12 features</li>
+<li>Lower performance compared to .NET 8</li>
+<li>No Native AOT support</li>
+</ul>
+<p><strong>Why rejected:</strong> End of support too soon, lacks Aspire compatibility, missing modern features needed for cloud-native development.</p>
+<h3 id="alternative-2-net-9-previewrc">Alternative 2: .NET 9 (Preview/RC)</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Latest features and performance improvements</li>
+<li>Cutting-edge cloud-native tooling</li>
+<li>Shows commitment to latest technology</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li>Not LTS (18-month support only)</li>
+<li>Preview/RC status at project start (unstable)</li>
+<li>Limited production adoption</li>
+<li>Breaking changes expected</li>
+<li>Library ecosystem not fully updated</li>
+</ul>
+<p><strong>Why rejected:</strong> Stability concerns for educational samples. .NET 9 GA in November 2024 would be appropriate for future updates, but .NET 8 LTS provides better stability for learning.</p>
+<h3 id="alternative-3-net-7">Alternative 3: .NET 7</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Modern feature set (better than .NET 6)</li>
+<li>Stable and production-ready</li>
+<li>Good performance improvements</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li>Not LTS (support ends May 2024 - already ended)</li>
+<li>Short support window makes it unsuitable for samples</li>
+<li>No significant advantage over .NET 8</li>
+<li>.NET Aspire targets .NET 8</li>
+</ul>
+<p><strong>Why rejected:</strong> Already out of support. No reason to choose .NET 7 when .NET 8 LTS is available.</p>
+<h2 id="related-decisions">Related Decisions</h2>
+<ul>
+<li><a href="0002-using-dotnet-aspire.html">ADR-0002</a>: Using .NET Aspire (requires .NET 8)</li>
+<li><a href="0009-minimal-apis-over-controllers.html">ADR-0009</a>: Minimal APIs leverage .NET 8 improvements</li>
+<li><a href="0012-container-first-development.html">ADR-0012</a>: .NET 8 container optimizations</li>
+</ul>
+<h2 id="related-links">Related Links</h2>
+<ul>
+<li><a href="https://devblogs.microsoft.com/dotnet/announcing-dotnet-8/">.NET 8 Announcement</a></li>
+<li><a href="https://devblogs.microsoft.com/dotnet/performance-improvements-in-net-8/">.NET 8 Performance Improvements</a></li>
+<li><a href="https://dotnet.microsoft.com/platform/support/policy/dotnet-core">.NET Support Policy</a></li>
+<li><a href="https://learn.microsoft.com/dotnet/core/whats-new/dotnet-8">What's New in .NET 8</a></li>
+</ul>
+<h2 id="notes">Notes</h2>
+<ul>
+<li>Consider upgrading to .NET 9 when it reaches LTS status (November 2025)</li>
+<li>Monitor .NET 8 monthly updates for security patches</li>
+<li>Evaluate Native AOT for API services in future iterations</li>
+<li>C# 12 features should be used where they improve code clarity (primary constructors, collection expressions)</li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/01-architecture-decision-records/0001-adopting-dotnet-8-platform.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

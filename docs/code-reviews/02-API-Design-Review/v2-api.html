@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>API Design Review - V2 (Fixed Design) | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="API Design Review - V2 (Fixed Design) | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/code-reviews/02-API-Design-Review/v2-api.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="api-design-review---v2-fixed-design">API Design Review - V2 (Fixed Design)</h1>
+
+<p><strong>Pull Request:</strong> #2367 - User Management API V2 (After Review Fixes)<br>
+<strong>Author:</strong> Jordan Lee (Junior Backend Developer)<br>
+<strong>Reviewer:</strong> Marcus Rodriguez (Staff Engineer)<br>
+<strong>Status:</strong> ✅ <strong>APPROVED</strong> - Ready for Production<br>
+<strong>Review Date:</strong> 2025-12-05</p>
+<hr>
+<h2 id="what-changed">What Changed</h2>
+<p>After the initial review feedback, I've completely refactored the User Management API to address all security and design issues. This document shows the corrected implementation.</p>
+<p><strong>Major Changes:</strong></p>
+<ul>
+<li>✅ Removed password from all responses</li>
+<li>✅ Added authentication/authorization</li>
+<li>✅ Proper HTTP status codes (not always 200)</li>
+<li>✅ RESTful endpoint design</li>
+<li>✅ PATCH support for partial updates</li>
+<li>✅ Soft delete instead of hard delete</li>
+<li>✅ Pagination metadata</li>
+<li>✅ ProblemDetails for errors</li>
+<li>✅ API versioning</li>
+<li>✅ Rate limiting</li>
+</ul>
+<hr>
+<h2 id="api-endpoints-restful">API Endpoints (RESTful)</h2>
+<h3 id="1-create-user">1. Create User</h3>
+<pre><code class="lang-http">POST /api/v1/users
+Content-Type: application/json
+Authorization: Bearer {admin_token}
+
+{
+  &quot;firstName&quot;: &quot;John&quot;,
+  &quot;lastName&quot;: &quot;Doe&quot;,
+  &quot;email&quot;: &quot;john@example.com&quot;,
+  &quot;password&quot;: &quot;SecureP@ssw0rd!&quot;,
+  &quot;phone&quot;: &quot;555-1234&quot;,
+  &quot;role&quot;: &quot;user&quot;
+}
+</code></pre>
+<p><strong>Response (Success - 201 Created):</strong></p>
+<pre><code class="lang-json">HTTP/1.1 201 Created
+Location: /api/v1/users/123
+Content-Type: application/json
+
+{
+  &quot;id&quot;: 123,
+  &quot;firstName&quot;: &quot;John&quot;,
+  &quot;lastName&quot;: &quot;Doe&quot;,
+  &quot;email&quot;: &quot;john@example.com&quot;,
+  &quot;phone&quot;: &quot;555-1234&quot;,
+  &quot;role&quot;: &quot;user&quot;,
+  &quot;status&quot;: &quot;active&quot;,
+  &quot;createdAt&quot;: &quot;2025-12-05T10:30:00Z&quot;,
+  &quot;updatedAt&quot;: &quot;2025-12-05T10:30:00Z&quot;
+}
+</code></pre>
+<p><strong>Note:</strong> ✅ No password in response!</p>
+<p><strong>Response (Error - 409 Conflict):</strong></p>
+<pre><code class="lang-json">HTTP/1.1 409 Conflict
+Content-Type: application/problem+json
+
+{
+  &quot;type&quot;: &quot;https://api.example.com/errors/duplicate-email&quot;,
+  &quot;title&quot;: &quot;Email already in use&quot;,
+  &quot;detail&quot;: &quot;An account with this email already exists. Try logging in or resetting your password.&quot;,
+  &quot;status&quot;: 409,
+  &quot;instance&quot;: &quot;/api/v1/users&quot;
+}
+</code></pre>
+<p><strong>Response (Error - 400 Bad Request):</strong></p>
+<pre><code class="lang-json">HTTP/1.1 400 Bad Request
+Content-Type: application/problem+json
+
+{
+  &quot;type&quot;: &quot;https://api.example.com/errors/validation-failed&quot;,
+  &quot;title&quot;: &quot;Validation failed&quot;,
+  &quot;detail&quot;: &quot;One or more validation errors occurred.&quot;,
+  &quot;status&quot;: 400,
+  &quot;errors&quot;: {
+    &quot;email&quot;: [&quot;Email is required&quot;, &quot;Email format is invalid&quot;],
+    &quot;password&quot;: [&quot;Password must be at least 8 characters&quot;]
+  }
+}
+</code></pre>
+<hr>
+<h3 id="2-get-user">2. Get User</h3>
+<pre><code class="lang-http">GET /api/v1/users/{id}
+Authorization: Bearer {user_token}
+</code></pre>
+<p><strong>Authorization Rules:</strong></p>
+<ul>
+<li>Users can only see their own data</li>
+<li>Admins can see any user</li>
+</ul>
+<p><strong>Response (Success - 200 OK):</strong></p>
+<pre><code class="lang-json">HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  &quot;id&quot;: 123,
+  &quot;firstName&quot;: &quot;John&quot;,
+  &quot;lastName&quot;: &quot;Doe&quot;,
+  &quot;email&quot;: &quot;john@example.com&quot;,
+  &quot;phone&quot;: &quot;555-1234&quot;,
+  &quot;status&quot;: &quot;active&quot;,
+  &quot;role&quot;: &quot;user&quot;,
+  &quot;createdAt&quot;: &quot;2025-12-05T10:30:00Z&quot;,
+  &quot;updatedAt&quot;: &quot;2025-12-05T14:20:00Z&quot;
+}
+</code></pre>
+<p><strong>Response (Error - 404 Not Found):</strong></p>
+<pre><code class="lang-json">HTTP/1.1 404 Not Found
+Content-Type: application/problem+json
+
+{
+  &quot;type&quot;: &quot;https://api.example.com/errors/user-not-found&quot;,
+  &quot;title&quot;: &quot;User not found&quot;,
+  &quot;detail&quot;: &quot;The requested user does not exist or has been deleted.&quot;,
+  &quot;status&quot;: 404
+}
+</code></pre>
+<p><strong>Response (Error - 403 Forbidden):</strong></p>
+<pre><code class="lang-json">HTTP/1.1 403 Forbidden
+Content-Type: application/problem+json
+
+{
+  &quot;type&quot;: &quot;https://api.example.com/errors/forbidden&quot;,
+  &quot;title&quot;: &quot;Access denied&quot;,
+  &quot;detail&quot;: &quot;You don't have permission to view this user's data.&quot;,
+  &quot;status&quot;: 403
+}
+</code></pre>
+<hr>
+<h3 id="3-update-user-full-update">3. Update User (Full Update)</h3>
+<pre><code class="lang-http">PUT /api/v1/users/{id}
+Content-Type: application/json
+Authorization: Bearer {user_token}
+
+{
+  &quot;firstName&quot;: &quot;John&quot;,
+  &quot;lastName&quot;: &quot;Smith&quot;,
+  &quot;email&quot;: &quot;john.smith@example.com&quot;,
+  &quot;phone&quot;: &quot;555-5678&quot;
+}
+</code></pre>
+<p><strong>Response (Success - 200 OK):</strong></p>
+<pre><code class="lang-json">HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  &quot;id&quot;: 123,
+  &quot;firstName&quot;: &quot;John&quot;,
+  &quot;lastName&quot;: &quot;Smith&quot;,
+  &quot;email&quot;: &quot;john.smith@example.com&quot;,
+  &quot;phone&quot;: &quot;555-5678&quot;,
+  &quot;status&quot;: &quot;active&quot;,
+  &quot;role&quot;: &quot;user&quot;,
+  &quot;updatedAt&quot;: &quot;2025-12-05T15:45:00Z&quot;
+}
+</code></pre>
+<hr>
+<h3 id="4-update-user-partial-update">4. Update User (Partial Update)</h3>
+<pre><code class="lang-http">PATCH /api/v1/users/{id}
+Content-Type: application/json
+Authorization: Bearer {user_token}
+
+{
+  &quot;phone&quot;: &quot;555-9999&quot;
+}
+</code></pre>
+<p><strong>Note:</strong> ✅ Only send the fields you want to update!</p>
+<p><strong>Response (Success - 200 OK):</strong></p>
+<pre><code class="lang-json">HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  &quot;id&quot;: 123,
+  &quot;firstName&quot;: &quot;John&quot;,
+  &quot;lastName&quot;: &quot;Smith&quot;,
+  &quot;email&quot;: &quot;john.smith@example.com&quot;,
+  &quot;phone&quot;: &quot;555-9999&quot;,
+  &quot;status&quot;: &quot;active&quot;,
+  &quot;role&quot;: &quot;user&quot;,
+  &quot;updatedAt&quot;: &quot;2025-12-05T16:00:00Z&quot;
+}
+</code></pre>
+<hr>
+<h3 id="5-update-user-status">5. Update User Status</h3>
+<pre><code class="lang-http">PATCH /api/v1/users/{id}/status
+Content-Type: application/json
+Authorization: Bearer {admin_token}
+
+{
+  &quot;status&quot;: &quot;inactive&quot;,
+  &quot;reason&quot;: &quot;User requested account suspension&quot;
+}
+</code></pre>
+<p><strong>Authorization:</strong> Admin only</p>
+<p><strong>Response (Success - 200 OK):</strong></p>
+<pre><code class="lang-json">HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  &quot;id&quot;: 123,
+  &quot;status&quot;: &quot;inactive&quot;,
+  &quot;updatedAt&quot;: &quot;2025-12-05T16:15:00Z&quot;
+}
+</code></pre>
+<hr>
+<h3 id="6-update-user-role">6. Update User Role</h3>
+<pre><code class="lang-http">PATCH /api/v1/users/{id}/role
+Content-Type: application/json
+Authorization: Bearer {super_admin_token}
+
+{
+  &quot;role&quot;: &quot;admin&quot;
+}
+</code></pre>
+<p><strong>Authorization:</strong> Super Admin only</p>
+<hr>
+<h3 id="7-delete-user-soft-delete">7. Delete User (Soft Delete)</h3>
+<pre><code class="lang-http">DELETE /api/v1/users/{id}
+Authorization: Bearer {admin_token}
+</code></pre>
+<p><strong>Response (Success - 204 No Content):</strong></p>
+<pre><code class="lang-http">HTTP/1.1 204 No Content
+</code></pre>
+<p><strong>Note:</strong> ✅ User is soft-deleted (marked as deleted, not removed from database)</p>
+<hr>
+<h3 id="8-permanently-delete-user">8. Permanently Delete User</h3>
+<pre><code class="lang-http">DELETE /api/v1/users/{id}/permanent
+Content-Type: application/json
+Authorization: Bearer {super_admin_token}
+
+{
+  &quot;confirmation&quot;: &quot;DELETE&quot;,
+  &quot;userId&quot;: 123
+}
+</code></pre>
+<p><strong>Authorization:</strong> Super Admin only + requires confirmation</p>
+<p><strong>Response (Success - 204 No Content):</strong></p>
+<pre><code class="lang-http">HTTP/1.1 204 No Content
+</code></pre>
+<hr>
+<h3 id="9-list-users">9. List Users</h3>
+<pre><code class="lang-http">GET /api/v1/users?page=1&amp;pageSize=10&amp;status=active
+Authorization: Bearer {admin_token}
+</code></pre>
+<p><strong>Query Parameters:</strong></p>
+<ul>
+<li><code>page</code> (default: 1)</li>
+<li><code>pageSize</code> (default: 10, max: 100)</li>
+<li><code>status</code> (optional: active, inactive, deleted)</li>
+<li><code>role</code> (optional: user, admin, superadmin)</li>
+<li><code>sortBy</code> (optional: createdAt, lastName, email)</li>
+<li><code>sortOrder</code> (optional: asc, desc)</li>
+</ul>
+<p><strong>Response (Success - 200 OK):</strong></p>
+<pre><code class="lang-json">HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  &quot;data&quot;: [
+    {
+      &quot;id&quot;: 1,
+      &quot;firstName&quot;: &quot;Alice&quot;,
+      &quot;lastName&quot;: &quot;Smith&quot;,
+      &quot;email&quot;: &quot;alice@example.com&quot;,
+      &quot;status&quot;: &quot;active&quot;,
+      &quot;role&quot;: &quot;user&quot;
+    },
+    {
+      &quot;id&quot;: 2,
+      &quot;firstName&quot;: &quot;Bob&quot;,
+      &quot;lastName&quot;: &quot;Jones&quot;,
+      &quot;email&quot;: &quot;bob@example.com&quot;,
+      &quot;status&quot;: &quot;active&quot;,
+      &quot;role&quot;: &quot;admin&quot;
+    }
+  ],
+  &quot;pagination&quot;: {
+    &quot;page&quot;: 1,
+    &quot;pageSize&quot;: 10,
+    &quot;totalItems&quot;: 247,
+    &quot;totalPages&quot;: 25,
+    &quot;hasNextPage&quot;: true,
+    &quot;hasPreviousPage&quot;: false,
+    &quot;links&quot;: {
+      &quot;self&quot;: &quot;/api/v1/users?page=1&amp;pageSize=10&quot;,
+      &quot;next&quot;: &quot;/api/v1/users?page=2&amp;pageSize=10&quot;,
+      &quot;previous&quot;: null,
+      &quot;first&quot;: &quot;/api/v1/users?page=1&amp;pageSize=10&quot;,
+      &quot;last&quot;: &quot;/api/v1/users?page=25&amp;pageSize=10&quot;
+    }
+  }
+}
+</code></pre>
+<p><strong>Note:</strong> ✅ Minimal data in list (only 5 fields per user, not 20+)</p>
+<hr>
+<h3 id="10-search-users">10. Search Users</h3>
+<pre><code class="lang-http">GET /api/v1/users/search?q=John&amp;page=1&amp;pageSize=10
+Authorization: Bearer {admin_token}
+</code></pre>
+<p><strong>Query Parameters:</strong></p>
+<ul>
+<li><code>q</code> (required: search query)</li>
+<li><code>page</code>, <code>pageSize</code> (optional: same as list)</li>
+</ul>
+<p><strong>Response:</strong> Same format as List Users</p>
+<hr>
+<h2 id="controller-implementation">Controller Implementation</h2>
+<pre><code class="lang-csharp">using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.JsonPatch;
+using System.Security.Claims;
+
+namespace UserManagementApi.Controllers.V1
+{
+    [ApiController]
+    [Route(&quot;api/v1/users&quot;)]
+    [Authorize] // ✅ All endpoints require authentication
+    [ApiVersion(&quot;1.0&quot;)]
+    public class UsersController : ControllerBase
+    {
+        private readonly IUserService _userService;
+        private readonly ILogger&lt;UsersController&gt; _logger;
+
+        public UsersController(IUserService userService, ILogger&lt;UsersController&gt; logger)
+        {
+            _userService = userService;
+            _logger = logger;
+        }
+
+        /// &lt;summary&gt;
+        /// Create a new user (Admin only)
+        /// &lt;/summary&gt;
+        [HttpPost]
+        [Authorize(Roles = &quot;Admin&quot;)]
+        [ProducesResponseType(typeof(UserDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
+        public async Task&lt;IActionResult&gt; CreateUser([FromBody] CreateUserRequest request)
+        {
+            try
+            {
+                var user = await _userService.CreateAsync(request);
+                var userDto = UserDto.FromEntity(user); // ✅ DTO excludes password
+                
+                return CreatedAtAction(
+                    nameof(GetUser), 
+                    new { id = user.Id }, 
+                    userDto
+                );
+            }
+            catch (DuplicateEmailException ex)
+            {
+                _logger.LogWarning(ex, &quot;Duplicate email attempt: {Email}&quot;, request.Email);
+                
+                return Conflict(new ProblemDetails
+                {
+                    Type = &quot;https://api.example.com/errors/duplicate-email&quot;,
+                    Title = &quot;Email already in use&quot;,
+                    Detail = &quot;An account with this email already exists. Try logging in or resetting your password.&quot;,
+                    Status = StatusCodes.Status409Conflict,
+                    Instance = HttpContext.Request.Path
+                });
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(new ValidationProblemDetails(ex.Errors)
+                {
+                    Type = &quot;https://api.example.com/errors/validation-failed&quot;,
+                    Title = &quot;Validation failed&quot;,
+                    Status = StatusCodes.Status400BadRequest,
+                    Instance = HttpContext.Request.Path
+                });
+            }
+        }
+
+        /// &lt;summary&gt;
+        /// Get user by ID (Users can see themselves, Admins can see anyone)
+        /// &lt;/summary&gt;
+        [HttpGet(&quot;{id}&quot;)]
+        [Authorize(Policy = &quot;SelfOrAdmin&quot;)]
+        [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status403Forbidden)]
+        public async Task&lt;IActionResult&gt; GetUser(int id)
+        {
+            var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? &quot;0&quot;);
+            var isAdmin = User.IsInRole(&quot;Admin&quot;);
+
+            // ✅ Authorization check
+            if (currentUserId != id &amp;&amp; !isAdmin)
+            {
+                return Forbid(); // Returns 403 Forbidden
+            }
+
+            var user = await _userService.GetByIdAsync(id);
+            
+            if (user == null)
+            {
+                return NotFound(new ProblemDetails // ✅ Returns 404, not 200
+                {
+                    Type = &quot;https://api.example.com/errors/user-not-found&quot;,
+                    Title = &quot;User not found&quot;,
+                    Detail = &quot;The requested user does not exist or has been deleted.&quot;,
+                    Status = StatusCodes.Status404NotFound,
+                    Instance = HttpContext.Request.Path
+                });
+            }
+
+            return Ok(UserDto.FromEntity(user)); // ✅ Returns 200 OK
+        }
+
+        /// &lt;summary&gt;
+        /// Full update of user (Users can update themselves, Admins can update anyone)
+        /// &lt;/summary&gt;
+        [HttpPut(&quot;{id}&quot;)]
+        [Authorize(Policy = &quot;SelfOrAdmin&quot;)]
+        [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        public async Task&lt;IActionResult&gt; UpdateUser(int id, [FromBody] UpdateUserRequest request)
+        {
+            var user = await _userService.GetByIdAsync(id);
+            
+            if (user == null)
+                return NotFound();
+
+            await _userService.UpdateAsync(id, request);
+            var updatedUser = await _userService.GetByIdAsync(id);
+            
+            return Ok(UserDto.FromEntity(updatedUser));
+        }
+
+        /// &lt;summary&gt;
+        /// Partial update of user (only provided fields are updated)
+        /// &lt;/summary&gt;
+        [HttpPatch(&quot;{id}&quot;)]
+        [Authorize(Policy = &quot;SelfOrAdmin&quot;)]
+        [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        public async Task&lt;IActionResult&gt; PatchUser(int id, [FromBody] PatchUserRequest request)
+        {
+            var user = await _userService.GetByIdAsync(id);
+            
+            if (user == null)
+                return NotFound();
+
+            // ✅ Only non-null fields are updated
+            await _userService.PatchAsync(id, request);
+            var updatedUser = await _userService.GetByIdAsync(id);
+            
+            return Ok(UserDto.FromEntity(updatedUser));
+        }
+
+        /// &lt;summary&gt;
+        /// Update user status (Admin only)
+        /// &lt;/summary&gt;
+        [HttpPatch(&quot;{id}/status&quot;)]
+        [Authorize(Roles = &quot;Admin&quot;)]
+        [ProducesResponseType(typeof(UserStatusDto), StatusCodes.Status200OK)]
+        public async Task&lt;IActionResult&gt; UpdateStatus(int id, [FromBody] UpdateStatusRequest request)
+        {
+            await _userService.UpdateStatusAsync(id, request.Status, request.Reason);
+            var user = await _userService.GetByIdAsync(id);
+            
+            return Ok(new UserStatusDto 
+            { 
+                Id = user.Id, 
+                Status = user.Status, 
+                UpdatedAt = user.UpdatedAt 
+            });
+        }
+
+        /// &lt;summary&gt;
+        /// Update user role (Super Admin only)
+        /// &lt;/summary&gt;
+        [HttpPatch(&quot;{id}/role&quot;)]
+        [Authorize(Roles = &quot;SuperAdmin&quot;)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task&lt;IActionResult&gt; UpdateRole(int id, [FromBody] UpdateRoleRequest request)
+        {
+            await _userService.UpdateRoleAsync(id, request.Role);
+            return NoContent(); // ✅ Returns 204 No Content
+        }
+
+        /// &lt;summary&gt;
+        /// Soft delete user (Admin only)
+        /// &lt;/summary&gt;
+        [HttpDelete(&quot;{id}&quot;)]
+        [Authorize(Roles = &quot;Admin&quot;)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        public async Task&lt;IActionResult&gt; DeleteUser(int id)
+        {
+            var user = await _userService.GetByIdAsync(id);
+            
+            if (user == null)
+                return NotFound();
+
+            await _userService.SoftDeleteAsync(id); // ✅ Soft delete
+            
+            _logger.LogInformation(&quot;User {UserId} soft-deleted by {AdminId}&quot;, id, User.Identity.Name);
+            
+            return NoContent();
+        }
+
+        /// &lt;summary&gt;
+        /// Permanently delete user (Super Admin only, requires confirmation)
+        /// &lt;/summary&gt;
+        [HttpDelete(&quot;{id}/permanent&quot;)]
+        [Authorize(Roles = &quot;SuperAdmin&quot;)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        public async Task&lt;IActionResult&gt; PermanentlyDeleteUser(
+            int id, 
+            [FromBody] DeleteConfirmationRequest confirmation)
+        {
+            if (confirmation.Confirmation != &quot;DELETE&quot; || confirmation.UserId != id)
+            {
+                return BadRequest(new ProblemDetails
+                {
+                    Title = &quot;Confirmation required&quot;,
+                    Detail = &quot;You must provide correct confirmation to permanently delete a user.&quot;,
+                    Status = StatusCodes.Status400BadRequest
+                });
+            }
+
+            await _userService.HardDeleteAsync(id); // ✅ Hard delete
+            
+            _logger.LogWarning(
+                &quot;User {UserId} PERMANENTLY deleted by {AdminId}&quot;, 
+                id, 
+                User.Identity.Name
+            );
+            
+            return NoContent();
+        }
+
+        /// &lt;summary&gt;
+        /// List all users with pagination (Admin only)
+        /// &lt;/summary&gt;
+        [HttpGet]
+        [Authorize(Roles = &quot;Admin&quot;)]
+        [ProducesResponseType(typeof(PagedResponse&lt;UserListDto&gt;), StatusCodes.Status200OK)]
+        public async Task&lt;IActionResult&gt; ListUsers(
+            [FromQuery] int page = 1, 
+            [FromQuery] int pageSize = 10,
+            [FromQuery] string? status = null,
+            [FromQuery] string? role = null,
+            [FromQuery] string sortBy = &quot;createdAt&quot;,
+            [FromQuery] string sortOrder = &quot;desc&quot;)
+        {
+            if (pageSize &gt; 100)
+                pageSize = 100; // ✅ Cap maximum page size
+
+            var result = await _userService.GetPagedAsync(
+                page, 
+                pageSize, 
+                status, 
+                role, 
+                sortBy, 
+                sortOrder
+            );
+
+            var response = new PagedResponse&lt;UserListDto&gt;
+            {
+                Data = result.Items.Select(UserListDto.FromEntity).ToList(),
+                Pagination = new PaginationMetadata
+                {
+                    Page = page,
+                    PageSize = pageSize,
+                    TotalItems = result.TotalCount,
+                    TotalPages = (int)Math.Ceiling(result.TotalCount / (double)pageSize),
+                    HasNextPage = page &lt; (int)Math.Ceiling(result.TotalCount / (double)pageSize),
+                    HasPreviousPage = page &gt; 1,
+                    Links = new PaginationLinks
+                    {
+                        Self = $&quot;/api/v1/users?page={page}&amp;pageSize={pageSize}&quot;,
+                        Next = page &lt; result.TotalCount / pageSize 
+                            ? $&quot;/api/v1/users?page={page + 1}&amp;pageSize={pageSize}&quot; 
+                            : null,
+                        Previous = page &gt; 1 
+                            ? $&quot;/api/v1/users?page={page - 1}&amp;pageSize={pageSize}&quot; 
+                            : null,
+                        First = $&quot;/api/v1/users?page=1&amp;pageSize={pageSize}&quot;,
+                        Last = $&quot;/api/v1/users?page={result.TotalCount / pageSize}&amp;pageSize={pageSize}&quot;
+                    }
+                }
+            };
+
+            return Ok(response);
+        }
+
+        /// &lt;summary&gt;
+        /// Search users (Admin only)
+        /// &lt;/summary&gt;
+        [HttpGet(&quot;search&quot;)]
+        [Authorize(Roles = &quot;Admin&quot;)]
+        [ProducesResponseType(typeof(PagedResponse&lt;UserListDto&gt;), StatusCodes.Status200OK)]
+        public async Task&lt;IActionResult&gt; SearchUsers(
+            [FromQuery] string q,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 10)
+        {
+            if (string.IsNullOrWhiteSpace(q))
+            {
+                return BadRequest(new ProblemDetails
+                {
+                    Title = &quot;Search query required&quot;,
+                    Detail = &quot;The 'q' parameter is required for search.&quot;,
+                    Status = StatusCodes.Status400BadRequest
+                });
+            }
+
+            var result = await _userService.SearchAsync(q, page, pageSize);
+            
+            // ... same pagination response as ListUsers
+            
+            return Ok(response);
+        }
+    }
+}
+</code></pre>
+<hr>
+<h2 id="data-transfer-objects-dtos">Data Transfer Objects (DTOs)</h2>
+<pre><code class="lang-csharp">// ✅ UserDto - NEVER includes password!
+public class UserDto
+{
+    public int Id { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public string Email { get; set; }
+    public string Phone { get; set; }
+    public string Status { get; set; }
+    public string Role { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
+
+    public static UserDto FromEntity(User user) =&gt; new UserDto
+    {
+        Id = user.Id,
+        FirstName = user.FirstName,
+        LastName = user.LastName,
+        Email = user.Email,
+        Phone = user.Phone,
+        Status = user.Status,
+        Role = user.Role,
+        CreatedAt = user.CreatedAt,
+        UpdatedAt = user.UpdatedAt
+        // ✅ Password is explicitly excluded
+    };
+}
+
+// ✅ UserListDto - Minimal data for list views
+public class UserListDto
+{
+    public int Id { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public string Email { get; set; }
+    public string Status { get; set; }
+    public string Role { get; set; }
+
+    public static UserListDto FromEntity(User user) =&gt; new UserListDto
+    {
+        Id = user.Id,
+        FirstName = user.FirstName,
+        LastName = user.LastName,
+        Email = user.Email,
+        Status = user.Status,
+        Role = user.Role
+        // ✅ Only 6 fields instead of 20+
+    };
+}
+
+// ✅ PatchUserRequest - All fields nullable
+public class PatchUserRequest
+{
+    public string? FirstName { get; set; }
+    public string? LastName { get; set; }
+    public string? Email { get; set; }
+    public string? Phone { get; set; }
+    
+    // ✅ Only non-null fields will be updated
+}
+</code></pre>
+<hr>
+<h2 id="authentication--authorization-setup">Authentication &amp; Authorization Setup</h2>
+<pre><code class="lang-csharp">// Program.cs or Startup.cs
+
+// ✅ Add JWT authentication
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =&gt;
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration[&quot;Jwt:Issuer&quot;],
+            ValidAudience = builder.Configuration[&quot;Jwt:Audience&quot;],
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration[&quot;Jwt:Key&quot;])
+            )
+        };
+    });
+
+// ✅ Add authorization policies
+builder.Services.AddAuthorization(options =&gt;
+{
+    options.AddPolicy(&quot;SelfOrAdmin&quot;, policy =&gt;
+        policy.RequireAssertion(context =&gt;
+        {
+            var userId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var requestedUserId = context.Resource as string;
+            var isAdmin = context.User.IsInRole(&quot;Admin&quot;);
+            
+            return userId == requestedUserId || isAdmin;
+        }));
+});
+
+// ✅ Add rate limiting
+builder.Services.AddRateLimiter(options =&gt;
+{
+    options.GlobalLimiter = PartitionedRateLimiter.Create&lt;HttpContext, string&gt;(context =&gt;
+        RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: context.User.Identity?.Name ?? context.Request.Headers.Host.ToString(),
+            factory: partition =&gt; new FixedWindowRateLimiterOptions
+            {
+                AutoReplenishment = true,
+                PermitLimit = 100,
+                QueueLimit = 0,
+                Window = TimeSpan.FromMinutes(1)
+            }));
+});
+
+// ✅ Add API versioning
+builder.Services.AddApiVersioning(options =&gt;
+{
+    options.DefaultApiVersion = new ApiVersion(1, 0);
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.ReportApiVersions = true;
+});
+
+app.UseAuthentication(); // ✅ Must come before UseAuthorization
+app.UseAuthorization();
+app.UseRateLimiter();
+</code></pre>
+<hr>
+<h2 id="what-i-learned">What I Learned</h2>
+<h3 id="security">Security</h3>
+<ul>
+<li>✅ <strong>Never return passwords</strong> - Even hashed passwords shouldn't be exposed</li>
+<li>✅ <strong>Always authenticate</strong> - Every endpoint requires authentication</li>
+<li>✅ <strong>Proper authorization</strong> - Users can only see/modify their own data, admins have broader access</li>
+<li>✅ <strong>Don't expose exception messages</strong> - Use ProblemDetails with user-friendly messages</li>
+<li>✅ <strong>Rate limiting</strong> - Prevent abuse and DDoS attacks</li>
+</ul>
+<h3 id="rest-api-design">REST API Design</h3>
+<ul>
+<li>✅ <strong>Use proper HTTP methods</strong> - GET (read), POST (create), PUT (full update), PATCH (partial), DELETE</li>
+<li>✅ <strong>Use proper status codes</strong> - 200 OK, 201 Created, 204 No Content, 400 Bad Request, 404 Not Found, 409 Conflict</li>
+<li>✅ <strong>RESTful URLs</strong> - <code>/users/{id}</code> not <code>/users/get?id=123</code></li>
+<li>✅ <strong>Nouns in URLs, verbs in HTTP methods</strong> - <code>/users</code> not <code>/getUsers</code></li>
+</ul>
+<h3 id="data-management">Data Management</h3>
+<ul>
+<li>✅ <strong>DTOs separate from entities</strong> - Don't expose database models directly</li>
+<li>✅ <strong>Soft delete by default</strong> - Keep audit trail, allow recovery</li>
+<li>✅ <strong>Pagination metadata</strong> - Make it easy for clients to navigate</li>
+<li>✅ <strong>Minimal data in lists</strong> - Don't return 20 fields when 5 will do</li>
+</ul>
+<h3 id="best-practices">Best Practices</h3>
+<ul>
+<li>✅ <strong>API versioning</strong> - Prepare for breaking changes</li>
+<li>✅ <strong>PATCH for partial updates</strong> - Don't require all fields</li>
+<li>✅ <strong>Logging</strong> - Log important actions (deletions, role changes)</li>
+<li>✅ <strong>ProblemDetails</strong> - Standard error format (RFC 7807)</li>
+</ul>
+<hr>
+<h2 id="comparison-v1-vs-v2">Comparison: V1 vs V2</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>V1 (Bad)</th>
+<th>V2 (Fixed)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Password in response</strong></td>
+<td>❌ Exposed</td>
+<td>✅ Never returned</td>
+</tr>
+<tr>
+<td><strong>Authentication</strong></td>
+<td>❌ None</td>
+<td>✅ JWT required</td>
+</tr>
+<tr>
+<td><strong>Authorization</strong></td>
+<td>❌ None</td>
+<td>✅ Role-based + policies</td>
+</tr>
+<tr>
+<td><strong>HTTP status codes</strong></td>
+<td>❌ Always 200</td>
+<td>✅ Proper codes</td>
+</tr>
+<tr>
+<td><strong>Endpoint design</strong></td>
+<td>❌ <code>/users/get?id=</code></td>
+<td>✅ <code>/users/{id}</code></td>
+</tr>
+<tr>
+<td><strong>Error format</strong></td>
+<td>❌ <code>{success: false}</code></td>
+<td>✅ ProblemDetails</td>
+</tr>
+<tr>
+<td><strong>Partial updates</strong></td>
+<td>❌ Must send all fields</td>
+<td>✅ PATCH support</td>
+</tr>
+<tr>
+<td><strong>Delete strategy</strong></td>
+<td>❌ Hard delete</td>
+<td>✅ Soft delete</td>
+</tr>
+<tr>
+<td><strong>Pagination</strong></td>
+<td>❌ No metadata</td>
+<td>✅ Full metadata</td>
+</tr>
+<tr>
+<td><strong>Rate limiting</strong></td>
+<td>❌ None</td>
+<td>✅ Implemented</td>
+</tr>
+<tr>
+<td><strong>API versioning</strong></td>
+<td>❌ None</td>
+<td>✅ /v1/ prefix</td>
+</tr>
+<tr>
+<td><strong>List response</strong></td>
+<td>❌ 20+ fields</td>
+<td>✅ 6 fields</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="testing-the-api">Testing the API</h2>
+<pre><code class="lang-bash"># 1. Get JWT token
+curl -X POST https://api.example.com/api/v1/auth/login \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{&quot;email&quot;: &quot;admin@example.com&quot;, &quot;password&quot;: &quot;password&quot;}'
+
+# Response: {&quot;token&quot;: &quot;eyJhbGc...&quot;}
+
+# 2. Create user (Admin only)
+curl -X POST https://api.example.com/api/v1/users \
+  -H &quot;Content-Type: application/json&quot; \
+  -H &quot;Authorization: Bearer eyJhbGc...&quot; \
+  -d '{
+    &quot;firstName&quot;: &quot;John&quot;,
+    &quot;lastName&quot;: &quot;Doe&quot;,
+    &quot;email&quot;: &quot;john@example.com&quot;,
+    &quot;password&quot;: &quot;SecureP@ss123&quot;,
+    &quot;phone&quot;: &quot;555-1234&quot;
+  }'
+
+# Response: 201 Created
+# {
+#   &quot;id&quot;: 123,
+#   &quot;firstName&quot;: &quot;John&quot;,
+#   ...
+#   // ✅ No password!
+# }
+
+# 3. Get user
+curl https://api.example.com/api/v1/users/123 \
+  -H &quot;Authorization: Bearer eyJhbGc...&quot;
+
+# Response: 200 OK (if authorized) or 403 Forbidden
+
+# 4. Partial update (only phone)
+curl -X PATCH https://api.example.com/api/v1/users/123 \
+  -H &quot;Content-Type: application/json&quot; \
+  -H &quot;Authorization: Bearer eyJhbGc...&quot; \
+  -d '{&quot;phone&quot;: &quot;555-9999&quot;}'
+
+# Response: 200 OK with updated user
+
+# 5. List users with pagination
+curl &quot;https://api.example.com/api/v1/users?page=1&amp;pageSize=10&amp;status=active&quot; \
+  -H &quot;Authorization: Bearer eyJhbGc...&quot;
+
+# Response: 200 OK with data + pagination metadata
+
+# 6. Try to access without authentication
+curl https://api.example.com/api/v1/users/123
+
+# Response: 401 Unauthorized
+
+# 7. Try to access other user's data (non-admin)
+curl https://api.example.com/api/v1/users/999 \
+  -H &quot;Authorization: Bearer &lt;user_123_token&gt;&quot;
+
+# Response: 403 Forbidden
+</code></pre>
+<hr>
+<h2 id="next-steps">Next Steps</h2>
+<p><strong>Done:</strong></p>
+<ul>
+<li>✅ All critical security issues fixed</li>
+<li>✅ RESTful API design implemented</li>
+<li>✅ Proper HTTP status codes</li>
+<li>✅ Authentication and authorization</li>
+<li>✅ PATCH support for partial updates</li>
+<li>✅ Soft delete with audit logging</li>
+<li>✅ Pagination metadata</li>
+<li>✅ API versioning</li>
+</ul>
+<p><strong>Future Enhancements:</strong></p>
+<ul>
+<li>[ ] OpenAPI/Swagger documentation</li>
+<li>[ ] Request validation with FluentValidation</li>
+<li>[ ] Integration tests (xUnit + WebApplicationFactory)</li>
+<li>[ ] CORS configuration</li>
+<li>[ ] Response caching</li>
+<li>[ ] Health checks</li>
+<li>[ ] Distributed tracing (OpenTelemetry)</li>
+</ul>
+<hr>
+<h2 id="resources">Resources</h2>
+<ul>
+<li><strong>Marcus's Review:</strong> See <code>review-feedback.md</code> for detailed explanations</li>
+<li><strong>REST API Best Practices:</strong> <a href="https://restfulapi.net/">https://restfulapi.net/</a></li>
+<li><strong>ProblemDetails Spec:</strong> RFC 7807</li>
+<li><strong>OWASP API Security:</strong> <a href="https://owasp.org/www-project-api-security/">https://owasp.org/www-project-api-security/</a></li>
+<li><strong>This Repository:</strong> <code>samples/05-RealWorld/WebApiAdvanced/</code> for production examples</li>
+</ul>
+<hr>
+<h2 id="acknowledgments">Acknowledgments</h2>
+<p><strong>Thank you, Marcus!</strong> Your detailed review helped me understand:</p>
+<ul>
+<li>Why security matters (not just &quot;best practices&quot;)</li>
+<li>How REST conventions make APIs predictable</li>
+<li>The importance of proper HTTP semantics</li>
+<li>How to write maintainable, production-ready code</li>
+</ul>
+<p>This was a huge learning opportunity. I went from &quot;code that works&quot; to &quot;code that's secure, maintainable, and follows industry standards.&quot;</p>
+<p><strong>Status:</strong> ✅ Ready for production deployment</p>
+<hr>
+<p><strong>Reviewer's Final Comment (Marcus Rodriguez):</strong></p>
+<blockquote>
+<p>Jordan, this is EXCELLENT work! You took every piece of feedback seriously and implemented all the critical fixes. The API now follows industry standards and is production-ready.</p>
+<p>Highlights:</p>
+<ul>
+<li>Security is solid (no password exposure, proper auth)</li>
+<li>RESTful design is correct</li>
+<li>Error handling is professional (ProblemDetails)</li>
+<li>Code is well-documented with XML comments</li>
+<li>Authorization logic is clear</li>
+</ul>
+<p><strong>APPROVED FOR PRODUCTION</strong> ✅</p>
+<p>You've leveled up significantly with this PR. Keep this standard for all future APIs!</p>
+<p>— Marcus</p>
+</blockquote>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/code-reviews/02-API-Design-Review/v2-api.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

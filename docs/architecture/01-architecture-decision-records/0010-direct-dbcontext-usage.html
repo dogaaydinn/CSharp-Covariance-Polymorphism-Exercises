@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>ADR-0010: Direct DbContext Usage (No Repository Pattern) | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="ADR-0010: Direct DbContext Usage (No Repository Pattern) | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/01-architecture-decision-records/0010-direct-dbcontext-usage.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="adr-0010-direct-dbcontext-usage-no-repository-pattern">ADR-0010: Direct DbContext Usage (No Repository Pattern)</h1>
+
+<p><strong>Status:</strong> Accepted
+<strong>Date:</strong> 2025-12-02
+<strong>Deciders:</strong> Architecture Team
+<strong>Technical Story:</strong> Data access layer architecture</p>
+<h2 id="context">Context</h2>
+<p>When using Entity Framework Core, developers often face a question: Should we wrap DbContext in a Repository pattern?</p>
+<p><strong>Repository Pattern:</strong></p>
+<pre><code class="lang-csharp">public interface IVideoRepository
+{
+    Task&lt;List&lt;Video&gt;&gt; GetAllAsync();
+    Task&lt;Video?&gt; GetByIdAsync(int id);
+    Task AddAsync(Video video);
+}
+
+public class VideoRepository : IVideoRepository
+{
+    private readonly VideoDbContext _context;
+    // Implementation...
+}
+</code></pre>
+<p><strong>Direct DbContext:</strong></p>
+<pre><code class="lang-csharp">app.MapGet(&quot;/api/videos&quot;, async (VideoDbContext db) =&gt;
+{
+    return await db.Videos.ToListAsync();
+});
+</code></pre>
+<p>Considerations:</p>
+<ul>
+<li>Abstraction benefits vs overhead</li>
+<li>Testability requirements</li>
+<li>Code simplicity</li>
+<li>SOLID principles (Dependency Inversion)</li>
+<li>Industry best practices evolution</li>
+</ul>
+<h2 id="decision">Decision</h2>
+<p>We will use <strong>DbContext directly</strong> without an intermediate Repository layer.</p>
+<p>Approach:</p>
+<ul>
+<li>Inject <code>VideoDbContext</code> into endpoints</li>
+<li>Use EF Core LINQ queries directly</li>
+<li>No repository interfaces or implementations</li>
+<li>Business logic extracted to services when needed</li>
+</ul>
+<h2 id="consequences">Consequences</h2>
+<h3 id="positive">Positive</h3>
+<ul>
+<li><strong>Simplicity</strong>: 40-50% less code (no repository layer)</li>
+<li><strong>EF Core is Repository</strong>: DbContext already implements Repository and Unit of Work patterns</li>
+<li><strong>LINQ Power</strong>: Full access to EF Core's query capabilities</li>
+<li><strong>No Abstraction Leak</strong>: Don't duplicate DbContext API in custom interface</li>
+<li><strong>Modern Approach</strong>: Industry moving away from Repository over EF Core</li>
+<li><strong>Testability</strong>: EF Core In-Memory provider for testing</li>
+<li><strong>Refactoring</strong>: DbContext methods are refactoring-friendly (Find All Usages works)</li>
+</ul>
+<h3 id="negative">Negative</h3>
+<ul>
+<li><strong>Database Coupling</strong>: Code directly coupled to EF Core</li>
+<li><strong>Testing</strong>: Slightly harder to unit test (need EF Core In-Memory or mocks)</li>
+<li><strong>Query Reuse</strong>: No single place for complex queries (mitigated with extension methods)</li>
+<li><strong>Migration</strong>: If switching from EF Core to Dapper, must change all code</li>
+</ul>
+<h3 id="neutral">Neutral</h3>
+<ul>
+<li><strong>SOLID Debate</strong>: Some argue Repository violates DIP, others argue it satisfies it</li>
+<li><strong>Team Preference</strong>: Some teams strongly prefer Repository</li>
+</ul>
+<h2 id="alternatives-considered">Alternatives Considered</h2>
+<h3 id="alternative-1-generic-repository-pattern">Alternative 1: Generic Repository Pattern</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Abstraction</strong>: Hides EF Core behind interface</li>
+<li><strong>Testability</strong>: Easy to mock <code>IRepository&lt;Video&gt;</code></li>
+<li><strong>Consistency</strong>: Uniform API across entities</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Over-Abstraction</strong>: EF Core already IS a repository</li>
+<li><strong>Leaky</strong>: Advanced queries leak through (Include, ThenInclude)</li>
+<li><strong>Boilerplate</strong>: Massive amount of code for no benefit</li>
+<li><strong>Limited</strong>: Cannot express all EF Core capabilities</li>
+<li><strong>Cargo Cult</strong>: Often implemented without understanding why</li>
+</ul>
+<p><strong>Why rejected:</strong> EF Core's DbContext already implements Repository and Unit of Work patterns. Adding another layer duplicates functionality.</p>
+<h3 id="alternative-2-specific-repository-per-entity">Alternative 2: Specific Repository Per Entity</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Encapsulation</strong>: Complex queries in one place</li>
+<li><strong>Testability</strong>: Can mock <code>IVideoRepository</code></li>
+<li><strong>Explicit</strong>: Clear intent for each operation</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Duplication</strong>: Each repository repeats CRUD operations</li>
+<li><strong>Maintenance</strong>: Must update repository for new queries</li>
+<li><strong>Over-Engineering</strong>: Simple CRUD doesn't need abstraction</li>
+<li><strong>Query Reuse</strong>: Could use extension methods instead</li>
+</ul>
+<p><strong>Why rejected:</strong> For a simple CRUD API, repositories add complexity without benefit. If queries become complex, extract to query services.</p>
+<h3 id="alternative-3-cqrs-with-mediatr">Alternative 3: CQRS with MediatR</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Separation</strong>: Commands and Queries separated</li>
+<li><strong>Organization</strong>: Each operation in its own class</li>
+<li><strong>Testable</strong>: Easy to test individual handlers</li>
+<li><strong>Scalable</strong>: Good for complex domains</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Overkill</strong>: Way too complex for simple CRUD</li>
+<li><strong>Boilerplate</strong>: Massive code overhead (Command, Handler, Validator, etc.)</li>
+<li><strong>Indirection</strong>: Hard to follow flow from API to database</li>
+<li><strong>Learning Curve</strong>: Team must learn CQRS + MediatR</li>
+</ul>
+<p><strong>Why rejected:</strong> CQRS is for complex business domains. Video CRUD is not complex enough to justify CQRS.</p>
+<h2 id="related-decisions">Related Decisions</h2>
+<ul>
+<li><a href="0003-entity-framework-core-data-access.html">ADR-0003</a>: EF Core chosen as ORM</li>
+<li><a href="0009-minimal-apis-over-controllers.html">ADR-0009</a>: Minimal APIs pair well with direct DbContext</li>
+</ul>
+<h2 id="related-links">Related Links</h2>
+<ul>
+<li><a href="https://www.ben-morris.com/why-the-repository-pattern-is-meaningless-with-entity-framework/">Repository Pattern Debate</a></li>
+<li><a href="https://learn.microsoft.com/ef/core/testing/">EF Core Testing</a></li>
+<li><a href="https://learn.microsoft.com/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/infrastructure-persistence-layer-design">MSDN Repository Pattern</a></li>
+<li><a href="https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html">Clean Architecture EF Core</a></li>
+</ul>
+<h2 id="notes">Notes</h2>
+<ul>
+<li><p><strong>When Repository Makes Sense</strong>:</p>
+<ul>
+<li>Switching between multiple data sources (SQL + MongoDB)</li>
+<li>Complex domain logic requiring encapsulation</li>
+<li>Team mandate (company standards)</li>
+<li>Large team with junior developers (guard rails)</li>
+</ul>
+</li>
+<li><p><strong>Alternatives to Repository</strong>:</p>
+<ul>
+<li><p><strong>Extension Methods</strong>: For query reuse</p>
+<pre><code class="lang-csharp">public static class VideoQueryExtensions
+{
+    public static IQueryable&lt;Video&gt; Active(this IQueryable&lt;Video&gt; query)
+        =&gt; query.Where(v =&gt; v.Status == VideoStatus.Ready);
+}
+
+// Usage: db.Videos.Active().ToListAsync();
+</code></pre>
+</li>
+<li><p><strong>Query Services</strong>: For complex queries</p>
+<pre><code class="lang-csharp">public class VideoQueryService
+{
+    private readonly VideoDbContext _db;
+    public Task&lt;List&lt;Video&gt;&gt; GetPopularVideosAsync(int count)
+        =&gt; _db.Videos.OrderByDescending(v =&gt; v.ViewCount)
+                     .Take(count).ToListAsync();
+}
+</code></pre>
+</li>
+<li><p><strong>Specification Pattern</strong>: For reusable filters</p>
+<pre><code class="lang-csharp">public class ActiveVideoSpec : ISpecification&lt;Video&gt;
+{
+    public Expression&lt;Func&lt;Video, bool&gt;&gt; Criteria
+        =&gt; v =&gt; v.Status == VideoStatus.Ready;
+}
+</code></pre>
+</li>
+</ul>
+</li>
+<li><p><strong>Testing Strategy</strong>:</p>
+<pre><code class="lang-csharp">// Integration test with EF Core In-Memory
+var options = new DbContextOptionsBuilder&lt;VideoDbContext&gt;()
+    .UseInMemoryDatabase(&quot;TestDb&quot;)
+    .Options;
+
+using var context = new VideoDbContext(options);
+// Seed data, test endpoint
+</code></pre>
+</li>
+<li><p><strong>Migration Path</strong>: If you later need Repository:</p>
+<ol>
+<li>Keep existing code (it works!)</li>
+<li>Add repositories only for complex entities</li>
+<li>Don't refactor working code unnecessarily</li>
+</ol>
+</li>
+<li><p><strong>Industry Trends</strong>:</p>
+<ul>
+<li>Microsoft's official samples use DbContext directly</li>
+<li>Clean Architecture samples (Jason Taylor) use thin repositories with MediatR</li>
+<li>Most modern .NET developers prefer direct DbContext</li>
+<li>Repository pattern is legacy from pre-EF days</li>
+</ul>
+</li>
+<li><p><strong>Performance</strong>: Direct DbContext has zero overhead vs Repository (no extra method calls)</p>
+</li>
+<li><p><strong>Conclusion</strong>: Repository Pattern is not evil, it's just unnecessary when using EF Core. Keep things simple until complexity demands abstraction.</p>
+</li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/01-architecture-decision-records/0010-direct-dbcontext-usage.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Production-Grade CI/CD Workflows | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Production-Grade CI/CD Workflows | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/CICD_WORKFLOWS.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="production-grade-cicd-workflows">Production-Grade CI/CD Workflows</h1>
+
+<h2 id="overview">Overview</h2>
+<p>This repository implements <strong>Silicon Valley-standard</strong> CI/CD practices with three comprehensive GitHub Actions workflows:</p>
+<ol>
+<li><strong>CI Pipeline</strong> (<code>ci.yml</code>) - Continuous Integration with quality gates</li>
+<li><strong>NuGet Publishing</strong> (<code>publish-nuget.yml</code>) - Automated package publishing</li>
+<li><strong>Container Build &amp; Push</strong> (<code>build-container.yml</code>) - Multi-arch Docker images with security scanning</li>
+</ol>
+<hr>
+<h2 id="1-ci-pipeline-ciyml">1. CI Pipeline (<code>ci.yml</code>)</h2>
+<h3 id="purpose">Purpose</h3>
+<p>Continuous Integration pipeline that runs on every push and pull request to ensure code quality and catch issues early.</p>
+<h3 id="jobs">Jobs</h3>
+<h4 id="build--test-matrix">Build &amp; Test (Matrix)</h4>
+<p>Runs on <strong>3 platforms</strong> (Ubuntu, Windows, macOS) to ensure cross-platform compatibility.</p>
+<pre><code class="lang-yaml">matrix:
+  os: [ubuntu-latest, windows-latest, macos-latest]
+</code></pre>
+<p><strong>Steps:</strong></p>
+<ol>
+<li>✅ Checkout code with full history</li>
+<li>✅ Setup .NET 8.0</li>
+<li>✅ Restore dependencies (NuGet packages)</li>
+<li>✅ Build in Debug configuration</li>
+<li>✅ Build in Release configuration</li>
+<li>✅ Run Unit Tests with coverage</li>
+<li>✅ Run Integration Tests with coverage</li>
+<li>✅ Upload coverage to Codecov</li>
+<li>✅ Publish build artifacts</li>
+</ol>
+<p><strong>Artifacts:</strong></p>
+<ul>
+<li>Build outputs (Release binaries)</li>
+<li>Code coverage reports</li>
+<li>Test results</li>
+</ul>
+<h4 id="code-quality--static-analysis">Code Quality &amp; Static Analysis</h4>
+<p>Comprehensive code quality checks including <strong>SonarCloud</strong> integration.</p>
+<p><strong>Checks:</strong></p>
+<ol>
+<li><p>✅ <strong>Code Formatting</strong> - <code>dotnet format --verify-no-changes</code></p>
+<ul>
+<li>Ensures consistent code style</li>
+<li>Enforces .editorconfig rules</li>
+</ul>
+</li>
+<li><p>✅ <strong>Roslyn Analyzers</strong> - Custom analyzers run during build</p>
+<ul>
+<li>Performance analyzers</li>
+<li>Design analyzers</li>
+<li>Security analyzers</li>
+</ul>
+</li>
+<li><p>✅ <strong>SonarCloud Static Analysis</strong> (NEW!)</p>
+<ul>
+<li><strong>Code Smells</strong> - Maintainability issues</li>
+<li><strong>Bugs</strong> - Potential runtime errors</li>
+<li><strong>Vulnerabilities</strong> - Security issues</li>
+<li><strong>Security Hotspots</strong> - Code requiring review</li>
+<li><strong>Code Coverage</strong> - Test coverage metrics</li>
+<li><strong>Duplications</strong> - Duplicate code detection</li>
+</ul>
+</li>
+</ol>
+<p><strong>SonarCloud Metrics:</strong></p>
+<ul>
+<li>Maintainability Rating (A-E)</li>
+<li>Reliability Rating (A-E)</li>
+<li>Security Rating (A-E)</li>
+<li>Coverage % (target: 80%+)</li>
+<li>Duplications % (target: &lt; 3%)</li>
+</ul>
+<p><strong>Configuration:</strong></p>
+<pre><code class="lang-properties"># sonar-project.properties
+sonar.projectKey=dogaaydinn_CSharp-Covariance-Polymorphism-Exercises
+sonar.organization=dogaaydinn
+sonar.sources=src
+sonar.tests=tests
+sonar.cs.opencover.reportsPaths=**/coverage/**/coverage.opencover.xml
+</code></pre>
+<h4 id="mutation-testing-strykernet">Mutation Testing (Stryker.NET)</h4>
+<p>Tests the quality of your tests by introducing mutations (bugs) and checking if tests catch them.</p>
+<p><strong>Mutation Score:</strong></p>
+<ul>
+<li><strong>&gt; 80%</strong>: Excellent test suite</li>
+<li><strong>60-80%</strong>: Good test suite</li>
+<li><strong>&lt; 60%</strong>: Weak test suite</li>
+</ul>
+<p><strong>Example Mutations:</strong></p>
+<pre><code class="lang-csharp">// Original
+if (x &gt; 10) return true;
+
+// Mutated (boundary)
+if (x &gt;= 10) return true;  // Did tests catch this?
+
+// Mutated (operator)
+if (x &lt; 10) return true;   // Did tests catch this?
+</code></pre>
+<h4 id="coverage-gate">Coverage Gate</h4>
+<p>Ensures minimum code coverage thresholds.</p>
+<p><strong>Steps:</strong></p>
+<ol>
+<li>Run all tests with coverage</li>
+<li>Generate HTML coverage report</li>
+<li>Add coverage summary to PR</li>
+<li>Check coverage threshold (informational)</li>
+</ol>
+<p><strong>Reports Generated:</strong></p>
+<ul>
+<li>HTML report (browsable)</li>
+<li>Markdown summary (PR comment)</li>
+<li>Coverage badges</li>
+</ul>
+<h4 id="security-scan">Security Scan</h4>
+<p>Scans dependencies for known vulnerabilities.</p>
+<p><strong>Checks:</strong></p>
+<ol>
+<li><code>dotnet list package --vulnerable</code> - CVE database check</li>
+<li><code>dotnet list package --outdated</code> - Outdated package detection</li>
+</ol>
+<p><strong>Example Output:</strong></p>
+<pre><code>Package            Current  Highest  Severity
+Newtonsoft.Json    12.0.1   13.0.3   High (CVE-2024-XXXXX)
+</code></pre>
+<h4 id="quality-gates-summary">Quality Gates Summary</h4>
+<p>Final job that aggregates all quality checks.</p>
+<p><strong>Gates:</strong></p>
+<ul>
+<li>✅ Build &amp; Test (all platforms)</li>
+<li>✅ Code Quality</li>
+<li>✅ Coverage Gate</li>
+<li>✅ Security Scan</li>
+</ul>
+<p><strong>Failure Handling:</strong></p>
+<ul>
+<li>Build failures block PR merge</li>
+<li>Quality issues are warnings (configurable)</li>
+<li>Security vulnerabilities generate alerts</li>
+</ul>
+<hr>
+<h2 id="2-nuget-publishing-publish-nugetyml">2. NuGet Publishing (<code>publish-nuget.yml</code>)</h2>
+<h3 id="purpose-1">Purpose</h3>
+<p>Automated NuGet package publishing with semantic versioning and full validation.</p>
+<h3 id="trigger-methods">Trigger Methods</h3>
+<p><strong>Method 1: Git Tags (Recommended)</strong></p>
+<pre><code class="lang-bash">git tag v1.0.0
+git push origin v1.0.0
+</code></pre>
+<p><strong>Method 2: Manual Workflow Dispatch</strong></p>
+<ul>
+<li>Go to Actions → Publish to NuGet → Run workflow</li>
+<li>Enter version (e.g., <code>1.0.0</code>)</li>
+<li>Select if prerelease</li>
+</ul>
+<h3 id="jobs-1">Jobs</h3>
+<h4 id="1-validate-release">1. Validate Release</h4>
+<p>Pre-flight checks before publishing.</p>
+<p><strong>Validations:</strong></p>
+<ol>
+<li>✅ Version format (X.Y.Z or X.Y.Z-prerelease)</li>
+<li>✅ Version doesn't already exist on NuGet.org</li>
+<li>✅ Determines if prerelease based on tag</li>
+</ol>
+<p><strong>Version Detection:</strong></p>
+<pre><code class="lang-bash"># From tag: v1.2.3 → 1.2.3
+# From tag: v1.2.3-beta → 1.2.3-beta (prerelease)
+# From input: User specifies version
+</code></pre>
+<h4 id="2-build--test-packages">2. Build &amp; Test Packages</h4>
+<p>Ensures packages are production-ready.</p>
+<p><strong>Steps:</strong></p>
+<ol>
+<li>Full solution build (Release)</li>
+<li>Run all tests (Unit + Integration)</li>
+<li>Generate coverage report</li>
+<li>Add coverage summary to workflow</li>
+</ol>
+<p><strong>Quality Gate:</strong></p>
+<ul>
+<li>All tests must pass</li>
+<li>No build errors</li>
+</ul>
+<h4 id="3-pack-packages">3. Pack Packages</h4>
+<p>Creates NuGet packages (.nupkg and .snupkg).</p>
+<p><strong>Packages Created:</strong></p>
+<ol>
+<li><strong>AdvancedConcepts.Analyzers</strong> - Roslyn code analyzers</li>
+<li><strong>AdvancedConcepts.SourceGenerators</strong> - Source generators</li>
+</ol>
+<p><strong>Package Contents:</strong></p>
+<pre><code>AdvancedConcepts.Analyzers.1.0.0.nupkg
+├── analyzers/dotnet/cs/AdvancedConcepts.Analyzers.dll
+├── LICENSE.md
+└── CHANGELOG.md
+
+AdvancedConcepts.Analyzers.1.0.0.snupkg (symbols)
+└── Debug symbols for debugging
+</code></pre>
+<p><strong>Metadata:</strong></p>
+<pre><code class="lang-xml">&lt;PackageId&gt;AdvancedConcepts.Analyzers&lt;/PackageId&gt;
+&lt;Version&gt;1.0.0&lt;/Version&gt;
+&lt;Authors&gt;Advanced Concepts Team&lt;/Authors&gt;
+&lt;Description&gt;Roslyn code analyzers...&lt;/Description&gt;
+&lt;PackageLicenseExpression&gt;MIT&lt;/PackageLicenseExpression&gt;
+&lt;RepositoryUrl&gt;https://github.com/...&lt;/RepositoryUrl&gt;
+</code></pre>
+<h4 id="4-publish-to-nuget">4. Publish to NuGet</h4>
+<p>Uploads packages to NuGet.org.</p>
+<p><strong>Requirements:</strong></p>
+<ul>
+<li><code>NUGET_API_KEY</code> secret must be configured</li>
+<li>Uses <code>nuget-production</code> environment (protection rules)</li>
+</ul>
+<p><strong>Publish Steps:</strong></p>
+<ol>
+<li>Download packed artifacts</li>
+<li>Push main package (.nupkg)</li>
+<li>Push symbols package (.snupkg)</li>
+<li>Skip duplicates (idempotent)</li>
+</ol>
+<p><strong>Result:</strong></p>
+<ul>
+<li>Packages available on <a href="https://www.nuget.org/packages/">https://www.nuget.org/packages/</a></li>
+<li>Installation: <code>dotnet add package AdvancedConcepts.Analyzers --version 1.0.0</code></li>
+</ul>
+<h4 id="5-create-github-release">5. Create GitHub Release</h4>
+<p>Automatic GitHub release with changelog.</p>
+<p><strong>Release Contents:</strong></p>
+<ul>
+<li>Version tag (v1.0.0)</li>
+<li>Changelog (git log between tags)</li>
+<li>NuGet package files attached</li>
+<li>Installation instructions</li>
+</ul>
+<p><strong>Example Release:</strong></p>
+<pre><code class="lang-markdown">## 📦 NuGet Packages Release v1.0.0
+
+### Packages Published
+- ✅ AdvancedConcepts.Analyzers
+- ✅ AdvancedConcepts.SourceGenerators
+
+### Changes
+- Add performance analyzer for string concatenation
+- Improve SOLID principle checks
+- Fix false positive in async naming analyzer
+
+### Installation
+dotnet add package AdvancedConcepts.Analyzers --version 1.0.0
+</code></pre>
+<hr>
+<h2 id="3-container-build--push-build-containeryml">3. Container Build &amp; Push (<code>build-container.yml</code>)</h2>
+<h3 id="purpose-2">Purpose</h3>
+<p>Build multi-architecture Docker images with comprehensive security scanning and publish to GitHub Container Registry.</p>
+<h3 id="triggers">Triggers</h3>
+<ul>
+<li>Push to main/master/develop (src/** or Dockerfile changes)</li>
+<li>Pull requests</li>
+<li>Releases</li>
+<li>Manual workflow dispatch</li>
+</ul>
+<h3 id="jobs-2">Jobs</h3>
+<h4 id="1-build--security-scan">1. Build &amp; Security Scan</h4>
+<p>Comprehensive container image build and security validation.</p>
+<p><strong>Build Configuration:</strong></p>
+<ul>
+<li><strong>Multi-arch</strong>: linux/amd64, linux/arm64</li>
+<li><strong>Base images</strong>: Alpine Linux (minimal attack surface)</li>
+<li><strong>BuildKit</strong>: Advanced caching and optimization</li>
+</ul>
+<p><strong>Security Scans:</strong></p>
+<p><strong>a) Trivy Vulnerability Scanner</strong></p>
+<pre><code class="lang-bash"># Scans for:
+- OS package vulnerabilities (CVEs)
+- Application dependency vulnerabilities
+- Misconfigurations
+- Secrets in image layers
+
+# Severity levels:
+CRITICAL, HIGH, MEDIUM, LOW, UNKNOWN
+</code></pre>
+<p><strong>Example Output:</strong></p>
+<pre><code>Total: 5 (CRITICAL: 1, HIGH: 2, MEDIUM: 2, LOW: 0)
+┌─────────────────┬──────────────┬──────────┬────────────────┐
+│ Library         │ Vulnerability│ Severity │ Installed Ver. │
+├─────────────────┼──────────────┼──────────┼────────────────┤
+│ openssl         │ CVE-2024-XXX │ CRITICAL │ 1.1.1k         │
+└─────────────────┴──────────────┴──────────┴────────────────┘
+</code></pre>
+<p><strong>b) Secret Scanning</strong>
+Detects accidentally committed secrets:</p>
+<ul>
+<li>API keys</li>
+<li>Passwords</li>
+<li>Private keys</li>
+<li>AWS credentials</li>
+<li>Database connection strings</li>
+</ul>
+<p><strong>c) SBOM Generation (Software Bill of Materials)</strong></p>
+<pre><code class="lang-json">{
+  &quot;spdxVersion&quot;: &quot;SPDX-2.3&quot;,
+  &quot;packages&quot;: [
+    {
+      &quot;name&quot;: &quot;Microsoft.AspNetCore.App&quot;,
+      &quot;versionInfo&quot;: &quot;8.0.0&quot;,
+      &quot;licenseConcluded&quot;: &quot;MIT&quot;
+    }
+  ]
+}
+</code></pre>
+<p><strong>d) Grype Scanner</strong>
+Alternative vulnerability scanner for cross-validation.</p>
+<p><strong>Container Tests:</strong></p>
+<ol>
+<li><strong>Startup Test</strong> - Verify container starts successfully</li>
+<li><strong>Health Check</strong> - Ensure health endpoint responds</li>
+<li><strong>Log Inspection</strong> - Check for errors in startup logs</li>
+</ol>
+<p><strong>Image Optimization Analysis (Dive):</strong></p>
+<pre><code>Efficiency Score: 98%
+Image Size: 105MB
+Wasted Space: 2.1MB
+
+Layer Analysis:
+  #1 → Base image (85MB)
+  #2 → Runtime dependencies (10MB)
+  #3 → Application (8MB)
+  #4 → Configuration (2MB)
+</code></pre>
+<h4 id="2-push-to-registry">2. Push to Registry</h4>
+<p>Publish validated images to GitHub Container Registry.</p>
+<p><strong>Image Tags:</strong></p>
+<pre><code>ghcr.io/dogaaydinn/csharp-covariance-polymorphism-exercises:latest    # main/master
+ghcr.io/dogaaydinn/csharp-covariance-polymorphism-exercises:develop   # develop branch
+ghcr.io/dogaaydinn/csharp-covariance-polymorphism-exercises:v1.0.0    # semver tag
+ghcr.io/dogaaydinn/csharp-covariance-polymorphism-exercises:main-a1b2c3  # commit SHA
+</code></pre>
+<p><strong>Image Signing (Cosign):</strong></p>
+<pre><code class="lang-bash"># Cryptographic signature for supply chain security
+cosign sign ghcr.io/.../image@sha256:abc123...
+</code></pre>
+<p><strong>Build Provenance:</strong>
+Attestation of how/where image was built (SLSA compliance):</p>
+<pre><code class="lang-json">{
+  &quot;builder&quot;: &quot;GitHub Actions&quot;,
+  &quot;buildType&quot;: &quot;https://github.com/slsa-framework/github-actions-buildtypes/v1&quot;,
+  &quot;invocation&quot;: {
+    &quot;configSource&quot;: {
+      &quot;uri&quot;: &quot;github.com/dogaaydinn/repo&quot;,
+      &quot;digest&quot;: &quot;sha256:abc123...&quot;
+    }
+  }
+}
+</code></pre>
+<h4 id="3-deploy-to-staging-optional">3. Deploy to Staging (Optional)</h4>
+<p>Automatic deployment to staging environment on develop branch.</p>
+<p><strong>Placeholder for:</strong></p>
+<ul>
+<li>Kubernetes deployment</li>
+<li>Azure Container Apps</li>
+<li>AWS ECS</li>
+<li>Docker Swarm</li>
+</ul>
+<pre><code class="lang-bash"># Example Kubernetes deployment
+kubectl set image deployment/myapp \
+  myapp=ghcr.io/.../image:develop
+</code></pre>
+<h4 id="4-deploy-to-production-optional">4. Deploy to Production (Optional)</h4>
+<p>Manual-approved deployment to production on main/master.</p>
+<p><strong>Environment Protection:</strong></p>
+<ul>
+<li>Requires approval</li>
+<li>Deployment window restrictions</li>
+<li>Branch protection</li>
+</ul>
+<hr>
+<h2 id="secrets-configuration">Secrets Configuration</h2>
+<h3 id="required-github-secrets">Required GitHub Secrets</h3>
+<table>
+<thead>
+<tr>
+<th>Secret</th>
+<th>Used By</th>
+<th>Purpose</th>
+<th>How to Get</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>NUGET_API_KEY</code></td>
+<td>publish-nuget.yml</td>
+<td>Publish to NuGet.org</td>
+<td><a href="https://www.nuget.org/account/apikeys">NuGet.org Account</a></td>
+</tr>
+<tr>
+<td><code>SONAR_TOKEN</code></td>
+<td>ci.yml</td>
+<td>SonarCloud analysis</td>
+<td><a href="https://sonarcloud.io/account/security">SonarCloud Account</a></td>
+</tr>
+<tr>
+<td><code>GITHUB_TOKEN</code></td>
+<td>All workflows</td>
+<td>GitHub API access</td>
+<td>Auto-provided by GitHub</td>
+</tr>
+</tbody>
+</table>
+<h3 id="setting-secrets">Setting Secrets</h3>
+<p><strong>Repository Settings → Secrets and variables → Actions → New repository secret</strong></p>
+<p><strong>NUGET_API_KEY:</strong></p>
+<ol>
+<li>Go to <a href="https://www.nuget.org/account/apikeys">https://www.nuget.org/account/apikeys</a></li>
+<li>Create new API key</li>
+<li>Scopes: Push new packages and package versions</li>
+<li>Select packages: AdvancedConcepts.*</li>
+<li>Copy key and add to GitHub secrets</li>
+</ol>
+<p><strong>SONAR_TOKEN:</strong></p>
+<ol>
+<li>Go to <a href="https://sonarcloud.io/">https://sonarcloud.io/</a></li>
+<li>Import GitHub repository</li>
+<li>My Account → Security → Generate token</li>
+<li>Copy token and add to GitHub secrets</li>
+</ol>
+<hr>
+<h2 id="environment-configuration">Environment Configuration</h2>
+<h3 id="production-environment">Production Environment</h3>
+<p><strong>Name:</strong> <code>nuget-production</code>
+<strong>Protection Rules:</strong></p>
+<ul>
+<li>Require reviewers: 1</li>
+<li>Wait timer: 0 minutes</li>
+<li>Allowed branches: main, master</li>
+</ul>
+<p><strong>Purpose:</strong> Prevent accidental NuGet releases</p>
+<h3 id="staging-environment">Staging Environment</h3>
+<p><strong>Name:</strong> <code>staging</code>
+<strong>Protection Rules:</strong> None
+<strong>Purpose:</strong> Automatic deployment testing</p>
+<p><strong>URL:</strong> <a href="https://staging.example.com">https://staging.example.com</a></p>
+<h3 id="production-deployment-environment">Production Deployment Environment</h3>
+<p><strong>Name:</strong> <code>production</code>
+<strong>Protection Rules:</strong></p>
+<ul>
+<li>Require reviewers: 2</li>
+<li>Wait timer: 30 minutes</li>
+<li>Allowed branches: main, master</li>
+</ul>
+<p><strong>URL:</strong> <a href="https://example.com">https://example.com</a></p>
+<hr>
+<h2 id="workflow-triggers-summary">Workflow Triggers Summary</h2>
+<h3 id="ci-pipeline">CI Pipeline</h3>
+<pre><code class="lang-yaml">on:
+  push:
+    branches: [master, main, develop]
+  pull_request:
+    branches: [master, main]
+  workflow_dispatch:  # Manual trigger
+</code></pre>
+<p><strong>When it runs:</strong></p>
+<ul>
+<li>Every push to main, master, or develop</li>
+<li>Every pull request to main or master</li>
+<li>Manual trigger from Actions tab</li>
+</ul>
+<h3 id="nuget-publishing">NuGet Publishing</h3>
+<pre><code class="lang-yaml">on:
+  push:
+    tags: ['v*.*.*']  # v1.0.0, v2.1.3-beta
+  workflow_dispatch:  # Manual with version input
+</code></pre>
+<p><strong>When it runs:</strong></p>
+<ul>
+<li>When version tag is pushed (v1.0.0)</li>
+<li>Manual trigger with version selection</li>
+</ul>
+<h3 id="container-build">Container Build</h3>
+<pre><code class="lang-yaml">on:
+  push:
+    branches: [master, main, develop]
+    paths: ['src/**', 'Dockerfile']
+  pull_request:
+    branches: [master, main]
+  release:
+    types: [published]
+  workflow_dispatch:
+</code></pre>
+<p><strong>When it runs:</strong></p>
+<ul>
+<li>Push to main/master/develop (if src/** or Dockerfile changed)</li>
+<li>Pull requests</li>
+<li>When GitHub release is published</li>
+<li>Manual trigger</li>
+</ul>
+<hr>
+<h2 id="best-practices-implemented">Best Practices Implemented</h2>
+<h3 id="-security">✅ Security</h3>
+<ul>
+<li>Non-root Docker user</li>
+<li>Secret scanning (Trivy, Grype)</li>
+<li>Dependency vulnerability scanning</li>
+<li>Image signing with Cosign</li>
+<li>SBOM generation</li>
+<li>SLSA provenance attestation</li>
+</ul>
+<h3 id="-quality">✅ Quality</h3>
+<ul>
+<li>Multi-platform testing (Linux, Windows, macOS)</li>
+<li>Code coverage with Codecov</li>
+<li>Static analysis with SonarCloud</li>
+<li>Mutation testing with Stryker.NET</li>
+<li>Code formatting enforcement</li>
+<li>Custom Roslyn analyzers</li>
+</ul>
+<h3 id="-performance">✅ Performance</h3>
+<ul>
+<li>Docker layer caching</li>
+<li>Multi-stage builds (95% size reduction)</li>
+<li>GitHub Actions cache</li>
+<li>Parallel job execution</li>
+<li>Matrix builds</li>
+</ul>
+<h3 id="-observability">✅ Observability</h3>
+<ul>
+<li>Detailed workflow summaries</li>
+<li>Coverage reports in PRs</li>
+<li>Security scan results</li>
+<li>Build artifact retention</li>
+<li>Release notes generation</li>
+</ul>
+<h3 id="-developer-experience">✅ Developer Experience</h3>
+<ul>
+<li>Fast feedback (&lt; 5 minutes for CI)</li>
+<li>Clear failure messages</li>
+<li>Automatic PR comments</li>
+<li>Manual workflow triggers</li>
+<li>Comprehensive documentation</li>
+</ul>
+<hr>
+<h2 id="usage-examples">Usage Examples</h2>
+<h3 id="release-a-new-nuget-package-version">Release a New NuGet Package Version</h3>
+<pre><code class="lang-bash"># 1. Update code and tests
+git add .
+git commit -m &quot;feat: add new performance analyzer&quot;
+
+# 2. Create and push version tag
+git tag v1.2.0
+git push origin v1.2.0
+
+# 3. GitHub Actions automatically:
+#    - Validates version
+#    - Runs tests
+#    - Packs NuGet packages
+#    - Publishes to NuGet.org
+#    - Creates GitHub release
+
+# 4. Verify on NuGet.org
+#    https://www.nuget.org/packages/AdvancedConcepts.Analyzers/1.2.0
+</code></pre>
+<h3 id="build-and-push-container-image">Build and Push Container Image</h3>
+<pre><code class="lang-bash"># 1. Make changes to code
+git add src/
+git commit -m &quot;feat: add new API endpoint&quot;
+git push origin main
+
+# 2. GitHub Actions automatically:
+#    - Builds multi-arch image
+#    - Scans for vulnerabilities
+#    - Tests container startup
+#    - Pushes to GHCR
+#    - Signs image with Cosign
+
+# 3. Pull and run image
+docker pull ghcr.io/dogaaydinn/csharp-covariance-polymorphism-exercises:latest
+docker run -p 8080:8080 ghcr.io/dogaaydinn/csharp-covariance-polymorphism-exercises:latest
+</code></pre>
+<h3 id="trigger-manual-workflow">Trigger Manual Workflow</h3>
+<p><strong>Via GitHub UI:</strong></p>
+<ol>
+<li>Go to Actions tab</li>
+<li>Select workflow (e.g., &quot;Publish to NuGet&quot;)</li>
+<li>Click &quot;Run workflow&quot;</li>
+<li>Fill in inputs (version, prerelease flag)</li>
+<li>Click &quot;Run workflow&quot;</li>
+</ol>
+<p><strong>Via GitHub CLI:</strong></p>
+<pre><code class="lang-bash"># Trigger NuGet publish
+gh workflow run publish-nuget.yml \
+  -f version=1.3.0 \
+  -f prerelease=false
+
+# Trigger container build
+gh workflow run build-container.yml
+</code></pre>
+<hr>
+<h2 id="metrics--monitoring">Metrics &amp; Monitoring</h2>
+<h3 id="ci-pipeline-metrics">CI Pipeline Metrics</h3>
+<ul>
+<li><strong>Build Time:</strong> ~5 minutes (3 platforms in parallel)</li>
+<li><strong>Test Coverage:</strong> Target 80%+ (tracked in SonarCloud)</li>
+<li><strong>Success Rate:</strong> Target 95%+</li>
+<li><strong>Mutation Score:</strong> Target 70%+</li>
+</ul>
+<h3 id="nuget-publishing-metrics">NuGet Publishing Metrics</h3>
+<ul>
+<li><strong>Publish Time:</strong> ~3 minutes (validation + publish + release)</li>
+<li><strong>Package Size:</strong> &lt; 500 KB per package</li>
+<li><strong>Download Count:</strong> Tracked on NuGet.org</li>
+</ul>
+<h3 id="container-metrics">Container Metrics</h3>
+<ul>
+<li><strong>Image Size:</strong> ~105 MB (Alpine-based)</li>
+<li><strong>Build Time:</strong> ~8 minutes (multi-arch)</li>
+<li><strong>Security Score:</strong> 0 critical/high vulnerabilities</li>
+<li><strong>Efficiency Score:</strong> 98% (Dive analysis)</li>
+</ul>
+<hr>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<h3 id="common-issues">Common Issues</h3>
+<p><strong>1. SonarCloud Analysis Fails</strong></p>
+<pre><code>Error: No token provided
+</code></pre>
+<p><strong>Solution:</strong> Add <code>SONAR_TOKEN</code> to GitHub secrets</p>
+<p><strong>2. NuGet Push Fails</strong></p>
+<pre><code>Error: Package already exists
+</code></pre>
+<p><strong>Solution:</strong> Version already published. Increment version number.</p>
+<p><strong>3. Container Build Fails</strong></p>
+<pre><code>Error: failed to solve: process &quot;/bin/sh -c dotnet restore&quot; did not complete successfully
+</code></pre>
+<p><strong>Solution:</strong> Check .csproj files exist and are valid. Verify Dockerfile paths.</p>
+<p><strong>4. Trivy Scan Blocks Build</strong></p>
+<pre><code>Detected HIGH severity vulnerabilities
+</code></pre>
+<p><strong>Solution:</strong> Update base image or dependencies to patched versions.</p>
+<h3 id="debug-workflows">Debug Workflows</h3>
+<p><strong>Enable debug logging:</strong></p>
+<pre><code class="lang-yaml">env:
+  ACTIONS_STEP_DEBUG: true
+  ACTIONS_RUNNER_DEBUG: true
+</code></pre>
+<p><strong>View detailed logs:</strong></p>
+<ul>
+<li>Actions tab → Select workflow run → Click failed job → Expand step</li>
+</ul>
+<hr>
+<h2 id="future-enhancements">Future Enhancements</h2>
+<h3 id="planned-improvements">Planned Improvements</h3>
+<ul>
+<li>[ ] Add deployment to Kubernetes (AKS/EKS/GKE)</li>
+<li>[ ] Implement blue-green deployments</li>
+<li>[ ] Add performance benchmarking in CI</li>
+<li>[ ] Implement automatic dependency updates (Dependabot/Renovate)</li>
+<li>[ ] Add chaos engineering tests</li>
+<li>[ ] Implement canary deployments</li>
+<li>[ ] Add A/B testing infrastructure</li>
+</ul>
+<hr>
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://docs.github.com/en/actions">GitHub Actions Documentation</a></li>
+<li><a href="https://sonarcloud.io/documentation/analysis/languages/csharp/">SonarCloud for .NET</a></li>
+<li><a href="https://aquasecurity.github.io/trivy/">Trivy Documentation</a></li>
+<li><a href="https://learn.microsoft.com/en-us/nuget/nuget-org/publish-a-package">NuGet Package Publishing</a></li>
+<li><a href="https://docs.docker.com/develop/dev-best-practices/">Docker Best Practices</a></li>
+<li><a href="https://slsa.dev/">SLSA Framework</a></li>
+</ul>
+<hr>
+<p><strong>Last Updated:</strong> 2024-12-02</p>
+<p><strong>Maintained By:</strong> Advanced Concepts Team</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/CICD_WORKFLOWS.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

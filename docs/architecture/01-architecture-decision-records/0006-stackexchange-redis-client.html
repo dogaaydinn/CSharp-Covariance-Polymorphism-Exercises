@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>ADR-0006: StackExchange.Redis Client Library | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="ADR-0006: StackExchange.Redis Client Library | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/01-architecture-decision-records/0006-stackexchange-redis-client.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="adr-0006-stackexchangeredis-client-library">ADR-0006: StackExchange.Redis Client Library</h1>
+
+<p><strong>Status:</strong> Accepted
+<strong>Date:</strong> 2025-12-02
+<strong>Deciders:</strong> Architecture Team
+<strong>Technical Story:</strong> Redis client library selection</p>
+<h2 id="context">Context</h2>
+<p>Having chosen Redis as our caching layer (ADR-0005), we need a .NET client library to interact with Redis. The client must provide:</p>
+<ul>
+<li>High performance and low latency</li>
+<li>Connection pooling and multiplexing</li>
+<li>Async/await support</li>
+<li>Pipeline and batch operations</li>
+<li>Pub/Sub support</li>
+<li>Strong typing where possible</li>
+<li>Production-grade reliability</li>
+<li>Active maintenance</li>
+</ul>
+<p>Several Redis clients exist in the .NET ecosystem with different trade-offs.</p>
+<h2 id="decision">Decision</h2>
+<p>We will use <strong>StackExchange.Redis 2.8+</strong> as the Redis client library.</p>
+<p>Integration:</p>
+<ul>
+<li>Package: <code>Aspire.StackExchange.Redis</code> (includes StackExchange.Redis)</li>
+<li>Configuration: Via Aspire service defaults</li>
+<li>Injection: <code>IDatabase</code> injected into API endpoints</li>
+<li>Connection: Multiplexed (single connection for all operations)</li>
+</ul>
+<h2 id="consequences">Consequences</h2>
+<h3 id="positive">Positive</h3>
+<ul>
+<li><strong>Performance</strong>: Highly optimized, minimal overhead</li>
+<li><strong>Connection Multiplexing</strong>: Single connection handles 1000s of operations/sec</li>
+<li><strong>Async-First</strong>: Native async/await support</li>
+<li><strong>Pipeline Support</strong>: Batch operations for improved throughput</li>
+<li><strong>Pub/Sub</strong>: Built-in support for Redis messaging</li>
+<li><strong>Lua Scripts</strong>: Support for atomic server-side operations</li>
+<li><strong>Reconnection</strong>: Automatic reconnection on connection loss</li>
+<li><strong>Monitoring</strong>: Built-in performance counters</li>
+<li><strong>Aspire Integration</strong>: First-class Aspire support</li>
+<li><strong>Production-Proven</strong>: Used by Stack Overflow, Microsoft, thousands of companies</li>
+<li><strong>Active Maintenance</strong>: Backed by Stack Overflow team</li>
+<li><strong>Documentation</strong>: Comprehensive docs and examples</li>
+</ul>
+<h3 id="negative">Negative</h3>
+<ul>
+<li><strong>Complexity</strong>: Advanced features have learning curve</li>
+<li><strong>Synchronous API</strong>: Some operations have sync-over-async patterns</li>
+<li><strong>Error Handling</strong>: Redis errors sometimes surfaced as exceptions, sometimes as null</li>
+<li><strong>Connection Strings</strong>: Complex configuration options</li>
+<li><strong>No Built-in Serialization</strong>: Must serialize objects manually</li>
+</ul>
+<h3 id="neutral">Neutral</h3>
+<ul>
+<li><strong>Breaking Changes</strong>: Major versions can have breaking changes (2.0 → 3.0)</li>
+<li><strong>Firewall-Friendly</strong>: Uses single multiplexed connection (good and bad)</li>
+</ul>
+<h2 id="alternatives-considered">Alternatives Considered</h2>
+<h3 id="alternative-1-servicestackredis">Alternative 1: ServiceStack.Redis</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>High-Level API</strong>: More abstractions than StackExchange.Redis</li>
+<li><strong>Built-in Serialization</strong>: Automatic JSON serialization</li>
+<li><strong>Typed Clients</strong>: Strong typing with generics</li>
+<li><strong>Complete</strong>: Includes ORM-like features</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Commercial License</strong>: Free for &lt;10 tables, paid for commercial ($4500+)</li>
+<li><strong>Heavier</strong>: More dependencies and abstractions</li>
+<li><strong>Slower</strong>: Additional abstraction layers reduce performance</li>
+<li><strong>No Aspire Integration</strong>: No official Aspire component</li>
+<li><strong>Smaller Community</strong>: Less widely adopted than StackExchange.Redis</li>
+</ul>
+<p><strong>Why rejected:</strong> Licensing costs inappropriate for open-source samples. StackExchange.Redis is faster and has broader adoption.</p>
+<h3 id="alternative-2-csredis">Alternative 2: CSRedis</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Free</strong>: Completely open source</li>
+<li><strong>Cluster Support</strong>: Good Redis Cluster support</li>
+<li><strong>Chinese Community</strong>: Large Chinese developer community</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Less Mature</strong>: Newer project, less battle-tested</li>
+<li><strong>Documentation</strong>: Limited English documentation</li>
+<li><strong>No Aspire Integration</strong>: No official support</li>
+<li><strong>Smaller Ecosystem</strong>: Fewer resources and examples</li>
+</ul>
+<p><strong>Why rejected:</strong> StackExchange.Redis is the de facto standard. No compelling reason to choose alternative.</p>
+<h3 id="alternative-3-microsoftextensionscachingstackexchangeredis">Alternative 3: Microsoft.Extensions.Caching.StackExchangeRedis</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Microsoft Official</strong>: Part of .NET Extensions</li>
+<li><strong>IDistributedCache</strong>: Standard interface</li>
+<li><strong>Simple API</strong>: Minimal learning curve</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Limited Features</strong>: Only caching, no Pub/Sub or advanced features</li>
+<li><strong>Abstraction Overhead</strong>: Additional layer over StackExchange.Redis</li>
+<li><strong>Serialization Required</strong>: Must serialize everything</li>
+<li><strong>Not Aspire-Native</strong>: Aspire uses StackExchange.Redis directly</li>
+</ul>
+<p><strong>Why rejected:</strong> This is a wrapper around StackExchange.Redis. Using StackExchange.Redis directly provides more features and control.</p>
+<h3 id="alternative-4-freeredis">Alternative 4: FreeRedis</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Modern</strong>: Designed for .NET 6+</li>
+<li><strong>Pipeline First</strong>: Optimized for batch operations</li>
+<li><strong>Cluster Support</strong>: Good cluster support</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>New</strong>: Less mature than StackExchange.Redis</li>
+<li><strong>Smaller Community</strong>: Limited adoption</li>
+<li><strong>No Aspire Integration</strong>: Not supported by Aspire</li>
+<li><strong>Unknown Longevity</strong>: Uncertain long-term maintenance</li>
+</ul>
+<p><strong>Why rejected:</strong> StackExchange.Redis is proven and Aspire-integrated. No need for alternatives.</p>
+<h2 id="related-decisions">Related Decisions</h2>
+<ul>
+<li><a href="0005-redis-distributed-caching.html">ADR-0005</a>: Redis chosen for caching</li>
+<li><a href="0002-using-dotnet-aspire.html">ADR-0002</a>: Aspire provides Redis integration</li>
+<li><a href="0016-cache-aside-pattern.html">ADR-0016</a>: Implementation pattern</li>
+</ul>
+<h2 id="related-links">Related Links</h2>
+<ul>
+<li><a href="https://stackexchange.github.io/StackExchange.Redis/">StackExchange.Redis Documentation</a></li>
+<li><a href="https://github.com/StackExchange/StackExchange.Redis">StackExchange.Redis GitHub</a></li>
+<li><a href="https://learn.microsoft.com/dotnet/aspire/caching/stackexchange-redis-component">Aspire Redis Component</a></li>
+<li><a href="https://redis.io/clients#dotnet">Redis Client Comparison</a></li>
+</ul>
+<h2 id="notes">Notes</h2>
+<ul>
+<li><p><strong>Connection Configuration</strong>:</p>
+<pre><code class="lang-csharp">builder.AddRedisClient(&quot;cache&quot;); // Aspire handles configuration
+</code></pre>
+</li>
+<li><p><strong>Usage Pattern</strong>:</p>
+<pre><code class="lang-csharp">var cache = app.Services.GetRequiredService&lt;IConnectionMultiplexer&gt;();
+var db = cache.GetDatabase();
+await db.StringSetAsync(&quot;key&quot;, &quot;value&quot;);
+</code></pre>
+</li>
+<li><p><strong>Performance Tips</strong>:</p>
+<ul>
+<li>Use <code>StringGetAsync</code> for simple values</li>
+<li>Use <code>HashGetAllAsync</code> for complex objects</li>
+<li>Use pipelines (<code>IBatch</code>) for multiple operations</li>
+<li>Avoid <code>Keys</code> command in production (use <code>Scan</code> instead)</li>
+</ul>
+</li>
+<li><p><strong>Error Handling</strong>:</p>
+<ul>
+<li>Wrap Redis operations in try-catch</li>
+<li>Degrade gracefully if Redis unavailable</li>
+<li>Log Redis errors but don't crash app</li>
+</ul>
+</li>
+<li><p><strong>Monitoring</strong>:</p>
+<ul>
+<li>Track connection count: <code>GetStatus()</code></li>
+<li>Monitor operation latency</li>
+<li>Watch for <code>TimeoutException</code> (indicates Redis overload)</li>
+</ul>
+</li>
+<li><p><strong>Production Considerations</strong>:</p>
+<ul>
+<li>Use connection string with <code>abortConnect=false</code></li>
+<li>Set <code>ConnectRetry=3</code> for automatic reconnection</li>
+<li>Enable <code>ResolveDns=true</code> for DNS changes</li>
+<li>Use SSL/TLS in production: <code>ssl=true</code></li>
+</ul>
+</li>
+<li><p><strong>Future</strong>: Consider Redis JSON module for native JSON support</p>
+</li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/01-architecture-decision-records/0006-stackexchange-redis-client.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

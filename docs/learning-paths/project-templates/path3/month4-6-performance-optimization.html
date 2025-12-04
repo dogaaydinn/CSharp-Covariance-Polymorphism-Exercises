@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Path 3 - Months 4-6 Capstone: Performance Optimization Challenge | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Path 3 - Months 4-6 Capstone: Performance Optimization Challenge | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../../favicon.ico">
+      <link rel="stylesheet" href="../../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/project-templates/path3/month4-6-performance-optimization.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../../index.html">
+            <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="path-3---months-4-6-capstone-performance-optimization-challenge">Path 3 - Months 4-6 Capstone: Performance Optimization Challenge</h1>
+
+<p><strong>Difficulty</strong>: ⭐⭐⭐⭐⭐ (Senior/Performance Expert)
+<strong>Estimated Time</strong>: 80-100 hours
+<strong>Prerequisites</strong>: Months 1-3 of Path 3 completed</p>
+<hr>
+<h2 id="-project-overview">🎯 Project Overview</h2>
+<p>Take a deliberately slow application and optimize it to 10x faster through systematic profiling, analysis, and optimization techniques. Demonstrate expert-level performance engineering skills.</p>
+<h3 id="learning-objectives">Learning Objectives</h3>
+<ul>
+<li>✅ Advanced profiling (dotTrace, PerfView, BenchmarkDotNet)</li>
+<li>✅ Memory profiling and leak detection</li>
+<li>✅ GC tuning and optimization</li>
+<li>✅ Lock-free programming</li>
+<li>✅ Database query optimization</li>
+<li>✅ Cache strategies</li>
+<li>✅ Async/await patterns</li>
+</ul>
+<hr>
+<h2 id="-the-challenge">📋 The Challenge</h2>
+<h3 id="starting-application">Starting Application</h3>
+<p>You'll be provided with (or create) a &quot;slow&quot; web API that has numerous performance issues:</p>
+<p><strong>Initial Performance</strong>:</p>
+<ul>
+<li>Average response time: 2000ms</li>
+<li>Throughput: 50 req/sec</li>
+<li>Memory usage: 500MB baseline, 2GB under load</li>
+<li>CPU usage: 80% constant</li>
+<li>GC collections: 100+ per second</li>
+<li>Database queries: N+1 problems everywhere</li>
+</ul>
+<p><strong>Target Performance</strong> (10x improvement):</p>
+<ul>
+<li>Average response time: &lt; 200ms</li>
+<li>Throughput: &gt; 500 req/sec</li>
+<li>Memory usage: &lt; 200MB baseline, &lt; 500MB under load</li>
+<li>CPU usage: &lt; 30% average</li>
+<li>GC collections: &lt; 10 per second</li>
+<li>Database queries: Optimized, no N+1</li>
+</ul>
+<hr>
+<h2 id="-intentional-performance-issues">🐌 Intentional Performance Issues</h2>
+<p>The starting application will have these common problems:</p>
+<h3 id="1-excessive-allocations">1. Excessive Allocations</h3>
+<pre><code class="lang-csharp">// ❌ BAD: Boxing in hot path
+public void ProcessOrders(List&lt;object&gt; orders)
+{
+    foreach (object order in orders) // Boxing!
+    {
+        int orderId = (int)order; // Unboxing!
+        ProcessOrder(orderId);
+    }
+}
+
+// ❌ BAD: String concatenation in loop
+public string GenerateReport(List&lt;Order&gt; orders)
+{
+    string report = &quot;&quot;;
+    foreach (var order in orders)
+    {
+        report += $&quot;Order {order.Id}: ${order.Total}\n&quot;; // Allocation per iteration!
+    }
+    return report;
+}
+</code></pre>
+<h3 id="2-synchronous-operations">2. Synchronous Operations</h3>
+<pre><code class="lang-csharp">// ❌ BAD: Blocking async calls
+public IActionResult GetOrders()
+{
+    var orders = _orderService.GetAllAsync().Result; // Blocks thread!
+    return Ok(orders);
+}
+
+// ❌ BAD: Sequential async calls
+public async Task&lt;OrderSummary&gt; GetOrderSummaryAsync(int orderId)
+{
+    var order = await _orderRepo.GetByIdAsync(orderId);
+    var customer = await _customerRepo.GetByIdAsync(order.CustomerId);
+    var items = await _itemRepo.GetByOrderIdAsync(orderId);
+
+    // These could run in parallel!
+    return new OrderSummary(order, customer, items);
+}
+</code></pre>
+<h3 id="3-n1-query-problem">3. N+1 Query Problem</h3>
+<pre><code class="lang-csharp">// ❌ BAD: N+1 queries
+public async Task&lt;List&lt;OrderDto&gt;&gt; GetOrdersAsync()
+{
+    var orders = await _context.Orders.ToListAsync();
+
+    foreach (var order in orders)
+    {
+        // Query for EACH order!
+        order.Customer = await _context.Customers
+            .FirstOrDefaultAsync(c =&gt; c.Id == order.CustomerId);
+
+        order.Items = await _context.OrderItems
+            .Where(i =&gt; i.OrderId == order.Id)
+            .ToListAsync();
+    }
+
+    return orders.Select(o =&gt; ToDto(o)).ToList();
+}
+</code></pre>
+<h3 id="4-no-caching">4. No Caching</h3>
+<pre><code class="lang-csharp">// ❌ BAD: Database hit every time
+public async Task&lt;Product&gt; GetProductAsync(int id)
+{
+    return await _context.Products.FindAsync(id);
+}
+</code></pre>
+<h3 id="5-lock-contention">5. Lock Contention</h3>
+<pre><code class="lang-csharp">// ❌ BAD: Coarse-grained locking
+private static readonly object _lock = new();
+private static readonly Dictionary&lt;int, Order&gt; _orders = new();
+
+public Order GetOrder(int id)
+{
+    lock (_lock) // Contention!
+    {
+        return _orders[id];
+    }
+}
+</code></pre>
+<hr>
+<h2 id="-optimization-journey">🚀 Optimization Journey</h2>
+<h3 id="phase-1-profiling--baseline">Phase 1: Profiling &amp; Baseline</h3>
+<p><strong>Tools to Use</strong>:</p>
+<ul>
+<li>dotTrace (CPU profiling)</li>
+<li>dotMemory (Memory profiling)</li>
+<li>PerfView (Advanced CPU &amp; memory)</li>
+<li>BenchmarkDotNet (Micro-benchmarks)</li>
+<li>Application Insights (Production profiling)</li>
+</ul>
+<p><strong>Establish Baseline</strong>:</p>
+<pre><code class="lang-bash"># Load test with k6
+k6 run --vus 100 --duration 30s load-test.js
+
+# Record baseline metrics
+- Response time: 2000ms (p95)
+- Throughput: 50 req/sec
+- Memory: 2GB
+- CPU: 80%
+</code></pre>
+<p><strong>Create Benchmarks</strong>:</p>
+<pre><code class="lang-csharp">[MemoryDiagnoser]
+public class OrderProcessingBenchmarks
+{
+    [Benchmark(Baseline = true)]
+    public async Task&lt;List&lt;Order&gt;&gt; GetOrders_Original()
+    {
+        return await _orderService.GetAllAsync();
+    }
+
+    [Benchmark]
+    public async Task&lt;List&lt;Order&gt;&gt; GetOrders_Optimized()
+    {
+        // Will implement optimization here
+        return await _orderService.GetAllOptimizedAsync();
+    }
+}
+</code></pre>
+<h3 id="phase-2-fix-allocations">Phase 2: Fix Allocations</h3>
+<p><strong>Optimization 1</strong>: Use Span<t> and ArrayPool<t></t></t></p>
+<pre><code class="lang-csharp">// ✅ GOOD: Zero allocations
+public void ProcessOrders(ReadOnlySpan&lt;int&gt; orderIds)
+{
+    foreach (int orderId in orderIds) // No boxing!
+    {
+        ProcessOrder(orderId);
+    }
+}
+
+// ✅ GOOD: StringBuilder
+public string GenerateReport(List&lt;Order&gt; orders)
+{
+    var sb = new StringBuilder(orders.Count * 50); // Pre-allocate
+    foreach (var order in orders)
+    {
+        sb.AppendLine($&quot;Order {order.Id}: ${order.Total}&quot;);
+    }
+    return sb.ToString();
+}
+</code></pre>
+<p><strong>Results</strong>:</p>
+<ul>
+<li>Allocations: 10M → 1000 (99.99% reduction)</li>
+<li>GC collections: 100/sec → 5/sec</li>
+<li>Memory: 2GB → 800MB</li>
+</ul>
+<h3 id="phase-3-fix-n1-queries">Phase 3: Fix N+1 Queries</h3>
+<pre><code class="lang-csharp">// ✅ GOOD: Eager loading
+public async Task&lt;List&lt;OrderDto&gt;&gt; GetOrdersAsync()
+{
+    var orders = await _context.Orders
+        .Include(o =&gt; o.Customer)      // 1 query for customers
+        .Include(o =&gt; o.Items)         // 1 query for items
+        .ToListAsync();                // Total: 3 queries instead of N+1!
+
+    return orders.Select(o =&gt; ToDto(o)).ToList();
+}
+
+// ✅ BETTER: Projection
+public async Task&lt;List&lt;OrderDto&gt;&gt; GetOrdersOptimizedAsync()
+{
+    return await _context.Orders
+        .Select(o =&gt; new OrderDto
+        {
+            OrderId = o.Id,
+            CustomerName = o.Customer.Name,  // All in 1 query!
+            ItemCount = o.Items.Count,
+            TotalAmount = o.Items.Sum(i =&gt; i.Price * i.Quantity)
+        })
+        .ToListAsync();
+}
+</code></pre>
+<p><strong>Results</strong>:</p>
+<ul>
+<li>Database queries: 1001 → 1</li>
+<li>Query time: 5000ms → 50ms (100x faster)</li>
+<li>Database CPU: 95% → 10%</li>
+</ul>
+<h3 id="phase-4-add-caching">Phase 4: Add Caching</h3>
+<pre><code class="lang-csharp">// ✅ GOOD: Multi-level caching
+public class ProductService
+{
+    private readonly IMemoryCache _memoryCache;
+    private readonly IDistributedCache _redisCache;
+    private readonly ApplicationDbContext _context;
+
+    public async Task&lt;Product&gt; GetProductAsync(int id)
+    {
+        // L1: Memory cache (nanoseconds)
+        if (_memoryCache.TryGetValue($&quot;product:{id}&quot;, out Product product))
+            return product;
+
+        // L2: Redis cache (milliseconds)
+        var cached = await _redisCache.GetStringAsync($&quot;product:{id}&quot;);
+        if (cached != null)
+        {
+            product = JsonSerializer.Deserialize&lt;Product&gt;(cached);
+            _memoryCache.Set($&quot;product:{id}&quot;, product, TimeSpan.FromMinutes(5));
+            return product;
+        }
+
+        // L3: Database (10-50ms)
+        product = await _context.Products.FindAsync(id);
+
+        // Populate caches
+        await _redisCache.SetStringAsync(
+            $&quot;product:{id}&quot;,
+            JsonSerializer.Serialize(product),
+            new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1)
+            });
+
+        _memoryCache.Set($&quot;product:{id}&quot;, product, TimeSpan.FromMinutes(5));
+
+        return product;
+    }
+}
+</code></pre>
+<p><strong>Results</strong>:</p>
+<ul>
+<li>Cache hit rate: 0% → 95%</li>
+<li>Average response time: 50ms → 5ms (10x faster)</li>
+<li>Database load: -95%</li>
+</ul>
+<h3 id="phase-5-parallelize-operations">Phase 5: Parallelize Operations</h3>
+<pre><code class="lang-csharp">// ✅ GOOD: Parallel async calls
+public async Task&lt;OrderSummary&gt; GetOrderSummaryAsync(int orderId)
+{
+    // Run in parallel!
+    var orderTask = _orderRepo.GetByIdAsync(orderId);
+    var customerTask = _customerRepo.GetByIdAsync(customerId); // Need to get customerId first
+    var itemsTask = _itemRepo.GetByOrderIdAsync(orderId);
+
+    await Task.WhenAll(orderTask, customerTask, itemsTask);
+
+    return new OrderSummary(
+        orderTask.Result,
+        customerTask.Result,
+        itemsTask.Result);
+}
+
+// ✅ GOOD: Parallel processing
+public async Task&lt;List&lt;OrderResult&gt;&gt; ProcessOrdersAsync(List&lt;Order&gt; orders)
+{
+    var tasks = orders.Select(async order =&gt;
+    {
+        return await ProcessOrderAsync(order);
+    });
+
+    return (await Task.WhenAll(tasks)).ToList();
+}
+</code></pre>
+<p><strong>Results</strong>:</p>
+<ul>
+<li>Processing time: 300ms → 100ms (3x faster)</li>
+<li>Throughput: 50 req/sec → 150 req/sec</li>
+</ul>
+<h3 id="phase-6-fix-lock-contention">Phase 6: Fix Lock Contention</h3>
+<pre><code class="lang-csharp">// ✅ GOOD: ConcurrentDictionary (lock-free)
+private static readonly ConcurrentDictionary&lt;int, Order&gt; _orders = new();
+
+public Order GetOrder(int id)
+{
+    return _orders[id]; // No locking needed!
+}
+
+// ✅ GOOD: Fine-grained locking
+private readonly ConcurrentDictionary&lt;int, object&gt; _locks = new();
+
+public async Task UpdateOrderAsync(int orderId, Order update)
+{
+    var orderLock = _locks.GetOrAdd(orderId, _ =&gt; new object());
+
+    lock (orderLock) // Lock only this order
+    {
+        // Update logic
+    }
+}
+</code></pre>
+<p><strong>Results</strong>:</p>
+<ul>
+<li>Lock contention: -99%</li>
+<li>Throughput under high concurrency: 2x improvement</li>
+</ul>
+<hr>
+<h2 id="-final-results">📊 Final Results</h2>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Before</th>
+<th>After</th>
+<th>Improvement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Response Time (p95)</td>
+<td>2000ms</td>
+<td>150ms</td>
+<td>13x faster</td>
+</tr>
+<tr>
+<td>Throughput</td>
+<td>50 req/sec</td>
+<td>600 req/sec</td>
+<td>12x</td>
+</tr>
+<tr>
+<td>Memory (baseline)</td>
+<td>500MB</td>
+<td>150MB</td>
+<td>70% reduction</td>
+</tr>
+<tr>
+<td>Memory (under load)</td>
+<td>2GB</td>
+<td>400MB</td>
+<td>80% reduction</td>
+</tr>
+<tr>
+<td>CPU Usage</td>
+<td>80%</td>
+<td>25%</td>
+<td>69% reduction</td>
+</tr>
+<tr>
+<td>GC/sec</td>
+<td>100+</td>
+<td>&lt;5</td>
+<td>95% reduction</td>
+</tr>
+<tr>
+<td>Database Queries</td>
+<td>1001</td>
+<td>1</td>
+<td>99.9% reduction</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Overall</strong>: More than <strong>10x performance improvement</strong> achieved!</p>
+<hr>
+<h2 id="-deliverables">📝 Deliverables</h2>
+<ol>
+<li><p><strong>Performance Report</strong> (30+ pages):</p>
+<ul>
+<li>Baseline measurements</li>
+<li>Profiling analysis</li>
+<li>Optimization techniques applied</li>
+<li>Before/after comparisons</li>
+<li>Benchmark results</li>
+</ul>
+</li>
+<li><p><strong>Optimized Code</strong>:</p>
+<ul>
+<li>All optimizations implemented</li>
+<li>BenchmarkDotNet suite</li>
+<li>Load test scripts</li>
+</ul>
+</li>
+<li><p><strong>Presentation</strong> (20 slides):</p>
+<ul>
+<li>Problem identification</li>
+<li>Optimization journey</li>
+<li>Results and learnings</li>
+<li>Recommendations</li>
+</ul>
+</li>
+<li><p><strong>Blog Post</strong>:</p>
+<ul>
+<li>&quot;How I Made My API 10x Faster&quot;</li>
+<li>Technical deep dive</li>
+<li>Share on dev.to or Medium</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="-evaluation-criteria">✅ Evaluation Criteria</h2>
+<table>
+<thead>
+<tr>
+<th>Criterion</th>
+<th>Weight</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Performance Improvement (10x)</td>
+<td>40%</td>
+</tr>
+<tr>
+<td>Profiling &amp; Analysis</td>
+<td>20%</td>
+</tr>
+<tr>
+<td>Code Quality</td>
+<td>15%</td>
+</tr>
+<tr>
+<td>Documentation &amp; Report</td>
+<td>15%</td>
+</tr>
+<tr>
+<td>Presentation</td>
+<td>10%</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Minimum Pass</strong>: 80% AND 8x performance improvement</p>
+<hr>
+<h2 id="-resources">📚 Resources</h2>
+<ul>
+<li>dotTrace: <a href="https://www.jetbrains.com/profiler/">https://www.jetbrains.com/profiler/</a></li>
+<li>PerfView: <a href="https://github.com/microsoft/perfview">https://github.com/microsoft/perfview</a></li>
+<li>BenchmarkDotNet: <a href="https://benchmarkdotnet.org/">https://benchmarkdotnet.org/</a></li>
+<li>Pro .NET Memory Management: Book by Konrad Kokosa</li>
+<li>Writing High-Performance .NET Code: Book by Ben Watson</li>
+</ul>
+<hr>
+<p><em>Template Version: 1.0</em></p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/project-templates/path3/month4-6-performance-optimization.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

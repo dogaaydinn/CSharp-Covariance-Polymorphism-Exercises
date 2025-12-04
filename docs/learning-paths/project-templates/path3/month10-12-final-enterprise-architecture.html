@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Path 3 - Months 10-12 Final Capstone: Enterprise Platform Architecture | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Path 3 - Months 10-12 Final Capstone: Enterprise Platform Architecture | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../../favicon.ico">
+      <link rel="stylesheet" href="../../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/project-templates/path3/month10-12-final-enterprise-architecture.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../../index.html">
+            <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="path-3---months-10-12-final-capstone-enterprise-platform-architecture">Path 3 - Months 10-12 Final Capstone: Enterprise Platform Architecture</h1>
+
+<p><strong>Difficulty</strong>: ⭐⭐⭐⭐⭐ (Senior/Staff/Principal Engineer)
+<strong>Estimated Time</strong>: 150-200 hours (3 months)
+<strong>Prerequisites</strong>: Completed all Path 3 content</p>
+<hr>
+<h2 id="-project-overview">🎯 Project Overview</h2>
+<p>Design and present a complete enterprise platform architecture for a fictional company going through digital transformation. This is your <strong>masterpiece</strong> demonstrating senior/staff-level architectural thinking.</p>
+<h3 id="what-this-is">What This Is</h3>
+<p>This is a <strong>comprehensive architectural design project</strong>, NOT a coding project. You will:</p>
+<ul>
+<li>Design a complete enterprise platform</li>
+<li>Make 50+ architectural decisions</li>
+<li>Create 30+ architectural artifacts</li>
+<li>Present to a &quot;board&quot; (review committee)</li>
+<li>Defend your decisions</li>
+</ul>
+<hr>
+<h2 id="-the-business-case">📋 The Business Case</h2>
+<h3 id="company-profile">Company Profile</h3>
+<p><strong>Name</strong>: TechRetail Global
+<strong>Industry</strong>: E-Commerce + Physical Retail (omnichannel)
+<strong>Current State</strong>:</p>
+<ul>
+<li>500 physical stores in 20 countries</li>
+<li>Legacy monolith system (15 years old)</li>
+<li>$5B annual revenue</li>
+<li>20M customers</li>
+<li>3000 employees</li>
+<li>150 IT staff</li>
+<li>Technical debt crushing innovation</li>
+</ul>
+<p><strong>Challenges</strong>:</p>
+<ul>
+<li>System outages during sales (lost $10M last year)</li>
+<li>Cannot deploy changes without downtime</li>
+<li>6-month release cycles</li>
+<li>Poor mobile experience</li>
+<li>No real-time inventory</li>
+<li>Competitor disruption threat</li>
+</ul>
+<p><strong>Vision</strong>:</p>
+<ul>
+<li>Modern cloud-native platform</li>
+<li>Real-time inventory across all channels</li>
+<li>Personalized shopping experience</li>
+<li>Global expansion (50 countries in 5 years)</li>
+<li>Reduce time-to-market (weekly deployments)</li>
+<li>99.99% uptime</li>
+<li>Handle 10x Black Friday traffic</li>
+</ul>
+<p><strong>Budget</strong>: $50M over 3 years
+<strong>Timeline</strong>: 18-month migration
+<strong>Team</strong>: 150 developers (30 teams)</p>
+<hr>
+<h2 id="-your-mission">🎯 Your Mission</h2>
+<p>Design the complete technical architecture for TechRetail's digital transformation, covering:</p>
+<ol>
+<li>System Architecture</li>
+<li>Data Architecture</li>
+<li>Security Architecture</li>
+<li>Infrastructure Architecture</li>
+<li>Migration Strategy</li>
+<li>Team Organization</li>
+<li>Technology Stack</li>
+<li>Cost Model</li>
+<li>Risk Analysis</li>
+<li>Implementation Roadmap</li>
+</ol>
+<hr>
+<h2 id="-required-deliverables">📋 Required Deliverables</h2>
+<h3 id="1-executive-summary-10-pages">1. Executive Summary (10 pages)</h3>
+<p><strong>Contents</strong>:</p>
+<ul>
+<li>Current state assessment</li>
+<li>Proposed future state</li>
+<li>Key architectural decisions</li>
+<li>Business value proposition</li>
+<li>Risk mitigation</li>
+<li>Investment analysis</li>
+<li>Success metrics</li>
+</ul>
+<p><strong>Audience</strong>: C-level executives, Board members</p>
+<h3 id="2-architecture-vision-document-40-pages">2. Architecture Vision Document (40 pages)</h3>
+<p><strong>Table of Contents</strong>:</p>
+<pre><code>1. Introduction
+   1.1 Business Context
+   1.2 Architectural Goals
+   1.3 Constraints
+   1.4 Assumptions
+
+2. Current State Architecture
+   2.1 System Landscape
+   2.2 Pain Points
+   2.3 Technical Debt Analysis
+
+3. Target State Architecture
+   3.1 Architectural Principles
+   3.2 High-Level Architecture
+   3.3 Microservices Boundaries
+   3.4 Data Architecture
+   3.5 Integration Patterns
+
+4. Key Architectural Decisions
+   4.1 ADR Index (50+ decisions)
+   4.2 Technology Stack
+   4.3 Cloud Provider Selection
+   4.4 Database Strategy
+
+5. Quality Attributes
+   5.1 Performance
+   5.2 Scalability
+   5.3 Availability
+   5.4 Security
+   5.5 Maintainability
+
+6. Migration Strategy
+   6.1 Strangler Fig Pattern
+   6.2 Phase 1-6 Detailed Plan
+   6.3 Risk Mitigation
+   6.4 Rollback Strategy
+
+7. Team &amp; Organization
+   7.1 Team Topology
+   7.2 Ownership Model
+   7.3 Communication Patterns
+
+8. Roadmap
+   8.1 18-Month Plan
+   8.2 Milestones
+   8.3 Success Criteria
+</code></pre>
+<h3 id="3-c4-architecture-diagrams-10-diagrams">3. C4 Architecture Diagrams (10+ diagrams)</h3>
+<p><strong>Level 1 - System Context</strong>:</p>
+<ul>
+<li>Current state</li>
+<li>Target state</li>
+<li>External systems</li>
+<li>User personas</li>
+</ul>
+<p><strong>Level 2 - Container Diagram</strong>:</p>
+<ul>
+<li>All microservices (30+)</li>
+<li>Databases</li>
+<li>Message brokers</li>
+<li>Caches</li>
+<li>External integrations</li>
+</ul>
+<p><strong>Level 3 - Component Diagrams</strong> (for 5 key services):</p>
+<ul>
+<li>E-commerce service</li>
+<li>Inventory service</li>
+<li>Order service</li>
+<li>Customer service</li>
+<li>Payment service</li>
+</ul>
+<p><strong>Additional Diagrams</strong>:</p>
+<ul>
+<li>Deployment diagram (multi-region)</li>
+<li>Network diagram</li>
+<li>Security architecture</li>
+<li>Data flow diagram</li>
+</ul>
+<h3 id="4-architecture-decision-records-50-adrs">4. Architecture Decision Records (50+ ADRs)</h3>
+<p><strong>Critical Decisions</strong>:</p>
+<ol>
+<li><strong>ADR-001</strong>: Microservices vs Modular Monolith</li>
+<li><strong>ADR-002</strong>: Cloud Provider (AWS vs Azure vs GCP)</li>
+<li><strong>ADR-003</strong>: Kubernetes vs Serverless</li>
+<li><strong>ADR-004</strong>: Event-Driven Architecture</li>
+<li><strong>ADR-005</strong>: CQRS for Order Service</li>
+<li><strong>ADR-006</strong>: Event Sourcing for Audit Trail</li>
+<li><strong>ADR-007</strong>: Database-Per-Service</li>
+<li><strong>ADR-008</strong>: Saga Pattern for Distributed Transactions</li>
+<li><strong>ADR-009</strong>: API Gateway Selection (Kong vs Apigee)</li>
+<li><strong>ADR-010</strong>: Service Mesh (Istio vs Linkerd)</li>
+<li><strong>ADR-011</strong>: Message Broker (Kafka vs RabbitMQ vs AWS EventBridge)</li>
+<li><strong>ADR-012</strong>: Cache Strategy (Redis Cluster)</li>
+<li><strong>ADR-013</strong>: Search Engine (Elasticsearch vs Algolia)</li>
+<li><strong>ADR-014</strong>: CDN Selection</li>
+<li><strong>ADR-015</strong>: Observability Stack (ELK vs Grafana Stack)
+... (35 more)</li>
+</ol>
+<h3 id="5-domain-model-ddd">5. Domain Model (DDD)</h3>
+<p><strong>Bounded Contexts</strong> (15+):</p>
+<pre><code>1. Customer Management
+2. Product Catalog
+3. Inventory Management
+4. Order Management
+5. Payment Processing
+6. Shipping &amp; Fulfillment
+7. Store Operations
+8. Loyalty Program
+9. Recommendation Engine
+10. Search &amp; Discovery
+11. Content Management
+12. Analytics &amp; Reporting
+13. Marketing Campaigns
+14. Customer Support
+15. Supply Chain
+</code></pre>
+<p><strong>Context Mapping</strong>:</p>
+<ul>
+<li>Partnership relationships</li>
+<li>Customer/Supplier relationships</li>
+<li>Conformist relationships</li>
+<li>Anti-Corruption Layers</li>
+<li>Shared Kernels</li>
+</ul>
+<p><strong>Aggregate Design</strong> (for each context):</p>
+<ul>
+<li>Root entities</li>
+<li>Value objects</li>
+<li>Domain events</li>
+<li>Invariants</li>
+</ul>
+<h3 id="6-data-architecture">6. Data Architecture</h3>
+<p><strong>Database Strategy</strong>:</p>
+<pre><code>Service                | Database      | Rationale
+-----------------------|---------------|---------------------------
+Customer               | PostgreSQL    | Relational, ACID
+Product Catalog        | MongoDB       | Flexible schema
+Inventory              | PostgreSQL    | Strong consistency
+Order                  | PostgreSQL    | Transactions critical
+Payment                | PostgreSQL    | Audit trail
+Shipping               | PostgreSQL    | Relational
+Store                  | PostgreSQL    | Relational
+Loyalty                | PostgreSQL    | Points calculations
+Recommendation         | Neo4j         | Graph relationships
+Search                 | Elasticsearch | Full-text search
+Analytics              | ClickHouse    | Time-series OLAP
+Session                | Redis         | Fast access, TTL
+Cache                  | Redis Cluster | Distributed cache
+Event Store            | Kafka/EventStore | Event sourcing
+</code></pre>
+<p><strong>Data Consistency</strong>:</p>
+<ul>
+<li>Strong: Payments, Financial operations</li>
+<li>Eventual: Inventory availability, Search index</li>
+<li>Causal: Order status updates</li>
+</ul>
+<p><strong>Data Sovereignty</strong>:</p>
+<ul>
+<li>GDPR compliance (EU data in EU)</li>
+<li>Data residency requirements</li>
+<li>Cross-region replication</li>
+</ul>
+<h3 id="7-scalability-architecture">7. Scalability Architecture</h3>
+<p><strong>Global Multi-Region Deployment</strong>:</p>
+<pre><code>Region          | Primary Services           | Latency Target
+----------------|---------------------------|----------------
+US-East         | All services              | &lt;50ms
+US-West         | All services              | &lt;50ms
+EU-Central      | All services              | &lt;50ms
+Asia-Pacific    | Read replicas + CDN       | &lt;100ms
+South America   | CDN only                  | &lt;200ms
+</code></pre>
+<p><strong>Auto-Scaling Configuration</strong>:</p>
+<pre><code class="lang-yaml">Service: E-Commerce API
+Instances:
+  Min: 10
+  Max: 100
+  Desired: 20
+
+Scaling Policies:
+  - Metric: CPU &gt; 70%
+    Duration: 2 minutes
+    Action: +5 instances
+
+  - Metric: Request latency &gt; 500ms
+    Duration: 1 minute
+    Action: +10 instances
+
+  - Metric: CPU &lt; 30%
+    Duration: 10 minutes
+    Action: -2 instances
+</code></pre>
+<p><strong>Load Distribution</strong>:</p>
+<ul>
+<li>Global Load Balancer (Route 53 / CloudFlare)</li>
+<li>Regional Load Balancers</li>
+<li>Service mesh load balancing (Envoy)</li>
+<li>Database read replicas (5 per region)</li>
+</ul>
+<p><strong>Capacity Planning</strong>:</p>
+<pre><code>Normal Day:
+- 2M active users
+- 20M page views
+- 500K orders
+- 5,000 req/sec peak
+
+Black Friday:
+- 20M active users
+- 200M page views
+- 5M orders
+- 50,000 req/sec peak
+
+Capacity Requirements:
+- API Gateway: 200 instances
+- Microservices: 1,000 instances total
+- Databases: 30 primaries + 150 replicas
+- Redis: 60-node clusters (20 per region)
+- Kafka: 27 brokers (9 per region)
+- Total cores: 10,000
+- Total memory: 50TB
+- Network: 1Tbps aggregate
+</code></pre>
+<h3 id="8-security-architecture">8. Security Architecture</h3>
+<p><strong>Defense in Depth</strong>:</p>
+<pre><code>Layer                    | Security Measures
+------------------------|------------------------------------------
+1. Edge                 | WAF, DDoS protection, CDN
+2. Network              | VPC, Security groups, Network ACLs
+3. Application Gateway  | API key, Rate limiting, OAuth 2.0
+4. Services             | mTLS, JWT validation, RBAC
+5. Data                 | Encryption at rest, Field-level encryption
+6. Identity             | SSO, MFA, Federated identity
+7. Audit                | CloudTrail, Audit logs, SIEM
+</code></pre>
+<p><strong>Compliance</strong>:</p>
+<ul>
+<li>PCI-DSS Level 1 (payment processing)</li>
+<li>SOC 2 Type II</li>
+<li>GDPR (EU customers)</li>
+<li>CCPA (California customers)</li>
+<li>ISO 27001</li>
+</ul>
+<p><strong>Secrets Management</strong>:</p>
+<ul>
+<li>HashiCorp Vault for application secrets</li>
+<li>AWS Secrets Manager for infrastructure</li>
+<li>Regular rotation (90 days)</li>
+<li>No secrets in code or logs</li>
+</ul>
+<h3 id="9-migration-strategy">9. Migration Strategy</h3>
+<p><strong>Strangler Fig Pattern</strong> (18 months):</p>
+<p><strong>Phase 1 (Months 1-3): Foundation</strong></p>
+<ul>
+<li>Cloud infrastructure setup</li>
+<li>CI/CD pipelines</li>
+<li>Observability stack</li>
+<li>API Gateway deployment</li>
+<li>Authentication service (first microservice)</li>
+<li>Route 10% traffic through new gateway</li>
+</ul>
+<p><strong>Phase 2 (Months 4-6): Core Services</strong></p>
+<ul>
+<li>Product Catalog service</li>
+<li>Customer service</li>
+<li>Search service</li>
+<li>Migrate read operations</li>
+<li>30% traffic on new platform</li>
+</ul>
+<p><strong>Phase 3 (Months 7-9): Transactional Services</strong></p>
+<ul>
+<li>Order service</li>
+<li>Payment service</li>
+<li>Inventory service</li>
+<li>60% traffic on new platform</li>
+</ul>
+<p><strong>Phase 4 (Months 10-12): Fulfillment</strong></p>
+<ul>
+<li>Shipping service</li>
+<li>Store operations service</li>
+<li>Loyalty service</li>
+<li>80% traffic on new platform</li>
+</ul>
+<p><strong>Phase 5 (Months 13-15): Analytics &amp; Optimization</strong></p>
+<ul>
+<li>Recommendation service</li>
+<li>Analytics platform</li>
+<li>Marketing service</li>
+<li>95% traffic on new platform</li>
+</ul>
+<p><strong>Phase 6 (Months 16-18): Completion</strong></p>
+<ul>
+<li>Decommission legacy</li>
+<li>Performance optimization</li>
+<li>100% traffic on new platform</li>
+</ul>
+<p><strong>Risk Mitigation</strong>:</p>
+<ul>
+<li>Feature flags for gradual rollout</li>
+<li>Parallel run (shadow mode)</li>
+<li>Automated rollback</li>
+<li>Data synchronization (2-way)</li>
+<li>Comprehensive testing at each phase</li>
+</ul>
+<h3 id="10-cost-analysis">10. Cost Analysis</h3>
+<p><strong>Initial Investment (Year 1)</strong>:</p>
+<pre><code>Category                | Cost
+------------------------|------------
+Cloud Infrastructure    | $8M
+Software Licenses       | $2M
+Development (30 teams)  | $25M
+DevOps &amp; SRE           | $3M
+Training               | $1M
+Consulting             | $2M
+Contingency (20%)      | $8M
+Total Year 1           | $49M
+</code></pre>
+<p><strong>Ongoing Costs (Years 2-3)</strong>:</p>
+<pre><code>Category                | Year 2 | Year 3
+------------------------|--------|--------
+Cloud Infrastructure    | $10M   | $12M
+Development            | $20M   | $15M
+Operations             | $5M    | $6M
+Total                  | $35M   | $33M
+</code></pre>
+<p><strong>ROI Analysis</strong>:</p>
+<pre><code>Benefits (5-year projection):
+- Reduced downtime: $50M saved
+- Faster time-to-market: $100M revenue
+- Improved conversion: $80M revenue
+- Cost optimization: $30M saved
+Total Benefits: $260M
+
+Total Investment: $117M (3 years)
+Net Benefit: $143M
+ROI: 122%
+Payback Period: 2.5 years
+</code></pre>
+<h3 id="11-technology-stack">11. Technology Stack</h3>
+<p><strong>Frontend</strong>:</p>
+<ul>
+<li>Next.js (web)</li>
+<li>React Native (mobile)</li>
+<li>Micro-frontends architecture</li>
+</ul>
+<p><strong>Backend</strong>:</p>
+<ul>
+<li>.NET 8 (microservices)</li>
+<li>gRPC (service-to-service)</li>
+<li>REST (public APIs)</li>
+</ul>
+<p><strong>Data</strong>:</p>
+<ul>
+<li>PostgreSQL (relational)</li>
+<li>MongoDB (document)</li>
+<li>Redis (cache)</li>
+<li>Elasticsearch (search)</li>
+<li>Kafka (event streaming)</li>
+</ul>
+<p><strong>Cloud</strong> (multi-cloud):</p>
+<ul>
+<li>Primary: AWS</li>
+<li>DR: Azure</li>
+<li>CDN: CloudFlare</li>
+</ul>
+<p><strong>Infrastructure</strong>:</p>
+<ul>
+<li>Kubernetes (EKS)</li>
+<li>Terraform (IaC)</li>
+<li>Istio (service mesh)</li>
+</ul>
+<p><strong>Observability</strong>:</p>
+<ul>
+<li>Prometheus (metrics)</li>
+<li>Grafana (dashboards)</li>
+<li>Jaeger (tracing)</li>
+<li>ELK Stack (logs)</li>
+<li>PagerDuty (alerting)</li>
+</ul>
+<p><strong>CI/CD</strong>:</p>
+<ul>
+<li>GitHub Actions</li>
+<li>ArgoCD (GitOps)</li>
+<li>SonarQube (code quality)</li>
+</ul>
+<hr>
+<h2 id="-presentation">📊 Presentation</h2>
+<h3 id="board-presentation-60-minutes">Board Presentation (60 minutes)</h3>
+<p><strong>Slide Deck (40 slides)</strong>:</p>
+<ol>
+<li>Executive Summary (5 slides)</li>
+<li>Business Case (5 slides)</li>
+<li>Current State Analysis (5 slides)</li>
+<li>Target Architecture (10 slides)</li>
+<li>Key Decisions (5 slides)</li>
+<li>Migration Strategy (5 slides)</li>
+<li>Risk &amp; Mitigation (3 slides)</li>
+<li>Cost &amp; ROI (2 slides)</li>
+</ol>
+<p><strong>Audience</strong>:</p>
+<ul>
+<li>CTO</li>
+<li>VP Engineering</li>
+<li>VP Operations</li>
+<li>CFO</li>
+<li>External reviewers</li>
+</ul>
+<p><strong>Q&amp;A Session</strong> (30 minutes):</p>
+<ul>
+<li>Defend architectural decisions</li>
+<li>Address concerns</li>
+<li>Discuss alternatives</li>
+<li>Risk mitigation details</li>
+</ul>
+<hr>
+<h2 id="-evaluation-criteria">✅ Evaluation Criteria</h2>
+<table>
+<thead>
+<tr>
+<th>Criterion</th>
+<th>Weight</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Architecture Quality</strong></td>
+<td>30%</td>
+<td>Soundness, scalability, maintainability</td>
+</tr>
+<tr>
+<td><strong>Business Alignment</strong></td>
+<td>20%</td>
+<td>Solves business problems, ROI</td>
+</tr>
+<tr>
+<td><strong>Technical Depth</strong></td>
+<td>20%</td>
+<td>Detailed designs, ADRs, trade-offs</td>
+</tr>
+<tr>
+<td><strong>Migration Strategy</strong></td>
+<td>15%</td>
+<td>Realistic, risk-aware, phased</td>
+</tr>
+<tr>
+<td><strong>Presentation</strong></td>
+<td>10%</td>
+<td>Communication, clarity, confidence</td>
+</tr>
+<tr>
+<td><strong>Documentation</strong></td>
+<td>5%</td>
+<td>Completeness, professionalism</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Minimum Pass</strong>: 85% (255/300 points)</p>
+<p><strong>Excellence</strong>: 95%+ earns &quot;Distinguished&quot; certification</p>
+<hr>
+<h2 id="-upon-completion">🎓 Upon Completion</h2>
+<p>Congratulations! You've completed Path 3 and demonstrated <strong>Senior/Staff Engineer</strong> capabilities. You can now:</p>
+<ul>
+<li>Lead large-scale system designs</li>
+<li>Make critical architectural decisions</li>
+<li>Present to executive leadership</li>
+<li>Mentor senior engineers</li>
+<li>Drive technical strategy</li>
+</ul>
+<p><strong>Your Certificate</strong>: Senior .NET Architect</p>
+<p><strong>Career Paths</strong>:</p>
+<ul>
+<li>Staff Engineer</li>
+<li>Principal Engineer</li>
+<li>Solutions Architect</li>
+<li>Engineering Manager</li>
+<li>CTO track</li>
+</ul>
+<hr>
+<h2 id="-resources">📚 Resources</h2>
+<ul>
+<li>&quot;Software Architecture: The Hard Parts&quot; by Ford et al.</li>
+<li>&quot;Fundamentals of Software Architecture&quot; by Richards &amp; Ford</li>
+<li>&quot;Building Microservices&quot; by Sam Newman</li>
+<li>AWS Well-Architected Framework</li>
+<li>Azure Architecture Center</li>
+<li>C4 Model: <a href="https://c4model.com/">https://c4model.com/</a></li>
+<li>ADR: <a href="https://adr.github.io/">https://adr.github.io/</a></li>
+</ul>
+<hr>
+<p><em>Template Version: 1.0</em>
+<em>Last Updated: 2025-12-02</em></p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/project-templates/path3/month10-12-final-enterprise-architecture.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

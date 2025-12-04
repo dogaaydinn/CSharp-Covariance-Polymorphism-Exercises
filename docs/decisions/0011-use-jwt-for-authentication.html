@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>11. Use JWT for Authentication | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="11. Use JWT for Authentication | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/decisions/0011-use-jwt-for-authentication.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="11-use-jwt-for-authentication">11. Use JWT for Authentication</h1>
+
+<p><strong>Status:</strong> ✅ Accepted</p>
+<p><strong>Date:</strong> 2024-12-01</p>
+<p><strong>Deciders:</strong> Architecture Team, Security Team</p>
+<p><strong>Technical Story:</strong> Implementation in API authentication middleware</p>
+<hr>
+<h2 id="context-and-problem-statement">Context and Problem Statement</h2>
+<p>Microservices need stateless authentication that works across:</p>
+<ul>
+<li>Multiple API instances (load balanced)</li>
+<li>Multiple services (distributed architecture)</li>
+<li>Mobile apps, SPAs, and server-side clients</li>
+<li>Cross-domain scenarios (CORS)</li>
+</ul>
+<p><strong>Traditional session-based authentication problems:</strong></p>
+<ul>
+<li>Sessions stored server-side (not stateless)</li>
+<li>Doesn't work with load balancers (sticky sessions required)</li>
+<li>Doesn't scale horizontally</li>
+<li>Can't share authentication across services</li>
+</ul>
+<p><strong>Requirements:</strong></p>
+<ul>
+<li>Stateless (no server-side session storage)</li>
+<li>Works with load balancers</li>
+<li>Can be validated by any service</li>
+<li>Supports claims (roles, permissions)</li>
+<li>Industry standard</li>
+</ul>
+<hr>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li><strong>Stateless</strong> - No server-side session storage</li>
+<li><strong>Scalability</strong> - Works with multiple instances</li>
+<li><strong>Standards-Based</strong> - RFC 7519 (JWT)</li>
+<li><strong>Self-Contained</strong> - Token includes all claims</li>
+<li><strong>Cross-Service</strong> - Share authentication across microservices</li>
+<li><strong>Mobile/SPA Support</strong> - Works with modern frontends</li>
+</ul>
+<hr>
+<h2 id="considered-options">Considered Options</h2>
+<ul>
+<li><strong>Option 1</strong> - JWT (JSON Web Tokens)</li>
+<li><strong>Option 2</strong> - Session-based authentication (cookies)</li>
+<li><strong>Option 3</strong> - OAuth 2.0 + OpenID Connect (OIDC)</li>
+<li><strong>Option 4</strong> - API Keys</li>
+</ul>
+<hr>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p><strong>Chosen option:</strong> &quot;JWT&quot;, because it provides stateless, self-contained tokens that can be validated by any service without database lookups, works seamlessly with load balancers, and is the industry standard for API authentication.</p>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li><strong>Stateless</strong> - No session storage required</li>
+<li><strong>Scalable</strong> - Works with any number of instances</li>
+<li><strong>Self-Contained</strong> - All claims in token</li>
+<li><strong>Cross-Service</strong> - Share authentication across microservices</li>
+<li><strong>Industry Standard</strong> - RFC 7519, widely supported</li>
+<li><strong>Mobile/SPA Friendly</strong> - Easy to use in modern frontends</li>
+<li><strong>Performance</strong> - No database lookup for every request</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li><strong>Token Size</strong> - Larger than session ID (200-1000 bytes)</li>
+<li><strong>Can't Revoke</strong> - Tokens valid until expiration (use short TTL + refresh tokens)</li>
+<li><strong>Stolen Tokens</strong> - If token leaked, attacker has access until expiration</li>
+<li><strong>Implementation Complexity</strong> - Must handle refresh tokens, token rotation</li>
+</ul>
+<hr>
+<h2 id="pros-and-cons-of-the-options">Pros and Cons of the Options</h2>
+<h3 id="jwt-chosen">JWT (Chosen)</h3>
+<p><strong>What is JWT?</strong></p>
+<p>JSON Web Token (JWT) is a compact, URL-safe token format for securely transmitting claims between parties. Consists of three parts: Header.Payload.Signature.</p>
+<p><strong>Structure:</strong></p>
+<pre><code>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+
+Decoded:
+Header:  { &quot;alg&quot;: &quot;HS256&quot;, &quot;typ&quot;: &quot;JWT&quot; }
+Payload: { &quot;sub&quot;: &quot;1234567890&quot;, &quot;name&quot;: &quot;John Doe&quot;, &quot;iat&quot;: 1516239022 }
+Signature: HMACSHA256(base64UrlEncode(header) + &quot;.&quot; + base64UrlEncode(payload), secret)
+</code></pre>
+<p><strong>Pros:</strong></p>
+<ul>
+<li><strong>Stateless</strong> - Server doesn't store sessions</li>
+<li><strong>Self-contained</strong> - All user info in token</li>
+<li><strong>Portable</strong> - Works across services, languages, platforms</li>
+<li><strong>Compact</strong> - Suitable for HTTP headers</li>
+<li><strong>Standard</strong> - RFC 7519, battle-tested</li>
+<li><strong>Flexible claims</strong> - Add custom data (roles, permissions, tenant ID)</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Can't revoke</strong> - Valid until expiration (mitigation: short TTL)</li>
+<li><strong>Size</strong> - Larger than session ID (sent with every request)</li>
+<li><strong>Complexity</strong> - Need refresh token mechanism</li>
+<li><strong>Secret management</strong> - Must protect signing key</li>
+</ul>
+<p><strong>Implementation (.NET 8):</strong></p>
+<pre><code class="lang-bash">dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer
+</code></pre>
+<pre><code class="lang-csharp">// Program.cs
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add JWT authentication
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =&gt;
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration[&quot;Jwt:Issuer&quot;],
+            ValidAudience = builder.Configuration[&quot;Jwt:Audience&quot;],
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration[&quot;Jwt:Key&quot;]!)),
+            ClockSkew = TimeSpan.Zero  // No tolerance for expired tokens
+        };
+
+        options.Events = new JwtBearerEvents
+        {
+            OnAuthenticationFailed = context =&gt;
+            {
+                if (context.Exception is SecurityTokenExpiredException)
+                {
+                    context.Response.Headers.Add(&quot;Token-Expired&quot;, &quot;true&quot;);
+                }
+                return Task.CompletedTask;
+            }
+        };
+    });
+
+builder.Services.AddAuthorization();
+
+var app = builder.Build();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers();
+app.Run();
+</code></pre>
+<p><strong>appsettings.json:</strong></p>
+<pre><code class="lang-json">{
+  &quot;Jwt&quot;: {
+    &quot;Key&quot;: &quot;your-256-bit-secret-key-here-min-32-chars&quot;,
+    &quot;Issuer&quot;: &quot;https://yourdomain.com&quot;,
+    &quot;Audience&quot;: &quot;https://yourdomain.com&quot;,
+    &quot;AccessTokenExpirationMinutes&quot;: 15,
+    &quot;RefreshTokenExpirationDays&quot;: 7
+  }
+}
+</code></pre>
+<p><strong>Token Generation Service:</strong></p>
+<pre><code class="lang-csharp">using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
+
+public class TokenService
+{
+    private readonly IConfiguration _configuration;
+
+    public TokenService(IConfiguration configuration)
+    {
+        _configuration = configuration;
+    }
+
+    public string GenerateAccessToken(User user)
+    {
+        var securityKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(_configuration[&quot;Jwt:Key&quot;]!));
+
+        var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+        var claims = new[]
+        {
+            new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+            new Claim(JwtRegisteredClaimNames.Email, user.Email),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new Claim(ClaimTypes.Name, user.Username),
+            new Claim(ClaimTypes.Role, user.Role),
+            // Custom claims
+            new Claim(&quot;tenant_id&quot;, user.TenantId.ToString()),
+            new Claim(&quot;subscription_tier&quot;, user.SubscriptionTier)
+        };
+
+        var token = new JwtSecurityToken(
+            issuer: _configuration[&quot;Jwt:Issuer&quot;],
+            audience: _configuration[&quot;Jwt:Audience&quot;],
+            claims: claims,
+            expires: DateTime.UtcNow.AddMinutes(
+                int.Parse(_configuration[&quot;Jwt:AccessTokenExpirationMinutes&quot;]!)),
+            signingCredentials: credentials);
+
+        return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
+    public string GenerateRefreshToken()
+    {
+        var randomBytes = new byte[32];
+        using var rng = RandomNumberGenerator.Create();
+        rng.GetBytes(randomBytes);
+        return Convert.ToBase64String(randomBytes);
+    }
+
+    public ClaimsPrincipal? GetPrincipalFromExpiredToken(string token)
+    {
+        var tokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = _configuration[&quot;Jwt:Issuer&quot;],
+            ValidAudience = _configuration[&quot;Jwt:Audience&quot;],
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(_configuration[&quot;Jwt:Key&quot;]!)),
+            ValidateLifetime = false  // Don't validate expiration for refresh
+        };
+
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out var securityToken);
+
+        if (securityToken is not JwtSecurityToken jwtSecurityToken ||
+            !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+        {
+            throw new SecurityTokenException(&quot;Invalid token&quot;);
+        }
+
+        return principal;
+    }
+}
+</code></pre>
+<p><strong>Authentication Controller:</strong></p>
+<pre><code class="lang-csharp">[ApiController]
+[Route(&quot;api/[controller]&quot;)]
+public class AuthController : ControllerBase
+{
+    private readonly TokenService _tokenService;
+    private readonly IUserRepository _userRepository;
+
+    [HttpPost(&quot;login&quot;)]
+    public async Task&lt;ActionResult&lt;AuthResponse&gt;&gt; Login([FromBody] LoginRequest request)
+    {
+        // Validate credentials
+        var user = await _userRepository.ValidateCredentialsAsync(request.Email, request.Password);
+        if (user == null)
+        {
+            return Unauthorized(new { message = &quot;Invalid credentials&quot; });
+        }
+
+        // Generate tokens
+        var accessToken = _tokenService.GenerateAccessToken(user);
+        var refreshToken = _tokenService.GenerateRefreshToken();
+
+        // Store refresh token (database or Redis)
+        await _userRepository.SaveRefreshTokenAsync(user.Id, refreshToken, DateTime.UtcNow.AddDays(7));
+
+        return Ok(new AuthResponse
+        {
+            AccessToken = accessToken,
+            RefreshToken = refreshToken,
+            ExpiresIn = 900  // 15 minutes
+        });
+    }
+
+    [HttpPost(&quot;refresh&quot;)]
+    public async Task&lt;ActionResult&lt;AuthResponse&gt;&gt; Refresh([FromBody] RefreshRequest request)
+    {
+        // Validate refresh token
+        var storedToken = await _userRepository.GetRefreshTokenAsync(request.RefreshToken);
+        if (storedToken == null || storedToken.ExpiresAt &lt; DateTime.UtcNow)
+        {
+            return Unauthorized(new { message = &quot;Invalid or expired refresh token&quot; });
+        }
+
+        // Get user from expired access token
+        var principal = _tokenService.GetPrincipalFromExpiredToken(request.AccessToken);
+        var userId = int.Parse(principal.FindFirst(JwtRegisteredClaimNames.Sub)!.Value);
+
+        var user = await _userRepository.GetByIdAsync(userId);
+
+        // Generate new tokens
+        var newAccessToken = _tokenService.GenerateAccessToken(user);
+        var newRefreshToken = _tokenService.GenerateRefreshToken();
+
+        // Update refresh token in database
+        await _userRepository.UpdateRefreshTokenAsync(userId, newRefreshToken, DateTime.UtcNow.AddDays(7));
+
+        return Ok(new AuthResponse
+        {
+            AccessToken = newAccessToken,
+            RefreshToken = newRefreshToken,
+            ExpiresIn = 900
+        });
+    }
+
+    [HttpPost(&quot;logout&quot;)]
+    [Authorize]
+    public async Task&lt;IActionResult&gt; Logout()
+    {
+        var userId = int.Parse(User.FindFirst(JwtRegisteredClaimNames.Sub)!.Value);
+
+        // Revoke refresh token
+        await _userRepository.RevokeRefreshTokensAsync(userId);
+
+        return Ok(new { message = &quot;Logged out successfully&quot; });
+    }
+}
+</code></pre>
+<p><strong>Usage in Controllers:</strong></p>
+<pre><code class="lang-csharp">[ApiController]
+[Route(&quot;api/[controller]&quot;)]
+[Authorize]  // Requires valid JWT
+public class ProductsController : ControllerBase
+{
+    [HttpGet]
+    [Authorize(Roles = &quot;Admin,User&quot;)]  // Role-based authorization
+    public async Task&lt;ActionResult&lt;List&lt;Product&gt;&gt;&gt; GetAll()
+    {
+        var userId = User.FindFirst(JwtRegisteredClaimNames.Sub)!.Value;
+        var userEmail = User.FindFirst(JwtRegisteredClaimNames.Email)!.Value;
+        var userRole = User.FindFirst(ClaimTypes.Role)!.Value;
+
+        // Business logic
+        return Ok(products);
+    }
+
+    [HttpPost]
+    [Authorize(Policy = &quot;AdminOnly&quot;)]  // Policy-based authorization
+    public async Task&lt;ActionResult&lt;Product&gt;&gt; Create([FromBody] Product product)
+    {
+        // Only admins can create products
+        return Ok(createdProduct);
+    }
+}
+
+// Define policies in Program.cs
+builder.Services.AddAuthorization(options =&gt;
+{
+    options.AddPolicy(&quot;AdminOnly&quot;, policy =&gt; policy.RequireRole(&quot;Admin&quot;));
+    options.AddPolicy(&quot;PremiumUser&quot;, policy =&gt;
+        policy.RequireClaim(&quot;subscription_tier&quot;, &quot;Premium&quot;, &quot;Enterprise&quot;));
+});
+</code></pre>
+<p><strong>Client Usage (Frontend):</strong></p>
+<pre><code class="lang-javascript">// Login
+const response = await fetch('/api/auth/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: 'user@example.com', password: 'password123' })
+});
+
+const { accessToken, refreshToken } = await response.json();
+
+// Store tokens (localStorage or sessionStorage)
+localStorage.setItem('accessToken', accessToken);
+localStorage.setItem('refreshToken', refreshToken);
+
+// Use token for API calls
+const products = await fetch('/api/products', {
+    headers: {
+        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+    }
+});
+
+// Refresh token when access token expires
+async function refreshAccessToken() {
+    const response = await fetch('/api/auth/refresh', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            accessToken: localStorage.getItem('accessToken'),
+            refreshToken: localStorage.getItem('refreshToken')
+        })
+    });
+
+    const { accessToken, refreshToken } = await response.json();
+    localStorage.setItem('accessToken', accessToken);
+    localStorage.setItem('refreshToken', refreshToken);
+}
+</code></pre>
+<h3 id="session-based-authentication-cookies">Session-Based Authentication (Cookies)</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Simple implementation</li>
+<li>Can revoke immediately (delete session)</li>
+<li>Smaller overhead (just session ID)</li>
+<li>Automatic CSRF protection with SameSite cookies</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Stateful</strong> - Requires server-side session storage</li>
+<li><strong>Doesn't scale</strong> - Need sticky sessions or shared session store</li>
+<li><strong>CORS issues</strong> - Cookies don't work well cross-domain</li>
+<li><strong>Not API-friendly</strong> - Requires cookie support</li>
+</ul>
+<p><strong>Why Not Chosen:</strong>
+Session-based auth works for monolithic web apps, but microservices need <strong>stateless</strong> authentication that scales horizontally.</p>
+<h3 id="oauth-20--openid-connect">OAuth 2.0 + OpenID Connect</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Industry standard for delegated authorization</li>
+<li>Works with social logins (Google, GitHub, etc.)</li>
+<li>Federated identity</li>
+<li>Fine-grained scopes</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Complex setup</strong> - Requires Authorization Server</li>
+<li><strong>Overkill</strong> - For internal APIs, JWT is simpler</li>
+<li><strong>External dependency</strong> - Need IdP (IdentityServer, Auth0, Okta)</li>
+</ul>
+<p><strong>When to Use:</strong></p>
+<ul>
+<li>Need social login</li>
+<li>Federated identity across organizations</li>
+<li>Third-party API access</li>
+</ul>
+<p><strong>Decision:</strong>
+For <strong>internal microservices</strong>, JWT is simpler. For <strong>external APIs</strong> or <strong>social login</strong>, use OAuth 2.0/OIDC with a provider like Auth0 or IdentityServer.</p>
+<h3 id="api-keys">API Keys</h3>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Very simple</li>
+<li>Good for machine-to-machine</li>
+<li>Never expire (if needed)</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>No user context</strong> - Just identifies application</li>
+<li><strong>No claims</strong> - Can't encode roles, permissions</li>
+<li><strong>Rotation complexity</strong> - Hard to rotate keys</li>
+<li><strong>Not standard</strong> - No RFC</li>
+</ul>
+<p><strong>When to Use:</strong></p>
+<ul>
+<li>Machine-to-machine communication</li>
+<li>Third-party API access (rate limiting)</li>
+</ul>
+<p><strong>Why Not Primary Choice:</strong>
+API keys lack user context and claims. JWT provides both authentication and authorization.</p>
+<hr>
+<h2 id="security-best-practices">Security Best Practices</h2>
+<p><strong>1. Use HTTPS Only:</strong></p>
+<pre><code class="lang-csharp">// Require HTTPS
+app.UseHttpsRedirection();
+</code></pre>
+<p><strong>2. Short Access Token TTL:</strong></p>
+<pre><code class="lang-json">{
+  &quot;Jwt&quot;: {
+    &quot;AccessTokenExpirationMinutes&quot;: 15,  // ✅ Short TTL
+    &quot;RefreshTokenExpirationDays&quot;: 7
+  }
+}
+</code></pre>
+<p><strong>3. Secure Secret Storage:</strong></p>
+<pre><code class="lang-bash"># Azure Key Vault
+dotnet user-secrets set &quot;Jwt:Key&quot; &quot;your-secret-key&quot;
+
+# Environment variable (production)
+export JWT_KEY=&quot;your-secret-key&quot;
+</code></pre>
+<p><strong>4. Validate All Claims:</strong></p>
+<pre><code class="lang-csharp">ValidateIssuer = true,
+ValidateAudience = true,
+ValidateLifetime = true,
+ValidateIssuerSigningKey = true,
+ClockSkew = TimeSpan.Zero  // No tolerance
+</code></pre>
+<p><strong>5. Use Refresh Token Rotation:</strong></p>
+<pre><code class="lang-csharp">// Generate new refresh token on every refresh
+var newRefreshToken = _tokenService.GenerateRefreshToken();
+await _userRepository.RevokeOldRefreshTokenAsync(oldRefreshToken);
+await _userRepository.SaveRefreshTokenAsync(userId, newRefreshToken, expiresAt);
+</code></pre>
+<hr>
+<h2 id="links">Links</h2>
+<ul>
+<li><a href="https://jwt.io/">JWT.io</a></li>
+<li><a href="https://datatracker.ietf.org/doc/html/rfc7519">RFC 7519 - JSON Web Token</a></li>
+<li><a href="https://cheatsheetseries.owasp.org/cheatsheets/JSON_Web_Token_for_Java_Cheat_Sheet.html">OWASP JWT Cheat Sheet</a></li>
+<li><a href="https://learn.microsoft.com/en-us/aspnet/core/security/authentication/jwt-authn">Microsoft JWT Bearer Authentication</a></li>
+</ul>
+<hr>
+<h2 id="notes">Notes</h2>
+<p><strong>Token Lifecycle:</strong></p>
+<ol>
+<li>User logs in → Receive access token (15 min) + refresh token (7 days)</li>
+<li>Use access token for API calls</li>
+<li>When access token expires → Use refresh token to get new access token</li>
+<li>When refresh token expires → User must log in again</li>
+</ol>
+<p><strong>Common Mistakes:</strong></p>
+<ul>
+<li>❌ Storing JWT in localStorage (XSS vulnerability) - Use httpOnly cookies for web</li>
+<li>❌ Not validating token expiration</li>
+<li>❌ Using weak secret keys (&lt; 256 bits)</li>
+<li>❌ Not revoking refresh tokens on logout</li>
+</ul>
+<p><strong>Review Date:</strong> 2025-12-01</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/decisions/0011-use-jwt-for-authentication.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

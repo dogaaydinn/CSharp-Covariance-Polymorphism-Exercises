@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Path 2 - Months 1-2 Capstone: High-Performance Log Parser | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Path 2 - Months 1-2 Capstone: High-Performance Log Parser | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../../favicon.ico">
+      <link rel="stylesheet" href="../../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/project-templates/path2/month1-2-high-performance-log-parser.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../../index.html">
+            <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="path-2---months-1-2-capstone-high-performance-log-parser">Path 2 - Months 1-2 Capstone: High-Performance Log Parser</h1>
+
+<p><strong>Difficulty</strong>: ⭐⭐⭐⭐☆ (Advanced)
+<strong>Estimated Time</strong>: 40-50 hours
+<strong>Prerequisites</strong>: Path 1 completed OR equivalent (Junior Developer skills)</p>
+<hr>
+<h2 id="-project-overview">🎯 Project Overview</h2>
+<p>Build a zero-allocation log parser that can process 1GB+ log files in under 10 seconds using Span<t>, Memory<t>, ArrayPool<t>, and parallel processing.</t></t></t></p>
+<h3 id="learning-objectives">Learning Objectives</h3>
+<ul>
+<li>✅ Span<t> and Memory<t> mastery</t></t></li>
+<li>✅ ArrayPool<t> for object pooling</t></li>
+<li>✅ Stackalloc and stack allocation</li>
+<li>✅ Zero-allocation parsing</li>
+<li>✅ Parallel.For and PLINQ</li>
+<li>✅ BenchmarkDotNet profiling</li>
+</ul>
+<hr>
+<h2 id="-requirements">📋 Requirements</h2>
+<h3 id="functional-requirements">Functional Requirements</h3>
+<ol>
+<li><p><strong>Parse Multiple Log Formats</strong>:</p>
+<ul>
+<li>Apache/Nginx access logs</li>
+<li>Application logs (custom format)</li>
+<li>JSON logs</li>
+<li>CSV logs</li>
+</ul>
+</li>
+<li><p><strong>Parsing Operations</strong>:</p>
+<ul>
+<li>Extract timestamp, level, message, context</li>
+<li>Parse IP addresses and URLs</li>
+<li>Extract key-value pairs</li>
+<li>Count occurrences</li>
+<li>Filter by criteria</li>
+</ul>
+</li>
+<li><p><strong>Aggregations</strong>:</p>
+<ul>
+<li>Count by log level (ERROR, WARN, INFO)</li>
+<li>Group by hour/day</li>
+<li>Top N errors</li>
+<li>Response time statistics</li>
+<li>HTTP status code distribution</li>
+</ul>
+</li>
+<li><p><strong>Performance Requirements</strong>:</p>
+<ul>
+<li><strong>1GB file</strong>: Parse in &lt; 10 seconds</li>
+<li><strong>100K lines</strong>: Parse in &lt; 1 second</li>
+<li><strong>Memory</strong>: &lt; 500MB peak for 1GB file</li>
+<li><strong>Allocations</strong>: &lt; 100 allocations for entire file</li>
+</ul>
+</li>
+<li><p><strong>Output Formats</strong>:</p>
+<ul>
+<li>Console table</li>
+<li>JSON summary</li>
+<li>CSV report</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="-key-implementation">🏗️ Key Implementation</h2>
+<h3 id="use-span-for-zero-allocation-parsing">Use Span<t> for Zero-Allocation Parsing</t></h3>
+<pre><code class="lang-csharp">public class LogParser
+{
+    // ❌ BAD: Traditional parsing (allocations)
+    public LogEntry ParseTraditional(string line)
+    {
+        string[] parts = line.Split(' '); // Allocation!
+        return new LogEntry
+        {
+            Timestamp = DateTime.Parse(parts[0]), // Allocation!
+            Level = parts[1],
+            Message = parts[2]
+        };
+    }
+
+    // ✅ GOOD: Span&lt;T&gt; parsing (zero allocations)
+    public bool TryParse(ReadOnlySpan&lt;char&gt; line, ref LogEntry entry)
+    {
+        int firstSpace = line.IndexOf(' ');
+        if (firstSpace == -1) return false;
+
+        ReadOnlySpan&lt;char&gt; timestampSpan = line.Slice(0, firstSpace);
+        if (!DateTime.TryParse(timestampSpan, out DateTime timestamp))
+            return false;
+
+        entry.Timestamp = timestamp;
+
+        // Continue parsing without allocations
+        line = line.Slice(firstSpace + 1);
+        // TODO: Parse remaining fields
+
+        return true;
+    }
+}
+</code></pre>
+<h3 id="use-arraypool-for-buffer-reuse">Use ArrayPool<t> for Buffer Reuse</t></h3>
+<pre><code class="lang-csharp">public class BufferedLogReader
+{
+    private static readonly ArrayPool&lt;char&gt; _charPool = ArrayPool&lt;char&gt;.Shared;
+
+    public async Task ProcessFileAsync(string filePath)
+    {
+        char[] buffer = _charPool.Rent(1024 * 1024); // 1MB buffer
+        try
+        {
+            using var stream = File.OpenRead(filePath);
+            using var reader = new StreamReader(stream);
+
+            while (!reader.EndOfStream)
+            {
+                int charsRead = await reader.ReadAsync(buffer, 0, buffer.Length);
+                ReadOnlySpan&lt;char&gt; span = buffer.AsSpan(0, charsRead);
+
+                ProcessLines(span);
+            }
+        }
+        finally
+        {
+            _charPool.Return(buffer); // Return buffer to pool
+        }
+    }
+
+    private void ProcessLines(ReadOnlySpan&lt;char&gt; data)
+    {
+        // TODO: Split by newlines and process each line
+    }
+}
+</code></pre>
+<h3 id="use-parallel-processing">Use Parallel Processing</h3>
+<pre><code class="lang-csharp">public class ParallelLogProcessor
+{
+    public Dictionary&lt;string, int&gt; CountByLevel(string[] lines)
+    {
+        // Thread-safe concurrent dictionary
+        var results = new ConcurrentDictionary&lt;string, int&gt;();
+
+        Parallel.For(0, lines.Length, i =&gt;
+        {
+            ReadOnlySpan&lt;char&gt; line = lines[i].AsSpan();
+
+            if (TryExtractLevel(line, out string level))
+            {
+                results.AddOrUpdate(level, 1, (key, count) =&gt; count + 1);
+            }
+        });
+
+        return results.ToDictionary(kv =&gt; kv.Key, kv =&gt; kv.Value);
+    }
+
+    private bool TryExtractLevel(ReadOnlySpan&lt;char&gt; line, out string level)
+    {
+        // TODO: Extract log level without allocation
+        level = null;
+        return false;
+    }
+}
+</code></pre>
+<h3 id="benchmarking">Benchmarking</h3>
+<pre><code class="lang-csharp">[MemoryDiagnoser]
+public class LogParserBenchmarks
+{
+    private string[] _lines;
+
+    [GlobalSetup]
+    public void Setup()
+    {
+        _lines = File.ReadAllLines(&quot;sample.log&quot;);
+    }
+
+    [Benchmark(Baseline = true)]
+    public int Traditional_Parse()
+    {
+        int count = 0;
+        foreach (var line in _lines)
+        {
+            string[] parts = line.Split(' ');
+            if (parts.Length &gt; 1 &amp;&amp; parts[1] == &quot;ERROR&quot;)
+                count++;
+        }
+        return count;
+    }
+
+    [Benchmark]
+    public int Span_Parse()
+    {
+        int count = 0;
+        foreach (var line in _lines)
+        {
+            ReadOnlySpan&lt;char&gt; span = line.AsSpan();
+            // Zero-allocation parsing
+            if (ContainsError(span))
+                count++;
+        }
+        return count;
+    }
+
+    private bool ContainsError(ReadOnlySpan&lt;char&gt; span)
+    {
+        // TODO: Implement zero-allocation search
+        return false;
+    }
+}
+</code></pre>
+<hr>
+<h2 id="-performance-targets">📊 Performance Targets</h2>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Traditional</th>
+<th>Target (Span<t>)</t></th>
+<th>Improvement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Time (1GB file)</td>
+<td>60 seconds</td>
+<td>&lt; 10 seconds</td>
+<td>6x faster</td>
+</tr>
+<tr>
+<td>Memory</td>
+<td>2GB</td>
+<td>&lt; 500MB</td>
+<td>75% reduction</td>
+</tr>
+<tr>
+<td>Allocations</td>
+<td>10M+</td>
+<td>&lt; 100</td>
+<td>99.999% reduction</td>
+</tr>
+<tr>
+<td>GC Collections</td>
+<td>1000+</td>
+<td>&lt; 10</td>
+<td>99% reduction</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="-milestones">🎯 Milestones</h2>
+<ol>
+<li><strong>Week 1</strong>: Basic Span<t> parsing working</t></li>
+<li><strong>Week 2</strong>: ArrayPool<t> integration</t></li>
+<li><strong>Week 3</strong>: Parallel processing added</li>
+<li><strong>Week 4</strong>: Benchmarks show target performance</li>
+</ol>
+<hr>
+<h2 id="-evaluation">✅ Evaluation</h2>
+<table>
+<thead>
+<tr>
+<th>Criteria</th>
+<th>Weight</th>
+<th>Min Score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Performance (meets targets)</td>
+<td>40%</td>
+<td>32/40</td>
+</tr>
+<tr>
+<td>Zero-allocation implementation</td>
+<td>30%</td>
+<td>24/30</td>
+</tr>
+<tr>
+<td>Code quality</td>
+<td>20%</td>
+<td>16/20</td>
+</tr>
+<tr>
+<td>Benchmarks &amp; profiling</td>
+<td>10%</td>
+<td>8/10</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Pass</strong>: 75% (75/100)</p>
+<hr>
+<h2 id="-resources">📚 Resources</h2>
+<ul>
+<li><code>samples/03-Advanced/HighPerformance/SpanMemoryExamples.cs</code></li>
+<li><code>samples/03-Advanced/HighPerformance/ParallelProcessingExamples.cs</code></li>
+<li>BenchmarkDotNet: <a href="https://benchmarkdotnet.org/">https://benchmarkdotnet.org/</a></li>
+<li>Span<t> Guide: <a href="https://learn.microsoft.com/en-us/archive/msdn-magazine/2018/january/csharp-all-about-span-exploring-a-new-net-mainstay">https://learn.microsoft.com/en-us/archive/msdn-magazine/2018/january/csharp-all-about-span-exploring-a-new-net-mainstay</a></t></li>
+</ul>
+<hr>
+<p><em>Template Version: 1.0</em></p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/project-templates/path2/month1-2-high-performance-log-parser.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

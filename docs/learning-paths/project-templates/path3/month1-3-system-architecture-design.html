@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Path 3 - Months 1-3 Capstone: Enterprise System Architecture Design | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Path 3 - Months 1-3 Capstone: Enterprise System Architecture Design | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../../favicon.ico">
+      <link rel="stylesheet" href="../../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/project-templates/path3/month1-3-system-architecture-design.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../../index.html">
+            <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="path-3---months-1-3-capstone-enterprise-system-architecture-design">Path 3 - Months 1-3 Capstone: Enterprise System Architecture Design</h1>
+
+<p><strong>Difficulty</strong>: ⭐⭐⭐⭐⭐ (Senior/Architect)
+<strong>Estimated Time</strong>: 80-100 hours
+<strong>Prerequisites</strong>: Path 2 completed OR 2-3 years experience</p>
+<hr>
+<h2 id="-project-overview">🎯 Project Overview</h2>
+<p>Design a complete enterprise-grade e-commerce platform architecture from scratch. This is a <strong>design-focused</strong> project demonstrating architectural thinking, not full implementation.</p>
+<h3 id="learning-objectives">Learning Objectives</h3>
+<ul>
+<li>✅ System architecture design</li>
+<li>✅ Domain-Driven Design (DDD) with bounded contexts</li>
+<li>✅ Microservice boundaries</li>
+<li>✅ Event-driven architecture at scale</li>
+<li>✅ CQRS and Event Sourcing</li>
+<li>✅ Scalability patterns</li>
+<li>✅ Security architecture</li>
+</ul>
+<hr>
+<h2 id="-project-requirements">📋 Project Requirements</h2>
+<h3 id="the-business-case">The Business Case</h3>
+<p><strong>Company</strong>: Global E-Commerce Platform
+<strong>Scale</strong>: 10M+ users, 1M+ daily active users
+<strong>Requirements</strong>:</p>
+<ul>
+<li>Handle Black Friday traffic (100x normal)</li>
+<li>99.99% uptime SLA</li>
+<li>Global presence (multi-region)</li>
+<li>Real-time inventory</li>
+<li>Personalized recommendations</li>
+<li>Multi-currency support</li>
+<li>PCI-DSS compliance</li>
+</ul>
+<hr>
+<h2 id="-deliverables">🏗️ Deliverables</h2>
+<h3 id="1-architecture-decision-records-adrs">1. Architecture Decision Records (ADRs)</h3>
+<p>Write 10+ ADRs documenting key decisions:</p>
+<p><strong>Example ADR Template</strong>:</p>
+<pre><code class="lang-markdown"># ADR-001: Use Microservices Architecture
+
+## Status: Accepted
+
+## Context
+- Need to support 10M+ users
+- Multiple teams (30+ developers)
+- Different scaling requirements per domain
+- Need independent deployment
+
+## Decision
+Use microservices architecture with event-driven communication.
+
+## Consequences
+**Positive**:
+- Independent scaling
+- Team autonomy
+- Technology diversity
+- Fault isolation
+
+**Negative**:
+- Increased complexity
+- Distributed system challenges
+- Operational overhead
+- Need for service mesh
+
+## Alternatives Considered
+- Monolith: Cannot scale, team coordination issues
+- Modular Monolith: Better but still single deployment
+</code></pre>
+<p><strong>Required ADRs</strong>:</p>
+<ol>
+<li>Microservices vs Monolith</li>
+<li>Synchronous (gRPC) vs Asynchronous (Events) communication</li>
+<li>Database per service vs Shared database</li>
+<li>CQRS with separate read/write models</li>
+<li>Event Sourcing for audit trail</li>
+<li>API Gateway selection</li>
+<li>Message broker selection (Kafka vs RabbitMQ)</li>
+<li>Caching strategy (Redis layers)</li>
+<li>Search solution (Elasticsearch)</li>
+<li>Payment gateway integration</li>
+</ol>
+<h3 id="2-c4-model-diagrams">2. C4 Model Diagrams</h3>
+<p>Create complete C4 diagrams:</p>
+<p><strong>Level 1 - System Context</strong>:</p>
+<pre><code>┌─────────────────────────────────────────────────────┐
+│                                                     │
+│   Customer ──&gt; E-Commerce Platform &lt;── Admin       │
+│                        │                            │
+│                        │                            │
+│                    ┌───▼────┐                      │
+│                    │Payment │                      │
+│                    │Gateway │                      │
+│                    └────────┘                      │
+│                                                     │
+└─────────────────────────────────────────────────────┘
+</code></pre>
+<p><strong>Level 2 - Container Diagram</strong>:</p>
+<ul>
+<li>Show all microservices</li>
+<li>External systems</li>
+<li>Databases</li>
+<li>Message brokers</li>
+<li>Caches</li>
+</ul>
+<p><strong>Level 3 - Component Diagram</strong> (for key services):</p>
+<ul>
+<li>Product Service components</li>
+<li>Order Service components</li>
+<li>Payment Service components</li>
+</ul>
+<p><strong>Level 4 - Code</strong> (optional):</p>
+<ul>
+<li>Key class diagrams</li>
+<li>Sequence diagrams</li>
+</ul>
+<h3 id="3-domain-model-with-bounded-contexts">3. Domain Model with Bounded Contexts</h3>
+<p><strong>Identify Bounded Contexts</strong>:</p>
+<pre><code>1. Catalog Context
+   - Product Management
+   - Category Management
+   - Inventory Management
+
+2. Order Context
+   - Order Processing
+   - Order Fulfillment
+   - Returns
+
+3. Customer Context
+   - Customer Profiles
+   - Customer Preferences
+   - Loyalty Programs
+
+4. Payment Context
+   - Payment Processing
+   - Refunds
+   - Fraud Detection
+
+5. Shipping Context
+   - Shipping Calculation
+   - Carrier Integration
+   - Tracking
+
+6. Search Context
+   - Product Search
+   - Recommendations
+   - Personalization
+</code></pre>
+<p><strong>Define Aggregates for Each Context</strong>:</p>
+<pre><code class="lang-csharp">// Order Context - Aggregates
+Order (root)
+├── OrderId
+├── CustomerId
+├── Status
+├── OrderItems[]
+├── ShippingAddress
+├── PaymentInfo
+└── DomainEvents[]
+
+// Catalog Context - Aggregates
+Product (root)
+├── ProductId
+├── SKU
+├── Name
+├── Price
+├── Inventory
+├── Categories[]
+└── Attributes[]
+</code></pre>
+<h3 id="4-data-architecture">4. Data Architecture</h3>
+<p><strong>Database Strategy</strong>:</p>
+<pre><code>Service          | Database Type  | Reason
+-----------------|---------------|---------------------------
+Catalog          | PostgreSQL    | Relational, complex queries
+Order            | PostgreSQL    | ACID, transactions
+Customer         | PostgreSQL    | Relational
+Payment          | PostgreSQL    | ACID critical
+Inventory        | Redis         | High performance, real-time
+Search           | Elasticsearch | Full-text search
+Session          | Redis         | Fast access, TTL
+Analytics        | ClickHouse    | Time-series, OLAP
+Audit Log        | MongoDB       | Document store, write-heavy
+</code></pre>
+<p><strong>Data Consistency Patterns</strong>:</p>
+<ul>
+<li>Strong consistency: Orders, Payments</li>
+<li>Eventual consistency: Inventory, Search index</li>
+<li>CQRS: Separate read/write models for Orders</li>
+<li>Event Sourcing: Audit trail for all financial operations</li>
+</ul>
+<h3 id="5-communication-patterns">5. Communication Patterns</h3>
+<p><strong>Synchronous (gRPC)</strong>:</p>
+<ul>
+<li>API Gateway → Services (query operations)</li>
+<li>Service → Service (real-time dependencies)</li>
+<li>Example: Order Service → Inventory Service (check stock)</li>
+</ul>
+<p><strong>Asynchronous (Events)</strong>:</p>
+<ul>
+<li>Cross-context communication</li>
+<li>Long-running processes</li>
+<li>Example: OrderPlaced → [Inventory, Shipping, Notification]</li>
+</ul>
+<p><strong>Event Schema</strong>:</p>
+<pre><code class="lang-json">{
+  &quot;eventId&quot;: &quot;uuid&quot;,
+  &quot;eventType&quot;: &quot;OrderPlaced&quot;,
+  &quot;aggregateId&quot;: &quot;order-123&quot;,
+  &quot;timestamp&quot;: &quot;2024-01-15T10:00:00Z&quot;,
+  &quot;version&quot;: 1,
+  &quot;data&quot;: {
+    &quot;orderId&quot;: &quot;order-123&quot;,
+    &quot;customerId&quot;: &quot;customer-456&quot;,
+    &quot;totalAmount&quot;: 299.99,
+    &quot;items&quot;: [...]
+  },
+  &quot;metadata&quot;: {
+    &quot;userId&quot;: &quot;user-789&quot;,
+    &quot;correlationId&quot;: &quot;request-abc&quot;,
+    &quot;causationId&quot;: &quot;command-xyz&quot;
+  }
+}
+</code></pre>
+<h3 id="6-scalability-plan">6. Scalability Plan</h3>
+<p><strong>Horizontal Scaling</strong>:</p>
+<ul>
+<li>Stateless services behind load balancer</li>
+<li>Database read replicas</li>
+<li>Cache layers (Redis Cluster)</li>
+<li>CDN for static assets</li>
+</ul>
+<p><strong>Vertical Scaling</strong>:</p>
+<ul>
+<li>Database (up to hardware limits)</li>
+<li>Cache servers</li>
+</ul>
+<p><strong>Auto-scaling Rules</strong>:</p>
+<pre><code>Metric              | Threshold | Action
+--------------------|-----------|----------------------
+CPU &gt; 70%           | 2 min     | Scale out +2 instances
+Memory &gt; 80%        | 2 min     | Scale out +2 instances
+Request latency &gt;1s | 5 min     | Scale out +3 instances
+CPU &lt; 30%           | 10 min    | Scale in -1 instance
+</code></pre>
+<p><strong>Traffic Estimation</strong>:</p>
+<pre><code>Normal Day:
+- 1M active users
+- 10M page views
+- 100K orders
+- 1000 req/sec peak
+
+Black Friday:
+- 10M active users
+- 100M page views
+- 1M orders
+- 10,000 req/sec peak
+
+Required Capacity:
+- API Gateway: 20 instances (500 req/sec each)
+- Services: 50-100 instances total
+- Databases: Primary + 5 read replicas
+- Redis: 10-node cluster
+- Kafka: 9-node cluster (3 brokers × 3 AZ)
+</code></pre>
+<h3 id="7-security-architecture">7. Security Architecture</h3>
+<p><strong>Authentication &amp; Authorization</strong>:</p>
+<ul>
+<li>OAuth 2.0 / OpenID Connect</li>
+<li>JWT tokens (access + refresh)</li>
+<li>Role-based access control (RBAC)</li>
+<li>Claims-based authorization</li>
+</ul>
+<p><strong>API Security</strong>:</p>
+<ul>
+<li>Rate limiting (per user, per IP)</li>
+<li>API keys for service-to-service</li>
+<li>TLS 1.3 everywhere</li>
+<li>mTLS for sensitive service communication</li>
+</ul>
+<p><strong>Data Security</strong>:</p>
+<ul>
+<li>Encryption at rest (AES-256)</li>
+<li>Encryption in transit (TLS)</li>
+<li>PCI-DSS compliance for payment data</li>
+<li>Tokenization for credit cards</li>
+<li>GDPR compliance (data retention, right to delete)</li>
+</ul>
+<p><strong>Infrastructure Security</strong>:</p>
+<ul>
+<li>WAF (Web Application Firewall)</li>
+<li>DDoS protection</li>
+<li>Network segmentation (DMZ, private subnets)</li>
+<li>Zero-trust network</li>
+</ul>
+<h3 id="8-disaster-recovery-plan">8. Disaster Recovery Plan</h3>
+<p><strong>Backup Strategy</strong>:</p>
+<ul>
+<li>Database: Hourly snapshots, 30-day retention</li>
+<li>Event store: Continuous replication</li>
+<li>Configuration: Git repository</li>
+</ul>
+<p><strong>Recovery Objectives</strong>:</p>
+<ul>
+<li>RTO (Recovery Time Objective): &lt; 1 hour</li>
+<li>RPO (Recovery Point Objective): &lt; 5 minutes</li>
+</ul>
+<p><strong>Multi-Region Strategy</strong>:</p>
+<pre><code>Primary Region (US-East)
+- Active-active for reads
+- Active-passive for writes
+
+Secondary Region (EU-West)
+- Async replication
+- Can take over in &lt; 15 minutes
+- Degraded mode (some features unavailable)
+</code></pre>
+<h3 id="9-monitoring--observability">9. Monitoring &amp; Observability</h3>
+<p><strong>Metrics to Track</strong>:</p>
+<ul>
+<li>Request latency (p50, p95, p99)</li>
+<li>Error rate</li>
+<li>Request throughput</li>
+<li>Database query performance</li>
+<li>Cache hit rate</li>
+<li>Message queue lag</li>
+<li>Business metrics (orders/hour, revenue)</li>
+</ul>
+<p><strong>Alerting Rules</strong>:</p>
+<pre><code>Alert                    | Severity | Threshold
+------------------------|----------|------------------
+API latency &gt; 1s        | Warning  | p95 for 5 min
+API latency &gt; 3s        | Critical | p95 for 2 min
+Error rate &gt; 1%         | Warning  | 5 min
+Error rate &gt; 5%         | Critical | 1 min
+Order failure rate &gt; 5% | Critical | Immediate
+Payment failure &gt; 10%   | Critical | Immediate
+</code></pre>
+<p><strong>Dashboards</strong>:</p>
+<ul>
+<li>Executive: Orders, revenue, active users</li>
+<li>Engineering: Latency, errors, throughput</li>
+<li>Operations: Infrastructure health</li>
+<li>Business: Conversion rates, cart abandonment</li>
+</ul>
+<h3 id="10-cost-estimation">10. Cost Estimation</h3>
+<p><strong>Monthly Infrastructure Cost</strong> (AWS):</p>
+<pre><code>Component                | Cost/Month
+------------------------|------------
+EC2 (50 instances)      | $5,000
+RDS (PostgreSQL)        | $3,000
+ElastiCache (Redis)     | $1,500
+MSK (Kafka)             | $2,500
+Load Balancers          | $500
+S3 + CloudFront         | $1,000
+Monitoring (CloudWatch) | $500
+Total Infrastructure    | $14,000
+
+Personnel (team of 8):
+- 1 Architect           | $180k/year
+- 3 Senior Developers   | $450k/year
+- 3 Mid Developers      | $360k/year
+- 1 DevOps             | $150k/year
+Total Personnel         | $1,140,000/year
+
+Total Annual Cost: ~$1.3M
+Revenue per year: $50M (assumed)
+Tech cost: 2.6% of revenue ✅
+</code></pre>
+<hr>
+<h2 id="-document-structure">📝 Document Structure</h2>
+<p>Your final submission should include:</p>
+<pre><code>enterprise-ecommerce-architecture/
+├── README.md                          # Overview
+├── docs/
+│   ├── architecture/
+│   │   ├── 01-system-context.md
+│   │   ├── 02-container-diagram.md
+│   │   ├── 03-component-diagrams/
+│   │   └── 04-sequence-diagrams/
+│   ├── decisions/
+│   │   ├── ADR-001-microservices.md
+│   │   ├── ADR-002-async-communication.md
+│   │   ├── ... (10+ ADRs)
+│   ├── domain/
+│   │   ├── bounded-contexts.md
+│   │   ├── catalog-context.md
+│   │   ├── order-context.md
+│   │   └── ...
+│   ├── data/
+│   │   ├── database-strategy.md
+│   │   ├── cqrs-design.md
+│   │   └── event-sourcing.md
+│   ├── operations/
+│   │   ├── scalability-plan.md
+│   │   ├── disaster-recovery.md
+│   │   └── monitoring.md
+│   └── security/
+│       ├── authentication.md
+│       ├── api-security.md
+│       └── compliance.md
+├── diagrams/
+│   ├── c4-level1-context.png
+│   ├── c4-level2-container.png
+│   ├── domain-model.png
+│   └── deployment-diagram.png
+└── presentation/
+    └── architecture-presentation.pdf   # 30-slide deck
+</code></pre>
+<hr>
+<h2 id="-evaluation-criteria">✅ Evaluation Criteria</h2>
+<table>
+<thead>
+<tr>
+<th>Criterion</th>
+<th>Weight</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Architecture Design</strong></td>
+<td>30%</td>
+<td>Soundness, scalability, maintainability</td>
+</tr>
+<tr>
+<td><strong>Domain Modeling</strong></td>
+<td>20%</td>
+<td>DDD application, bounded contexts</td>
+</tr>
+<tr>
+<td><strong>Technical Decisions</strong></td>
+<td>20%</td>
+<td>ADRs quality, trade-off analysis</td>
+</tr>
+<tr>
+<td><strong>Documentation</strong></td>
+<td>15%</td>
+<td>Completeness, clarity, diagrams</td>
+</tr>
+<tr>
+<td><strong>Scalability Plan</strong></td>
+<td>10%</td>
+<td>Realistic capacity planning</td>
+</tr>
+<tr>
+<td><strong>Security</strong></td>
+<td>5%</td>
+<td>Comprehensive security measures</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Minimum Pass</strong>: 80% (240/300 points)</p>
+<hr>
+<h2 id="-resources">📚 Resources</h2>
+<ul>
+<li>C4 Model: <a href="https://c4model.com/">https://c4model.com/</a></li>
+<li>ADR Templates: <a href="https://adr.github.io/">https://adr.github.io/</a></li>
+<li>DDD Book: Eric Evans &quot;Domain-Driven Design&quot;</li>
+<li>Microservices Patterns: <a href="https://microservices.io/patterns/">https://microservices.io/patterns/</a></li>
+<li>AWS Well-Architected Framework</li>
+</ul>
+<hr>
+<p><em>Template Version: 1.0</em></p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/project-templates/path3/month1-3-system-architecture-design.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

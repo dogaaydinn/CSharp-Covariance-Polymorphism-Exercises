@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Path 2 - Month 9 Final Capstone: Micro-Video Platform | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Path 2 - Month 9 Final Capstone: Micro-Video Platform | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../../favicon.ico">
+      <link rel="stylesheet" href="../../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/project-templates/path2/month9-final-capstone.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../../index.html">
+            <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="path-2---month-9-final-capstone-micro-video-platform">Path 2 - Month 9 Final Capstone: Micro-Video Platform</h1>
+
+<p><strong>Difficulty</strong>: ⭐⭐⭐⭐⭐ (Expert)
+<strong>Estimated Time</strong>: 120-150 hours (4 weeks full-time)
+<strong>Prerequisites</strong>: Completed all Path 2 content (Months 1-8)</p>
+<hr>
+<h2 id="-project-overview">🎯 Project Overview</h2>
+<p>Build a complete production-ready video platform with microservices, demonstrating ALL concepts learned in Path 2. This is your portfolio centerpiece project.</p>
+<h3 id="system-requirements">System Requirements</h3>
+<p>A full-featured video streaming platform with:</p>
+<ul>
+<li><strong>5+ Microservices</strong> communicating via gRPC and events</li>
+<li><strong>API Gateway</strong> as single entry point</li>
+<li><strong>Event-driven</strong> architecture with message queues</li>
+<li><strong>High-performance</strong> video processing</li>
+<li><strong>Complete observability</strong> (logging, tracing, metrics)</li>
+<li><strong>Production-ready</strong> with CI/CD</li>
+<li><strong>Fully documented</strong> with architecture diagrams</li>
+</ul>
+<hr>
+<h2 id="-architecture">📋 Architecture</h2>
+<pre><code>                    ┌──────────────┐
+                    │ API Gateway  │
+                    │   (REST)     │
+                    └──────┬───────┘
+                           │
+        ┌──────────────────┼──────────────────┐
+        │                  │                  │
+   ┌────▼─────┐      ┌─────▼────┐     ┌──────▼──────┐
+   │   User   │      │  Video   │     │  Analytics  │
+   │ Service  │      │ Service  │     │   Service   │
+   │ (gRPC)   │      │ (gRPC)   │     │   (gRPC)    │
+   └────┬─────┘      └─────┬────┘     └──────┬──────┘
+        │                  │                  │
+        │            ┌─────▼──────┐           │
+        │            │  Storage   │           │
+        │            │  Service   │           │
+        │            │  (gRPC)    │           │
+        │            └─────┬──────┘           │
+        │                  │                  │
+        └──────────────────┴──────────────────┘
+                           │
+                  ┌────────▼─────────┐
+                  │    RabbitMQ      │
+                  │  (Event Bus)     │
+                  └────────┬─────────┘
+                           │
+              ┌────────────┴───────────────┐
+              │                            │
+       ┌──────▼──────┐           ┌────────▼────────┐
+       │Notification │           │  Search/Index   │
+       │   Service   │           │    Service      │
+       └─────────────┘           └─────────────────┘
+
+Storage:  PostgreSQL, MongoDB, Redis, S3/MinIO
+Monitoring: Seq, Jaeger, Prometheus, Grafana
+</code></pre>
+<hr>
+<h2 id="-microservices">🛠️ Microservices</h2>
+<h3 id="1-api-gateway-aspnet-core">1. API Gateway (ASP.NET Core)</h3>
+<p><strong>Responsibilities</strong>:</p>
+<ul>
+<li>HTTP/REST entry point</li>
+<li>JWT authentication</li>
+<li>Request routing to internal services</li>
+<li>Response aggregation</li>
+<li>Rate limiting</li>
+<li>CORS handling</li>
+</ul>
+<p><strong>Endpoints</strong>:</p>
+<pre><code>POST   /api/auth/login
+POST   /api/auth/register
+GET    /api/videos
+POST   /api/videos/upload
+GET    /api/videos/{id}
+POST   /api/videos/{id}/view
+GET    /api/users/{id}/videos
+GET    /api/stats/overview
+</code></pre>
+<p><strong>Tech Stack</strong>:</p>
+<ul>
+<li>ASP.NET Core 8</li>
+<li>YARP (reverse proxy) or Ocelot</li>
+<li>JWT authentication</li>
+<li>Polly for resilience</li>
+</ul>
+<hr>
+<h3 id="2-user-service-grpc">2. User Service (gRPC)</h3>
+<p><strong>Responsibilities</strong>:</p>
+<ul>
+<li>User registration/authentication</li>
+<li>Profile management</li>
+<li>JWT token generation</li>
+<li>User preferences</li>
+</ul>
+<p><strong>gRPC Services</strong>:</p>
+<pre><code class="lang-protobuf">service UserService {
+  rpc Register (RegisterRequest) returns (RegisterResponse);
+  rpc Login (LoginRequest) returns (LoginResponse);
+  rpc GetUser (GetUserRequest) returns (UserResponse);
+  rpc UpdateProfile (UpdateProfileRequest) returns (UpdateProfileResponse);
+}
+</code></pre>
+<p><strong>Database</strong>: PostgreSQL
+<strong>Events Published</strong>:</p>
+<ul>
+<li>UserRegistered</li>
+<li>UserProfileUpdated</li>
+</ul>
+<hr>
+<h3 id="3-video-service-grpc">3. Video Service (gRPC)</h3>
+<p><strong>Responsibilities</strong>:</p>
+<ul>
+<li>Video metadata management</li>
+<li>Upload coordination</li>
+<li>Video status tracking</li>
+<li>Thumbnail management</li>
+</ul>
+<p><strong>gRPC Services</strong>:</p>
+<pre><code class="lang-protobuf">service VideoService {
+  rpc UploadVideo (UploadVideoRequest) returns (UploadVideoResponse);
+  rpc GetVideo (GetVideoRequest) returns (VideoResponse);
+  rpc ListVideos (ListVideosRequest) returns (ListVideosResponse);
+  rpc UpdateVideo (UpdateVideoRequest) returns (UpdateVideoResponse);
+  rpc DeleteVideo (DeleteVideoRequest) returns (DeleteVideoResponse);
+}
+</code></pre>
+<p><strong>Database</strong>: MongoDB
+<strong>Events Published</strong>:</p>
+<ul>
+<li>VideoUploaded</li>
+<li>VideoProcessed</li>
+<li>VideoDeleted</li>
+</ul>
+<hr>
+<h3 id="4-storage-service-grpc">4. Storage Service (gRPC)</h3>
+<p><strong>Responsibilities</strong>:</p>
+<ul>
+<li>Actual file storage (MinIO/S3)</li>
+<li>Pre-signed URL generation</li>
+<li>File chunking for large uploads</li>
+<li>CDN integration</li>
+</ul>
+<p><strong>gRPC Services</strong>:</p>
+<pre><code class="lang-protobuf">service StorageService {
+  rpc GetUploadUrl (GetUploadUrlRequest) returns (GetUploadUrlResponse);
+  rpc GetDownloadUrl (GetDownloadUrlRequest) returns (GetDownloadUrlResponse);
+  rpc DeleteFile (DeleteFileRequest) returns (DeleteFileResponse);
+}
+</code></pre>
+<p><strong>Storage</strong>: MinIO (S3-compatible)</p>
+<hr>
+<h3 id="5-analytics-service-grpc">5. Analytics Service (gRPC)</h3>
+<p><strong>Responsibilities</strong>:</p>
+<ul>
+<li>Track video views</li>
+<li>User engagement metrics</li>
+<li>Generate statistics</li>
+<li>Real-time analytics</li>
+</ul>
+<p><strong>gRPC Services</strong>:</p>
+<pre><code class="lang-protobuf">service AnalyticsService {
+  rpc RecordView (RecordViewRequest) returns (RecordViewResponse);
+  rpc GetVideoStats (GetVideoStatsRequest) returns (VideoStatsResponse);
+  rpc GetUserStats (GetUserStatsRequest) returns (UserStatsResponse);
+  rpc GetTrendingVideos (GetTrendingVideosRequest) returns (TrendingVideosResponse);
+}
+</code></pre>
+<p><strong>Database</strong>: MongoDB (time-series collection) or InfluxDB
+<strong>Events Consumed</strong>:</p>
+<ul>
+<li>VideoViewed</li>
+<li>VideoLiked</li>
+<li>VideoShared</li>
+</ul>
+<hr>
+<h3 id="6-notification-service-event-consumer">6. Notification Service (Event Consumer)</h3>
+<p><strong>Responsibilities</strong>:</p>
+<ul>
+<li>Email notifications</li>
+<li>Push notifications</li>
+<li>SMS notifications (optional)</li>
+<li>Notification templates</li>
+</ul>
+<p><strong>Events Consumed</strong>:</p>
+<ul>
+<li>UserRegistered → Send welcome email</li>
+<li>VideoUploaded → Notify subscribers</li>
+<li>VideoProcessed → Notify uploader</li>
+</ul>
+<p><strong>Tech</strong>: Background service with RabbitMQ consumer</p>
+<hr>
+<h3 id="7-search-service-optional-http">7. Search Service (Optional, HTTP)</h3>
+<p><strong>Responsibilities</strong>:</p>
+<ul>
+<li>Full-text search</li>
+<li>Video indexing</li>
+<li>Search suggestions</li>
+</ul>
+<p><strong>Tech</strong>: Elasticsearch or MeiliSearch</p>
+<hr>
+<h2 id="-key-features-to-implement">🎯 Key Features to Implement</h2>
+<h3 id="high-performance-video-upload">High-Performance Video Upload</h3>
+<pre><code class="lang-csharp">// Use Span&lt;T&gt; for chunked upload
+public async Task&lt;string&gt; UploadChunkedAsync(
+    Stream stream,
+    string fileName,
+    CancellationToken ct)
+{
+    const int chunkSize = 1024 * 1024; // 1MB chunks
+    var buffer = ArrayPool&lt;byte&gt;.Shared.Rent(chunkSize);
+
+    try
+    {
+        var uploadId = Guid.NewGuid().ToString();
+        int partNumber = 1;
+
+        int bytesRead;
+        while ((bytesRead = await stream.ReadAsync(buffer, ct)) &gt; 0)
+        {
+            ReadOnlyMemory&lt;byte&gt; chunk = buffer.AsMemory(0, bytesRead);
+
+            await _s3Client.UploadPartAsync(new UploadPartRequest
+            {
+                BucketName = _bucketName,
+                Key = fileName,
+                UploadId = uploadId,
+                PartNumber = partNumber++,
+                InputStream = new MemoryStream(chunk.ToArray())
+            }, ct);
+
+            _logger.LogInformation(
+                &quot;Uploaded chunk {PartNumber} of {FileName}&quot;,
+                partNumber - 1, fileName);
+        }
+
+        return uploadId;
+    }
+    finally
+    {
+        ArrayPool&lt;byte&gt;.Shared.Return(buffer);
+    }
+}
+</code></pre>
+<h3 id="event-driven-communication">Event-Driven Communication</h3>
+<pre><code class="lang-csharp">// Publish event
+public async Task PublishVideoUploadedAsync(VideoUploadedEvent @event)
+{
+    var message = JsonSerializer.SerializeToUtf8Bytes(@event);
+
+    await _channel.BasicPublishAsync(
+        exchange: &quot;video.events&quot;,
+        routingKey: &quot;video.uploaded&quot;,
+        mandatory: true,
+        basicProperties: new BasicProperties
+        {
+            DeliveryMode = 2, // Persistent
+            ContentType = &quot;application/json&quot;,
+            MessageId = @event.VideoId.ToString()
+        },
+        body: message);
+
+    _logger.LogInformation(
+        &quot;Published VideoUploaded event for video {VideoId}&quot;,
+        @event.VideoId);
+}
+
+// Consume event
+public class VideoUploadedConsumer : BackgroundService
+{
+    protected override async Task ExecuteAsync(CancellationToken ct)
+    {
+        var consumer = new AsyncEventingBasicConsumer(_channel);
+
+        consumer.Received += async (sender, ea) =&gt;
+        {
+            var body = ea.Body.ToArray();
+            var @event = JsonSerializer.Deserialize&lt;VideoUploadedEvent&gt;(body);
+
+            using var activity = _activitySource.StartActivity(&quot;ProcessVideoUploaded&quot;);
+            activity?.SetTag(&quot;video.id&quot;, @event.VideoId);
+
+            try
+            {
+                await ProcessVideoUploadedAsync(@event);
+                _channel.BasicAck(ea.DeliveryTag, multiple: false);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, &quot;Failed to process VideoUploaded event&quot;);
+                _channel.BasicNack(ea.DeliveryTag, multiple: false, requeue: true);
+            }
+        };
+
+        _channel.BasicConsume(
+            queue: &quot;notification.video.uploaded&quot;,
+            autoAck: false,
+            consumer: consumer);
+
+        await Task.Delay(Timeout.Infinite, ct);
+    }
+}
+</code></pre>
+<hr>
+<h2 id="-implementation-phases">🎯 Implementation Phases</h2>
+<h3 id="phase-1-foundation-week-1">Phase 1: Foundation (Week 1)</h3>
+<ul>
+<li>[ ] Set up solution structure (7 projects)</li>
+<li>[ ] Configure Docker Compose</li>
+<li>[ ] Set up databases (PostgreSQL, MongoDB, Redis)</li>
+<li>[ ] Set up RabbitMQ</li>
+<li>[ ] Implement basic API Gateway</li>
+</ul>
+<h3 id="phase-2-core-services-week-2">Phase 2: Core Services (Week 2)</h3>
+<ul>
+<li>[ ] Implement User Service (gRPC)</li>
+<li>[ ] Implement Video Service (gRPC)</li>
+<li>[ ] Implement JWT authentication</li>
+<li>[ ] Basic CRUD operations working</li>
+</ul>
+<h3 id="phase-3-storage--events-week-3">Phase 3: Storage &amp; Events (Week 3)</h3>
+<ul>
+<li>[ ] Implement Storage Service (MinIO)</li>
+<li>[ ] Add RabbitMQ event publishing</li>
+<li>[ ] Implement Notification Service</li>
+<li>[ ] Implement Analytics Service</li>
+</ul>
+<h3 id="phase-4-observability-week-3-4">Phase 4: Observability (Week 3-4)</h3>
+<ul>
+<li>[ ] Add Serilog structured logging</li>
+<li>[ ] Add OpenTelemetry tracing</li>
+<li>[ ] Add health checks</li>
+<li>[ ] Set up Prometheus + Grafana</li>
+<li>[ ] Add Seq for log aggregation</li>
+<li>[ ] Add Jaeger for trace visualization</li>
+</ul>
+<h3 id="phase-5-polish--deploy-week-4">Phase 5: Polish &amp; Deploy (Week 4)</h3>
+<ul>
+<li>[ ] Write comprehensive tests (unit + integration)</li>
+<li>[ ] Add resilience policies (Polly)</li>
+<li>[ ] Performance testing</li>
+<li>[ ] Complete documentation</li>
+<li>[ ] CI/CD pipeline (GitHub Actions)</li>
+<li>[ ] Production deployment</li>
+</ul>
+<hr>
+<h2 id="-evaluation-criteria">✅ Evaluation Criteria</h2>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Weight</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Architecture</strong></td>
+<td>20%</td>
+<td>Microservice design, separation of concerns</td>
+</tr>
+<tr>
+<td><strong>Implementation</strong></td>
+<td>25%</td>
+<td>Code quality, SOLID principles, patterns</td>
+</tr>
+<tr>
+<td><strong>Performance</strong></td>
+<td>15%</td>
+<td>High-performance code, Span<t>, optimization</t></td>
+</tr>
+<tr>
+<td><strong>Observability</strong></td>
+<td>15%</td>
+<td>Logging, tracing, metrics, dashboards</td>
+</tr>
+<tr>
+<td><strong>Testing</strong></td>
+<td>10%</td>
+<td>Unit tests, integration tests, coverage</td>
+</tr>
+<tr>
+<td><strong>Documentation</strong></td>
+<td>10%</td>
+<td>Architecture docs, API docs, README</td>
+</tr>
+<tr>
+<td><strong>Deployment</strong></td>
+<td>5%</td>
+<td>Docker, CI/CD, production-ready</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Minimum Pass</strong>: 80% (240/300 points)</p>
+<hr>
+<h2 id="-required-deliverables">📚 Required Deliverables</h2>
+<ol>
+<li><p><strong>Source Code</strong>:</p>
+<ul>
+<li>GitHub repository with all services</li>
+<li>Docker Compose configuration</li>
+<li>CI/CD pipeline</li>
+</ul>
+</li>
+<li><p><strong>Documentation</strong>:</p>
+<ul>
+<li>Architecture diagram (C4 model)</li>
+<li>API documentation (Swagger)</li>
+<li>Setup/deployment guide</li>
+<li>Technical decisions document</li>
+</ul>
+</li>
+<li><p><strong>Tests</strong>:</p>
+<ul>
+<li>Unit tests (80%+ coverage)</li>
+<li>Integration tests for key flows</li>
+<li>Load test results</li>
+</ul>
+</li>
+<li><p><strong>Monitoring</strong>:</p>
+<ul>
+<li>Grafana dashboards</li>
+<li>Sample logs in Seq</li>
+<li>Traces in Jaeger</li>
+</ul>
+</li>
+<li><p><strong>Demo</strong>:</p>
+<ul>
+<li>Video walkthrough (15 minutes)</li>
+<li>Live demo or screenshots</li>
+<li>Performance benchmarks</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="-upon-completion">🎓 Upon Completion</h2>
+<p>Congratulations! You've completed Path 2 and are now a <strong>Mid-Level .NET Developer</strong>. You can:</p>
+<ul>
+<li>Design and implement microservice architectures</li>
+<li>Write high-performance code</li>
+<li>Build production-ready systems with observability</li>
+<li>Work with event-driven architectures</li>
+<li>Deploy and monitor distributed systems</li>
+</ul>
+<p><strong>Next Steps</strong>:</p>
+<ol>
+<li>Take Path 2 final certification exam</li>
+<li>Update resume and LinkedIn</li>
+<li>Start Path 3 (Senior Developer) OR</li>
+<li>Begin job search for mid-level positions</li>
+</ol>
+<hr>
+<p><em>Template Version: 1.0</em>
+<em>Last Updated: 2025-12-02</em></p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/learning-paths/project-templates/path2/month9-final-capstone.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

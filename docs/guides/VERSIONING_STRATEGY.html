@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Versioning and Release Strategy Guide | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Versioning and Release Strategy Guide | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/guides/VERSIONING_STRATEGY.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="versioning-and-release-strategy-guide">Versioning and Release Strategy Guide</h1>
+
+<h2 id="overview">Overview</h2>
+<p>This guide covers the versioning and release strategy for the Advanced C# Concepts project, including Semantic Versioning, GitVersion automation, Conventional Commits, and release management best practices.</p>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ul>
+<li><a href="#semantic-versioning-20">Semantic Versioning 2.0</a></li>
+<li><a href="#gitversion-configuration">GitVersion Configuration</a></li>
+<li><a href="#conventional-commits">Conventional Commits</a></li>
+<li><a href="#release-branches">Release Branches</a></li>
+<li><a href="#tag-management">Tag Management</a></li>
+<li><a href="#release-workflow">Release Workflow</a></li>
+<li><a href="#version-bumping-rules">Version Bumping Rules</a></li>
+<li><a href="#best-practices">Best Practices</a></li>
+</ul>
+<h2 id="semantic-versioning-20">Semantic Versioning 2.0</h2>
+<h3 id="version-format">Version Format</h3>
+<pre><code>MAJOR.MINOR.PATCH[-PRERELEASE][+BUILD]
+
+Examples:
+- 1.0.0          (stable release)
+- 1.0.0-alpha.1  (pre-release)
+- 1.0.0-beta.2   (beta release)
+- 1.0.0-rc.1     (release candidate)
+- 1.0.0+20231130 (with build metadata)
+</code></pre>
+<h3 id="version-components">Version Components</h3>
+<p><strong>MAJOR version (X.0.0):</strong></p>
+<ul>
+<li>Incompatible API changes</li>
+<li>Breaking changes</li>
+<li>Major architectural changes</li>
+<li>Example: 1.0.0 → 2.0.0</li>
+</ul>
+<p><strong>MINOR version (0.X.0):</strong></p>
+<ul>
+<li>New features (backwards-compatible)</li>
+<li>Significant enhancements</li>
+<li>New public APIs</li>
+<li>Example: 1.0.0 → 1.1.0</li>
+</ul>
+<p><strong>PATCH version (0.0.X):</strong></p>
+<ul>
+<li>Bug fixes (backwards-compatible)</li>
+<li>Minor improvements</li>
+<li>Documentation updates</li>
+<li>Security patches</li>
+<li>Example: 1.0.0 → 1.0.1</li>
+</ul>
+<p><strong>Pre-release identifiers:</strong></p>
+<ul>
+<li><code>alpha</code> - Early development, unstable</li>
+<li><code>beta</code> - Feature complete, testing phase</li>
+<li><code>rc</code> - Release candidate, final testing</li>
+<li>Format: <code>1.0.0-alpha.1</code>, <code>1.0.0-beta.2</code>, <code>1.0.0-rc.1</code></li>
+</ul>
+<p><strong>Build metadata:</strong></p>
+<ul>
+<li>Build number, commit SHA, date</li>
+<li>Format: <code>1.0.0+20231130.abc123</code></li>
+<li>Does not affect version precedence</li>
+</ul>
+<h3 id="version-precedence">Version Precedence</h3>
+<pre><code>1.0.0-alpha.1 &lt; 1.0.0-alpha.2 &lt; 1.0.0-beta.1 &lt; 1.0.0-rc.1 &lt; 1.0.0
+</code></pre>
+<h2 id="gitversion-configuration">GitVersion Configuration</h2>
+<h3 id="installation">Installation</h3>
+<pre><code class="lang-bash"># Install globally
+dotnet tool install --global GitVersion.Tool
+
+# Install locally in project
+dotnet tool install GitVersion.Tool
+dotnet tool restore
+</code></pre>
+<h3 id="gitversionyml-configuration">GitVersion.yml Configuration</h3>
+<p>Our current configuration (<code>GitVersion.yml</code> in project root):</p>
+<pre><code class="lang-yaml">mode: ContinuousDelivery
+branches:
+  main:
+    regex: ^main$
+    mode: ContinuousDelivery
+    tag: ''
+    increment: Patch
+    prevent-increment-of-merged-branch-version: true
+    track-merge-target: false
+    source-branches: ['develop', 'release']
+
+  develop:
+    regex: ^develop$
+    mode: ContinuousDeployment
+    tag: 'alpha'
+    increment: Minor
+    prevent-increment-of-merged-branch-version: false
+    track-merge-target: true
+    source-branches: []
+
+  release:
+    regex: ^release[/-]
+    mode: ContinuousDelivery
+    tag: 'rc'
+    increment: Patch
+    prevent-increment-of-merged-branch-version: true
+    track-merge-target: false
+    source-branches: ['develop']
+
+  feature:
+    regex: ^feature[/-]
+    mode: ContinuousDeployment
+    tag: 'feature'
+    increment: Minor
+    prevent-increment-of-merged-branch-version: false
+    track-merge-target: false
+    source-branches: ['develop']
+
+  hotfix:
+    regex: ^hotfix[/-]
+    mode: ContinuousDeployment
+    tag: 'hotfix'
+    increment: Patch
+    prevent-increment-of-merged-branch-version: false
+    track-merge-target: false
+    source-branches: ['main']
+
+ignore:
+  sha: []
+
+merge-message-formats: {}
+</code></pre>
+<h3 id="branch-based-versioning">Branch-Based Versioning</h3>
+<table>
+<thead>
+<tr>
+<th>Branch Type</th>
+<th>Version Pattern</th>
+<th>Example</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>main</code></td>
+<td>X.Y.Z</td>
+<td>1.0.0</td>
+<td>Production releases</td>
+</tr>
+<tr>
+<td><code>develop</code></td>
+<td>X.Y.Z-alpha.N</td>
+<td>1.1.0-alpha.5</td>
+<td>Development builds</td>
+</tr>
+<tr>
+<td><code>release/X.Y</code></td>
+<td>X.Y.Z-rc.N</td>
+<td>1.1.0-rc.1</td>
+<td>Release candidates</td>
+</tr>
+<tr>
+<td><code>feature/name</code></td>
+<td>X.Y.Z-feature.N</td>
+<td>1.1.0-feature.3</td>
+<td>Feature branches</td>
+</tr>
+<tr>
+<td><code>hotfix/name</code></td>
+<td>X.Y.Z-hotfix.N</td>
+<td>1.0.1-hotfix.2</td>
+<td>Hotfix branches</td>
+</tr>
+</tbody>
+</table>
+<h3 id="using-gitversion">Using GitVersion</h3>
+<pre><code class="lang-bash"># Calculate version
+dotnet gitversion
+
+# Get specific version component
+dotnet gitversion /showvariable SemVer
+dotnet gitversion /showvariable MajorMinorPatch
+dotnet gitversion /showvariable NuGetVersionV2
+
+# Update AssemblyInfo files
+dotnet gitversion /updateassemblyinfo
+
+# Output format options
+dotnet gitversion /output json
+dotnet gitversion /output buildserver
+</code></pre>
+<h3 id="gitversion-in-cicd">GitVersion in CI/CD</h3>
+<pre><code class="lang-yaml"># GitHub Actions example
+- name: Install GitVersion
+  uses: gittools/actions/gitversion/setup@v0
+  with:
+    versionSpec: '5.x'
+
+- name: Determine Version
+  id: gitversion
+  uses: gittools/actions/gitversion/execute@v0
+
+- name: Display Version
+  run: |
+    echo &quot;SemVer: ${{ steps.gitversion.outputs.semVer }}&quot;
+    echo &quot;NuGetVersion: ${{ steps.gitversion.outputs.nuGetVersionV2 }}&quot;
+</code></pre>
+<h2 id="conventional-commits">Conventional Commits</h2>
+<h3 id="commit-message-format">Commit Message Format</h3>
+<pre><code>&lt;type&gt;[optional scope]: &lt;description&gt;
+
+[optional body]
+
+[optional footer(s)]
+</code></pre>
+<h3 id="commit-types">Commit Types</h3>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+<th>Version Impact</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>feat</code></td>
+<td>New feature</td>
+<td>MINOR bump</td>
+<td><code>feat: add user authentication</code></td>
+</tr>
+<tr>
+<td><code>fix</code></td>
+<td>Bug fix</td>
+<td>PATCH bump</td>
+<td><code>fix: resolve null reference error</code></td>
+</tr>
+<tr>
+<td><code>docs</code></td>
+<td>Documentation only</td>
+<td>None</td>
+<td><code>docs: update API documentation</code></td>
+</tr>
+<tr>
+<td><code>style</code></td>
+<td>Code style changes</td>
+<td>None</td>
+<td><code>style: format code with dotnet format</code></td>
+</tr>
+<tr>
+<td><code>refactor</code></td>
+<td>Code refactoring</td>
+<td>None</td>
+<td><code>refactor: extract validation logic</code></td>
+</tr>
+<tr>
+<td><code>perf</code></td>
+<td>Performance improvement</td>
+<td>PATCH bump</td>
+<td><code>perf: optimize LINQ queries</code></td>
+</tr>
+<tr>
+<td><code>test</code></td>
+<td>Add or update tests</td>
+<td>None</td>
+<td><code>test: add unit tests for UserService</code></td>
+</tr>
+<tr>
+<td><code>build</code></td>
+<td>Build system changes</td>
+<td>None</td>
+<td><code>build: update .NET SDK to 8.0.200</code></td>
+</tr>
+<tr>
+<td><code>ci</code></td>
+<td>CI/CD changes</td>
+<td>None</td>
+<td><code>ci: add Docker build step</code></td>
+</tr>
+<tr>
+<td><code>chore</code></td>
+<td>Maintenance tasks</td>
+<td>None</td>
+<td><code>chore: update dependencies</code></td>
+</tr>
+<tr>
+<td><code>revert</code></td>
+<td>Revert previous commit</td>
+<td>Varies</td>
+<td><code>revert: revert &quot;feat: add feature X&quot;</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="breaking-changes">Breaking Changes</h3>
+<p>Indicate breaking changes with <code>!</code> or <code>BREAKING CHANGE:</code> footer:</p>
+<pre><code>feat!: remove deprecated API
+
+BREAKING CHANGE: The old authentication API has been removed.
+Users must migrate to the new OAuth2-based API.
+</code></pre>
+<h3 id="commit-message-examples">Commit Message Examples</h3>
+<p><strong>Feature Addition:</strong></p>
+<pre><code>feat(auth): add OAuth2 authentication support
+
+Implement OAuth2 authentication flow with support for
+Google and GitHub providers.
+
+Closes #123
+</code></pre>
+<p><strong>Bug Fix:</strong></p>
+<pre><code>fix(validation): prevent null reference in email validator
+
+Added null check before accessing email properties
+to prevent NullReferenceException.
+
+Fixes #456
+</code></pre>
+<p><strong>Breaking Change:</strong></p>
+<pre><code>feat(api)!: redesign user API endpoints
+
+BREAKING CHANGE: User API endpoints have been redesigned
+for better REST compliance. Old endpoints are removed.
+
+Migration guide: docs/migration/v2.0.md
+</code></pre>
+<p><strong>Multiple Issues:</strong></p>
+<pre><code>fix: resolve authentication and authorization bugs
+
+- Fix token expiration validation
+- Correct permission check logic
+- Update role assignment flow
+
+Fixes #789, #790, #791
+</code></pre>
+<h3 id="scope-examples">Scope Examples</h3>
+<pre><code>feat(core): add new data structure
+feat(ui): implement dark mode
+feat(api): add user management endpoints
+fix(tests): correct assertion in unit test
+docs(readme): add installation instructions
+</code></pre>
+<h3 id="commitizen---interactive-commits">Commitizen - Interactive Commits</h3>
+<pre><code class="lang-bash"># Install globally
+npm install -g commitizen cz-conventional-changelog
+
+# Initialize in project
+commitizen init cz-conventional-changelog --save-dev --save-exact
+
+# Use commitizen
+git cz
+</code></pre>
+<h2 id="release-branches">Release Branches</h2>
+<h3 id="branch-strategy">Branch Strategy</h3>
+<pre><code>main (1.0.0)
+  │
+  └─→ develop (1.1.0-alpha)
+       │
+       ├─→ feature/user-auth (1.1.0-feature)
+       ├─→ feature/reporting (1.1.0-feature)
+       │
+       └─→ release/1.1 (1.1.0-rc)
+            │
+            └─→ main (1.1.0)
+                 │
+                 └─→ hotfix/critical-bug (1.1.1-hotfix)
+                      │
+                      └─→ main (1.1.1)
+</code></pre>
+<h3 id="creating-release-branches">Creating Release Branches</h3>
+<pre><code class="lang-bash"># Create release branch from develop
+git checkout develop
+git pull origin develop
+git checkout -b release/1.1.0
+
+# GitVersion will calculate: 1.1.0-rc.1
+
+# Push release branch
+git push -u origin release/1.1.0
+</code></pre>
+<h3 id="release-branch-workflow">Release Branch Workflow</h3>
+<ol>
+<li><p><strong>Create Release Branch</strong></p>
+<pre><code class="lang-bash">git checkout -b release/1.1.0 develop
+</code></pre>
+</li>
+<li><p><strong>Prepare Release</strong></p>
+<ul>
+<li>Update CHANGELOG.md</li>
+<li>Update version in documentation</li>
+<li>Final testing</li>
+<li>Bug fixes only (no new features)</li>
+</ul>
+</li>
+<li><p><strong>Merge to Main</strong></p>
+<pre><code class="lang-bash">git checkout main
+git merge --no-ff release/1.1.0
+git tag -a v1.1.0 -m &quot;Release version 1.1.0&quot;
+git push origin main --tags
+</code></pre>
+</li>
+<li><p><strong>Merge Back to Develop</strong></p>
+<pre><code class="lang-bash">git checkout develop
+git merge --no-ff release/1.1.0
+git push origin develop
+</code></pre>
+</li>
+<li><p><strong>Delete Release Branch</strong> (optional)</p>
+<pre><code class="lang-bash">git branch -d release/1.1.0
+git push origin --delete release/1.1.0
+</code></pre>
+</li>
+</ol>
+<h2 id="tag-management">Tag Management</h2>
+<h3 id="annotated-tags">Annotated Tags</h3>
+<p>Always use annotated tags for releases:</p>
+<pre><code class="lang-bash"># Create annotated tag
+git tag -a v1.0.0 -m &quot;Release version 1.0.0&quot;
+
+# Push tag to remote
+git push origin v1.0.0
+
+# Push all tags
+git push origin --tags
+</code></pre>
+<h3 id="tag-format">Tag Format</h3>
+<pre><code>v{MAJOR}.{MINOR}.{PATCH}[-{PRERELEASE}]
+
+Examples:
+- v1.0.0
+- v1.1.0-rc.1
+- v2.0.0-beta.1
+</code></pre>
+<h3 id="tag-message-template">Tag Message Template</h3>
+<pre><code class="lang-bash">git tag -a v1.0.0 -m &quot;Release v1.0.0
+
+Major Features:
+- User authentication system
+- Advanced caching layer
+- Real-time notifications
+
+Bug Fixes:
+- Fixed memory leak in background service
+- Corrected validation logic
+
+Breaking Changes:
+- Removed deprecated API endpoints (see migration guide)
+&quot;
+</code></pre>
+<h3 id="tag-operations">Tag Operations</h3>
+<pre><code class="lang-bash"># List all tags
+git tag
+
+# List tags matching pattern
+git tag -l &quot;v1.*&quot;
+
+# Show tag details
+git show v1.0.0
+
+# Delete local tag
+git tag -d v1.0.0
+
+# Delete remote tag
+git push origin --delete v1.0.0
+
+# Checkout specific tag
+git checkout v1.0.0
+
+# Create branch from tag
+git checkout -b hotfix/1.0.1 v1.0.0
+</code></pre>
+<h3 id="lightweight-vs-annotated-tags">Lightweight vs Annotated Tags</h3>
+<p><strong>Annotated Tags (Recommended):</strong></p>
+<pre><code class="lang-bash">git tag -a v1.0.0 -m &quot;Release 1.0.0&quot;
+# Contains: tagger, date, message, GPG signature
+</code></pre>
+<p><strong>Lightweight Tags (Not Recommended for Releases):</strong></p>
+<pre><code class="lang-bash">git tag v1.0.0
+# Just a pointer to commit
+</code></pre>
+<h2 id="release-workflow">Release Workflow</h2>
+<h3 id="automated-release-process">Automated Release Process</h3>
+<pre><code class="lang-mermaid">graph TD
+    A[Create Release Branch] --&gt; B[GitVersion Calculates Version]
+    B --&gt; C[Update CHANGELOG]
+    C --&gt; D[Run Tests]
+    D --&gt; E{Tests Pass?}
+    E --&gt;|No| F[Fix Issues]
+    F --&gt; D
+    E --&gt;|Yes| G[Build Release Artifacts]
+    G --&gt; H[Create GitHub Release]
+    H --&gt; I[Publish NuGet Package]
+    I --&gt; J[Deploy Documentation]
+    J --&gt; K[Merge to Main]
+    K --&gt; L[Create Git Tag]
+    L --&gt; M[Merge Back to Develop]
+</code></pre>
+<h3 id="manual-release-checklist">Manual Release Checklist</h3>
+<p><strong>Pre-Release:</strong></p>
+<ul>
+<li>[ ] All tests passing</li>
+<li>[ ] Code coverage &gt;90%</li>
+<li>[ ] Security scan passing</li>
+<li>[ ] Performance benchmarks meet targets</li>
+<li>[ ] Documentation updated</li>
+<li>[ ] CHANGELOG.md updated</li>
+<li>[ ] Migration guide prepared (if breaking changes)</li>
+</ul>
+<p><strong>Release:</strong></p>
+<ul>
+<li>[ ] Create release branch</li>
+<li>[ ] Update version numbers</li>
+<li>[ ] Final testing</li>
+<li>[ ] Create release tag</li>
+<li>[ ] Build release artifacts</li>
+<li>[ ] Create GitHub release</li>
+<li>[ ] Publish NuGet packages</li>
+<li>[ ] Deploy documentation</li>
+</ul>
+<p><strong>Post-Release:</strong></p>
+<ul>
+<li>[ ] Monitor for issues</li>
+<li>[ ] Update project boards</li>
+<li>[ ] Announce release</li>
+<li>[ ] Close milestone</li>
+<li>[ ] Merge back to develop</li>
+</ul>
+<h2 id="version-bumping-rules">Version Bumping Rules</h2>
+<h3 id="when-to-bump-major-breaking-changes">When to Bump MAJOR (Breaking Changes)</h3>
+<pre><code class="lang-csharp">// 1.0.0 → 2.0.0
+
+// Removing public API
+// BEFORE
+public class UserService
+{
+    public void DeleteUser(int id) { }
+}
+
+// AFTER (BREAKING)
+public class UserService
+{
+    // Method removed - MAJOR bump required
+}
+
+// Changing method signatures
+// BEFORE
+public void ProcessUser(int id) { }
+
+// AFTER (BREAKING)
+public void ProcessUser(string id) { }  // MAJOR bump
+
+// Changing return types
+// BEFORE
+public string GetName() { }
+
+// AFTER (BREAKING)
+public User GetName() { }  // MAJOR bump
+</code></pre>
+<h3 id="when-to-bump-minor-new-features">When to Bump MINOR (New Features)</h3>
+<pre><code class="lang-csharp">// 1.0.0 → 1.1.0
+
+// Adding new public methods
+public class UserService
+{
+    public void DeleteUser(int id) { }  // Existing
+
+    public void ArchiveUser(int id) { }  // NEW - MINOR bump
+}
+
+// Adding new optional parameters
+// BEFORE
+public void ProcessUser(int id) { }
+
+// AFTER (Non-breaking)
+public void ProcessUser(int id, bool validate = true) { }  // MINOR bump
+
+// Adding new classes/interfaces
+public interface IUserRepository { }  // NEW - MINOR bump
+</code></pre>
+<h3 id="when-to-bump-patch-bug-fixes">When to Bump PATCH (Bug Fixes)</h3>
+<pre><code class="lang-csharp">// 1.0.0 → 1.0.1
+
+// Bug fixes without API changes
+public void ProcessUser(int id)
+{
+    // BEFORE (bug)
+    if (id &lt; 0) throw new Exception();
+
+    // AFTER (fix)
+    if (id &lt;= 0) throw new ArgumentException(nameof(id));  // PATCH bump
+}
+
+// Performance improvements
+public List&lt;User&gt; GetUsers()
+{
+    // BEFORE (slow)
+    return users.Where(u =&gt; u.IsActive).ToList();
+
+    // AFTER (optimized)
+    return users.Where(u =&gt; u.IsActive).ToList();  // PATCH bump
+}
+</code></pre>
+<h2 id="best-practices">Best Practices</h2>
+<h3 id="1-versioning">1. Versioning</h3>
+<ul>
+<li>✅ Always use Semantic Versioning 2.0</li>
+<li>✅ Use GitVersion for automated version calculation</li>
+<li>✅ Tag all releases with annotated tags</li>
+<li>✅ Document breaking changes clearly</li>
+<li>✅ Maintain CHANGELOG.md</li>
+</ul>
+<h3 id="2-commits">2. Commits</h3>
+<ul>
+<li>✅ Use Conventional Commits format</li>
+<li>✅ Write clear, descriptive commit messages</li>
+<li>✅ Reference issues in commit messages</li>
+<li>✅ Keep commits atomic and focused</li>
+<li>✅ Squash feature branch commits before merging</li>
+</ul>
+<h3 id="3-branches">3. Branches</h3>
+<ul>
+<li>✅ Protect main and develop branches</li>
+<li>✅ Require pull request reviews</li>
+<li>✅ Enforce CI checks before merge</li>
+<li>✅ Delete feature branches after merge</li>
+<li>✅ Keep release branches for support</li>
+</ul>
+<h3 id="4-releases">4. Releases</h3>
+<ul>
+<li>✅ Test thoroughly before release</li>
+<li>✅ Automate release process</li>
+<li>✅ Generate release notes automatically</li>
+<li>✅ Publish to multiple registries (NuGet, GitHub)</li>
+<li>✅ Monitor releases for issues</li>
+</ul>
+<h3 id="5-documentation">5. Documentation</h3>
+<ul>
+<li>✅ Update CHANGELOG for every release</li>
+<li>✅ Document breaking changes</li>
+<li>✅ Provide migration guides</li>
+<li>✅ Version API documentation</li>
+<li>✅ Maintain backwards compatibility when possible</li>
+</ul>
+<h2 id="tools">Tools</h2>
+<h3 id="recommended-tools">Recommended Tools</h3>
+<ul>
+<li><strong>GitVersion</strong> - Automated version calculation</li>
+<li><strong>Commitizen</strong> - Interactive conventional commits</li>
+<li><strong>commitlint</strong> - Lint commit messages</li>
+<li><strong>husky</strong> - Git hooks</li>
+<li><strong>semantic-release</strong> - Automated release workflow</li>
+<li><strong>conventional-changelog</strong> - Generate CHANGELOG</li>
+<li><strong>git-cliff</strong> - Advanced changelog generation</li>
+</ul>
+<h3 id="configuration-examples">Configuration Examples</h3>
+<p><strong>commitlint.config.js:</strong></p>
+<pre><code class="lang-javascript">module.exports = {
+  extends: ['@commitlint/config-conventional'],
+  rules: {
+    'type-enum': [2, 'always', [
+      'feat', 'fix', 'docs', 'style', 'refactor',
+      'perf', 'test', 'build', 'ci', 'chore', 'revert'
+    ]],
+    'subject-case': [2, 'always', 'sentence-case'],
+    'body-max-line-length': [2, 'always', 100]
+  }
+};
+</code></pre>
+<p><strong>.huskyrc:</strong></p>
+<pre><code class="lang-json">{
+  &quot;hooks&quot;: {
+    &quot;commit-msg&quot;: &quot;commitlint -E HUSKY_GIT_PARAMS&quot;,
+    &quot;pre-commit&quot;: &quot;dotnet test &amp;&amp; dotnet format --verify-no-changes&quot;
+  }
+}
+</code></pre>
+<h2 id="resources">Resources</h2>
+<ul>
+<li><a href="https://semver.org/">Semantic Versioning 2.0</a></li>
+<li><a href="https://gitversion.net/">GitVersion Documentation</a></li>
+<li><a href="https://www.conventionalcommits.org/">Conventional Commits</a></li>
+<li><a href="https://keepachangelog.com/">Keep a Changelog</a></li>
+<li><a href="https://nvie.com/posts/a-successful-git-branching-model/">Git Flow</a></li>
+</ul>
+<hr>
+<p><strong>Last Updated:</strong> 2025-12-01
+<strong>Version:</strong> 1.0</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/guides/VERSIONING_STRATEGY.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

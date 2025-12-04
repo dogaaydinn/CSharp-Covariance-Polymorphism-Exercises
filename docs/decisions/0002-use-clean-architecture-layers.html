@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>2. Adopt Clean Architecture Layering | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="2. Adopt Clean Architecture Layering | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/decisions/0002-use-clean-architecture-layers.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="2-adopt-clean-architecture-layering">2. Adopt Clean Architecture Layering</h1>
+
+<p><strong>Status:</strong> ✅ Accepted</p>
+<p><strong>Date:</strong> 2024-12-01</p>
+<p><strong>Deciders:</strong> Architecture Team, Tech Lead</p>
+<p><strong>Technical Story:</strong> Implementation in <code>samples/05-RealWorld/MicroserviceTemplate</code></p>
+<hr>
+<h2 id="context-and-problem-statement">Context and Problem Statement</h2>
+<p>As our microservices grow in complexity, we need a standardized architecture that ensures:</p>
+<ul>
+<li>Clear separation of concerns</li>
+<li>Testable business logic</li>
+<li>Independence from frameworks and databases</li>
+<li>Ability to change UI or database without affecting business rules</li>
+</ul>
+<p>Traditional layered architecture (Controller → Service → Repository) works for simple apps but doesn't scale well. We need an architecture that puts <strong>business logic at the center</strong> and makes external concerns (UI, database, external services) <strong>dependent on business logic</strong>, not the other way around.</p>
+<hr>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li><strong>Testability</strong> - Business logic must be testable without database or UI</li>
+<li><strong>Maintainability</strong> - Changes should be isolated to specific layers</li>
+<li><strong>Framework Independence</strong> - Business logic shouldn't depend on ASP.NET or EF Core</li>
+<li><strong>Database Independence</strong> - Should be able to swap PostgreSQL for SQL Server easily</li>
+<li><strong>Team Onboarding</strong> - New developers should quickly understand structure</li>
+<li><strong>Industry Standards</strong> - Architecture should be widely recognized</li>
+</ul>
+<hr>
+<h2 id="considered-options">Considered Options</h2>
+<ul>
+<li><strong>Option 1</strong> - Clean Architecture (Onion Architecture / Hexagonal Architecture)</li>
+<li><strong>Option 2</strong> - Traditional N-Tier Layered Architecture</li>
+<li><strong>Option 3</strong> - Vertical Slice Architecture</li>
+<li><strong>Option 4</strong> - Domain-Driven Design (DDD) Layers</li>
+</ul>
+<hr>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p><strong>Chosen option:</strong> &quot;Clean Architecture&quot;, because it enforces the Dependency Inversion Principle, makes business logic the core of the application, and has proven track record in enterprise microservices.</p>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li><strong>Testable Business Logic</strong> - Domain layer has zero external dependencies</li>
+<li><strong>Framework Agnostic</strong> - Can change from ASP.NET to gRPC without touching business logic</li>
+<li><strong>Database Agnostic</strong> - Can swap EF Core for Dapper or ADO.NET</li>
+<li><strong>Clear Boundaries</strong> - Each layer has well-defined responsibilities</li>
+<li><strong>Maintainability</strong> - Changes are isolated; changing UI doesn't break business logic</li>
+<li><strong>Screaming Architecture</strong> - Project structure screams what the app does (Products, Orders, etc.)</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li><strong>More Files</strong> - More layers means more files and folders</li>
+<li><strong>Learning Curve</strong> - Developers need to understand dependency flow</li>
+<li><strong>Boilerplate</strong> - DTOs, interfaces, and mappers required</li>
+<li><strong>Overkill for Simple Apps</strong> - Unnecessary complexity for CRUD apps</li>
+</ul>
+<hr>
+<h2 id="pros-and-cons-of-the-options">Pros and Cons of the Options</h2>
+<h3 id="clean-architecture-chosen">Clean Architecture (Chosen)</h3>
+<p><strong>Layer Structure:</strong></p>
+<pre><code>┌─────────────────────────────────────┐
+│   Presentation Layer (API/Web)      │  ← Depends on Application
+├─────────────────────────────────────┤
+│   Application Layer (Use Cases)     │  ← Depends on Domain
+├─────────────────────────────────────┤
+│   Domain Layer (Business Logic)     │  ← NO dependencies!
+├─────────────────────────────────────┤
+│   Infrastructure Layer (Data/IO)    │  ← Depends on Domain (interfaces)
+└─────────────────────────────────────┘
+</code></pre>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Business logic is <strong>completely independent</strong> of frameworks</li>
+<li>Easy to test (mock interfaces, not concrete implementations)</li>
+<li>Changes to database don't affect business rules</li>
+<li><strong>Dependency Inversion</strong> - outer layers depend on inner layers</li>
+<li>Widely documented and understood</li>
+<li>Used by Microsoft, Netflix, and other large companies</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li>More folders and files than traditional architecture</li>
+<li>Requires discipline to maintain layer boundaries</li>
+<li>DTOs needed to translate between layers</li>
+<li>Can feel like over-engineering for simple apps</li>
+</ul>
+<p><strong>Example Implementation:</strong></p>
+<pre><code>MicroserviceTemplate/
+├── Domain/                           ← Core business logic (NO dependencies)
+│   ├── Entities/Product.cs
+│   ├── ValueObjects/Money.cs
+│   ├── Events/ProductCreatedEvent.cs
+│   └── Repositories/IProductRepository.cs  ← Interface only!
+│
+├── Application/                      ← Use cases (depends on Domain)
+│   ├── Commands/CreateProductCommand.cs
+│   ├── Queries/GetProductQuery.cs
+│   ├── DTOs/ProductDto.cs
+│   └── Validators/CreateProductValidator.cs
+│
+├── Infrastructure/                   ← External concerns (implements Domain interfaces)
+│   ├── Repositories/ProductRepository.cs   ← Implements IProductRepository
+│   ├── Data/ApplicationDbContext.cs
+│   └── DependencyInjection.cs
+│
+└── API/                             ← Presentation layer
+    ├── Controllers/ProductsController.cs
+    └── Program.cs
+</code></pre>
+<h3 id="traditional-n-tier-architecture">Traditional N-Tier Architecture</h3>
+<p><strong>Layer Structure:</strong></p>
+<pre><code>Controller → Service → Repository → Database
+</code></pre>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Simple and straightforward</li>
+<li>Familiar to most developers</li>
+<li>Less files and folders</li>
+<li>Quick to set up for small apps</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li><strong>Business logic mixed with infrastructure</strong> (Services depend on EF Core)</li>
+<li>Hard to test (services tightly coupled to database)</li>
+<li>Controllers depend on concrete services (not interfaces)</li>
+<li>Database changes affect business logic</li>
+<li>No dependency inversion</li>
+</ul>
+<p><strong>Why Rejected:</strong></p>
+<pre><code class="lang-csharp">// ProductService.cs (tightly coupled to EF Core)
+public class ProductService
+{
+    private readonly ApplicationDbContext _context; // ❌ Depends on EF Core!
+
+    public async Task&lt;Product&gt; CreateAsync(Product product)
+    {
+        _context.Products.Add(product);  // ❌ Business logic mixed with data access
+        await _context.SaveChangesAsync();
+        return product;
+    }
+}
+</code></pre>
+<p>This approach makes it <strong>impossible to test business logic</strong> without a database. You can't swap EF Core for another ORM without rewriting business logic.</p>
+<h3 id="vertical-slice-architecture">Vertical Slice Architecture</h3>
+<p><strong>Structure:</strong></p>
+<pre><code>Features/
+├── CreateProduct/
+│   ├── CreateProductCommand.cs
+│   ├── CreateProductHandler.cs
+│   └── CreateProductValidator.cs
+├── GetProduct/
+│   ├── GetProductQuery.cs
+│   └── GetProductHandler.cs
+</code></pre>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Features are co-located</li>
+<li>Easy to find everything related to a feature</li>
+<li>No cross-layer navigation needed</li>
+<li>Good for feature teams</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li>Shared business logic is difficult to manage</li>
+<li>Domain entities scattered across features</li>
+<li>Hard to enforce consistency</li>
+<li>Less suitable for complex domains</li>
+</ul>
+<p><strong>Why Rejected:</strong>
+While this works well for simple CRUD apps, our microservices have <strong>complex business rules</strong> that need to be centralized in a Domain layer. Vertical slices work better for applications with independent features and minimal shared logic.</p>
+<h3 id="ddd-tactical-patterns">DDD Tactical Patterns</h3>
+<p><strong>Structure:</strong></p>
+<pre><code>Domain/
+├── Aggregates/
+├── Entities/
+├── ValueObjects/
+├── DomainServices/
+├── DomainEvents/
+└── Repositories/
+</code></pre>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Extremely expressive and rich domain models</li>
+<li>Handles complex business logic well</li>
+<li>Aggregates enforce consistency boundaries</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li>Steep learning curve</li>
+<li>Requires deep domain expertise</li>
+<li>Can be over-engineering for simple domains</li>
+<li>More complex than Clean Architecture</li>
+</ul>
+<p><strong>Why Not Chosen (Yet):</strong>
+DDD tactical patterns are <strong>compatible with Clean Architecture</strong> and can be adopted incrementally. We start with Clean Architecture and introduce DDD patterns (Aggregates, Value Objects, Domain Events) as domain complexity grows.</p>
+<hr>
+<h2 id="implementation-guidelines">Implementation Guidelines</h2>
+<h3 id="dependency-flow-critical">Dependency Flow (Critical!)</h3>
+<pre><code class="lang-csharp">// ✅ CORRECT: Infrastructure depends on Domain
+public class ProductRepository : IProductRepository  // Interface from Domain
+{
+    private readonly ApplicationDbContext _context;
+    // Implementation details...
+}
+
+// ✅ CORRECT: Application depends on Domain
+public class CreateProductHandler : IRequestHandler&lt;CreateProductCommand, ProductDto&gt;
+{
+    private readonly IProductRepository _repository; // Interface from Domain
+    // Use case logic...
+}
+
+// ❌ WRONG: Domain depends on Infrastructure
+public class Product  // Domain entity
+{
+    public ApplicationDbContext Context { get; set; } // ❌ Never do this!
+}
+</code></pre>
+<h3 id="layer-responsibilities">Layer Responsibilities</h3>
+<p><strong>Domain Layer (Core - No Dependencies):</strong></p>
+<pre><code class="lang-csharp">// ✅ Business logic and rules
+public class Product
+{
+    public void ChangePrice(Money newPrice)
+    {
+        if (newPrice.Amount &lt;= 0)
+            throw new DomainException(&quot;Price must be positive&quot;);
+
+        Price = newPrice;
+        UpdatedAt = DateTime.UtcNow;
+    }
+}
+
+// ✅ Domain interfaces (implemented by Infrastructure)
+public interface IProductRepository
+{
+    Task&lt;Product&gt; GetByIdAsync(int id);
+    Task AddAsync(Product product);
+}
+</code></pre>
+<p><strong>Application Layer (Use Cases):</strong></p>
+<pre><code class="lang-csharp">// ✅ Orchestrates domain logic
+public class CreateProductHandler
+{
+    private readonly IProductRepository _repository;
+
+    public async Task&lt;ProductDto&gt; Handle(CreateProductCommand command)
+    {
+        var product = new Product(command.Name, new Money(command.Price));
+        await _repository.AddAsync(product);
+        return ProductDto.FromEntity(product);
+    }
+}
+</code></pre>
+<p><strong>Infrastructure Layer (External Concerns):</strong></p>
+<pre><code class="lang-csharp">// ✅ Implements domain interfaces
+public class ProductRepository : IProductRepository
+{
+    private readonly ApplicationDbContext _context;
+
+    public async Task AddAsync(Product product)
+    {
+        _context.Products.Add(product);
+        await _context.SaveChangesAsync();
+    }
+}
+</code></pre>
+<p><strong>Presentation Layer (API/Web):</strong></p>
+<pre><code class="lang-csharp">// ✅ Thin controllers
+[ApiController]
+public class ProductsController
+{
+    private readonly IMediator _mediator;
+
+    [HttpPost]
+    public async Task&lt;ActionResult&lt;ProductDto&gt;&gt; Create(CreateProductCommand command)
+    {
+        var result = await _mediator.Send(command);
+        return Ok(result);
+    }
+}
+</code></pre>
+<hr>
+<h2 id="links">Links</h2>
+<ul>
+<li><a href="https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html">Clean Architecture by Uncle Bob</a></li>
+<li><a href="https://github.com/jasontaylordev/CleanArchitecture">Jason Taylor's Clean Architecture Template</a></li>
+<li><a href="../../samples/05-RealWorld/MicroserviceTemplate">Clean Architecture Sample</a></li>
+<li><a href="https://jeffreypalermo.com/2008/07/the-onion-architecture-part-1/">Onion Architecture by Jeffrey Palermo</a></li>
+</ul>
+<hr>
+<h2 id="notes">Notes</h2>
+<p><strong>When to Use Clean Architecture:</strong></p>
+<ul>
+<li>✅ Microservices with complex business logic</li>
+<li>✅ Long-lived applications (5+ years)</li>
+<li>✅ Applications with changing requirements</li>
+<li>✅ Applications that need to be testable</li>
+<li>✅ Applications with multiple UIs (Web + Mobile + Desktop)</li>
+</ul>
+<p><strong>When NOT to Use:</strong></p>
+<ul>
+<li>❌ Simple CRUD applications</li>
+<li>❌ Prototypes or proof-of-concepts</li>
+<li>❌ Throw-away scripts or tools</li>
+<li>❌ Applications with no business logic</li>
+</ul>
+<p><strong>Common Mistakes to Avoid:</strong></p>
+<ol>
+<li><strong>Leaking Infrastructure into Domain</strong> - Don't reference EF Core in domain entities</li>
+<li><strong>Anemic Domain Models</strong> - Don't make entities just data bags; put logic in them</li>
+<li><strong>Too Many Layers</strong> - Don't add layers just for the sake of it</li>
+<li><strong>Over-Abstracting</strong> - Not everything needs an interface</li>
+</ol>
+<p><strong>Evolution Path:</strong></p>
+<ol>
+<li><strong>Start:</strong> Clean Architecture with simple entities</li>
+<li><strong>Grow:</strong> Add Value Objects as domain complexity increases</li>
+<li><strong>Mature:</strong> Introduce Aggregates and Domain Events when needed</li>
+<li><strong>Advanced:</strong> Adopt full DDD tactical patterns for complex domains</li>
+</ol>
+<p><strong>Review Date:</strong> 2025-12-01</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/decisions/0002-use-clean-architecture-layers.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

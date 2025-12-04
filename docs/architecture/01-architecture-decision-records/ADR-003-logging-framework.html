@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>ADR-003: Serilog as Structured Logging Framework | Advanced C# Concepts </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="ADR-003: Serilog as Structured Logging Framework | Advanced C# Concepts ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="">
+      <meta name="docfx:tocrel" content="">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/01-architecture-decision-records/ADR-003-logging-framework.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="adr-003-serilog-as-structured-logging-framework">ADR-003: Serilog as Structured Logging Framework</h1>
+
+<p><strong>Status:</strong> ✅ Accepted
+<strong>Date:</strong> 2025-11-30
+<strong>Deciders:</strong> Development Team
+<strong>Technical Story:</strong> Phase 5 - Observability &amp; Monitoring</p>
+<h2 id="context">Context</h2>
+<p>Enterprise applications require robust logging for:</p>
+<ol>
+<li>Debugging production issues</li>
+<li>Performance monitoring</li>
+<li>Security auditing</li>
+<li>Compliance requirements</li>
+<li>Business analytics</li>
+</ol>
+<p>We needed to choose a logging framework that provides:</p>
+<ul>
+<li>Structured logging (not just text)</li>
+<li>Multiple sink support (Console, File, external services)</li>
+<li>Performance (minimal overhead)</li>
+<li>Rich context enrichment</li>
+<li>Production-grade reliability</li>
+</ul>
+<h2 id="decision">Decision</h2>
+<p>We will use <strong>Serilog</strong> as our structured logging framework with:</p>
+<ul>
+<li><strong>Serilog.Sinks.Console</strong> for development</li>
+<li><strong>Serilog.Sinks.File</strong> for persistent logs</li>
+<li><strong>Serilog.Sinks.Seq</strong> for centralized log aggregation</li>
+<li><strong>Enrichers</strong> (Environment, Process, Thread) for context</li>
+<li><strong>OpenTelemetry</strong> integration for distributed tracing</li>
+</ul>
+<h2 id="rationale">Rationale</h2>
+<h3 id="structured-logging">Structured Logging</h3>
+<pre><code class="lang-csharp">// Traditional logging (unstructured)
+logger.LogInformation($&quot;User {userId} placed order {orderId}&quot;);
+
+// Serilog (structured)
+logger.Information(&quot;User {UserId} placed order {OrderId}&quot;,
+    userId, orderId);
+// Output: { &quot;UserId&quot;: 123, &quot;OrderId&quot;: 456, &quot;Message&quot;: &quot;User 123...&quot; }
+</code></pre>
+<p><strong>Benefits:</strong></p>
+<ul>
+<li><strong>Queryable logs:</strong> Search by UserId=123</li>
+<li><strong>Aggregation:</strong> Count orders per user</li>
+<li><strong>Alerting:</strong> Trigger on specific values</li>
+<li><strong>Analytics:</strong> Business insights from logs</li>
+</ul>
+<h3 id="multiple-sinks">Multiple Sinks</h3>
+<pre><code class="lang-csharp">Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()           // Development
+    .WriteTo.File(&quot;logs/app.log&quot;) // Persistent
+    .WriteTo.Seq(&quot;http://localhost:5341&quot;) // Centralized
+    .CreateLogger();
+</code></pre>
+<h3 id="enrichers-for-context">Enrichers for Context</h3>
+<pre><code class="lang-csharp">.Enrich.WithMachineName()      // Which server?
+.Enrich.WithEnvironmentName()  // Dev/Staging/Prod?
+.Enrich.WithThreadId()         // Concurrency tracking
+.Enrich.WithProcessId()        // Process isolation
+.Enrich.FromLogContext()       // Request-scoped data
+</code></pre>
+<h3 id="performance-characteristics">Performance Characteristics</h3>
+<ul>
+<li><strong>Minimal allocation:</strong> Optimized for high-throughput</li>
+<li><strong>Async sinks:</strong> Non-blocking log writes</li>
+<li><strong>Filtering:</strong> Only log what matters</li>
+<li><strong>Sampling:</strong> Reduce volume in production</li>
+</ul>
+<h3 id="enterprise-features">Enterprise Features</h3>
+<ul>
+<li><strong>Minimum level per sink:</strong> Debug to Console, Info to File</li>
+<li><strong>Log event filtering:</strong> Exclude noisy sources</li>
+<li><strong>Destructuring:</strong> Complex object logging</li>
+<li><strong>Message templates:</strong> Consistent log format</li>
+</ul>
+<h2 id="comparison-with-alternatives">Comparison with Alternatives</h2>
+<h3 id="serilog-vs-microsoftextensionslogging">Serilog vs Microsoft.Extensions.Logging</h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Serilog</th>
+<th>Microsoft.Extensions.Logging</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Structured Logging</td>
+<td>✅ Native</td>
+<td>⚠️ Limited</td>
+</tr>
+<tr>
+<td>Sinks</td>
+<td>100+ available</td>
+<td>Fewer providers</td>
+</tr>
+<tr>
+<td>Performance</td>
+<td>High</td>
+<td>Good</td>
+</tr>
+<tr>
+<td>Configuration</td>
+<td>Fluent API</td>
+<td>Configuration-based</td>
+</tr>
+<tr>
+<td>Context Enrichment</td>
+<td>Rich</td>
+<td>Basic</td>
+</tr>
+<tr>
+<td>Community</td>
+<td>Large</td>
+<td>Growing</td>
+</tr>
+</tbody>
+</table>
+<h3 id="serilog-vs-nlog">Serilog vs NLog</h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Serilog</th>
+<th>NLog</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Structured</td>
+<td>✅ First-class</td>
+<td>⚠️ Added later</td>
+</tr>
+<tr>
+<td>Modern .NET</td>
+<td>✅ Excellent</td>
+<td>✅ Good</td>
+</tr>
+<tr>
+<td>Performance</td>
+<td>✅ Faster</td>
+<td>Good</td>
+</tr>
+<tr>
+<td>Configuration</td>
+<td>Code-first</td>
+<td>XML/Config</td>
+</tr>
+<tr>
+<td>Learning Curve</td>
+<td>Easy</td>
+<td>Moderate</td>
+</tr>
+</tbody>
+</table>
+<h2 id="consequences">Consequences</h2>
+<h3 id="positive">Positive</h3>
+<ul>
+<li>✅ <strong>Structured logging</strong> enables advanced querying</li>
+<li>✅ <strong>Multiple sinks</strong> for different environments</li>
+<li>✅ <strong>Rich enrichment</strong> provides valuable context</li>
+<li>✅ <strong>High performance</strong> with minimal overhead</li>
+<li>✅ <strong>Seq integration</strong> for centralized logging</li>
+<li>✅ <strong>OpenTelemetry</strong> compatibility for tracing</li>
+<li>✅ <strong>Production-ready</strong> with proven reliability</li>
+</ul>
+<h3 id="negative">Negative</h3>
+<ul>
+<li>⚠️ <strong>Additional dependency:</strong> NuGet packages to manage</li>
+<li>⚠️ <strong>Learning curve:</strong> Developers need to learn message templates</li>
+<li>⚠️ <strong>Configuration complexity:</strong> More options to configure</li>
+<li>⚠️ <strong>Seq licensing:</strong> Commercial license for Seq (optional)</li>
+</ul>
+<h3 id="operational-impact">Operational Impact</h3>
+<ul>
+<li><strong>Log Storage:</strong> Structured logs are larger than plain text</li>
+<li><strong>Network Traffic:</strong> Centralized logging increases bandwidth</li>
+<li><strong>Latency:</strong> Async sinks minimize impact</li>
+<li><strong>Cost:</strong> Seq server or cloud logging service</li>
+</ul>
+<h2 id="implementation">Implementation</h2>
+<h3 id="configuration-example">Configuration Example</h3>
+<pre><code class="lang-csharp">public static void ConfigureSerilog()
+{
+    Log.Logger = new LoggerConfiguration()
+        // Minimum levels
+        .MinimumLevel.Debug()
+        .MinimumLevel.Override(&quot;Microsoft&quot;, LogEventLevel.Warning)
+        .MinimumLevel.Override(&quot;System&quot;, LogEventLevel.Warning)
+
+        // Enrichers
+        .Enrich.FromLogContext()
+        .Enrich.WithMachineName()
+        .Enrich.WithEnvironmentName()
+        .Enrich.WithProcessId()
+        .Enrich.WithThreadId()
+
+        // Sinks
+        .WriteTo.Console(
+            outputTemplate: &quot;[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}&quot;)
+        .WriteTo.File(
+            path: &quot;logs/app-.log&quot;,
+            rollingInterval: RollingInterval.Day,
+            retainedFileCountLimit: 30,
+            outputTemplate: &quot;{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}&quot;)
+        .WriteTo.Seq(&quot;http://localhost:5341&quot;)
+
+        .CreateLogger();
+}
+</code></pre>
+<h3 id="usage-patterns">Usage Patterns</h3>
+<h4 id="basic-logging">Basic Logging</h4>
+<pre><code class="lang-csharp">logger.Information(&quot;Application started at {StartTime}&quot;, DateTime.UtcNow);
+logger.Warning(&quot;Retry attempt {RetryCount} for operation {OperationId}&quot;,
+    retryCount, operationId);
+logger.Error(exception, &quot;Failed to process order {OrderId}&quot;, orderId);
+</code></pre>
+<h4 id="context-enrichment">Context Enrichment</h4>
+<pre><code class="lang-csharp">using (LogContext.PushProperty(&quot;CorrelationId&quot;, correlationId))
+using (LogContext.PushProperty(&quot;UserId&quot;, userId))
+{
+    logger.Information(&quot;Processing payment&quot;);
+    // All logs within this scope include CorrelationId and UserId
+}
+</code></pre>
+<h4 id="performance-logging">Performance Logging</h4>
+<pre><code class="lang-csharp">using (logger.BeginTimedOperation(&quot;Database Query&quot;))
+{
+    await repository.GetAllAsync();
+    // Automatically logs duration
+}
+</code></pre>
+<h4 id="security-events">Security Events</h4>
+<pre><code class="lang-csharp">logger.Warning(&quot;Failed login attempt for user {Username} from IP {IpAddress}&quot;,
+    username, ipAddress);
+logger.Information(&quot;User {UserId} accessed sensitive resource {ResourceId}&quot;,
+    userId, resourceId);
+</code></pre>
+<h2 id="integration-with-opentelemetry">Integration with OpenTelemetry</h2>
+<pre><code class="lang-csharp">// Serilog enriched with TraceId and SpanId
+.Enrich.FromLogContext()
+.Enrich.WithProperty(&quot;TraceId&quot;, Activity.Current?.TraceId)
+.Enrich.WithProperty(&quot;SpanId&quot;, Activity.Current?.SpanId)
+</code></pre>
+<p>This enables correlation between:</p>
+<ul>
+<li><strong>Logs:</strong> What happened</li>
+<li><strong>Traces:</strong> Request flow across services</li>
+<li><strong>Metrics:</strong> Performance measurements</li>
+</ul>
+<h2 id="monitoring-stack">Monitoring Stack</h2>
+<pre><code>Developer → Application (Serilog)
+              ↓
+         ┌────┴────┐
+         ↓         ↓
+     Console    File Logs
+         ↓         ↓
+    Development  Archive
+
+Production → Application (Serilog)
+              ↓
+         ┌────┴────┬────────┐
+         ↓         ↓        ↓
+      Seq      File    Elasticsearch
+         ↓         ↓        ↓
+    Dashboard  Archive  Kibana
+</code></pre>
+<h2 id="verification">Verification</h2>
+<ul>
+<li>✅ Serilog configured with enrichers</li>
+<li>✅ Console, File, and Seq sinks operational</li>
+<li>✅ Structured logging examples implemented</li>
+<li>✅ Performance logging patterns documented</li>
+<li>✅ Security event logging in place</li>
+<li>✅ Docker Compose with Seq container</li>
+<li>✅ Log correlation with OpenTelemetry</li>
+</ul>
+<h2 id="packages-installed">Packages Installed</h2>
+<pre><code class="lang-xml">&lt;!-- Core Serilog --&gt;
+&lt;PackageReference Include=&quot;Serilog&quot; Version=&quot;4.1.0&quot; /&gt;
+&lt;PackageReference Include=&quot;Serilog.AspNetCore&quot; Version=&quot;8.0.3&quot; /&gt;
+
+&lt;!-- Sinks --&gt;
+&lt;PackageReference Include=&quot;Serilog.Sinks.Console&quot; Version=&quot;6.0.0&quot; /&gt;
+&lt;PackageReference Include=&quot;Serilog.Sinks.File&quot; Version=&quot;6.0.0&quot; /&gt;
+&lt;PackageReference Include=&quot;Serilog.Sinks.Seq&quot; Version=&quot;8.0.0&quot; /&gt;
+
+&lt;!-- Enrichers --&gt;
+&lt;PackageReference Include=&quot;Serilog.Enrichers.Environment&quot; Version=&quot;3.0.1&quot; /&gt;
+&lt;PackageReference Include=&quot;Serilog.Enrichers.Process&quot; Version=&quot;3.0.0&quot; /&gt;
+&lt;PackageReference Include=&quot;Serilog.Enrichers.Thread&quot; Version=&quot;4.0.0&quot; /&gt;
+</code></pre>
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://serilog.net/">Serilog Documentation</a></li>
+<li><a href="https://github.com/serilog/serilog/wiki/Structured-Data">Structured Logging Best Practices</a></li>
+<li><a href="https://docs.datalust.co/docs">Seq Documentation</a></li>
+<li><a href="https://opentelemetry.io/docs/languages/net/">OpenTelemetry Integration</a></li>
+</ul>
+<h2 id="related-adrs">Related ADRs</h2>
+<ul>
+<li>ADR-001: .NET 8 Upgrade (enables modern logging features)</li>
+<li>ADR-004: CI/CD Platform (logging in deployment pipeline)</li>
+</ul>
+<h2 id="future-considerations">Future Considerations</h2>
+<ul>
+<li>[ ] <strong>Application Insights</strong> for Azure deployments</li>
+<li>[ ] <strong>CloudWatch Logs</strong> for AWS deployments</li>
+<li>[ ] <strong>ELK Stack</strong> (Elasticsearch, Logstash, Kibana) for large scale</li>
+<li>[ ] <strong>Grafana Loki</strong> as lightweight alternative to Elasticsearch</li>
+</ul>
+<hr>
+<p><strong>Last Updated:</strong> 2025-11-30
+<strong>Next Review:</strong> 2026-03-01</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/dogaaydinn/CSharp-Covariance-Polymorphism-Exercises/blob/master/docs/architecture/01-architecture-decision-records/ADR-003-logging-framework.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright © 2024 - Advanced C# Concepts
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
