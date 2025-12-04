@@ -516,51 +516,94 @@ cat README.md
 
 ```
 CSharp-Covariance-Polymorphism-Exercises/
-├── 📂 AdvancedCsharpConcepts/                  (Main Project)
-│   ├── 📂 Beginner/                            (Fundamentals)
-│   │   ├── Polymorphism-AssignCompatibility/
-│   │   ├── Override-Upcast-Downcast/
-│   │   └── Upcast-Downcast/
-│   ├── 📂 Intermediate/                        (Advanced Concepts)
-│   │   ├── BoxingUnboxing/
-│   │   └── CovarianceContravariance/
-│   └── 📂 Advanced/                            (Expert Level)
-│       ├── ExplicitImplicitConversion/
-│       ├── GenericCovarianceContravariance/
-│       ├── ModernCSharp/                       (C# 12 Features)
-│       ├── HighPerformance/                    (Span<T>, Parallel)
-│       ├── PerformanceBenchmarks/              (BenchmarkDotNet)
-│       ├── DesignPatterns/                     🆕 (Factory, Builder)
-│       ├── DependencyInjection/                🆕 (DI Framework)
-│       └── Observability/                      🆕 (Serilog Logging)
+├── 📂 src/                                     (Source Code)
+│   ├── AdvancedConcepts.Core/                  (Main Library - 5,542 LOC)
+│   │   ├── Beginner/                           (Fundamentals)
+│   │   ├── Intermediate/                       (Advanced Concepts)
+│   │   └── Advanced/                           (Expert Level)
+│   ├── AdvancedConcepts.Analyzers/             🆕 (10 Custom Analyzers)
+│   └── AdvancedConcepts.SourceGenerators/      🆕 (3 Source Generators)
 │
-├── 📂 AdvancedCsharpConcepts.Tests/            (Unit Tests - 100+)
-│   ├── Beginner/                               🆕
-│   ├── Intermediate/                           🆕
-│   ├── ModernCSharp/
-│   └── HighPerformance/
+├── 📂 snippets/                                🆕 (Learning-Focused Examples)
+│   ├── 01-Beginner/                            (3 projects)
+│   │   ├── PolymorphismBasics/
+│   │   ├── OverrideVirtual/
+│   │   └── CastingExamples/
+│   ├── 02-Intermediate/                        (3 projects)
+│   │   ├── BoxingPerformance/
+│   │   ├── CovarianceContravariance/
+│   │   └── GenericConstraints/
+│   ├── 03-Advanced/                            (6 projects)
+│   │   ├── DesignPatterns/
+│   │   ├── HighPerformance/
+│   │   ├── ObservabilityPatterns/
+│   │   ├── PerformanceOptimization/
+│   │   ├── ResiliencePatterns/
+│   │   └── SOLIDPrinciples/
+│   ├── 04-Expert/                              (4 projects)
+│   │   ├── AdvancedPerformance/
+│   │   ├── NativeAOT/
+│   │   ├── RoslynAnalyzersDemo/
+│   │   └── SourceGenerators/
+│   └── 99-Exercises/                           (Interactive exercises)
+│       ├── Algorithms/
+│       ├── DesignPatterns/
+│       ├── Generics/
+│       └── LINQ/
 │
-├── 📂 AdvancedCsharpConcepts.IntegrationTests/ 🆕 (Integration Tests)
-│   └── PerformanceIntegrationTests.cs
+├── 📂 samples/                                 🆕 (Production-Ready Apps)
+│   ├── RealWorld/                              (3 applications)
+│   │   ├── MicroserviceTemplate/               (Clean Architecture + CQRS)
+│   │   ├── WebApiAdvanced/                     (JWT, Rate Limiting, Caching)
+│   │   └── MLNetIntegration/                   (Machine Learning)
+│   ├── CloudNative/
+│   │   └── AspireVideoService/                 (.NET Aspire Platform)
+│   ├── CuttingEdge/
+│   │   └── AspireCloudStack/                   (Full Cloud Stack)
+│   ├── Capstone/
+│   │   └── MicroVideoPlatform/                 (Video Streaming Platform)
+│   └── RealWorldProblems/                      (8+ solutions)
+│       ├── API-Rate-Limiting/
+│       ├── Cache-Strategy/
+│       ├── Database-Migration/
+│       └── N-Plus-One-Problem/
+│
+├── 📂 tests/                                   (Test Projects)
+│   ├── AdvancedConcepts.UnitTests/             (300+ unit tests)
+│   ├── AdvancedConcepts.IntegrationTests/      (9 integration tests)
+│   └── AdvancedConcepts.SourceGenerators.Tests/
 │
 ├── 📂 .github/workflows/                       (CI/CD)
 │   ├── ci.yml                                  (Main pipeline)
+│   ├── validate-samples.yml                    🆕 (Sample validation)
 │   ├── codeql.yml                              (Security scanning)
-│   └── dependabot.yml                          (Dependency updates)
+│   ├── performance.yml                         🆕 (Benchmarks)
+│   └── publish-nuget.yml                       🆕 (Package publishing)
 │
 ├── 📂 docs/                                    (Documentation)
-│   └── architecture/ARCHITECTURE.md
+│   ├── architecture/                           (ADRs, C4 diagrams)
+│   ├── guides/                                 (How-to guides)
+│   └── learning-paths/                         🆕 (Structured learning)
+│
+├── 📂 benchmarks/                              🆕 (Performance Tests)
+│   └── AdvancedConcepts.Benchmarks/
 │
 ├── 📄 Dockerfile                               (Multi-stage build)
 ├── 📄 docker-compose.yml                       (4 services)
-├── 📄 stryker-config.json                      🆕 (Mutation testing)
 ├── 📄 README.md                                (This file)
 ├── 📄 CHANGELOG.md                             (Version history)
-├── 📄 ROADMAP.md                               (Transformation plan)
-├── 📄 GAP_ANALYSIS.md                          🆕 (Completion status)
-├── 📄 CODE_REVIEW_REPORT.md                    (Quality assessment)
-└── 📄 PRODUCTION_READY_REPORT.md               🆕 (Final report)
+└── 📄 ROADMAP.md                               (Development plan)
 ```
+
+### 📖 Structure Overview
+
+**Microsoft-Style Organization** (v1.0.0+):
+- **`snippets/`** - Focused code examples demonstrating single concepts (learning)
+- **`samples/`** - Complete, production-ready applications (reference implementations)
+- **`src/`** - Core library, analyzers, and source generators
+- **`tests/`** - Comprehensive test suite (309 tests)
+
+[See snippets/README.md](snippets/README.md) | [See samples/README.md](samples/README.md)
 
 ---
 
