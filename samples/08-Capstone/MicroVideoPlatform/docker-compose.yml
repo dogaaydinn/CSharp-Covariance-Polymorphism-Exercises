@@ -1,0 +1,271 @@
+version: '3.8'
+
+services:
+  # ============================================================================
+  # INFRASTRUCTURE SERVICES
+  # ============================================================================
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: microvideo-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-microvideo}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_INITDB_ARGS: "-E UTF8"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - microvideo-network
+
+  redis:
+    image: redis:7.4-alpine
+    container_name: microvideo-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-redis}
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    networks:
+      - microvideo-network
+
+  rabbitmq:
+    image: rabbitmq:3.12-management-alpine
+    container_name: microvideo-rabbitmq
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-guest}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-guest}
+      RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_VHOST:-/}
+    ports:
+      - "5672:5672"   # AMQP
+      - "15672:15672" # Management UI
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+      - ./scripts/rabbitmq-definitions.json:/etc/rabbitmq/definitions.json:ro
+      - ./scripts/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - microvideo-network
+
+  # ============================================================================
+  # APPLICATION SERVICES
+  # ============================================================================
+
+  shared:
+    build:
+      context: .
+      dockerfile: MicroVideoPlatform.Shared/Dockerfile
+    image: microvideo/shared:latest
+    container_name: microvideo-shared
+    # This is a library project, no need to run it
+
+  content-api:
+    build:
+      context: .
+      dockerfile: MicroVideoPlatform.Content.API/Dockerfile
+    image: microvideo/content-api:latest
+    container_name: microvideo-content-api
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT:-Development}
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__PostgreSQL=Host=postgres;Port=5432;Database=${POSTGRES_DB:-microvideo};Username=${POSTGRES_USER:-postgres};Password=${POSTGRES_PASSWORD:-postgres}
+      - ConnectionStrings__Redis=redis:6379,password=${REDIS_PASSWORD:-redis}
+      - RabbitMQ__Host=rabbitmq
+      - RabbitMQ__Port=5672
+      - RabbitMQ__Username=${RABBITMQ_USER:-guest}
+      - RabbitMQ__Password=${RABBITMQ_PASSWORD:-guest}
+      - RabbitMQ__VirtualHost=${RABBITMQ_VHOST:-/}
+      - JWT__Secret=${JWT_SECRET:-your-super-secret-key-change-in-production-minimum-32-characters}
+      - JWT__Issuer=${JWT_ISSUER:-MicroVideoPlatform}
+      - JWT__Audience=${JWT_AUDIENCE:-MicroVideoPlatform}
+      - JWT__ExpiryMinutes=${JWT_EXPIRY_MINUTES:-60}
+    ports:
+      - "5001:8080"
+    volumes:
+      - ./uploads:/app/uploads
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - microvideo-network
+
+  processing-worker:
+    build:
+      context: .
+      dockerfile: MicroVideoPlatform.Processing.Worker/Dockerfile
+    image: microvideo/processing-worker:latest
+    container_name: microvideo-processing-worker
+    restart: unless-stopped
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      content-api:
+        condition: service_healthy
+      analytics-function:
+        condition: service_healthy
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT:-Development}
+      - RabbitMQ__Host=rabbitmq
+      - RabbitMQ__Port=5672
+      - RabbitMQ__Username=${RABBITMQ_USER:-guest}
+      - RabbitMQ__Password=${RABBITMQ_PASSWORD:-guest}
+      - RabbitMQ__VirtualHost=${RABBITMQ_VHOST:-/}
+      - ContentAPI__BaseUrl=http://content-api:8080
+      - AnalyticsFunction__BaseUrl=http://analytics-function:8080
+      - Processing__SimulateDelay=${PROCESSING_SIMULATE_DELAY:-true}
+      - Processing__DelaySeconds=${PROCESSING_DELAY_SECONDS:-5}
+    volumes:
+      - ./uploads:/app/uploads
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - microvideo-network
+
+  analytics-function:
+    build:
+      context: .
+      dockerfile: MicroVideoPlatform.Analytics.Function/Dockerfile
+    image: microvideo/analytics-function:latest
+    container_name: microvideo-analytics-function
+    restart: unless-stopped
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT:-Development}
+      - ASPNETCORE_URLS=http://+:8080
+      - ML__ModelPath=${ML_MODEL_PATH:-/app/models/video-classifier.zip}
+      - ML__ConfidenceThreshold=${ML_CONFIDENCE_THRESHOLD:-0.7}
+    ports:
+      - "5003:8080"
+    volumes:
+      - ./ml-models:/app/models
+      - ./uploads:/app/uploads
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - microvideo-network
+
+  web-ui:
+    build:
+      context: .
+      dockerfile: MicroVideoPlatform.Web.UI/Dockerfile
+    image: microvideo/web-ui:latest
+    container_name: microvideo-web-ui
+    restart: unless-stopped
+    depends_on:
+      apigateway:
+        condition: service_healthy
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT:-Development}
+      - ASPNETCORE_URLS=http://+:8080
+      - ApiGateway__BaseUrl=http://apigateway:8080
+      - SignalR__HubUrl=http://apigateway:8080/hubs/video
+    ports:
+      - "5004:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - microvideo-network
+
+  apigateway:
+    build:
+      context: .
+      dockerfile: MicroVideoPlatform.ApiGateway/Dockerfile
+    image: microvideo/apigateway:latest
+    container_name: microvideo-apigateway
+    restart: unless-stopped
+    depends_on:
+      content-api:
+        condition: service_healthy
+      analytics-function:
+        condition: service_healthy
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT:-Development}
+      - ASPNETCORE_URLS=http://+:8080
+      - ReverseProxy__Routes__content-route__ClusterId=content-cluster
+      - ReverseProxy__Routes__content-route__Match__Path=/api/videos/{**catch-all}
+      - ReverseProxy__Clusters__content-cluster__Destinations__destination1__Address=http://content-api:8080
+      - ReverseProxy__Routes__analytics-route__ClusterId=analytics-cluster
+      - ReverseProxy__Routes__analytics-route__Match__Path=/api/analytics/{**catch-all}
+      - ReverseProxy__Clusters__analytics-cluster__Destinations__destination1__Address=http://analytics-function:8080
+      - RateLimiting__EnableRateLimiting=${RATE_LIMITING_ENABLED:-true}
+      - RateLimiting__PermitLimit=${RATE_LIMITING_PERMIT_LIMIT:-100}
+      - RateLimiting__Window=${RATE_LIMITING_WINDOW_SECONDS:-60}
+    ports:
+      - "5000:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - microvideo-network
+
+# ============================================================================
+# NETWORKS
+# ============================================================================
+
+networks:
+  microvideo-network:
+    driver: bridge
+    name: microvideo-network
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+# ============================================================================
+# VOLUMES
+# ============================================================================
+
+volumes:
+  postgres-data:
+    driver: local
+    name: microvideo-postgres-data
+  redis-data:
+    driver: local
+    name: microvideo-redis-data
+  rabbitmq-data:
+    driver: local
+    name: microvideo-rabbitmq-data

@@ -1,0 +1,186 @@
+@page "/videos"
+@rendermode InteractiveServer
+@inject IHttpClientFactory HttpClientFactory
+
+<PageTitle>Video Library</PageTitle>
+
+<h1>Video Library</h1>
+
+<p>This is a cloud-native video service powered by .NET Aspire</p>
+
+@if (videos == null)
+{
+    <p><em>Loading videos...</em></p>
+}
+else if (!videos.Any())
+{
+    <p><em>No videos available. Add one below!</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Views</th>
+                <th>Uploaded</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var video in videos)
+            {
+                <tr>
+                    <td>@video.Title</td>
+                    <td>@video.Description</td>
+                    <td>
+                        <span class="badge @GetStatusClass(video.Status)">
+                            @video.Status
+                        </span>
+                    </td>
+                    <td>@video.ViewCount</td>
+                    <td>@video.UploadedAt.ToString("g")</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary" @onclick="() => IncrementView(video.Id)">
+                            Watch
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<hr />
+
+<h3>Add New Video</h3>
+<div class="mb-3">
+    <label class="form-label">Title</label>
+    <input type="text" class="form-control" @bind="newVideoTitle" />
+</div>
+<div class="mb-3">
+    <label class="form-label">Description</label>
+    <textarea class="form-control" @bind="newVideoDescription"></textarea>
+</div>
+<div class="mb-3">
+    <label class="form-label">URL</label>
+    <input type="text" class="form-control" @bind="newVideoUrl" />
+</div>
+<button class="btn btn-success" @onclick="AddVideo">Add Video</button>
+
+@if (!string.IsNullOrEmpty(message))
+{
+    <div class="alert alert-info mt-3">@message</div>
+}
+
+@code {
+    private List<Video>? videos;
+    private string newVideoTitle = "";
+    private string newVideoDescription = "";
+    private string newVideoUrl = "";
+    private string message = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadVideos();
+    }
+
+    private async Task LoadVideos()
+    {
+        try
+        {
+            var client = HttpClientFactory.CreateClient("api");
+            videos = await client.GetFromJsonAsync<List<Video>>("/api/videos");
+        }
+        catch (Exception ex)
+        {
+            message = $"Error loading videos: {ex.Message}";
+        }
+    }
+
+    private async Task AddVideo()
+    {
+        if (string.IsNullOrWhiteSpace(newVideoTitle) || string.IsNullOrWhiteSpace(newVideoUrl))
+        {
+            message = "Title and URL are required";
+            return;
+        }
+
+        try
+        {
+            var client = HttpClientFactory.CreateClient("api");
+            var newVideo = new Video
+            {
+                Title = newVideoTitle,
+                Description = newVideoDescription,
+                Url = newVideoUrl
+            };
+
+            var response = await client.PostAsJsonAsync("/api/videos", newVideo);
+            if (response.IsSuccessStatusCode)
+            {
+                message = "Video added successfully!";
+                newVideoTitle = "";
+                newVideoDescription = "";
+                newVideoUrl = "";
+                await LoadVideos();
+            }
+            else
+            {
+                message = $"Error: {response.StatusCode}";
+            }
+        }
+        catch (Exception ex)
+        {
+            message = $"Error adding video: {ex.Message}";
+        }
+    }
+
+    private async Task IncrementView(int videoId)
+    {
+        try
+        {
+            var client = HttpClientFactory.CreateClient("api");
+            var response = await client.PostAsync($"/api/videos/{videoId}/view", null);
+            if (response.IsSuccessStatusCode)
+            {
+                await LoadVideos();
+                message = "View count updated!";
+            }
+        }
+        catch (Exception ex)
+        {
+            message = $"Error: {ex.Message}";
+        }
+    }
+
+    private string GetStatusClass(VideoStatus status) => status switch
+    {
+        VideoStatus.Pending => "bg-warning",
+        VideoStatus.Processing => "bg-info",
+        VideoStatus.Ready => "bg-success",
+        VideoStatus.Failed => "bg-danger",
+        _ => "bg-secondary"
+    };
+
+    public class Video
+    {
+        public int Id { get; set; }
+        public required string Title { get; set; }
+        public required string Description { get; set; }
+        public required string Url { get; set; }
+        public DateTime UploadedAt { get; set; }
+        public VideoStatus Status { get; set; }
+        public int ViewCount { get; set; }
+    }
+
+    public enum VideoStatus
+    {
+        Pending,
+        Processing,
+        Ready,
+        Failed
+    }
+}

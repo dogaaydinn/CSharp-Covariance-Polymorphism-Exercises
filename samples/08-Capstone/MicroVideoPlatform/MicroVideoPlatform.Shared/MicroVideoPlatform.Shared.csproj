@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Serialization -->
+    <PackageReference Include="System.Text.Json" Version="8.0.5" />
+
+    <!-- Validation -->
+    <PackageReference Include="FluentValidation" Version="11.9.0" />
+
+    <!-- MediatR for CQRS (used by Processing.Worker) -->
+    <PackageReference Include="MediatR" Version="12.2.0" />
+  </ItemGroup>
+
+</Project>

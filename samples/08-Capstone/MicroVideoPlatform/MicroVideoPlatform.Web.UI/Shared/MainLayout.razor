@@ -1,0 +1,217 @@
+@inherits LayoutComponentBase
+@inject AppState AppState
+@inject VideoHubClient HubClient
+@inject NavigationManager NavigationManager
+@inject ILogger<MainLayout> Logger
+@implements IDisposable
+
+<MudThemeProvider @ref="@_themeProvider" Theme="_theme" IsDarkMode="@AppState.IsDarkMode" />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout>
+    <MudAppBar Elevation="1">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawer" />
+        <MudText Typo="Typo.h5" Class="ml-3">MicroVideo Platform</MudText>
+        <MudSpacer />
+
+        @* Connection Status Indicator *@
+        @if (_isConnected)
+        {
+            <MudChip Icon="@Icons.Material.Filled.Circle" Color="Color.Success" Size="Size.Small" Class="mr-2">
+                Connected
+            </MudChip>
+        }
+        else
+        {
+            <MudChip Icon="@Icons.Material.Filled.Circle" Color="Color.Error" Size="Size.Small" Class="mr-2">
+                Disconnected
+            </MudChip>
+        }
+
+        @* Dark Mode Toggle *@
+        <MudTooltip Text="@(AppState.IsDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode")">
+            <MudIconButton Icon="@(AppState.IsDarkMode ? Icons.Material.Filled.LightMode : Icons.Material.Filled.DarkMode)"
+                           Color="Color.Inherit"
+                           OnClick="@ToggleTheme" />
+        </MudTooltip>
+
+        @* User Profile / Login *@
+        @if (AppState.IsAuthenticated)
+        {
+            <MudMenu Icon="@Icons.Material.Filled.AccountCircle" Color="Color.Inherit" AnchorOrigin="Origin.BottomRight">
+                <MudMenuItem>
+                    <MudText Typo="Typo.body2">User: @AppState.CurrentUserId</MudText>
+                </MudMenuItem>
+                <MudDivider />
+                <MudMenuItem Icon="@Icons.Material.Filled.Settings">Settings</MudMenuItem>
+                <MudMenuItem Icon="@Icons.Material.Filled.Logout" OnClick="@HandleLogout">Logout</MudMenuItem>
+            </MudMenu>
+        }
+        else
+        {
+            <MudButton Variant="Variant.Text" Color="Color.Inherit" OnClick="@HandleLogin">Login</MudButton>
+        }
+    </MudAppBar>
+
+    <MudDrawer @bind-Open="_drawerOpen" Elevation="2" ClipMode="DrawerClipMode.Always">
+        <MudDrawerHeader>
+            <MudText Typo="Typo.h6">Navigation</MudText>
+        </MudDrawerHeader>
+        <MudNavMenu>
+            <MudNavLink Href="/" Icon="@Icons.Material.Filled.Home" Match="NavLinkMatch.All">
+                Home
+            </MudNavLink>
+            <MudNavLink Href="/videos" Icon="@Icons.Material.Filled.VideoLibrary" Match="NavLinkMatch.Prefix">
+                Videos
+            </MudNavLink>
+            <MudNavLink Href="/upload" Icon="@Icons.Material.Filled.Upload" Match="NavLinkMatch.Prefix">
+                Upload Video
+            </MudNavLink>
+            <MudDivider Class="my-2" />
+            <MudNavGroup Title="Categories" Icon="@Icons.Material.Filled.Category" Expanded="false">
+                <MudNavLink Href="/videos?category=Education">Education</MudNavLink>
+                <MudNavLink Href="/videos?category=Entertainment">Entertainment</MudNavLink>
+                <MudNavLink Href="/videos?category=Technology">Technology</MudNavLink>
+                <MudNavLink Href="/videos?category=Music">Music</MudNavLink>
+                <MudNavLink Href="/videos?category=Gaming">Gaming</MudNavLink>
+                <MudNavLink Href="/videos?category=Sports">Sports</MudNavLink>
+            </MudNavGroup>
+            <MudDivider Class="my-2" />
+            @if (AppState.IsAuthenticated)
+            {
+                <MudNavLink Href="/my-videos" Icon="@Icons.Material.Filled.VideoCall" Match="NavLinkMatch.Prefix">
+                    My Videos
+                </MudNavLink>
+                <MudNavLink Href="/favorites" Icon="@Icons.Material.Filled.Favorite" Match="NavLinkMatch.Prefix">
+                    Favorites
+                </MudNavLink>
+                <MudNavLink Href="/history" Icon="@Icons.Material.Filled.History" Match="NavLinkMatch.Prefix">
+                    Watch History
+                </MudNavLink>
+            }
+        </MudNavMenu>
+    </MudDrawer>
+
+    <MudMainContent>
+        <MudContainer MaxWidth="MaxWidth.ExtraExtraLarge" Class="my-4 pt-4">
+            @Body
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+
+@code {
+    private MudThemeProvider? _themeProvider;
+    private bool _drawerOpen = true;
+    private bool _isConnected = false;
+
+    private MudTheme _theme = new MudTheme()
+    {
+        Palette = new PaletteLight()
+        {
+            Primary = Colors.Blue.Default,
+            Secondary = Colors.Purple.Default,
+            AppbarBackground = Colors.Blue.Default,
+        },
+        PaletteDark = new PaletteDark()
+        {
+            Primary = Colors.Blue.Lighten1,
+            Secondary = Colors.Purple.Lighten1,
+            AppbarBackground = Colors.Grey.Darken4,
+            Background = Colors.Grey.Darken4,
+            Surface = Colors.Grey.Darken3,
+        }
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Initialize AppState from LocalStorage
+        await AppState.InitializeAsync();
+        AppState.OnChange += StateHasChanged;
+
+        // Initialize SignalR connection
+        try
+        {
+            if (!HubClient.IsConnected)
+            {
+                await HubClient.StartAsync();
+            }
+
+            // Register user if authenticated
+            if (AppState.IsAuthenticated && AppState.CurrentUserId != null)
+            {
+                await HubClient.RegisterUserAsync(AppState.CurrentUserId);
+            }
+
+            _isConnected = HubClient.IsConnected;
+
+            // Subscribe to connection state changes
+            HubClient.ConnectionStateChanged += OnConnectionStateChanged;
+            HubClient.NotificationReceived += OnNotificationReceived;
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Failed to initialize SignalR connection");
+            _isConnected = false;
+        }
+    }
+
+    private void ToggleDrawer()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+
+    private void ToggleTheme()
+    {
+        AppState.ToggleTheme();
+    }
+
+    private async Task HandleLogin()
+    {
+        // For demo purposes, generate a random user ID
+        var userId = $"user_{Guid.NewGuid():N}";
+        AppState.CurrentUserId = userId;
+
+        // Register with SignalR hub
+        if (HubClient.IsConnected)
+        {
+            await HubClient.RegisterUserAsync(userId);
+        }
+
+        Logger.LogInformation("User logged in: {UserId}", userId);
+    }
+
+    private async Task HandleLogout()
+    {
+        // Clear app state
+        await AppState.ClearAsync();
+
+        Logger.LogInformation("User logged out");
+
+        // Navigate to home
+        NavigationManager.NavigateTo("/", true);
+    }
+
+    private void OnConnectionStateChanged(ConnectionStateChangedEventArgs args)
+    {
+        _isConnected = args.State == Microsoft.AspNetCore.SignalR.Client.HubConnectionState.Connected;
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void OnNotificationReceived(NotificationEventArgs args)
+    {
+        // Handle notification display (could use MudBlazor Snackbar)
+        Logger.LogInformation("Notification received: {Title} - {Message}", args.Title, args.Message);
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        AppState.OnChange -= StateHasChanged;
+        if (HubClient != null)
+        {
+            HubClient.ConnectionStateChanged -= OnConnectionStateChanged;
+            HubClient.NotificationReceived -= OnNotificationReceived;
+        }
+    }
+}

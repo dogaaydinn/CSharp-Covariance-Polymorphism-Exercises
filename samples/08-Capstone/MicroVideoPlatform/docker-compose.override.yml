@@ -1,0 +1,165 @@
+version: '3.8'
+
+# ============================================================================
+# Development Overrides
+# ============================================================================
+# This file is automatically loaded by docker-compose in development.
+# It provides development-specific configurations.
+
+services:
+  # ============================================================================
+  # INFRASTRUCTURE SERVICES - Development Overrides
+  # ============================================================================
+
+  postgres:
+    ports:
+      - "5432:5432"  # Expose for direct access from host
+    environment:
+      POSTGRES_DB: microvideo_dev
+      POSTGRES_USER: dev_user
+      POSTGRES_PASSWORD: dev_password
+    # Enable logging for debugging
+    command:
+      - "postgres"
+      - "-c"
+      - "log_statement=all"
+      - "-c"
+      - "log_duration=on"
+
+  redis:
+    ports:
+      - "6379:6379"
+    # Disable password in development for easier debugging
+    command: redis-server --appendonly yes
+
+  rabbitmq:
+    environment:
+      RABBITMQ_DEFAULT_USER: dev_user
+      RABBITMQ_DEFAULT_PASS: dev_password
+
+  # ============================================================================
+  # APPLICATION SERVICES - Development Overrides
+  # ============================================================================
+
+  content-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__PostgreSQL=Host=postgres;Port=5432;Database=microvideo_dev;Username=dev_user;Password=dev_password
+      - ConnectionStrings__Redis=redis:6379
+      - JWT__Secret=dev-secret-key-not-for-production-use-32-chars-minimum
+      - Serilog__MinimumLevel__Default=Debug
+      - EnableSwagger=true
+      - SeedDatabase=true
+    # Mount source code for hot reload (if using dotnet watch)
+    volumes:
+      - ./MicroVideoPlatform.Content.API:/app/src
+      - ./uploads:/app/uploads
+    # Override command for hot reload
+    # command: dotnet watch run --project /app/src/MicroVideoPlatform.Content.API.csproj
+
+  processing-worker:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - RabbitMQ__Username=dev_user
+      - RabbitMQ__Password=dev_password
+      - Processing__SimulateDelay=true
+      - Processing__DelaySeconds=3  # Faster in dev
+      - Serilog__MinimumLevel__Default=Debug
+    volumes:
+      - ./MicroVideoPlatform.Processing.Worker:/app/src
+      - ./uploads:/app/uploads
+
+  analytics-function:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - Serilog__MinimumLevel__Default=Debug
+      - EnableSwagger=true
+    volumes:
+      - ./MicroVideoPlatform.Analytics.Function:/app/src
+      - ./ml-models:/app/models
+      - ./uploads:/app/uploads
+
+  web-ui:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080;https://+:8081
+      - Serilog__MinimumLevel__Default=Debug
+    ports:
+      - "5004:8080"
+      - "5014:8081"  # HTTPS in development
+    volumes:
+      - ./MicroVideoPlatform.Web.UI:/app/src
+      - ~/.aspnet/https:/https:ro  # Development certificates
+
+  apigateway:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - RateLimiting__EnableRateLimiting=false  # Disable rate limiting in dev
+      - Serilog__MinimumLevel__Default=Debug
+      - EnableSwagger=true
+    volumes:
+      - ./MicroVideoPlatform.ApiGateway:/app/src
+
+# ============================================================================
+# ADDITIONAL DEVELOPMENT SERVICES
+# ============================================================================
+
+  # Adminer - Database management UI
+  adminer:
+    image: adminer:latest
+    container_name: microvideo-adminer
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+    environment:
+      ADMINER_DEFAULT_SERVER: postgres
+      ADMINER_DESIGN: pepa-linha
+    networks:
+      - microvideo-network
+
+  # Redis Commander - Redis management UI
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: microvideo-redis-commander
+    restart: unless-stopped
+    depends_on:
+      - redis
+    environment:
+      REDIS_HOSTS: local:redis:6379
+    ports:
+      - "8081:8081"
+    networks:
+      - microvideo-network
+
+  # MailHog - Email testing (for notification features)
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: microvideo-mailhog
+    restart: unless-stopped
+    ports:
+      - "1025:1025"  # SMTP
+      - "8025:8025"  # Web UI
+    networks:
+      - microvideo-network
+
+  # Seq - Structured logging UI (optional)
+  seq:
+    image: datalust/seq:latest
+    container_name: microvideo-seq
+    restart: unless-stopped
+    environment:
+      ACCEPT_EULA: "Y"
+    ports:
+      - "5341:80"
+      - "5342:5341"
+    volumes:
+      - seq-data:/data
+    networks:
+      - microvideo-network
+
+volumes:
+  seq-data:
+    driver: local
+    name: microvideo-seq-data

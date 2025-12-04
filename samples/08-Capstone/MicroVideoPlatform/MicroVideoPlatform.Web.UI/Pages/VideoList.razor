@@ -1,0 +1,340 @@
+@page "/videos"
+@inject VideoStore VideoStore
+@inject NavigationManager NavigationManager
+@inject ILogger<VideoList> Logger
+@implements IDisposable
+
+<PageTitle>Videos - MicroVideo Platform</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.ExtraExtraLarge">
+    <MudText Typo="Typo.h3" Class="mb-4">Videos</MudText>
+
+    @* Toolbar: Search, Filter, View Toggle *@
+    <MudPaper Class="pa-4 mb-4" Elevation="2">
+        <MudGrid>
+            <MudItem xs="12" md="6">
+                <MudTextField @bind-Value="_searchTerm"
+                              Label="Search videos"
+                              Variant="Variant.Outlined"
+                              Adornment="Adornment.End"
+                              AdornmentIcon="@Icons.Material.Filled.Search"
+                              OnKeyUp="OnSearchKeyUp" />
+            </MudItem>
+            <MudItem xs="12" md="3">
+                <MudSelect @bind-Value="_selectedCategory"
+                           Label="Category"
+                           Variant="Variant.Outlined"
+                           T="string"
+                           AnchorOrigin="Origin.BottomCenter">
+                    <MudSelectItem T="string" Value="@string.Empty">All Categories</MudSelectItem>
+                    <MudSelectItem T="string" Value="@("Education")">Education</MudSelectItem>
+                    <MudSelectItem T="string" Value="@("Entertainment")">Entertainment</MudSelectItem>
+                    <MudSelectItem T="string" Value="@("Technology")">Technology</MudSelectItem>
+                    <MudSelectItem T="string" Value="@("Music")">Music</MudSelectItem>
+                    <MudSelectItem T="string" Value="@("Gaming")">Gaming</MudSelectItem>
+                    <MudSelectItem T="string" Value="@("Sports")">Sports</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+            <MudItem xs="12" md="3">
+                <MudSelect @bind-Value="_sortBy"
+                           Label="Sort By"
+                           Variant="Variant.Outlined"
+                           T="string"
+                           AnchorOrigin="Origin.BottomCenter">
+                    <MudSelectItem T="string" Value="@("recent")">Most Recent</MudSelectItem>
+                    <MudSelectItem T="string" Value="@("popular")">Most Popular</MudSelectItem>
+                    <MudSelectItem T="string" Value="@("views")">Most Viewed</MudSelectItem>
+                    <MudSelectItem T="string" Value="@("title")">Title (A-Z)</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+        </MudGrid>
+
+        <MudDivider Class="my-3" />
+
+        <MudStack Row="true" Justify="Justify.SpaceBetween">
+            <MudChip Color="Color.Info">@FilteredVideos.Count videos found</MudChip>
+            <MudButtonGroup OverrideStyles="false">
+                <MudTooltip Text="Grid View">
+                    <MudIconButton Icon="@Icons.Material.Filled.GridView"
+                                   Color="@(_viewMode == ViewMode.Grid ? Color.Primary : Color.Default)"
+                                   OnClick="@(() => _viewMode = ViewMode.Grid)" />
+                </MudTooltip>
+                <MudTooltip Text="List View">
+                    <MudIconButton Icon="@Icons.Material.Filled.List"
+                                   Color="@(_viewMode == ViewMode.List ? Color.Primary : Color.Default)"
+                                   OnClick="@(() => _viewMode = ViewMode.List)" />
+                </MudTooltip>
+            </MudButtonGroup>
+        </MudStack>
+    </MudPaper>
+
+    @* Loading State *@
+    @if (_isLoading)
+    {
+        <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="mb-4" />
+        <MudStack Row="true" Justify="Justify.Center">
+            <MudProgressCircular Color="Color.Primary" Size="Size.Large" Indeterminate="true" />
+        </MudStack>
+    }
+    else if (!FilteredVideos.Any())
+    {
+        <MudAlert Severity="Severity.Info" Class="mt-4">
+            No videos found. Try adjusting your search or filters.
+        </MudAlert>
+    }
+    else
+    {
+        @* Grid View *@
+        @if (_viewMode == ViewMode.Grid)
+        {
+            <MudGrid>
+                @foreach (var video in PaginatedVideos)
+                {
+                    <MudItem xs="12" sm="6" md="4" lg="3">
+                        <MudCard Class="cursor-pointer hover-card" @onclick="@(() => NavigateToVideo(video.Id))">
+                            <MudCardMedia Image="@GetThumbnailUrl(video)" Height="180" />
+                            <MudCardContent>
+                                <MudText Typo="Typo.h6" Class="mud-text-truncate-2">@video.Title</MudText>
+                                <MudText Typo="Typo.body2" Color="Color.Secondary">@video.Category</MudText>
+                                <MudText Typo="Typo.caption" Color="Color.Secondary">@video.UploadDate.ToString("MMM dd, yyyy")</MudText>
+                            </MudCardContent>
+                            <MudCardActions>
+                                <MudStack Row="true" Spacing="2">
+                                    <MudChip Size="Size.Small" Icon="@Icons.Material.Filled.Visibility">
+                                        @FormatCount(video.ViewsCount)
+                                    </MudChip>
+                                    <MudChip Size="Size.Small" Icon="@Icons.Material.Filled.ThumbUp" Color="Color.Success">
+                                        @FormatCount(video.LikesCount)
+                                    </MudChip>
+                                    <MudChip Size="Size.Small" Icon="@Icons.Material.Filled.Comment">
+                                        @FormatCount(video.CommentsCount)
+                                    </MudChip>
+                                </MudStack>
+                            </MudCardActions>
+                        </MudCard>
+                    </MudItem>
+                }
+            </MudGrid>
+        }
+        else
+        {
+            @* List View *@
+            <MudPaper Elevation="2">
+                <MudList Clickable="true">
+                    @foreach (var video in PaginatedVideos)
+                    {
+                        <MudListItem @onclick="@(() => NavigateToVideo(video.Id))">
+                            <MudGrid>
+                                <MudItem xs="3" sm="2">
+                                    <MudImage Src="@GetThumbnailUrl(video)" Alt="@video.Title" Elevation="2" Class="rounded" />
+                                </MudItem>
+                                <MudItem xs="9" sm="10">
+                                    <MudText Typo="Typo.h6">@video.Title</MudText>
+                                    <MudText Typo="Typo.body2" Color="Color.Secondary" Class="mb-2">@video.Description</MudText>
+                                    <MudStack Row="true" Spacing="2">
+                                        <MudChip Size="Size.Small" Icon="@Icons.Material.Filled.Category">@video.Category</MudChip>
+                                        <MudChip Size="Size.Small" Icon="@Icons.Material.Filled.Visibility">@FormatCount(video.ViewsCount) views</MudChip>
+                                        <MudChip Size="Size.Small" Icon="@Icons.Material.Filled.ThumbUp" Color="Color.Success">@FormatCount(video.LikesCount)</MudChip>
+                                        <MudChip Size="Size.Small" Icon="@Icons.Material.Filled.AccessTime">@GetRelativeTime(video.UploadDate)</MudChip>
+                                    </MudStack>
+                                </MudItem>
+                            </MudGrid>
+                        </MudListItem>
+                        <MudDivider />
+                    }
+                </MudList>
+            </MudPaper>
+        }
+
+        @* Pagination *@
+        <MudPaper Class="pa-4 mt-4" Elevation="1">
+            <MudPagination Count="@TotalPages"
+                           Selected="@_currentPage"
+                           SelectedChanged="OnPageChanged"
+                           Color="Color.Primary"
+                           BoundaryCount="1"
+                           MiddleCount="3" />
+        </MudPaper>
+    }
+</MudContainer>
+
+<style>
+    .cursor-pointer {
+        cursor: pointer;
+    }
+
+    .hover-card {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+
+    .hover-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    }
+
+    .mud-text-truncate-2 {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
+</style>
+
+@code {
+    private enum ViewMode { Grid, List }
+
+    private bool _isLoading = true;
+    private ViewMode _viewMode = ViewMode.Grid;
+    private string _searchTerm = string.Empty;
+    private string _selectedCategory = string.Empty;
+    private string _sortBy = "recent";
+    private int _currentPage = 1;
+    private const int PageSize = 12;
+
+    private List<VideoDto> FilteredVideos
+    {
+        get
+        {
+            var videos = VideoStore.Videos.ToList();
+
+            // Apply search filter
+            if (!string.IsNullOrWhiteSpace(_searchTerm))
+            {
+                videos = videos.Where(v =>
+                    v.Title.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                    v.Description.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                    v.Tags.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase)
+                ).ToList();
+            }
+
+            // Apply category filter
+            if (!string.IsNullOrWhiteSpace(_selectedCategory))
+            {
+                videos = videos.Where(v => v.Category.Equals(_selectedCategory, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            // Apply sorting
+            videos = _sortBy switch
+            {
+                "popular" => videos.OrderByDescending(v => v.LikesCount).ToList(),
+                "views" => videos.OrderByDescending(v => v.ViewsCount).ToList(),
+                "title" => videos.OrderBy(v => v.Title).ToList(),
+                _ => videos.OrderByDescending(v => v.UploadDate).ToList() // "recent"
+            };
+
+            return videos;
+        }
+    }
+
+    private List<VideoDto> PaginatedVideos
+    {
+        get
+        {
+            return FilteredVideos
+                .Skip((_currentPage - 1) * PageSize)
+                .Take(PageSize)
+                .ToList();
+        }
+    }
+
+    private int TotalPages => (int)Math.Ceiling((double)FilteredVideos.Count / PageSize);
+
+    protected override async Task OnInitializedAsync()
+    {
+        VideoStore.OnChange += OnVideoStoreChanged;
+
+        // Parse query parameters
+        var uri = new Uri(NavigationManager.Uri);
+        var queryParams = System.Web.HttpUtility.ParseQueryString(uri.Query);
+        var category = queryParams["category"];
+        if (!string.IsNullOrEmpty(category))
+        {
+            _selectedCategory = category;
+        }
+
+        // Load videos
+        await LoadVideosAsync();
+    }
+
+    private async Task LoadVideosAsync()
+    {
+        _isLoading = true;
+        try
+        {
+            await VideoStore.LoadVideosAsync(forceRefresh: false);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error loading videos");
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+
+    private void OnVideoStoreChanged()
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void OnSearchKeyUp(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            _currentPage = 1; // Reset to first page on search
+            StateHasChanged();
+        }
+    }
+
+    private void OnPageChanged(int newPage)
+    {
+        _currentPage = newPage;
+        StateHasChanged();
+    }
+
+    private void NavigateToVideo(Guid videoId)
+    {
+        NavigationManager.NavigateTo($"/video/{videoId}");
+    }
+
+    private string GetThumbnailUrl(VideoDto video)
+    {
+        // Use video thumbnail URL or fallback to a placeholder
+        return !string.IsNullOrEmpty(video.ThumbnailUrl)
+            ? video.ThumbnailUrl
+            : $"https://via.placeholder.com/320x180/4A90E2/FFFFFF?text={Uri.EscapeDataString(video.Title)}";
+    }
+
+    private string FormatCount(int count)
+    {
+        if (count >= 1_000_000)
+            return $"{count / 1_000_000.0:F1}M";
+        if (count >= 1_000)
+            return $"{count / 1_000.0:F1}K";
+        return count.ToString();
+    }
+
+    private string GetRelativeTime(DateTime dateTime)
+    {
+        var timeSpan = DateTime.UtcNow - dateTime;
+
+        if (timeSpan.TotalDays >= 365)
+            return $"{(int)(timeSpan.TotalDays / 365)} year{((int)(timeSpan.TotalDays / 365) > 1 ? "s" : "")} ago";
+        if (timeSpan.TotalDays >= 30)
+            return $"{(int)(timeSpan.TotalDays / 30)} month{((int)(timeSpan.TotalDays / 30) > 1 ? "s" : "")} ago";
+        if (timeSpan.TotalDays >= 1)
+            return $"{(int)timeSpan.TotalDays} day{((int)timeSpan.TotalDays > 1 ? "s" : "")} ago";
+        if (timeSpan.TotalHours >= 1)
+            return $"{(int)timeSpan.TotalHours} hour{((int)timeSpan.TotalHours > 1 ? "s" : "")} ago";
+        if (timeSpan.TotalMinutes >= 1)
+            return $"{(int)timeSpan.TotalMinutes} minute{((int)timeSpan.TotalMinutes > 1 ? "s" : "")} ago";
+        return "just now";
+    }
+
+    public void Dispose()
+    {
+        VideoStore.OnChange -= OnVideoStoreChanged;
+    }
+}

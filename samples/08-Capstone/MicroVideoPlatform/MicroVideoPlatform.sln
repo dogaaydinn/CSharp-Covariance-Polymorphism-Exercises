@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroVideoPlatform.Shared", "MicroVideoPlatform.Shared\MicroVideoPlatform.Shared.csproj", "{4E58CDA1-0358-4206-A79D-C75C80C6355F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroVideoPlatform.Content.API", "MicroVideoPlatform.Content.API\MicroVideoPlatform.Content.API.csproj", "{C2578862-87C4-4669-939E-32F9B60BB7B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroVideoPlatform.Processing.Worker", "MicroVideoPlatform.Processing.Worker\MicroVideoPlatform.Processing.Worker.csproj", "{7ACA81A1-1D6D-41CC-B67D-DFD2B7921907}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroVideoPlatform.Web.UI", "MicroVideoPlatform.Web.UI\MicroVideoPlatform.Web.UI.csproj", "{76BC258F-088F-4894-B65E-A6C3FFDDE0B6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroVideoPlatform.ApiGateway", "MicroVideoPlatform.ApiGateway\MicroVideoPlatform.ApiGateway.csproj", "{5D9D5D20-3D6E-46F2-A7DA-C40D3AB6B8A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroVideoPlatform.Analytics.Function", "MicroVideoPlatform.Analytics.Function\MicroVideoPlatform.Analytics.Function.csproj", "{C2B48752-05AB-4152-93F4-F18877E46997}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4E58CDA1-0358-4206-A79D-C75C80C6355F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E58CDA1-0358-4206-A79D-C75C80C6355F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E58CDA1-0358-4206-A79D-C75C80C6355F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E58CDA1-0358-4206-A79D-C75C80C6355F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2578862-87C4-4669-939E-32F9B60BB7B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2578862-87C4-4669-939E-32F9B60BB7B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2578862-87C4-4669-939E-32F9B60BB7B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2578862-87C4-4669-939E-32F9B60BB7B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7ACA81A1-1D6D-41CC-B67D-DFD2B7921907}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7ACA81A1-1D6D-41CC-B67D-DFD2B7921907}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7ACA81A1-1D6D-41CC-B67D-DFD2B7921907}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7ACA81A1-1D6D-41CC-B67D-DFD2B7921907}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76BC258F-088F-4894-B65E-A6C3FFDDE0B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76BC258F-088F-4894-B65E-A6C3FFDDE0B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76BC258F-088F-4894-B65E-A6C3FFDDE0B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76BC258F-088F-4894-B65E-A6C3FFDDE0B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D9D5D20-3D6E-46F2-A7DA-C40D3AB6B8A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D9D5D20-3D6E-46F2-A7DA-C40D3AB6B8A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D9D5D20-3D6E-46F2-A7DA-C40D3AB6B8A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D9D5D20-3D6E-46F2-A7DA-C40D3AB6B8A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2B48752-05AB-4152-93F4-F18877E46997}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2B48752-05AB-4152-93F4-F18877E46997}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2B48752-05AB-4152-93F4-F18877E46997}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2B48752-05AB-4152-93F4-F18877E46997}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

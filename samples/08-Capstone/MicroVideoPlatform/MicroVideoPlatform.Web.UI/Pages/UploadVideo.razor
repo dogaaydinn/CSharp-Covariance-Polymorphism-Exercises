@@ -1,0 +1,360 @@
+@page "/upload"
+@inject VideoStore VideoStore
+@inject VideoHubClient HubClient
+@inject AppState AppState
+@inject NavigationManager NavigationManager
+@inject ILogger<UploadVideo> Logger
+@inject ISnackbar Snackbar
+
+<PageTitle>Upload Video - MicroVideo Platform</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Large">
+    <MudText Typo="Typo.h3" Class="mb-4">Upload Video</MudText>
+
+    @if (!AppState.IsAuthenticated)
+    {
+        <MudAlert Severity="Severity.Warning" Class="mb-4">
+            You must be logged in to upload videos. <MudLink Href="#">Click here to login</MudLink>.
+        </MudAlert>
+    }
+    else
+    {
+        <MudPaper Class="pa-6" Elevation="3">
+            <MudStepper @ref="_stepper" Color="Color.Primary" Variant="Variant.Filled">
+                @* Step 1: File Upload *@
+                <MudStep Title="Upload File" Icon="@Icons.Material.Filled.Upload">
+                    <ChildContent>
+                        <MudText Class="mb-4">Select or drag and drop a video file to upload.</MudText>
+
+                        @if (_uploadedFile == null)
+                        {
+                            <MudFileUpload T="IBrowserFile"
+                                           Accept=".mp4,.avi,.mov,.wmv,.flv,.mkv"
+                                           FilesChanged="HandleFileSelected"
+                                           MaximumFileCount="1">
+                                <ButtonTemplate>
+                                    <MudPaper Height="200px"
+                                              Outlined="true"
+                                              Class="d-flex flex-column justify-center align-center cursor-pointer pa-4"
+                                              Style="border: 2px dashed var(--mud-palette-primary); border-radius: 8px;">
+                                        <MudIcon Icon="@Icons.Material.Filled.CloudUpload" Size="Size.Large" Color="Color.Primary" />
+                                        <MudText Typo="Typo.h6" Class="mt-2">Drag & Drop Video Here</MudText>
+                                        <MudText Typo="Typo.body2" Color="Color.Secondary">or click to browse</MudText>
+                                        <MudText Typo="Typo.caption" Color="Color.Secondary" Class="mt-2">
+                                            Supported formats: MP4, AVI, MOV, WMV, FLV, MKV
+                                        </MudText>
+                                        <MudText Typo="Typo.caption" Color="Color.Secondary">
+                                            Maximum file size: 500 MB
+                                        </MudText>
+                                    </MudPaper>
+                                </ButtonTemplate>
+                            </MudFileUpload>
+                        }
+                        else
+                        {
+                            <MudPaper Class="pa-4" Elevation="2">
+                                <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+                                    <MudStack Row="true" Spacing="2">
+                                        <MudIcon Icon="@Icons.Material.Filled.VideoFile" Color="Color.Primary" Size="Size.Large" />
+                                        <div>
+                                            <MudText Typo="Typo.body1" Class="font-weight-bold">@_uploadedFile.Name</MudText>
+                                            <MudText Typo="Typo.caption" Color="Color.Secondary">@FormatFileSize(_uploadedFile.Size)</MudText>
+                                        </div>
+                                    </MudStack>
+                                    <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                                   Color="Color.Error"
+                                                   OnClick="HandleRemoveFile" />
+                                </MudStack>
+
+                                @if (_uploadProgress > 0 && _uploadProgress < 100)
+                                {
+                                    <MudProgressLinear Value="@_uploadProgress" Color="Color.Primary" Class="mt-3" />
+                                    <MudText Typo="Typo.caption" Class="mt-1">Uploading: @_uploadProgress%</MudText>
+                                }
+                                else if (_uploadProgress == 100)
+                                {
+                                    <MudAlert Severity="Severity.Success" Class="mt-3">File uploaded successfully!</MudAlert>
+                                }
+                            </MudPaper>
+                        }
+                    </ChildContent>
+                    <ActionContent>
+                        <MudButton Variant="Variant.Filled"
+                                   Color="Color.Primary"
+                                   OnClick="@(() => _stepper.NextAsync())"
+                                   Disabled="@(_uploadedFile == null)">
+                            Next
+                        </MudButton>
+                    </ActionContent>
+                </MudStep>
+
+                @* Step 2: Video Details *@
+                <MudStep Title="Video Details" Icon="@Icons.Material.Filled.Description">
+                    <ChildContent>
+                        <MudForm @ref="_form" @bind-IsValid="@_formValid">
+                            <MudTextField @bind-Value="_videoTitle"
+                                          Label="Title"
+                                          Variant="Variant.Outlined"
+                                          Required="true"
+                                          RequiredError="Title is required"
+                                          Counter="100"
+                                          MaxLength="100"
+                                          Class="mb-4" />
+
+                            <MudTextField @bind-Value="_videoDescription"
+                                          Label="Description"
+                                          Variant="Variant.Outlined"
+                                          Lines="5"
+                                          Counter="500"
+                                          MaxLength="500"
+                                          Class="mb-4" />
+
+                            <MudSelect @bind-Value="_videoCategory"
+                                       Label="Category"
+                                       Variant="Variant.Outlined"
+                                       Required="true"
+                                       RequiredError="Category is required"
+                                       T="string"
+                                       Class="mb-4">
+                                <MudSelectItem T="string" Value="@("Education")">Education</MudSelectItem>
+                                <MudSelectItem T="string" Value="@("Entertainment")">Entertainment</MudSelectItem>
+                                <MudSelectItem T="string" Value="@("Technology")">Technology</MudSelectItem>
+                                <MudSelectItem T="string" Value="@("Music")">Music</MudSelectItem>
+                                <MudSelectItem T="string" Value="@("Gaming")">Gaming</MudSelectItem>
+                                <MudSelectItem T="string" Value="@("Sports")">Sports</MudSelectItem>
+                            </MudSelect>
+
+                            <MudTextField @bind-Value="_videoTags"
+                                          Label="Tags"
+                                          Variant="Variant.Outlined"
+                                          HelperText="Separate tags with commas (e.g., tutorial, programming, csharp)"
+                                          Counter="200"
+                                          MaxLength="200"
+                                          Class="mb-4" />
+
+                            <MudSwitch @bind-Checked="_isPublic"
+                                       Label="Make this video public"
+                                       Color="Color.Primary"
+                                       Class="mb-4" />
+                        </MudForm>
+                    </ChildContent>
+                    <ActionContent>
+                        <MudButton Variant="Variant.Text" OnClick="@(() => _stepper.PreviousAsync())">
+                            Back
+                        </MudButton>
+                        <MudButton Variant="Variant.Filled"
+                                   Color="Color.Primary"
+                                   OnClick="@(() => _stepper.NextAsync())"
+                                   Disabled="@(!_formValid)">
+                            Next
+                        </MudButton>
+                    </ActionContent>
+                </MudStep>
+
+                @* Step 3: Preview & Submit *@
+                <MudStep Title="Preview & Submit" Icon="@Icons.Material.Filled.Preview">
+                    <ChildContent>
+                        <MudText Typo="Typo.h6" Class="mb-3">Review Your Video</MudText>
+
+                        <MudPaper Class="pa-4 mb-4" Elevation="2">
+                            <MudGrid>
+                                <MudItem xs="12" md="6">
+                                    <MudStack Spacing="2">
+                                        <div>
+                                            <MudText Typo="Typo.caption" Color="Color.Secondary">Title</MudText>
+                                            <MudText Typo="Typo.body1" Class="font-weight-bold">@_videoTitle</MudText>
+                                        </div>
+                                        <div>
+                                            <MudText Typo="Typo.caption" Color="Color.Secondary">Category</MudText>
+                                            <MudChip Size="Size.Small">@_videoCategory</MudChip>
+                                        </div>
+                                        <div>
+                                            <MudText Typo="Typo.caption" Color="Color.Secondary">Visibility</MudText>
+                                            <MudChip Size="Size.Small" Color="@(_isPublic ? Color.Success : Color.Warning)">
+                                                @(_isPublic ? "Public" : "Private")
+                                            </MudChip>
+                                        </div>
+                                    </MudStack>
+                                </MudItem>
+                                <MudItem xs="12" md="6">
+                                    <MudStack Spacing="2">
+                                        <div>
+                                            <MudText Typo="Typo.caption" Color="Color.Secondary">File Name</MudText>
+                                            <MudText Typo="Typo.body2">@_uploadedFile?.Name</MudText>
+                                        </div>
+                                        <div>
+                                            <MudText Typo="Typo.caption" Color="Color.Secondary">File Size</MudText>
+                                            <MudText Typo="Typo.body2">@FormatFileSize(_uploadedFile?.Size ?? 0)</MudText>
+                                        </div>
+                                    </MudStack>
+                                </MudItem>
+                                <MudItem xs="12">
+                                    <MudDivider Class="my-2" />
+                                    <MudText Typo="Typo.caption" Color="Color.Secondary">Description</MudText>
+                                    <MudText Typo="Typo.body2">@_videoDescription</MudText>
+                                </MudItem>
+                                @if (!string.IsNullOrWhiteSpace(_videoTags))
+                                {
+                                    <MudItem xs="12">
+                                        <MudDivider Class="my-2" />
+                                        <MudText Typo="Typo.caption" Color="Color.Secondary" Class="mb-2">Tags</MudText>
+                                        <MudStack Row="true" Spacing="1">
+                                            @foreach (var tag in _videoTags.Split(',', StringSplitOptions.RemoveEmptyEntries))
+                                            {
+                                                <MudChip Size="Size.Small" Color="Color.Secondary">@tag.Trim()</MudChip>
+                                            }
+                                        </MudStack>
+                                    </MudItem>
+                                }
+                            </MudGrid>
+                        </MudPaper>
+
+                        @if (_isSubmitting)
+                        {
+                            <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="mb-2" />
+                            <MudText Typo="Typo.body2" Align="Align.Center">Submitting your video...</MudText>
+                        }
+                    </ChildContent>
+                    <ActionContent>
+                        <MudButton Variant="Variant.Text" OnClick="@(() => _stepper.PreviousAsync())" Disabled="@_isSubmitting">
+                            Back
+                        </MudButton>
+                        <MudButton Variant="Variant.Filled"
+                                   Color="Color.Success"
+                                   OnClick="HandleSubmit"
+                                   Disabled="@_isSubmitting">
+                            @(_isSubmitting ? "Submitting..." : "Publish Video")
+                        </MudButton>
+                    </ActionContent>
+                </MudStep>
+            </MudStepper>
+        </MudPaper>
+    }
+</MudContainer>
+
+<style>
+    .cursor-pointer {
+        cursor: pointer;
+    }
+</style>
+
+@code {
+    private MudStepper? _stepper;
+    private MudForm? _form;
+    private bool _formValid;
+
+    private IBrowserFile? _uploadedFile;
+    private double _uploadProgress = 0;
+    private bool _isSubmitting = false;
+
+    // Form fields
+    private string _videoTitle = string.Empty;
+    private string _videoDescription = string.Empty;
+    private string _videoCategory = string.Empty;
+    private string _videoTags = string.Empty;
+    private bool _isPublic = true;
+
+    private void HandleFileSelected(IBrowserFile? file)
+    {
+        if (file == null) return;
+
+        // Validate file size (500 MB limit)
+        const long maxFileSize = 500 * 1024 * 1024;
+        if (file.Size > maxFileSize)
+        {
+            Snackbar.Add($"File size exceeds 500 MB limit. Selected file is {FormatFileSize(file.Size)}.", Severity.Error);
+            return;
+        }
+
+        _uploadedFile = file;
+        SimulateUpload();
+    }
+
+    private void HandleRemoveFile()
+    {
+        _uploadedFile = null;
+        _uploadProgress = 0;
+    }
+
+    private async void SimulateUpload()
+    {
+        // Simulate file upload progress
+        _uploadProgress = 0;
+        while (_uploadProgress < 100)
+        {
+            await Task.Delay(100);
+            _uploadProgress += 5;
+            StateHasChanged();
+        }
+    }
+
+    private async Task HandleSubmit()
+    {
+        if (_uploadedFile == null || !AppState.IsAuthenticated)
+            return;
+
+        _isSubmitting = true;
+
+        try
+        {
+            // Create video DTO
+            var videoDto = new MicroVideoPlatform.Shared.DTOs.VideoDto
+            {
+                Id = Guid.NewGuid(),
+                Title = _videoTitle,
+                Description = _videoDescription,
+                Category = _videoCategory,
+                Tags = _videoTags,
+                UploadDate = DateTime.UtcNow,
+                Status = MicroVideoPlatform.Shared.Enums.VideoStatus.Processing,
+                VideoUrl = $"/videos/{_uploadedFile.Name}", // Placeholder
+                ThumbnailUrl = string.Empty,
+                ViewsCount = 0,
+                LikesCount = 0,
+                DislikesCount = 0,
+                CommentsCount = 0
+            };
+
+            // Create video via API
+            var createdVideo = await VideoStore.CreateVideoAsync(videoDto);
+
+            // Notify all users via SignalR
+            await HubClient.NotifyNewVideoUpload(
+                createdVideo.Id.ToString(),
+                createdVideo.Title,
+                AppState.CurrentUserId ?? "Anonymous",
+                createdVideo.Category
+            );
+
+            Snackbar.Add("Video uploaded successfully!", Severity.Success);
+
+            // Navigate to video detail page
+            await Task.Delay(1000); // Brief delay to show success message
+            NavigationManager.NavigateTo($"/video/{createdVideo.Id}");
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error uploading video");
+            Snackbar.Add("Failed to upload video. Please try again.", Severity.Error);
+        }
+        finally
+        {
+            _isSubmitting = false;
+        }
+    }
+
+    private string FormatFileSize(long bytes)
+    {
+        string[] sizes = { "B", "KB", "MB", "GB", "TB" };
+        double len = bytes;
+        int order = 0;
+
+        while (len >= 1024 && order < sizes.Length - 1)
+        {
+            order++;
+            len = len / 1024;
+        }
+
+        return $"{len:0.##} {sizes[order]}";
+    }
+}

@@ -1,0 +1,355 @@
+using ResiliencePatterns.Examples;
+
+namespace ResiliencePatterns;
+
+/// <summary>
+/// Comprehensive demonstration of Polly resilience patterns for production systems.
+///
+/// This sample demonstrates:
+/// - Retry patterns with exponential backoff
+/// - Circuit breaker for cascading failure prevention
+/// - Timeout patterns to prevent hanging operations
+/// - Fallback patterns for graceful degradation
+/// - Combined patterns for defense in depth
+///
+/// Each pattern includes:
+/// - Problem scenario
+/// - Implementation with Polly 8.x
+/// - Configuration options
+/// - Real-world use cases
+/// - Best practices and anti-patterns
+/// </summary>
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        Console.WriteLine("╔════════════════════════════════════════════════════════════════════╗");
+        Console.WriteLine("║         RESILIENCE PATTERNS WITH POLLY - COMPREHENSIVE DEMO       ║");
+        Console.WriteLine("╚════════════════════════════════════════════════════════════════════╝");
+        Console.WriteLine();
+        Console.WriteLine("Production-ready resilience patterns for distributed systems");
+        Console.WriteLine();
+
+        if (args.Length > 0 && args[0] == "--help")
+        {
+            ShowHelp();
+            return;
+        }
+
+        try
+        {
+            // Allow running specific pattern or all
+            var patternToRun = args.Length > 0 ? args[0].ToLower() : "all";
+
+            switch (patternToRun)
+            {
+                case "retry":
+                    await RunRetryPatterns();
+                    break;
+                case "circuit-breaker":
+                    await RunCircuitBreakerPatterns();
+                    break;
+                case "timeout":
+                    await RunTimeoutPatterns();
+                    break;
+                case "fallback":
+                    await RunFallbackPatterns();
+                    break;
+                case "combined":
+                    await RunCombinedPatterns();
+                    break;
+                case "all":
+                default:
+                    await RunAllPatterns();
+                    break;
+            }
+
+            Console.WriteLine("\n\n╔════════════════════════════════════════════════════════════════════╗");
+            Console.WriteLine("║                         DEMO COMPLETED                             ║");
+            Console.WriteLine("╚════════════════════════════════════════════════════════════════════╝");
+            Console.WriteLine();
+            Console.WriteLine("Key Takeaways:");
+            Console.WriteLine("  1. Always use timeouts to prevent hanging operations");
+            Console.WriteLine("  2. Retry only transient failures with exponential backoff");
+            Console.WriteLine("  3. Circuit breakers prevent cascading failures");
+            Console.WriteLine("  4. Fallbacks provide graceful degradation");
+            Console.WriteLine("  5. Combine patterns for defense in depth");
+            Console.WriteLine();
+            Console.WriteLine("Production Checklist:");
+            Console.WriteLine("  - Configure appropriate timeouts for all I/O operations");
+            Console.WriteLine("  - Tune circuit breaker thresholds from load testing");
+            Console.WriteLine("  - Provide fallback behavior for critical paths");
+            Console.WriteLine("  - Monitor resilience metrics (retry rate, circuit state)");
+            Console.WriteLine("  - Test failure scenarios with chaos engineering");
+            Console.WriteLine();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"\n[ERROR] Unexpected error: {ex.Message}");
+            Console.WriteLine($"Stack trace: {ex.StackTrace}");
+            Environment.Exit(1);
+        }
+    }
+
+    static async Task RunAllPatterns()
+    {
+        await RunRetryPatterns();
+        await RunCircuitBreakerPatterns();
+        await RunTimeoutPatterns();
+        await RunFallbackPatterns();
+        await RunCombinedPatterns();
+    }
+
+    static async Task RunRetryPatterns()
+    {
+        Console.WriteLine("\n╔════════════════════════════════════════════════════════════════════╗");
+        Console.WriteLine("║                          RETRY PATTERNS                            ║");
+        Console.WriteLine("╚════════════════════════════════════════════════════════════════════╝");
+        Console.WriteLine();
+        Console.WriteLine("Purpose: Automatically retry transient failures with backoff");
+        Console.WriteLine("Use Cases: Network calls, database operations, API integrations");
+        Console.WriteLine();
+
+        try
+        {
+            // Basic retry with exponential backoff
+            await RetryPattern.BasicRetryExample();
+            await Task.Delay(1000);
+
+            // Selective retry - only specific exceptions
+            await RetryPattern.SelectiveRetryExample();
+            await Task.Delay(1000);
+
+            // Result-based retry - HTTP status codes
+            await RetryPattern.ResultBasedRetryExample();
+            await Task.Delay(1000);
+
+            // Custom delay strategy - Retry-After header
+            await RetryPattern.CustomDelayRetryExample();
+            await Task.Delay(1000);
+
+            // Real-world: Database retry
+            await RetryPattern.DatabaseRetryExample();
+            await Task.Delay(1000);
+
+            // Configuration guidance
+            RetryPattern.ShowConfigurationGuidance();
+
+            // Common mistakes
+            RetryPattern.ShowCommonMistakes();
+
+            Console.WriteLine("\n[RETRY PATTERNS COMPLETED]");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"\n[ERROR in Retry Patterns] {ex.Message}");
+        }
+    }
+
+    static async Task RunCircuitBreakerPatterns()
+    {
+        Console.WriteLine("\n\n╔════════════════════════════════════════════════════════════════════╗");
+        Console.WriteLine("║                      CIRCUIT BREAKER PATTERNS                      ║");
+        Console.WriteLine("╚════════════════════════════════════════════════════════════════════╝");
+        Console.WriteLine();
+        Console.WriteLine("Purpose: Prevent cascading failures by failing fast when service is down");
+        Console.WriteLine("Use Cases: External service calls, database queries, microservices");
+        Console.WriteLine();
+
+        try
+        {
+            // Basic circuit breaker
+            await CircuitBreakerPattern.BasicCircuitBreakerExample();
+            await Task.Delay(2000);
+
+            // Advanced with state monitoring
+            await CircuitBreakerPattern.AdvancedCircuitBreakerExample();
+            await Task.Delay(2000);
+
+            // Manual circuit control
+            await CircuitBreakerPattern.ManualCircuitBreakerExample();
+            await Task.Delay(1000);
+
+            // Real-world: Microservice dependency
+            await CircuitBreakerPattern.MicroserviceCircuitBreakerExample();
+            await Task.Delay(1000);
+
+            // State machine explanation
+            CircuitBreakerPattern.ShowStateTransitions();
+
+            // Configuration guidance
+            CircuitBreakerPattern.ShowConfigurationGuidance();
+
+            Console.WriteLine("\n[CIRCUIT BREAKER PATTERNS COMPLETED]");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"\n[ERROR in Circuit Breaker Patterns] {ex.Message}");
+        }
+    }
+
+    static async Task RunTimeoutPatterns()
+    {
+        Console.WriteLine("\n\n╔════════════════════════════════════════════════════════════════════╗");
+        Console.WriteLine("║                         TIMEOUT PATTERNS                           ║");
+        Console.WriteLine("╚════════════════════════════════════════════════════════════════════╝");
+        Console.WriteLine();
+        Console.WriteLine("Purpose: Prevent operations from hanging indefinitely");
+        Console.WriteLine("Use Cases: HTTP requests, database queries, file operations");
+        Console.WriteLine();
+
+        try
+        {
+            // Basic timeout
+            await TimeoutPattern.BasicTimeoutExample();
+            await Task.Delay(1000);
+
+            // Timeout with cancellation token
+            await TimeoutPattern.CancellationTokenTimeoutExample();
+            await Task.Delay(1000);
+
+            // Dynamic timeout per operation
+            await TimeoutPattern.DynamicTimeoutExample();
+            await Task.Delay(1000);
+
+            // Timeout with retry
+            await TimeoutPattern.TimeoutWithRetryExample();
+            await Task.Delay(1000);
+
+            // Real-world: API client
+            await TimeoutPattern.ApiClientTimeoutExample();
+            await Task.Delay(1000);
+
+            // Custom timeout handling
+            await TimeoutPattern.CustomTimeoutHandlingExample();
+            await Task.Delay(1000);
+
+            // Configuration guidance
+            TimeoutPattern.ShowConfigurationGuidance();
+
+            // Common mistakes
+            TimeoutPattern.ShowCommonMistakes();
+
+            Console.WriteLine("\n[TIMEOUT PATTERNS COMPLETED]");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"\n[ERROR in Timeout Patterns] {ex.Message}");
+        }
+    }
+
+    static async Task RunFallbackPatterns()
+    {
+        Console.WriteLine("\n\n╔════════════════════════════════════════════════════════════════════╗");
+        Console.WriteLine("║                        FALLBACK PATTERNS                           ║");
+        Console.WriteLine("╚════════════════════════════════════════════════════════════════════╝");
+        Console.WriteLine();
+        Console.WriteLine("Purpose: Provide graceful degradation when primary operation fails");
+        Console.WriteLine("Use Cases: Cache fallback, backup services, default values");
+        Console.WriteLine();
+
+        try
+        {
+            // Basic fallback
+            await FallbackPattern.BasicFallbackExample();
+            await Task.Delay(1000);
+
+            // Multi-layer fallback
+            await FallbackPattern.MultiLayerFallbackExample();
+            await Task.Delay(1000);
+
+            // Degraded functionality
+            await FallbackPattern.DegradedFunctionalityFallbackExample();
+            await Task.Delay(1000);
+
+            // Real-world: E-commerce pricing
+            await FallbackPattern.EcommercePricingFallbackExample();
+            await Task.Delay(1000);
+
+            // Async fallback
+            await FallbackPattern.AsyncFallbackExample();
+            await Task.Delay(1000);
+
+            // Configuration guidance
+            FallbackPattern.ShowConfigurationGuidance();
+
+            // Anti-patterns
+            FallbackPattern.ShowAntiPatterns();
+
+            Console.WriteLine("\n[FALLBACK PATTERNS COMPLETED]");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"\n[ERROR in Fallback Patterns] {ex.Message}");
+        }
+    }
+
+    static async Task RunCombinedPatterns()
+    {
+        Console.WriteLine("\n\n╔════════════════════════════════════════════════════════════════════╗");
+        Console.WriteLine("║                        COMBINED PATTERNS                           ║");
+        Console.WriteLine("╚════════════════════════════════════════════════════════════════════╝");
+        Console.WriteLine();
+        Console.WriteLine("Purpose: Layer multiple patterns for defense in depth");
+        Console.WriteLine("Use Cases: Production APIs, critical services, microservices");
+        Console.WriteLine();
+
+        try
+        {
+            // Timeout + Retry + Circuit Breaker
+            await CombinedPatterns.TimeoutRetryCircuitBreakerExample();
+            await Task.Delay(2000);
+
+            // Full resilience stack
+            await CombinedPatterns.FullResilienceStackExample();
+            await Task.Delay(2000);
+
+            // Hedging pattern
+            await CombinedPatterns.HedgingPatternExample();
+            await Task.Delay(1000);
+
+            // Real-world: Microservice API client
+            await CombinedPatterns.MicroserviceApiClientExample();
+            await Task.Delay(1000);
+
+            // Bulkhead isolation
+            await CombinedPatterns.BulkheadIsolationExample();
+            await Task.Delay(1000);
+
+            // Best practices
+            CombinedPatterns.ShowCombinationBestPractices();
+
+            // Production checklist
+            CombinedPatterns.ShowProductionChecklist();
+
+            Console.WriteLine("\n[COMBINED PATTERNS COMPLETED]");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"\n[ERROR in Combined Patterns] {ex.Message}");
+        }
+    }
+
+    static void ShowHelp()
+    {
+        Console.WriteLine("USAGE:");
+        Console.WriteLine("  dotnet run [pattern]");
+        Console.WriteLine();
+        Console.WriteLine("PATTERNS:");
+        Console.WriteLine("  retry           - Retry patterns with exponential backoff");
+        Console.WriteLine("  circuit-breaker - Circuit breaker for cascading failure prevention");
+        Console.WriteLine("  timeout         - Timeout patterns to prevent hanging");
+        Console.WriteLine("  fallback        - Fallback patterns for graceful degradation");
+        Console.WriteLine("  combined        - Combined patterns for defense in depth");
+        Console.WriteLine("  all             - Run all patterns (default)");
+        Console.WriteLine();
+        Console.WriteLine("EXAMPLES:");
+        Console.WriteLine("  dotnet run                  # Run all patterns");
+        Console.WriteLine("  dotnet run retry            # Run only retry patterns");
+        Console.WriteLine("  dotnet run circuit-breaker  # Run only circuit breaker patterns");
+        Console.WriteLine();
+        Console.WriteLine("OPTIONS:");
+        Console.WriteLine("  --help          - Show this help message");
+        Console.WriteLine();
+    }
+}

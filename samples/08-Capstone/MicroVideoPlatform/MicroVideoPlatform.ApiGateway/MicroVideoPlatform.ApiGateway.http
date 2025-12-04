@@ -1,0 +1,6 @@
+@MicroVideoPlatform.ApiGateway_HostAddress = http://localhost:5250
+
+GET {{MicroVideoPlatform.ApiGateway_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

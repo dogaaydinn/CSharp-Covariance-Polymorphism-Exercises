@@ -1,0 +1,552 @@
+@page "/video/{VideoId:guid}"
+@inject VideoStore VideoStore
+@inject VideoHubClient HubClient
+@inject IAnalyticsApiClient AnalyticsClient
+@inject AppState AppState
+@inject NavigationManager NavigationManager
+@inject ILogger<VideoDetail> Logger
+@inject ISnackbar Snackbar
+@implements IDisposable
+
+<PageTitle>@(_video?.Title ?? "Video") - MicroVideo Platform</PageTitle>
+
+@if (_isLoading)
+{
+    <MudContainer MaxWidth="MaxWidth.Large" Class="d-flex justify-center align-center" Style="min-height: 400px;">
+        <MudProgressCircular Color="Color.Primary" Size="Size.Large" Indeterminate="true" />
+    </MudContainer>
+}
+else if (_video == null)
+{
+    <MudContainer MaxWidth="MaxWidth.Large">
+        <MudAlert Severity="Severity.Error">Video not found.</MudAlert>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" Href="/videos" Class="mt-4">
+            Back to Videos
+        </MudButton>
+    </MudContainer>
+}
+else
+{
+    <MudContainer MaxWidth="MaxWidth.ExtraExtraLarge">
+        <MudGrid>
+            @* Left Column: Video Player and Info *@
+            <MudItem xs="12" md="8">
+                @* Video Player *@
+                <MudPaper Elevation="3" Class="mb-4">
+                    <video controls style="width: 100%; max-height: 600px; background-color: black;">
+                        <source src="@_video.VideoUrl" type="video/mp4" />
+                        Your browser does not support the video tag.
+                    </video>
+                </MudPaper>
+
+                @* Video Info *@
+                <MudPaper Class="pa-4 mb-4" Elevation="2">
+                    <MudText Typo="Typo.h4" Class="mb-2">@_video.Title</MudText>
+
+                    <MudStack Row="true" Justify="Justify.SpaceBetween" Class="mb-3">
+                        <MudStack Row="true" Spacing="2">
+                            <MudChip Icon="@Icons.Material.Filled.Visibility" Color="Color.Info">
+                                @FormatCount(_video.ViewsCount) views
+                            </MudChip>
+                            <MudChip Icon="@Icons.Material.Filled.AccessTime">
+                                @GetRelativeTime(_video.UploadDate)
+                            </MudChip>
+                            <MudChip Icon="@Icons.Material.Filled.Category">
+                                @_video.Category
+                            </MudChip>
+                        </MudStack>
+
+                        <MudStack Row="true" Spacing="1">
+                            @* Like Button *@
+                            <MudTooltip Text="Like">
+                                <MudIconButton Icon="@Icons.Material.Filled.ThumbUp"
+                                               Color="@(_userLiked ? Color.Success : Color.Default)"
+                                               OnClick="HandleLike" />
+                            </MudTooltip>
+                            <MudText Typo="Typo.body1">@FormatCount(_video.LikesCount)</MudText>
+
+                            @* Dislike Button *@
+                            <MudTooltip Text="Dislike">
+                                <MudIconButton Icon="@Icons.Material.Filled.ThumbDown"
+                                               Color="@(_userDisliked ? Color.Error : Color.Default)"
+                                               OnClick="HandleDislike"
+                                               Class="ml-2" />
+                            </MudTooltip>
+                            <MudText Typo="Typo.body1">@FormatCount(_video.DislikesCount)</MudText>
+
+                            @* Share Button *@
+                            <MudTooltip Text="Share">
+                                <MudIconButton Icon="@Icons.Material.Filled.Share"
+                                               OnClick="HandleShare"
+                                               Class="ml-2" />
+                            </MudTooltip>
+                        </MudStack>
+                    </MudStack>
+
+                    <MudDivider Class="my-3" />
+
+                    <MudText Typo="Typo.body1" Class="mb-2">@_video.Description</MudText>
+
+                    @if (!string.IsNullOrEmpty(_video.Tags))
+                    {
+                        <MudStack Row="true" Spacing="1" Class="mt-3">
+                            @foreach (var tag in _video.Tags.Split(',', StringSplitOptions.RemoveEmptyEntries))
+                            {
+                                <MudChip Size="Size.Small" Color="Color.Secondary">@tag.Trim()</MudChip>
+                            }
+                        </MudStack>
+                    }
+                </MudPaper>
+
+                @* Comments Section *@
+                <MudPaper Class="pa-4" Elevation="2">
+                    <MudText Typo="Typo.h5" Class="mb-3">
+                        Comments (@_comments.Count)
+                    </MudText>
+
+                    @* Online Viewers *@
+                    @if (_onlineViewersCount > 1)
+                    {
+                        <MudChip Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Success" Size="Size.Small" Class="mb-3">
+                            @_onlineViewersCount people watching
+                        </MudChip>
+                    }
+
+                    @* Add Comment *@
+                    @if (AppState.IsAuthenticated)
+                    {
+                        <MudTextField @bind-Value="_newCommentText"
+                                      Label="Add a comment..."
+                                      Variant="Variant.Outlined"
+                                      Lines="3"
+                                      Class="mb-3" />
+                        <MudButton Variant="Variant.Filled"
+                                   Color="Color.Primary"
+                                   OnClick="HandleAddComment"
+                                   Disabled="string.IsNullOrWhiteSpace(_newCommentText)">
+                            Post Comment
+                        </MudButton>
+                    }
+                    else
+                    {
+                        <MudAlert Severity="Severity.Info" Class="mb-3">
+                            Please <MudLink Href="#" OnClick="@(() => {})">login</MudLink> to comment.
+                        </MudAlert>
+                    }
+
+                    <MudDivider Class="my-4" />
+
+                    @* Comments List *@
+                    @if (!_comments.Any())
+                    {
+                        <MudText Typo="Typo.body2" Color="Color.Secondary">No comments yet. Be the first to comment!</MudText>
+                    }
+                    else
+                    {
+                        <MudList>
+                            @foreach (var comment in _comments.OrderByDescending(c => c.Timestamp))
+                            {
+                                <MudListItem Class="px-0">
+                                    <MudStack>
+                                        <MudStack Row="true" Justify="Justify.SpaceBetween">
+                                            <MudStack Row="true" Spacing="2">
+                                                <MudAvatar Color="Color.Primary" Size="Size.Small">
+                                                    @GetInitials(comment.UserName)
+                                                </MudAvatar>
+                                                <div>
+                                                    <MudText Typo="Typo.body2" Class="font-weight-bold">@comment.UserName</MudText>
+                                                    <MudText Typo="Typo.caption" Color="Color.Secondary">@GetRelativeTime(comment.Timestamp)</MudText>
+                                                </div>
+                                            </MudStack>
+                                            @if (AppState.CurrentUserId == comment.UserId)
+                                            {
+                                                <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                                               Size="Size.Small"
+                                                               Color="Color.Error"
+                                                               OnClick="@(() => HandleDeleteComment(comment.CommentId))" />
+                                            }
+                                        </MudStack>
+                                        <MudText Typo="Typo.body2" Class="ml-10">@comment.Text</MudText>
+                                    </MudStack>
+                                </MudListItem>
+                                <MudDivider />
+                            }
+                        </MudList>
+                    }
+                </MudPaper>
+            </MudItem>
+
+            @* Right Column: Related Videos *@
+            <MudItem xs="12" md="4">
+                <MudPaper Class="pa-4" Elevation="2">
+                    <MudText Typo="Typo.h6" Class="mb-3">Related Videos</MudText>
+
+                    @if (_isLoadingRecommendations)
+                    {
+                        <MudProgressLinear Color="Color.Primary" Indeterminate="true" />
+                    }
+                    else if (!_recommendations.Any())
+                    {
+                        <MudText Typo="Typo.body2" Color="Color.Secondary">No recommendations available.</MudText>
+                    }
+                    else
+                    {
+                        <MudStack Spacing="3">
+                            @foreach (var rec in _recommendations.Take(10))
+                            {
+                                <MudCard Class="cursor-pointer hover-card" @onclick="@(() => NavigateToVideo(rec.VideoId))">
+                                    <MudCardMedia Image="@GetRecommendationThumbnail(rec)" Height="120" />
+                                    <MudCardContent Class="pa-2">
+                                        <MudText Typo="Typo.body2" Class="mud-text-truncate-2">@rec.Title</MudText>
+                                        <MudText Typo="Typo.caption" Color="Color.Secondary">@rec.Category</MudText>
+                                        <MudChip Size="Size.Small" Color="Color.Info">
+                                            Score: @rec.Score.ToString("F2")
+                                        </MudChip>
+                                    </MudCardContent>
+                                </MudCard>
+                            }
+                        </MudStack>
+                    }
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+    </MudContainer>
+}
+
+<style>
+    .cursor-pointer {
+        cursor: pointer;
+    }
+
+    .hover-card {
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .hover-card:hover {
+        transform: translateX(4px);
+    }
+
+    .mud-text-truncate-2 {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
+</style>
+
+@code {
+    [Parameter]
+    public Guid VideoId { get; set; }
+
+    private VideoDto? _video;
+    private bool _isLoading = true;
+    private bool _isLoadingRecommendations = true;
+    private bool _userLiked = false;
+    private bool _userDisliked = false;
+    private int _onlineViewersCount = 0;
+
+    private List<CommentDto> _comments = new();
+    private string _newCommentText = string.Empty;
+
+    private List<VideoRecommendation> _recommendations = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadVideoAsync();
+        await LoadRecommendationsAsync();
+
+        // Subscribe to SignalR events
+        HubClient.CommentReceived += OnCommentReceived;
+        HubClient.CommentDeleted += OnCommentDeleted;
+        HubClient.LikeCountUpdated += OnLikeCountUpdated;
+        HubClient.ViewCountUpdated += OnViewCountUpdated;
+        HubClient.UserJoined += OnUserJoined;
+        HubClient.UserLeft += OnUserLeft;
+        HubClient.OnlineUsersReceived += OnOnlineUsersReceived;
+
+        // Join video room for real-time updates
+        if (AppState.IsAuthenticated && AppState.CurrentUserId != null)
+        {
+            await HubClient.JoinVideoRoomAsync(VideoId.ToString(), AppState.CurrentUserId);
+        }
+    }
+
+    private async Task LoadVideoAsync()
+    {
+        _isLoading = true;
+        try
+        {
+            _video = await VideoStore.GetVideoAsync(VideoId);
+            if (_video != null)
+            {
+                // Increment view count
+                await VideoStore.IncrementViewCountAsync(VideoId);
+
+                // Update view count via SignalR
+                await HubClient.UpdateViewCountAsync(VideoId.ToString(), _video.ViewsCount + 1);
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error loading video {VideoId}", VideoId);
+            Snackbar.Add("Failed to load video", Severity.Error);
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+
+    private async Task LoadRecommendationsAsync()
+    {
+        _isLoadingRecommendations = true;
+        try
+        {
+            _recommendations = await AnalyticsClient.GetRecommendationsAsync(VideoId.ToString(), topN: 10);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error loading recommendations for video {VideoId}", VideoId);
+        }
+        finally
+        {
+            _isLoadingRecommendations = false;
+        }
+    }
+
+    private async Task HandleLike()
+    {
+        if (!AppState.IsAuthenticated)
+        {
+            Snackbar.Add("Please login to like videos", Severity.Info);
+            return;
+        }
+
+        _userLiked = !_userLiked;
+        if (_userLiked && _userDisliked)
+        {
+            _userDisliked = false;
+            _video!.DislikesCount--;
+        }
+
+        if (_userLiked)
+            _video!.LikesCount++;
+        else
+            _video!.LikesCount--;
+
+        // Update via SignalR
+        await HubClient.UpdateLikeCountAsync(VideoId.ToString(), _video.LikesCount, _video.DislikesCount);
+    }
+
+    private async Task HandleDislike()
+    {
+        if (!AppState.IsAuthenticated)
+        {
+            Snackbar.Add("Please login to dislike videos", Severity.Info);
+            return;
+        }
+
+        _userDisliked = !_userDisliked;
+        if (_userDisliked && _userLiked)
+        {
+            _userLiked = false;
+            _video!.LikesCount--;
+        }
+
+        if (_userDisliked)
+            _video!.DislikesCount++;
+        else
+            _video!.DislikesCount--;
+
+        // Update via SignalR
+        await HubClient.UpdateLikeCountAsync(VideoId.ToString(), _video.LikesCount, _video.DislikesCount);
+    }
+
+    private void HandleShare()
+    {
+        // Copy URL to clipboard (requires JS interop in real implementation)
+        Snackbar.Add("Video URL copied to clipboard!", Severity.Success);
+    }
+
+    private async Task HandleAddComment()
+    {
+        if (!AppState.IsAuthenticated || string.IsNullOrWhiteSpace(_newCommentText))
+            return;
+
+        try
+        {
+            await HubClient.SendCommentAsync(
+                VideoId.ToString(),
+                AppState.CurrentUserId!,
+                AppState.CurrentUserId!, // Using userId as userName for demo
+                _newCommentText
+            );
+
+            _newCommentText = string.Empty;
+            Snackbar.Add("Comment posted!", Severity.Success);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error posting comment");
+            Snackbar.Add("Failed to post comment", Severity.Error);
+        }
+    }
+
+    private async Task HandleDeleteComment(string commentId)
+    {
+        try
+        {
+            await HubClient.DeleteCommentAsync(VideoId.ToString(), commentId, AppState.CurrentUserId!);
+            Snackbar.Add("Comment deleted", Severity.Success);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error deleting comment");
+            Snackbar.Add("Failed to delete comment", Severity.Error);
+        }
+    }
+
+    private void OnCommentReceived(CommentReceivedEventArgs args)
+    {
+        if (args.VideoId == VideoId.ToString())
+        {
+            _comments.Add(new CommentDto
+            {
+                CommentId = args.CommentId,
+                UserId = args.UserId,
+                UserName = args.UserName,
+                Text = args.Text,
+                Timestamp = args.Timestamp
+            });
+            InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private void OnCommentDeleted(CommentDeletedEventArgs args)
+    {
+        if (args.VideoId == VideoId.ToString())
+        {
+            _comments.RemoveAll(c => c.CommentId == args.CommentId);
+            InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private void OnLikeCountUpdated(LikeCountUpdatedEventArgs args)
+    {
+        if (args.VideoId == VideoId.ToString() && _video != null)
+        {
+            _video.LikesCount = args.LikesCount;
+            _video.DislikesCount = args.DislikesCount;
+            InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private void OnViewCountUpdated(ViewCountUpdatedEventArgs args)
+    {
+        if (args.VideoId == VideoId.ToString() && _video != null)
+        {
+            _video.ViewsCount = args.ViewCount;
+            InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private void OnUserJoined(UserJoinedEventArgs args)
+    {
+        if (args.VideoId == VideoId.ToString())
+        {
+            _onlineViewersCount = args.OnlineCount;
+            InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private void OnUserLeft(UserLeftEventArgs args)
+    {
+        if (args.VideoId == VideoId.ToString())
+        {
+            _onlineViewersCount = args.OnlineCount;
+            InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private void OnOnlineUsersReceived(OnlineUsersEventArgs args)
+    {
+        if (args.VideoId == VideoId.ToString())
+        {
+            _onlineViewersCount = args.Count;
+            InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private void NavigateToVideo(string videoId)
+    {
+        NavigationManager.NavigateTo($"/video/{videoId}", forceLoad: true);
+    }
+
+    private string GetRecommendationThumbnail(VideoRecommendation rec)
+    {
+        return $"https://via.placeholder.com/240x120/4A90E2/FFFFFF?text={Uri.EscapeDataString(rec.Title)}";
+    }
+
+    private string FormatCount(int count)
+    {
+        if (count >= 1_000_000)
+            return $"{count / 1_000_000.0:F1}M";
+        if (count >= 1_000)
+            return $"{count / 1_000.0:F1}K";
+        return count.ToString();
+    }
+
+    private string GetRelativeTime(DateTime dateTime)
+    {
+        var timeSpan = DateTime.UtcNow - dateTime;
+
+        if (timeSpan.TotalDays >= 365)
+            return $"{(int)(timeSpan.TotalDays / 365)} year{((int)(timeSpan.TotalDays / 365) > 1 ? "s" : "")} ago";
+        if (timeSpan.TotalDays >= 30)
+            return $"{(int)(timeSpan.TotalDays / 30)} month{((int)(timeSpan.TotalDays / 30) > 1 ? "s" : "")} ago";
+        if (timeSpan.TotalDays >= 1)
+            return $"{(int)timeSpan.TotalDays} day{((int)timeSpan.TotalDays > 1 ? "s" : "")} ago";
+        if (timeSpan.TotalHours >= 1)
+            return $"{(int)timeSpan.TotalHours} hour{((int)timeSpan.TotalHours > 1 ? "s" : "")} ago";
+        if (timeSpan.TotalMinutes >= 1)
+            return $"{(int)timeSpan.TotalMinutes} minute{((int)timeSpan.TotalMinutes > 1 ? "s" : "")} ago";
+        return "just now";
+    }
+
+    private string GetInitials(string name)
+    {
+        if (string.IsNullOrEmpty(name)) return "?";
+        var parts = name.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        return parts.Length > 1
+            ? $"{parts[0][0]}{parts[1][0]}".ToUpper()
+            : parts[0].Substring(0, Math.Min(2, parts[0].Length)).ToUpper();
+    }
+
+    public void Dispose()
+    {
+        // Unsubscribe from SignalR events
+        HubClient.CommentReceived -= OnCommentReceived;
+        HubClient.CommentDeleted -= OnCommentDeleted;
+        HubClient.LikeCountUpdated -= OnLikeCountUpdated;
+        HubClient.ViewCountUpdated -= OnViewCountUpdated;
+        HubClient.UserJoined -= OnUserJoined;
+        HubClient.UserLeft -= OnUserLeft;
+        HubClient.OnlineUsersReceived -= OnOnlineUsersReceived;
+
+        // Leave video room
+        if (AppState.IsAuthenticated && AppState.CurrentUserId != null)
+        {
+            _ = HubClient.LeaveVideoRoomAsync(VideoId.ToString(), AppState.CurrentUserId);
+        }
+    }
+
+    private class CommentDto
+    {
+        public string CommentId { get; set; } = string.Empty;
+        public string UserId { get; set; } = string.Empty;
+        public string UserName { get; set; } = string.Empty;
+        public string Text { get; set; } = string.Empty;
+        public DateTime Timestamp { get; set; }
+    }
+}

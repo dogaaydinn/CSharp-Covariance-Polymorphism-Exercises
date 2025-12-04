@@ -1,0 +1,41 @@
+# =============================================================================
+# Terraform Variables - Example Configuration
+# =============================================================================
+# Copy this file to terraform.tfvars and fill in your values
+# DO NOT commit terraform.tfvars to version control (add to .gitignore)
+# =============================================================================
+
+# Project Configuration
+project_name = "microvideo"
+environment  = "prod"
+location     = "eastus"  # Options: eastus, westeurope, southeastasia, etc.
+
+# App Service Configuration
+app_service_sku   = "B1"   # Options: F1 (free), B1 ($13/mo), S1 ($69/mo)
+enable_https_only = true
+enable_always_on  = true   # Requires B1 or higher
+
+# PostgreSQL Configuration
+postgres_sku            = "B_Standard_B1ms"  # Burstable tier
+postgres_admin_username = "adminuser"
+postgres_admin_password = "CHANGE_ME_P@ssw0rd1234!"  # CHANGE THIS
+
+# Redis Configuration
+redis_sku      = "Basic"
+redis_capacity = 0  # 0=250MB ($16/mo), 1=1GB ($50/mo)
+
+# Docker Image
+acr_image_tag = "latest"  # Or specific version: "v1.0.0"
+
+# JWT Secret (minimum 32 characters)
+jwt_secret = "CHANGE_ME_your-super-secret-jwt-key-minimum-32-characters"  # CHANGE THIS
+
+# =============================================================================
+# Security Recommendations:
+# =============================================================================
+# 1. Use strong passwords (min 12 chars, uppercase, lowercase, numbers, symbols)
+# 2. Generate JWT secret with: openssl rand -base64 32
+# 3. Store secrets in Azure Key Vault for production
+# 4. Use terraform.tfvars.encrypted or environment variables
+# 5. Never commit terraform.tfvars to Git
+# =============================================================================
