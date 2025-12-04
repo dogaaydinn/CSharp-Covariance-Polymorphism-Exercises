@@ -59,7 +59,7 @@ public class BoxingUnboxingTests
         list.Add(3);
 
         // Assert
-        list.Should().HaveCount(3);
+        list.Count.Should().Be(3);
         list[0].Should().BeOfType<int>();
     }
 
@@ -131,7 +131,7 @@ public class BoxingUnboxingTests
         }
 
         // Assert
-        arrayList.Should().HaveCount(count);
+        arrayList.Count.Should().Be(count);
         genericList.Should().HaveCount(count);
         genericList.Should().Equal(Enumerable.Range(0, count));
     }

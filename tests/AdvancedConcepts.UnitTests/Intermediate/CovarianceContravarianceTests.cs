@@ -106,7 +106,7 @@ public class CovarianceContravarianceTests
     }
 
     [Fact]
-    public void IComparer Contravariance_AnimalComparer_UsableForDogs()
+    public void IComparerContravariance_AnimalComparer_UsableForDogs()
     {
         // Arrange
         var animalComparer = Comparer<Animal>.Create((a, b) =>
