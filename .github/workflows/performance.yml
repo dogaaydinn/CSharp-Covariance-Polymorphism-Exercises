@@ -59,7 +59,7 @@ jobs:
       run: dotnet run --project benchmarks/AdvancedConcepts.Benchmarks/AdvancedConcepts.Benchmarks.csproj --configuration Release --no-build -- --filter "*TypeConversionBenchmarks*" --exporters json markdown html
 
     - name: Upload Benchmark Results
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: ${{ matrix.artifact-name }}-results
         path: |
