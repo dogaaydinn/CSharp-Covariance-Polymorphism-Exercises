@@ -49,7 +49,7 @@ jobs:
         sarif_file: snyk.sarif
 
     - name: Upload Snyk report
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       if: always()
       with:
         name: snyk-report
@@ -90,7 +90,7 @@ jobs:
           --exclude '**/bin/**'
 
     - name: Upload Dependency-Check report
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       if: always()
       with:
         name: dependency-check-report
@@ -125,7 +125,7 @@ jobs:
         GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
 
     - name: Upload Gitleaks report
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       if: always()
       with:
         name: gitleaks-report
@@ -178,7 +178,7 @@ jobs:
       continue-on-error: true
 
     - name: Upload license report
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: license-report
         path: license-report.json
@@ -247,7 +247,7 @@ jobs:
         sarif_file: results.sarif
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: scorecard-results
         path: results.sarif
