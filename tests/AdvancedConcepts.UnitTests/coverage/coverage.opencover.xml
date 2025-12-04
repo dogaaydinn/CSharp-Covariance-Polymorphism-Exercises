@@ -2,9 +2,9 @@
 <CoverageSession>
   <Summary numSequencePoints="2125" visitedSequencePoints="235" numBranchPoints="346" visitedBranchPoints="58" sequenceCoverage="11.05" branchCoverage="16.76" maxCyclomaticComplexity="531" minCyclomaticComplexity="531" visitedClasses="11" numClasses="108" visitedMethods="29" numMethods="263" />
   <Modules>
-    <Module hash="739A50E7-2095-4B9D-9ADA-AA2F7D8F109E">
+    <Module hash="02761521-5AAF-4486-A7FB-6E6EE5C6ABAF">
       <ModulePath>AdvancedConcepts.Core.dll</ModulePath>
-      <ModuleTime>2025-12-04T02:35:50</ModuleTime>
+      <ModuleTime>2025-12-04T02:50:56</ModuleTime>
       <ModuleName>AdvancedConcepts.Core</ModuleName>
       <Files>
         <File uid="1" fullPath="/Users/dogaaydin/CSharp-Covariance-Polymorphism-Exercises/src/AdvancedConcepts.Core/Program.cs" />
