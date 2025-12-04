@@ -1,0 +1,209 @@
+name: Validate Samples & Snippets
+
+on:
+  push:
+    branches: [master, main, develop]
+    paths:
+      - 'samples/**'
+      - 'snippets/**'
+  pull_request:
+    branches: [master, main, develop]
+    paths:
+      - 'samples/**'
+      - 'snippets/**'
+  workflow_dispatch:
+
+jobs:
+  discover-projects:
+    name: Discover Projects
+    runs-on: ubuntu-latest
+    outputs:
+      snippets: ${{ steps.find-snippets.outputs.projects }}
+      samples: ${{ steps.find-samples.outputs.projects }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Find Snippet Projects
+        id: find-snippets
+        run: |
+          projects=$(find snippets -name "*.csproj" -type f | jq -R -s -c 'split("\n")[:-1]')
+          echo "projects=${projects}" >> $GITHUB_OUTPUT
+          echo "Found snippet projects:"
+          echo "${projects}" | jq -r '.[]'
+
+      - name: Find Sample Projects
+        id: find-samples
+        run: |
+          # Find all .csproj files in samples, excluding test projects
+          projects=$(find samples -name "*.csproj" -type f | grep -v "\.Tests\." | jq -R -s -c 'split("\n")[:-1]')
+          echo "projects=${projects}" >> $GITHUB_OUTPUT
+          echo "Found sample projects:"
+          echo "${projects}" | jq -r '.[]'
+
+  validate-snippets:
+    name: Validate Snippet
+    needs: discover-projects
+    if: needs.discover-projects.outputs.snippets != '[]'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        project: ${{ fromJson(needs.discover-projects.outputs.snippets) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Get Project Info
+        id: project-info
+        run: |
+          project_path="${{ matrix.project }}"
+          project_dir=$(dirname "${project_path}")
+          project_name=$(basename "${project_path}" .csproj)
+          echo "path=${project_path}" >> $GITHUB_OUTPUT
+          echo "dir=${project_dir}" >> $GITHUB_OUTPUT
+          echo "name=${project_name}" >> $GITHUB_OUTPUT
+
+      - name: Restore Dependencies
+        run: dotnet restore "${{ steps.project-info.outputs.path }}"
+
+      - name: Build Project
+        run: dotnet build "${{ steps.project-info.outputs.path }}" --no-restore --configuration Release
+
+      - name: Run Project (with timeout)
+        timeout-minutes: 2
+        run: |
+          echo "Running ${{ steps.project-info.outputs.name }}..."
+          # Run with timeout to prevent hanging
+          timeout 30s dotnet run --project "${{ steps.project-info.outputs.path }}" --no-build --configuration Release || exit_code=$?
+
+          # Exit code 124 means timeout (not necessarily an error for samples)
+          # Exit code 0 means success
+          # Any other exit code is a failure
+          if [ "${exit_code:-0}" -eq 124 ]; then
+            echo "⚠️  Project timed out after 30s (this may be expected for interactive samples)"
+            exit 0
+          elif [ "${exit_code:-0}" -ne 0 ]; then
+            echo "❌ Project failed with exit code ${exit_code}"
+            exit 1
+          else
+            echo "✅ Project ran successfully"
+          fi
+
+  validate-samples:
+    name: Validate Sample
+    needs: discover-projects
+    if: needs.discover-projects.outputs.samples != '[]'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        project: ${{ fromJson(needs.discover-projects.outputs.samples) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Get Project Info
+        id: project-info
+        run: |
+          project_path="${{ matrix.project }}"
+          project_dir=$(dirname "${project_path}")
+          project_name=$(basename "${project_path}" .csproj)
+          echo "path=${project_path}" >> $GITHUB_OUTPUT
+          echo "dir=${project_dir}" >> $GITHUB_OUTPUT
+          echo "name=${project_name}" >> $GITHUB_OUTPUT
+
+      - name: Check Project Type
+        id: check-type
+        run: |
+          project_path="${{ steps.project-info.outputs.path }}"
+          project_name="${{ steps.project-info.outputs.name }}"
+
+          # Skip AppHost and ServiceDefaults projects (they're not meant to run standalone)
+          if [[ "${project_name}" == *"AppHost"* ]] || [[ "${project_name}" == *"ServiceDefaults"* ]]; then
+            echo "should_run=false" >> $GITHUB_OUTPUT
+            echo "reason=AppHost/ServiceDefaults project (library/orchestrator)" >> $GITHUB_OUTPUT
+          # Skip library projects
+          elif grep -q "<OutputType>Library</OutputType>" "${project_path}"; then
+            echo "should_run=false" >> $GITHUB_OUTPUT
+            echo "reason=Library project" >> $GITHUB_OUTPUT
+          # Skip Azure Functions (need special runtime)
+          elif [[ "${project_name}" == *"Function"* ]] && grep -q "Microsoft.Azure.Functions" "${project_path}"; then
+            echo "should_run=false" >> $GITHUB_OUTPUT
+            echo "reason=Azure Function (needs Azure Functions runtime)" >> $GITHUB_OUTPUT
+          else
+            echo "should_run=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Restore Dependencies
+        run: dotnet restore "${{ steps.project-info.outputs.path }}"
+
+      - name: Build Project
+        run: dotnet build "${{ steps.project-info.outputs.path }}" --no-restore --configuration Release
+
+      - name: Run Project (with timeout)
+        if: steps.check-type.outputs.should_run == 'true'
+        timeout-minutes: 2
+        run: |
+          echo "Running ${{ steps.project-info.outputs.name }}..."
+          # Run with timeout to prevent hanging (web apps will timeout, which is expected)
+          timeout 30s dotnet run --project "${{ steps.project-info.outputs.path }}" --no-build --configuration Release || exit_code=$?
+
+          # Exit code 124 means timeout (expected for web APIs)
+          # Exit code 0 means success
+          # Any other exit code is a failure
+          if [ "${exit_code:-0}" -eq 124 ]; then
+            echo "⚠️  Project timed out after 30s (expected for web applications)"
+            exit 0
+          elif [ "${exit_code:-0}" -ne 0 ]; then
+            echo "❌ Project failed with exit code ${exit_code}"
+            exit 1
+          else
+            echo "✅ Project ran successfully"
+          fi
+
+      - name: Skip Run (Project Type)
+        if: steps.check-type.outputs.should_run == 'false'
+        run: |
+          echo "⏭️  Skipping run for ${{ steps.project-info.outputs.name }}"
+          echo "Reason: ${{ steps.check-type.outputs.reason }}"
+          echo "✅ Build verification sufficient for this project type"
+
+  summary:
+    name: Validation Summary
+    needs: [validate-snippets, validate-samples]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Results
+        run: |
+          echo "## Validation Summary"
+          echo ""
+
+          if [ "${{ needs.validate-snippets.result }}" == "success" ]; then
+            echo "✅ All snippets validated successfully"
+          elif [ "${{ needs.validate-snippets.result }}" == "skipped" ]; then
+            echo "⏭️  No snippets to validate"
+          else
+            echo "❌ Some snippets failed validation"
+          fi
+
+          if [ "${{ needs.validate-samples.result }}" == "success" ]; then
+            echo "✅ All samples validated successfully"
+          elif [ "${{ needs.validate-samples.result }}" == "skipped" ]; then
+            echo "⏭️  No samples to validate"
+          else
+            echo "❌ Some samples failed validation"
+          fi
+
+          # Fail the job if either validation failed
+          if [ "${{ needs.validate-snippets.result }}" == "failure" ] || [ "${{ needs.validate-samples.result }}" == "failure" ]; then
+            exit 1
+          fi
