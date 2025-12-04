@@ -1,6 +1,6 @@
 # Sample Projects - Örnek Projeler
 
-Modern C# 12 ve .NET 8 kullanarak hazırlanmış, beginner'dan intermediate seviyeye kadar 18 eğitim projesi.
+Modern C# 12 ve .NET 8 kullanarak hazırlanmış, beginner'dan advanced seviyeye kadar 30 eğitim projesi.
 
 ## 📚 Proje Yapısı
 
@@ -34,7 +34,25 @@ Orta seviye C# konularını kapsayan projeler.
 | 17 | **DelegateExample** | Func, Action, Predicate | ✅ Tamamlandı |
 | 18 | **EventHandlerPattern** | Event handling | ✅ Tamamlandı |
 
-**İlerleme**: 18/18 (100% tamamlandı) ✅
+### 03-Advanced (12 Proje)
+İleri seviye design patterns ve modern C# özellikleri.
+
+| # | Proje Adı | Konu | Durum |
+|---|-----------|------|-------|
+| 19 | **SOLIDPrinciples** | 5 SOLID prensipleri | ✅ Tamamlandı |
+| 20 | **FactoryPattern** | Simple, Method, Abstract Factory | ✅ Tamamlandı |
+| 21 | **StrategyPattern** | Runtime algorithm selection | ✅ Tamamlandı |
+| 22 | **ObserverPattern** | Event-driven communication | ✅ Tamamlandı |
+| 23 | **DecoratorPattern** | Add responsibilities dynamically | ✅ Tamamlandı |
+| 24 | **RepositoryPattern** | Data access abstraction | ✅ Tamamlandı |
+| 25 | **UnitOfWorkPattern** | Transaction management | ✅ Tamamlandı |
+| 26 | **DependencyInjection** | IoC container, lifetimes | ✅ Tamamlandı |
+| 27 | **LazyInitialization** | Lazy<T> pattern | ✅ Tamamlandı |
+| 28 | **ValueTaskExample** | Async optimization | ✅ Tamamlandı |
+| 29 | **RecordTypes** | C# 9+ record types | ✅ Tamamlandı |
+| 30 | **PatternMatchingAdvanced** | List patterns, slice patterns | ✅ Tamamlandı |
+
+**İlerleme**: 30/30 (100% tamamlandı) ✅
 
 ---
 
