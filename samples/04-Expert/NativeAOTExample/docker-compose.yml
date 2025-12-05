@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  # Native AOT compiled application
+  native-aot-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: native-aot-example
+    image: native-aot-example:latest
+    environment:
+      - DOTNET_ENVIRONMENT=Production
+    networks:
+      - aot-network
+    restart: unless-stopped
+    # Native AOT apps start in 5-10ms! ⚡
+
+  # Comparison: Standard .NET runtime version (for benchmarking)
+  standard-dotnet:
+    image: mcr.microsoft.com/dotnet/runtime:8.0
+    container_name: dotnet-standard-comparison
+    working_dir: /app
+    volumes:
+      - ./bin/Release/net8.0:/app:ro
+    command: dotnet NativeAOTExample.dll
+    networks:
+      - aot-network
+    profiles:
+      - comparison  # Only run with: docker-compose --profile comparison up
+
+networks:
+  aot-network:
+    driver: bridge
+
+# ============================================
+# Usage:
+# ============================================
+# Build and run Native AOT version:
+#   docker-compose up --build
+#
+# Compare with standard .NET:
+#   docker-compose --profile comparison up
+#
+# Measure binary sizes:
+#   docker images | grep native-aot
+#
+# Benchmark startup time:
+#   time docker run native-aot-example
+# ============================================
+#
+# Expected Results:
+# - Native AOT image: ~15-20MB
+# - Standard runtime: ~150-200MB
+# - Startup improvement: 20-40x faster
+# ============================================

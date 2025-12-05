@@ -1,0 +1,90 @@
+version: '3.8'
+
+services:
+  grpc-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: grpc-server
+    image: grpc-example:latest
+    environment:
+      - DOTNET_ENVIRONMENT=Production
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:5000
+    ports:
+      - "5000:5000"
+    networks:
+      - grpc-network
+    restart: unless-stopped
+
+  # Optional: gRPC client for testing
+  # grpc-client:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.client
+  #   container_name: grpc-client
+  #   environment:
+  #     - GrpcServer__Address=http://grpc-server:5000
+  #   depends_on:
+  #     - grpc-server
+  #   networks:
+  #     - grpc-network
+  #   profiles:
+  #     - client
+
+networks:
+  grpc-network:
+    driver: bridge
+
+# ============================================
+# Usage:
+# ============================================
+# Build and run server:
+#   docker-compose up --build
+#
+# Run with client:
+#   docker-compose --profile client up
+#
+# Test with grpcurl:
+#   grpcurl -plaintext localhost:5000 list
+#   grpcurl -plaintext -d '{"a": 5, "b": 3}' \
+#     localhost:5000 calculator.Calculator/Add
+#
+# View logs:
+#   docker-compose logs -f grpc-server
+#
+# Stop:
+#   docker-compose down
+# ============================================
+#
+# Protocol Buffers (.proto):
+# ============================================
+# syntax = "proto3";
+#
+# service Calculator {
+#   rpc Add (AddRequest) returns (AddResponse);
+#   rpc Multiply (MultiplyRequest) returns (MultiplyResponse);
+# }
+#
+# message AddRequest {
+#   int32 a = 1;
+#   int32 b = 2;
+# }
+#
+# message AddResponse {
+#   int32 result = 1;
+# }
+# ============================================
+#
+# Performance Benefits:
+# ============================================
+# REST/JSON:
+# - Request size: ~150 bytes
+# - Response time: ~50ms
+# - Throughput: ~1,000 req/sec
+#
+# gRPC/Protobuf:
+# - Request size: ~20 bytes (7x smaller)
+# - Response time: ~5ms (10x faster)
+# - Throughput: ~10,000 req/sec (10x higher)
+# ============================================

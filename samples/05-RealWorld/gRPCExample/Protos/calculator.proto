@@ -2,16 +2,61 @@ syntax = "proto3";
 
 option csharp_namespace = "GrpcExample";
 
+// Calculator service with various RPC types
 service Calculator {
-  rpc Add (CalculateRequest) returns (CalculateReply);
-  rpc Multiply (CalculateRequest) returns (CalculateReply);
+  // Unary RPC: Simple request-response
+  rpc Add (BinaryOperation) returns (CalculationResult);
+  rpc Subtract (BinaryOperation) returns (CalculationResult);
+  rpc Multiply (BinaryOperation) returns (CalculationResult);
+  rpc Divide (BinaryOperation) returns (CalculationResult);
+
+  // Server streaming RPC: Client sends one request, server returns stream of responses
+  rpc Fibonacci (FibonacciRequest) returns (stream NumberResult);
+
+  // Client streaming RPC: Client sends stream of requests, server returns one response
+  rpc Sum (stream Number) returns (CalculationResult);
+
+  // Bidirectional streaming RPC: Both client and server send streams
+  rpc Calculate (stream Operation) returns (stream CalculationResult);
 }
 
-message CalculateRequest {
-  int32 a = 1;
-  int32 b = 2;
+// Messages for Unary RPCs
+message BinaryOperation {
+  double a = 1;
+  double b = 2;
 }
 
-message CalculateReply {
-  int32 result = 1;
+message CalculationResult {
+  double result = 1;
+  string operation = 2;
+  bool success = 3;
+  string error_message = 4;
+}
+
+// Messages for Server Streaming RPC
+message FibonacciRequest {
+  int32 count = 1;
+}
+
+message NumberResult {
+  int64 value = 1;
+  int32 index = 2;
+}
+
+// Messages for Client Streaming RPC
+message Number {
+  double value = 1;
+}
+
+// Messages for Bidirectional Streaming RPC
+message Operation {
+  enum OperationType {
+    ADD = 0;
+    SUBTRACT = 1;
+    MULTIPLY = 2;
+    DIVIDE = 3;
+  }
+
+  OperationType type = 1;
+  double operand = 2;
 }

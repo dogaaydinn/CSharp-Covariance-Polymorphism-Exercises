@@ -1,0 +1,90 @@
+version: '3.8'
+
+services:
+  message-queue-example:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: message-queue-example
+    image: message-queue-example:latest
+    environment:
+      - DOTNET_ENVIRONMENT=Production
+      - ASPNETCORE_ENVIRONMENT=Production
+      - RabbitMQ__Host=rabbitmq
+      - RabbitMQ__Username=guest
+      - RabbitMQ__Password=guest
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - mq-network
+    restart: unless-stopped
+
+  # RabbitMQ Message Broker
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"    # AMQP port
+      - "15672:15672"  # Management UI
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - mq-network
+    restart: unless-stopped
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  rabbitmq-data:
+    driver: local
+
+networks:
+  mq-network:
+    driver: bridge
+
+# ============================================
+# Usage:
+# ============================================
+# Build and run:
+#   docker-compose up --build
+#
+# Run in background:
+#   docker-compose up -d
+#
+# View logs:
+#   docker-compose logs -f message-queue-example
+#
+# RabbitMQ Management UI:
+#   http://localhost:15672
+#   Username: guest
+#   Password: guest
+#
+# Stop:
+#   docker-compose down
+#
+# Cleanup:
+#   docker-compose down -v
+# ============================================
+#
+# RabbitMQ Concepts:
+# ============================================
+# - Exchange: Routes messages
+# - Queue: Stores messages
+# - Binding: Links exchange to queue
+# - Message: Data payload
+# - Producer: Sends messages
+# - Consumer: Receives messages
+#
+# Exchange Types:
+# - Direct: Route by routing key
+# - Fanout: Broadcast to all queues
+# - Topic: Pattern matching
+# - Headers: Route by headers
+# ============================================

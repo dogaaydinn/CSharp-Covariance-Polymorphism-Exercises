@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  efcore-advanced:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: efcore-advanced
+    image: efcore-advanced:latest
+    environment:
+      - DOTNET_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Data Source=/data/efcore.db
+    volumes:
+      - efcore-data:/data
+    networks:
+      - efcore-network
+    restart: unless-stopped
+
+  # Optional: SQL Server for production
+  # sqlserver:
+  #   image: mcr.microsoft.com/mssql/server:2022-latest
+  #   environment:
+  #     - ACCEPT_EULA=Y
+  #     - SA_PASSWORD=YourStrong@Password
+  #   ports:
+  #     - "1433:1433"
+  #   volumes:
+  #     - sqlserver-data:/var/opt/mssql
+  #   networks:
+  #     - efcore-network
+
+volumes:
+  efcore-data:
+    driver: local
+  # sqlserver-data:
+  #   driver: local
+
+networks:
+  efcore-network:
+    driver: bridge
+
+# ============================================
+# Usage:
+# ============================================
+# Build and run:
+#   docker-compose up --build
+#
+# With SQL Server:
+#   docker-compose --profile sqlserver up
+#
+# View logs:
+#   docker-compose logs -f efcore-advanced
+#
+# Stop:
+#   docker-compose down
+#
+# Cleanup (remove volumes):
+#   docker-compose down -v
+# ============================================
+#
+# Database Connection Strings:
+# ============================================
+# SQLite (development):
+#   Data Source=efcore.db
+#
+# SQL Server (production):
+#   Server=sqlserver;Database=EFCoreAdvanced;User Id=sa;Password=YourStrong@Password;TrustServerCertificate=True
+#
+# PostgreSQL (production):
+#   Host=postgres;Database=efcoreadvanced;Username=postgres;Password=password
+# ============================================

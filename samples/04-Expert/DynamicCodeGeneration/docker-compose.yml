@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  dynamic-code-gen:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dynamic-code-generation
+    image: dynamic-code-generation:latest
+    environment:
+      - DOTNET_ENVIRONMENT=Production
+      - DOTNET_EnableDiagnostics=0
+    networks:
+      - codegen-network
+    restart: unless-stopped
+
+networks:
+  codegen-network:
+    driver: bridge
+
+# ============================================
+# Usage:
+# ============================================
+# Build and run:
+#   docker-compose up --build
+#
+# View logs:
+#   docker-compose logs -f
+#
+# Stop:
+#   docker-compose down
+# ============================================
+#
+# What This Demonstrates:
+# - Runtime type creation with TypeBuilder
+# - Dynamic method generation with DynamicMethod
+# - IL opcode usage (Ldarg, Add, Mul, Ret)
+# - Reflection.Emit API
+# ============================================

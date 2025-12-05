@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  background-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: background-service-example
+    image: background-service-example:latest
+    environment:
+      - DOTNET_ENVIRONMENT=Production
+      - ASPNETCORE_ENVIRONMENT=Production
+    networks:
+      - background-network
+    restart: unless-stopped
+    # For production, consider:
+    # - Resource limits (memory, CPU)
+    # - Logging drivers
+    # - Health checks
+
+networks:
+  background-network:
+    driver: bridge
+
+# ============================================
+# Usage:
+# ============================================
+# Build and run:
+#   docker-compose up --build
+#
+# Run in background:
+#   docker-compose up -d
+#
+# View logs:
+#   docker-compose logs -f
+#
+# Stop:
+#   docker-compose down
+# ============================================
+#
+# Production Considerations:
+# ============================================
+# - Add resource limits (deploy.resources)
+# - Configure logging (logging driver)
+# - Add health checks
+# - Use environment-specific configs
+# - Monitor with Prometheus/Grafana
+# ============================================

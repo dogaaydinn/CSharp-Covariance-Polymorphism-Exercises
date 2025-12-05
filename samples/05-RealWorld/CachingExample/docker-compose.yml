@@ -1,0 +1,80 @@
+version: '3.8'
+
+services:
+  caching-example:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: caching-example
+    image: caching-example:latest
+    environment:
+      - DOTNET_ENVIRONMENT=Production
+      - ASPNETCORE_ENVIRONMENT=Production
+      - Redis__ConnectionString=redis:6379
+    depends_on:
+      - redis
+    networks:
+      - cache-network
+    restart: unless-stopped
+
+  # Redis for distributed caching
+  redis:
+    image: redis:7-alpine
+    container_name: redis-cache
+    command: redis-server --appendonly yes
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - cache-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+volumes:
+  redis-data:
+    driver: local
+
+networks:
+  cache-network:
+    driver: bridge
+
+# ============================================
+# Usage:
+# ============================================
+# Build and run:
+#   docker-compose up --build
+#
+# Run in background:
+#   docker-compose up -d
+#
+# View logs:
+#   docker-compose logs -f caching-example
+#
+# Check Redis:
+#   docker exec -it redis-cache redis-cli
+#   > KEYS *
+#   > GET key_name
+#   > MONITOR
+#
+# Stop:
+#   docker-compose down
+#
+# Cleanup (remove volumes):
+#   docker-compose down -v
+# ============================================
+#
+# Redis Commands:
+# ============================================
+# KEYS *               - List all keys
+# GET key              - Get value
+# SET key value        - Set value
+# TTL key              - Time to live
+# DEL key              - Delete key
+# FLUSHALL             - Clear all data
+# INFO stats           - Redis statistics
+# ============================================

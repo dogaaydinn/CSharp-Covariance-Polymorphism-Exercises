@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  unsafe-code-example:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: unsafe-code-example
+    image: unsafe-code-example:latest
+    environment:
+      - DOTNET_ENVIRONMENT=Production
+      - DOTNET_EnableDiagnostics=0
+    networks:
+      - unsafe-network
+    restart: unless-stopped
+
+networks:
+  unsafe-network:
+    driver: bridge
+
+# ============================================
+# Usage:
+# ============================================
+# Build and run:
+#   docker-compose up --build
+#
+# View logs:
+#   docker-compose logs -f
+#
+# Stop:
+#   docker-compose down
+# ============================================
+#
+# What This Demonstrates:
+# ============================================
+# - Pointer arithmetic and operations
+# - High-performance array processing
+# - stackalloc for zero-allocation buffers
+# - Unsafe code patterns for extreme performance
+#
+# PERFORMANCE BENEFITS:
+# - 2-3x faster than safe code
+# - No bounds checking
+# - Zero heap allocations with stackalloc
+# - Direct memory access
+# ============================================

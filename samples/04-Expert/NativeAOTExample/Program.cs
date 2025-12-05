@@ -46,27 +46,11 @@ class Program
 
         // ✅ GOOD: Simple, type-safe operations
         var numbers = new[] { 1, 2, 3, 4, 5 };
-        var sum = CalculateSum(numbers);
-        var product = CalculateProduct(numbers);
+        var sum = Calculator.CalculateSum(numbers);
+        var product = Calculator.CalculateProduct(numbers);
 
         Console.WriteLine($"   Sum: {sum}");
         Console.WriteLine($"   Product: {product}");
-    }
-
-    static int CalculateSum(int[] numbers)
-    {
-        var total = 0;
-        foreach (var n in numbers)
-            total += n;
-        return total;
-    }
-
-    static int CalculateProduct(int[] numbers)
-    {
-        var product = 1;
-        foreach (var n in numbers)
-            product *= n;
-        return product;
     }
 
     static void DemonstrateJsonSerialization()
@@ -96,38 +80,6 @@ class Program
         var items = new[] { "Apple", "Banana", "Cherry", "Date", "Elderberry" };
 
         // ✅ GOOD: Span<T> for zero-allocation processing
-        ProcessItemsWithSpan(items);
+        CollectionProcessor.ProcessItemsWithSpan(items);
     }
-
-    static void ProcessItemsWithSpan(string[] items)
-    {
-        ReadOnlySpan<string> span = items;
-
-        Console.WriteLine($"   Processing {span.Length} items:");
-        for (var i = 0; i < span.Length; i++)
-        {
-            Console.WriteLine($"   - {span[i]} ({span[i].Length} chars)");
-        }
-    }
-}
-
-/// <summary>
-/// Person model - simple, AOT-compatible.
-/// </summary>
-public class Person
-{
-    public string? Name { get; set; }
-    public int Age { get; set; }
-    public string? Email { get; set; }
-}
-
-/// <summary>
-/// JSON serialization context for AOT compilation.
-/// Replaces reflection with compile-time code generation.
-/// </summary>
-[JsonSerializable(typeof(Person))]
-[JsonSerializable(typeof(string))]
-[JsonSerializable(typeof(int))]
-internal partial class AppJsonContext : JsonSerializerContext
-{
 }
