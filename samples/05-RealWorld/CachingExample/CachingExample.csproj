@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <!-- Memory Cache -->
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.1" />
 
     <!-- Distributed Cache (Redis) -->
     <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="8.0.0" />
