@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option csharp_namespace = "GrpcExample";
+
+service Calculator {
+  rpc Add (CalculateRequest) returns (CalculateReply);
+  rpc Multiply (CalculateRequest) returns (CalculateReply);
+}
+
+message CalculateRequest {
+  int32 a = 1;
+  int32 b = 2;
+}
+
+message CalculateReply {
+  int32 result = 1;
+}
