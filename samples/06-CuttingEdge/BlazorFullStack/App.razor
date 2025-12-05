@@ -1,0 +1,39 @@
+@inject TodoService TodoService
+
+<h1>📝 Blazor Todo App</h1>
+
+<div>
+    <input @bind="newTodoTitle" placeholder="New todo..." />
+    <button @onclick="AddTodo">Add</button>
+</div>
+
+<ul>
+    @foreach (var todo in todos)
+    {
+        <li>
+            <input type="checkbox" @bind="todo.IsComplete" />
+            <span style="@(todo.IsComplete ? "text-decoration: line-through" : "")">
+                @todo.Title
+            </span>
+        </li>
+    }
+</ul>
+
+@code {
+    private List<TodoItem> todos = new();
+    private string newTodoTitle = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        todos = TodoService.GetTodos();
+    }
+
+    private void AddTodo()
+    {
+        if (!string.IsNullOrWhiteSpace(newTodoTitle))
+        {
+            TodoService.AddTodo(new TodoItem { Title = newTodoTitle });
+            newTodoTitle = string.Empty;
+        }
+    }
+}

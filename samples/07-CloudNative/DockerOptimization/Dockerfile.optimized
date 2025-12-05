@@ -1,0 +1,29 @@
+# Optimized Multi-Stage Dockerfile
+# Image size: ~110 MB (50% smaller!)
+
+# Stage 1: Build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+
+# Copy project file first (better layer caching)
+COPY ["DockerOptimization.csproj", "./"]
+RUN dotnet restore
+
+# Copy source code and build
+COPY . .
+RUN dotnet publish -c Release -o /app/publish \
+    /p:PublishTrimmed=true \
+    /p:PublishSingleFile=true
+
+# Stage 2: Runtime
+FROM mcr.microsoft.com/dotnet/aspnet:8.0-jammy-chiseled AS final
+WORKDIR /app
+EXPOSE 8080
+
+# Copy only published output (not build artifacts)
+COPY --from=build /app/publish .
+
+# Run as non-root user
+USER $APP_UID
+
+ENTRYPOINT ["./DockerOptimization"]

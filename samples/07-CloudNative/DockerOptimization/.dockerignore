@@ -1,0 +1,9 @@
+# Exclude build artifacts and unnecessary files
+bin/
+obj/
+*.md
+.git/
+.vs/
+.vscode/
+*.user
+*.suo

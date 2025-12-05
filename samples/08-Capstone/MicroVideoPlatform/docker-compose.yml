@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  # API Gateway
+  api-gateway:
+    build:
+      context: .
+      dockerfile: src/ApiGateway/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+      - ReverseProxy__Clusters__content-cluster__Destinations__destination1__Address=http://content-api:5001
+    depends_on:
+      - content-api
+    networks:
+      - microvideo-network
+
+  # Content API
+  content-api:
+    build:
+      context: .
+      dockerfile: src/Content.API/Dockerfile
+    ports:
+      - "5001:5001"
+    environment:
+      - ASPNETCORE_URLS=http://+:5001
+    networks:
+      - microvideo-network
+
+  # Processing Worker
+  processing-worker:
+    build:
+      context: .
+      dockerfile: src/Processing.Worker/Dockerfile
+    environment:
+      - DOTNET_ENVIRONMENT=Production
+    networks:
+      - microvideo-network
+
+  # RabbitMQ (Message Bus)
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"    # AMQP
+      - "15672:15672"  # Management UI
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    networks:
+      - microvideo-network
+
+networks:
+  microvideo-network:
+    driver: bridge

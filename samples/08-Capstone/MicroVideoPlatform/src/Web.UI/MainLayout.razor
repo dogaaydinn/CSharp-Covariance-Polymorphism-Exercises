@@ -1,0 +1,39 @@
+@inherits LayoutComponentBase
+
+<div class="page">
+    <header>
+        <h1>🎬 MicroVideoPlatform</h1>
+        <p>Microservices-based Video Streaming Platform</p>
+    </header>
+
+    <main>
+        @Body
+    </main>
+
+    <footer>
+        <p>Built with .NET 8, Blazor WebAssembly, YARP, CQRS, Event-Driven Architecture</p>
+    </footer>
+</div>
+
+<style>
+    .page {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 30px;
+        border-radius: 10px;
+        margin-bottom: 30px;
+    }
+    header h1 {
+        margin: 0;
+    }
+    footer {
+        text-align: center;
+        margin-top: 50px;
+        color: #666;
+    }
+</style>
