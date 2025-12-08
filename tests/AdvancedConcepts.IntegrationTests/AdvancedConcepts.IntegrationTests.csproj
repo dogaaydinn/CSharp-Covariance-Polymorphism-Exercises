@@ -11,7 +11,7 @@
   <ItemGroup>
     <!-- Test Framework -->
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
-    <PackageReference Include="xunit" Version="2.9.2" />
+    <PackageReference Include="xunit" Version="2.9.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
@@ -21,7 +21,7 @@
     <PackageReference Include="FluentAssertions" Version="8.8.0" />
 
     <!-- Test Data Generation -->
-    <PackageReference Include="Bogus" Version="35.6.1" />
+    <PackageReference Include="Bogus" Version="35.6.5" />
 
     <!-- Code Coverage -->
     <PackageReference Include="coverlet.collector" Version="6.0.4">
