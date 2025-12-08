@@ -12,7 +12,7 @@
   <ItemGroup>
     <!-- Test Framework -->
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
-    <PackageReference Include="xunit" Version="2.9.2" />
+    <PackageReference Include="xunit" Version="2.9.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
@@ -28,11 +28,11 @@
     <!-- Test Data Generation -->
     <PackageReference Include="AutoFixture" Version="4.18.1" />
     <PackageReference Include="AutoFixture.Xunit2" Version="4.18.1" />
-    <PackageReference Include="Bogus" Version="35.6.1" />
+    <PackageReference Include="Bogus" Version="35.6.5" />
 
     <!-- Property-Based Testing -->
-    <PackageReference Include="FsCheck" Version="3.0.0-rc3" />
-    <PackageReference Include="FsCheck.Xunit" Version="3.0.0-rc3" />
+    <PackageReference Include="FsCheck" Version="3.3.2" />
+    <PackageReference Include="FsCheck.Xunit" Version="3.3.2" />
 
     <!-- Logging Testing -->
     <PackageReference Include="Serilog.Sinks.TestCorrelator" Version="3.0.0" />
