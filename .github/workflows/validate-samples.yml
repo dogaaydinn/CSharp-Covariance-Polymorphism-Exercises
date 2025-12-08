@@ -21,7 +21,7 @@ jobs:
       snippets: ${{ steps.find-snippets.outputs.projects }}
       samples: ${{ steps.find-samples.outputs.projects }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Find Snippet Projects
         id: find-snippets
@@ -50,7 +50,7 @@ jobs:
       matrix:
         project: ${{ fromJson(needs.discover-projects.outputs.snippets) }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -103,7 +103,7 @@ jobs:
       matrix:
         project: ${{ fromJson(needs.discover-projects.outputs.samples) }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
