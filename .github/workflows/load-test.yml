@@ -191,7 +191,7 @@ jobs:
           EOF
 
       - name: Upload k6 results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: k6-load-test-results-${{ github.run_number }}
@@ -291,7 +291,7 @@ jobs:
           fi
 
       - name: Upload Bombardier results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: bombardier-load-test-results-${{ github.run_number }}
